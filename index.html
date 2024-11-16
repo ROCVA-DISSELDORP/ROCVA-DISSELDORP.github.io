@@ -3,36 +3,87 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Portfolio</title>
+    <title>Guide to GitHub Pages</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
     <header>
-        <h1>My Portfolio</h1>
+        <h1>Guide: Publish Your First Website</h1>
         <nav>
-            <a href="#">Home</a>
-            <a href="#">Projects</a>
-            <a href="#">About</a>
-            <a href="#">Contact</a>
+            <a href="#setup-git">Set Up Git</a>
+            <a href="#github-pages">GitHub Pages</a>
+            <a href="#resources">Resources</a>
         </nav>
     </header>
     <main>
-        <section id="projects">
-            <h2>Projects</h2>
-            <div class="project">
-                <h3>Project 1</h3>
-                <p>Description of Project 1</p>
-                <a href="SnakeGame/index.html">Link to Project 1</a>
-            </div>
-            <div class="project">
-                <h3>Project 2</h3>
-                <p>Description of Project 2</p>
-                <a href="#">Link to Project 2</a>
-            </div>
-            </section>
+        <section id="setup-git">
+            <h2>1. Install and Set Up Git</h2>
+            <p>Git is essential for version control and uploading your website to GitHub.</p>
+            <ol>
+                <li>
+                    Download and install Git from <a href="https://git-scm.com/downloads" target="_blank">https://git-scm.com/downloads</a>.
+                </li>
+                <li>
+                    After installation, open your terminal (Command Prompt, Git Bash, or VS Code terminal) and configure Git with your GitHub account:
+                    <pre><code>
+git config --global user.name "Your GitHub Username"
+git config --global user.email "your-email@example.com"
+                    </code></pre>
+                </li>
+                <li>Verify your configuration with:
+                    <pre><code>
+git config --list
+                    </code></pre>
+                </li>
+            </ol>
+        </section>
+        
+        <section id="github-pages">
+            <h2>2. Create and Publish Your Website with GitHub Pages</h2>
+            <p>Follow these steps to create and publish your website:</p>
+            <ol>
+                <li>
+                    Go to <a href="https://github.com" target="_blank">GitHub</a> and create a new repository. Name it as <code>your-username.github.io</code>.
+                </li>
+                <li>
+                    Clone the repository to your local machine using:
+                    <pre><code>
+git clone https://github.com/your-username/your-username.github.io
+                    </code></pre>
+                </li>
+                <li>
+                    Add your website files (e.g., HTML, CSS, JS) to the cloned folder.
+                </li>
+                <li>
+                    Use the following commands to push your site to GitHub:
+                    <pre><code>
+git add .
+git commit -m "Initial commit"
+git push
+                    </code></pre>
+                </li>
+                <li>
+                    Open the repository settings on GitHub and enable GitHub Pages. Set the branch to <code>main</code>.
+                </li>
+                <li>Your website will be live at <code>https://your-username.github.io</code>.
+                </li>
+            </ol>
+        </section>
+        
+        <section id="resources">
+            <h2>3. Additional Resources</h2>
+            <ul>
+                <li>
+                    Official GitHub Pages Guide: <a href="https://pages.github.com/" target="_blank">https://pages.github.com/</a>
+                </li>
+                <li>
+                    Git Documentation: <a href="https://git-scm.com/" target="_blank">https://git-scm.com/</a>
+                </li>
+            </ul>
+        </section>
     </main>
     <footer>
-        <p>&copy; 2023 My Portfolio</p>
+        <p>&copy; 2023 Guide for Students</p>
     </footer>
     <script src="script.js"></script>
 </body>
