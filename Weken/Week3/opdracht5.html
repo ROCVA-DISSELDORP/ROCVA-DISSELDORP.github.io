@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Opdracht 5 - VS Code Kennen</title>
+    <link rel="stylesheet" href="../../styles.css">
+    <script>
+        // Functie om de tekst te kopiëren naar het klembord
+        function copyToClipboard() {
+            const code = document.getElementById("markdown-code").innerText;
+            navigator.clipboard.writeText(code).then(() => {
+                alert("Markdown-code gekopieerd naar klembord!");
+            });
+        }
+
+        // Functie om het bestand te downloaden als .md
+        function downloadFile() {
+            const code = document.getElementById("markdown-code").innerText;
+            const blob = new Blob([code], { type: "text/markdown" });
+            const link = document.createElement("a");
+            link.href = URL.createObjectURL(blob);
+            link.download = "vs-code-shortcuts.md";
+            link.click();
+        }
+    </script>
+</head>
+<body>
+    <header>
+        <h1>Opdracht 5: Leer VS Code Kennen</h1>
+    </header>
+    <main>
+        <section>
+            <h2>Beschrijving</h2>
+            <p>In deze opdracht leer je de belangrijkste shortcuts van Visual Studio Code kennen. Hieronder staat een Markdown-bestand met een lijst van shortcuts. Gebruik de knoppen om de code te kopiëren of te downloaden.</p>
+            <h3>Codeblok:</h3>
+            <pre id="markdown-code">
+                <code>
+                    # VS Code Shortcuts
+                    
+                    ## Categorie?
+                    - `Ctrl + P`: 
+                    - `Ctrl + Shift + P`:
+                    - `Ctrl + Shift + N`:	
+                    - `Ctrl + Shift + W`:	
+                    - `Ctrl + W`: 
+                    - `Ctrl + Shift + T`: 
+                    - `Ctrl + Shift + E`: 
+                    - `Ctrl + Shift + G`: 
+                    - `Ctrl + Shift + X`: 
+                    - `Ctrl + Shift + M`: 
+                    - `Ctrl + B`: 
+                    - `Ctrl + G`:
+                    - `Alt + Right Arrow or Left Arrow`:
+                    - `Ctrl + \`:
+                    - `Ctrl + 1 / 2 / 3`:
+                    
+                    
+                    ## Categorie?
+                    - `Ctrl + X`:	
+                    - `Ctrl + Shift + K`:	
+                    - `Ctrl + Z`:	
+                    - `Alt + Up / Down`:
+                    - `Shift + Alt + Up of Down`:
+                    - `Ctrl + Enter`:
+                    - `Ctrl + Shift + Enter`:
+                    - `Ctrl + [ of ]`:
+                    - `Shift + Alt + F`:
+                    - `Ctrl + /`:
+                    
+                    ## Categorie?
+                    - `Ctrl + F`: 
+                    - `Ctrl + H`: 
+                    - `Ctrl + Shift + F`: 
+                    - `Ctrl + Shift + H`: 
+                    
+                    ## Categorie?
+                    - `Alt + Click `:
+                    - `Ctrl + Alt + Up or Down `:	
+                    
+                    ## Categorie?
+                    - `Ctrl + `: 
+                    - `Ctrl + Shift + `: 
+                    
+                    # Categorie?
+                    - `Ctrl + K + R`:
+                    - `Ctrl + K + S`:
+                    - `F2`:
+                    - `Ctrl + ,:
+                    
+                </code>
+            </pre>
+            <div class="buttons">
+                <button onclick="copyToClipboard()">Kopieer Markdown</button>
+                <button onclick="downloadFile()">Download als .md</button>
+            </div>
+            <h3>Opdracht:</h3>
+            <ol>
+                <li>Open Visual Studio Code en voer de shortcuts uit om te zien wat ze doen.</li>
+                <li>Schrijf de uitleg achter elke shortcut in het Markdown-bestand.</li>
+                <li>Sla je ingevulde bestand op als <code>vs-code-shortcuts.md</code>.</li>
+            </ol>
+            <h3>Resultaat:</h3>
+            <p>Je hebt een ingevuld Markdown-bestand met uitleg over de belangrijkste shortcuts van VS Code.</p>
+        </section>
+        <footer>
+            <a href="week3.html" class="button">Terug naar Week 3</a>
+        </footer>
+    </main>
+</body>
+</html>

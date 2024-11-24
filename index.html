@@ -1,101 +1,23 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="nl">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Guide to GitHub Pages</title>
+    <title>SD'er van de Toekomst</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
     <header>
-        <h1>Guide: Publish Your First Website</h1>
-        <nav>
-            <a href="#setup-git">Set Up Git</a>
-            <a href="#github-pages">GitHub Pages</a>
-            <a href="#resources">Resources</a>
-        </nav>
+        <h1>SD'er van de Toekomst</h1>
+        <p>Klik op een week om de opdrachten te bekijken!</p>
     </header>
     <main>
-        <section id="setup-git">
-            <h2>1. Install and Set Up Git</h2>
-            <p>Git is essential for version control and uploading your website to GitHub.</p>
-            <ol>
-                <li>
-                    Download and install Git from <a href="https://git-scm.com/downloads" target="_blank">https://git-scm.com/downloads</a>.
-                </li>
-                <li>
-                    After installation, open your terminal (Command Prompt, Git Bash, or VS Code terminal) and configure Git with your GitHub account:
-                    <pre><code>
-git config --global user.name "Your GitHub Username"
-git config --global user.email "your-email@example.com"
-                    </code></pre>
-                </li>
-                <li>Verify your configuration with:
-                    <pre><code>
-git config --list
-                    </code></pre>
-                </li>
-            </ol>
-        </section>
-        
-        <section id="github-pages">
-            <h2>2. Create and Publish Your Website with GitHub Pages</h2>
-            <p>Follow these steps to create and publish your website:</p>
-            <ol>
-                <li>
-                    Go to <a href="https://github.com" target="_blank">GitHub</a> and create a new repository. Name it as <code>your-username.github.io</code>.
-                </li>
-                <li>
-                    Clone the repository to your local machine using:
-                    <pre><code>
-git clone https://github.com/your-username/your-username.github.io
-                    </code></pre>
-                </li>
-                <li>
-                    Add your website files (e.g., HTML, CSS, JS) to the cloned folder.
-                </li>
-                <li>
-                    Use the following commands to push your site to GitHub:
-                    <pre><code>
-git add .
-git commit -m "Initial commit"
-git push
-                    </code></pre>
-                </li>
-                <li>
-                    Open the repository settings on GitHub and enable GitHub Pages. Set the branch to <code>main</code>.
-                </li>
-                <li>Your website will be live at <code>https://your-username.github.io</code>.
-                </li>
-            </ol>
-        </section>
-        <section>
-            <h2>3. Upload Haaalo card to padlet board</h2>
-            <ul>
-                <li>
-                    24R padlet link: <a href="https://talnet.padlet.org/ldisseldorp/prototypes-24r-hcl9dtv8hwisa6oo" target="_blank">Padlet</a>
-                </li>
-                <li>
-                    24Q padlet link: <a href="https://talnet.padlet.org/ldisseldorp/prototypes-klas-24q-b8r5dyi49v2kwpo2" target="_blank">Padlet</a>
-                </li>
-            </ul>
-        </section>
-        
-        <section id="resources">
-            <h2>4. Additional Resources</h2>
-            <ul>
-                <li>
-                    Official GitHub Pages Guide: <a href="https://pages.github.com/" target="_blank">https://pages.github.com/</a>
-                </li>
-                <li>
-                    Git Documentation: <a href="https://git-scm.com/" target="_blank">https://git-scm.com/</a>
-                </li>
-            </ul>
+        <section class="card-container">
+            <a href="./Weken/Week1/week1.html" class="card">Week 1</a>
+            <a href="./Weken/Week2/week2.html" class="card">Week 2</a>
+            <a href="./Weken/Week3/week3.html" class="card">Week 3</a>
+            <a href="week4.html" class="card">Week 4</a>
         </section>
     </main>
-    <footer>
-        <p>&copy; 2023 Guide for Students</p>
-    </footer>
-    <script src="script.js"></script>
 </body>
 </html>

@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="nl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Opdracht 6 - VS Code Basisinstellingen</title>
+    <link rel="stylesheet" href="../../styles.css" />
+  </head>
+  <body>
+    <header>
+      <h1>Opdracht 6: Basisinstellingen in VS Code</h1>
+    </header>
+    <main>
+      <section>
+        <h2>Beschrijving</h2>
+        <p>
+          In deze opdracht pas je de basisinstellingen van Visual Studio Code
+          aan om je werkruimte persoonlijker en efficiënter te maken.
+        </p>
+        <h3>Stappen:</h3>
+        <ol>
+          <li>
+            <strong>Thema en Lettertype:</strong>
+            <ul>
+              <li>
+                Open de instellingen via <code>Ctrl + ,</code> of het menu
+                <strong>File > Preferences > Settings</strong>.
+              </li>
+              <li>
+                Zoek naar "Color Theme" en kies een thema dat je prettig vindt,
+                zoals "Dark+" of "Light+".
+              </li>
+              <li>Pas de lettergrootte aan (bijvoorbeeld 14px of 16px).</li>
+              <li>
+                Optioneel: pas je lettertype aan (bijvoorbeeld "Fira Code" of
+                "JetBrains Mono").
+              </li>
+            </ul>
+          </li>
+          <li>
+            <strong>Extensies Installeren:</strong>
+            <ul>
+              <li>Open de extensiemarkt met <code>Ctrl + Shift + X</code>.</li>
+              <li>
+                Installeer de extensies:
+                <ul>
+                  <li>
+                    <strong>Prettier</strong>: Automatische codeformattering.
+                    (Shift + Alt + F om een document nu te formatteren)
+                  </li>
+                  <li>
+                    <strong>Live share</strong>: Open je browser en ga naar
+                    <code>https://vscode.dev/share</code> om te delen.
+                  </li>
+                </ul>
+              </li>
+              <li>
+                Activeer of deactiveer een extensie en kijk wat er verandert in
+                je editor.
+              </li>
+            </ul>
+          </li>
+          <li>
+            <strong>Auto Save:</strong>
+            <ul>
+              <li>
+                Schakel Auto Save in via <strong>File > Auto Save</strong> of
+                zoek in de instellingen naar "Auto Save".
+              </li>
+              <li>Selecteer de optie <strong>After Delay</strong>.</li>
+            </ul>
+          </li>
+          <li>
+            Optioneel: Snippet Maken:
+            <ul>
+              <li>
+                Open de command palette met <code>Ctrl + Shift + P</code>.
+              </li>
+              <li>
+                Typ en selecteer
+                <strong>Preferences: Configure User Snippets</strong>.
+              </li>
+              <li>
+                Kies een taal waarin je de snippet wilt toevoegen, bijvoorbeeld
+                <strong>HTML</strong>.
+              </li>
+              <li>
+                Er opent een JSON-bestand. Voeg het volgende toe binnen de
+                bestaande haakjes:
+                <pre><code>
+    "HTML5 Skeleton": {
+        "prefix": "html5",
+        "body": [
+            "&lt;!DOCTYPE html&gt;",
+            "&lt;html lang=\\"en\\"&gt;",
+            "&lt;head&gt;",
+            "    &lt;meta charset=\\"UTF-8\\"&gt;",
+            "    &lt;meta name=\\"viewport\\" content=\\"width=device-width, initial-scale=1.0\\"&gt;",
+            "    &lt;title&gt;$1&lt;/title&gt;",
+            "&lt;/head&gt;",
+            "&lt;body&gt;",
+            "    $0",
+            "&lt;/body&gt;",
+            "&lt;/html&gt;"
+        ],
+        "description": "HTML5 basisdocument"
+    }
+                                </code></pre>
+              </li>
+              <li>Sla het bestand op.</li>
+              <li>
+                Test de snippet door in een nieuw HTML-bestand
+                <code>html5</code> te typen en de snippet te selecteren.
+              </li>
+            </ul>
+          </li>
+        </ol>
+        <h3>Resultaat:</h3>
+        <p>
+          Je hebt de basisinstellingen aangepast en je werkomgeving
+          geoptimaliseerd. Daarnaast heb je een snippet gemaakt voor sneller
+          werken. Je beseft je dat je vs code kan personaliseren zoals je dat
+          zelf wilt. Dit zorgt dat je steeds sneller kan programmeren.
+        </p>
+        <p>
+          In het begin zou ik zoveel mogelijk leren werken met de basis
+          instellingen. Je kunt je backup en sync settings instellen zodat je extensies en instellingen van vs code gekoppeld worden aan je GitHub account. Dit zorgt dat je snel je werkomgeving kan herstellen.
+        </p>
+      </section>
+      <footer>
+        <a href="./week3.html" class="button">Terug naar Week 3</a>
+      </footer>
+    </main>
+  </body>
+</html>
