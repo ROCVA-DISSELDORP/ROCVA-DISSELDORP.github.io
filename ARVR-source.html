@@ -837,12 +837,19 @@ public class TimeScaleExample : MonoBehaviour
 
 
 
-<details class="wp-block-details alignwide has-very-light-gray-to-cyan-bluish-gray-gradient-background has-background is-layout-flow wp-container-core-details-is-layout-7 wp-block-details-is-layout-flow" style="border-style:none;border-width:0px;padding-top:var(--wp--preset--spacing--30);padding-right:var(--wp--preset--spacing--30);padding-bottom:var(--wp--preset--spacing--30);padding-left:var(--wp--preset--spacing--30)"><summary>Download starter project with all dependencies</summary>
-<p>Download the starter project from the link below and unzip it to a folder of your choice.<br><a href="https://github.com/ROCVA-DISSELDORP/VRRollerCoasterSampleProject6.0" target="_blank" rel="noopener">https://github.com/ROCVA-DISSELDORP/VRRollerCoasterSampleProject6.0</a></p>
+<details class="wp-block-details alignwide has-very-light-gray-to-cyan-bluish-gray-gradient-background has-background is-layout-flow wp-container-core-details-is-layout-7 wp-block-details-is-layout-flow" style="border-style:none;border-width:0px;padding-top:var(--wp--preset--spacing--30);padding-right:var(--wp--preset--spacing--30);padding-bottom:var(--wp--preset--spacing--30);padding-left:var(--wp--preset--spacing--30)"><summary>Create Unity Documents Folder Structure</summary>
+<p>Windows File Explorer &gt; ..<em>/Documents</em> &gt; right click &gt; New Folder..<br><em>/Documents<br></em>&nbsp; &nbsp; /Unity<br>&nbsp; &nbsp; &nbsp; &nbsp; /Projects<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; /VRRollerCoasterShooter<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; /Builds<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; /Backups</p>
 
 
 
-
+<details class="wp-block-details has-pale-cyan-blue-background-color has-background is-layout-flow wp-block-details-is-layout-flow" style="padding-right:var(--wp--preset--spacing--30);padding-left:var(--wp--preset--spacing--30)" open=""><summary>Notes</summary>
+<p>If this is your first Unity Project then I highly recommend to create the folder structure that you see above here inside of your own Documents folder on your hard drive, to store this project, the builds of this project and for all your other future Unity projects.</p>
+<p>To create this folder structure, first create a new <em>/Unity</em> folder inside of your <em>../Documents</em> folder. <br>Then inside <em>../Documents/Unity</em> create a <em>/Projects</em> folder for your Unity Projects. <br>Then inside the <em>../Documents/Unity/Projects</em> folder create a <em>VRRollerCoasterShooter</em> folder for this project. <br>Finally inside the <em>../Documents/Unity/Projects/VRRollerCoasterShooter</em> folder, create a <em>/Builds</em> folder for all future builds of this project and a <em>/Backups</em> folder for complete project backup files:</p>
+<p><em>../Documents/Unity/Projects/VRRollerCoasterShooter</em><br><em>&nbsp; &nbsp; &nbsp; /Builds</em><br><em>&nbsp; &nbsp; &nbsp; /Backups</em></p>
+<p>When we create the Unity Project in the next step another folder will be created by Unity for the actual game’s project files, which we will tell Unity to place inside of the <em>../VRRollerCoasterShooter</em> folder. So inside of the <em>../VRRollerCoasterShooter</em> folder will be three other folders; the actual project folder, the <em>/Builds</em> folder and the <em>/Backups</em> folder, like this:</p>
+<p><em>../VRRollerCoasterShooter</em><br><em>&nbsp; &nbsp; &nbsp; /Builds</em><br><em>&nbsp; &nbsp; &nbsp; /Backups</em><br><em>&nbsp; &nbsp; &nbsp; /VRRollerCoasterShooter-Project</em></p>
+<p>Each project that you’re going to create might have builds and each project you create might have other things that you want to save with your project, but outside of the actual game’s project folder. For instance, project backups, notes for yourself, screenshots for something, screen recordings and other things that don’t belong in the actual game. This way you can keep it all neatly organized!</p>
+</details>
 </details>
 
 
@@ -852,13 +859,13 @@ public class TimeScaleExample : MonoBehaviour
 
 
 <details class="wp-block-details alignwide has-very-light-gray-to-cyan-bluish-gray-gradient-background has-background is-layout-flow wp-block-details-is-layout-flow" style="padding-top:var(--wp--preset--spacing--30);padding-right:var(--wp--preset--spacing--30);padding-bottom:var(--wp--preset--spacing--30);padding-left:var(--wp--preset--spacing--30)"><summary>Install the Unity Editor (with Android build support)</summary>
-<p>Unity Hub &gt; Installs &gt; Install Editor &gt; Official releases &gt; 6000.0 LTS &gt; Install<br>&nbsp; &nbsp; &gt; select Android Build Support<br>&nbsp; &nbsp; &gt; select Windows Build Support (IL2CPP)<br>&nbsp; &nbsp; &gt; Install</p>
+<p>Unity Hub &gt; Installs &gt; Install Editor &gt; Official releases &gt; 2022.3.7f1 LTS &gt; Install<br>&nbsp; &nbsp; &gt; select Android Build Support<br>&nbsp; &nbsp; &gt; select Windows Build Support (IL2CPP)<br>&nbsp; &nbsp; &gt; Install</p>
 
 
 
 <details class="wp-block-details has-pale-cyan-blue-background-color has-background is-layout-flow wp-block-details-is-layout-flow" style="padding-right:var(--wp--preset--spacing--30);padding-left:var(--wp--preset--spacing--30)" open=""><summary>Notes</summary>
 <p>Open the Unity Hub application and go to Installs.</p>
-<p>Click on Install Editor and choose Unity 6000.0 LTS from the list of Official releases.<br>(This project uses Unity version 6000.0.28f1 LTS but should also work with later 6000.0 LTS versions)</p>
+<p>Click on Install Editor and choose Unity 2022.3.7f1 LTS from the list of Official releases.<br>(This project uses Unity version 2022.3.7f1 LTS but should also work with later 2022 LTS versions)</p>
 <p>Click on Install and make sure to select Android Build Support in the list of platforms. (The Quest headset runs on Android hardware.)<br>You can also select Windows Build Support (IL2CPP) if you want to be able to build games to Windows with this Unity Editor.</p>
 <p>Keep in mind that you can always add individual build modules to your installed Unity Editor later on by going to Installs in the Unity Hub and by clicking on the cog wheel next to the installed editor in the Installs list:</p>
 
@@ -878,7 +885,7 @@ public class TimeScaleExample : MonoBehaviour
 
 
 
-<details class="wp-block-details alignwide has-very-light-gray-to-cyan-bluish-gray-gradient-background has-background is-layout-flow wp-block-details-is-layout-flow" style="padding-top:var(--wp--preset--spacing--30);padding-right:var(--wp--preset--spacing--30);padding-bottom:var(--wp--preset--spacing--30);padding-left:var(--wp--preset--spacing--30)"><summary>Add Downloaded Unity Project</summary>
+<details class="wp-block-details alignwide has-very-light-gray-to-cyan-bluish-gray-gradient-background has-background is-layout-flow wp-block-details-is-layout-flow" style="padding-top:var(--wp--preset--spacing--30);padding-right:var(--wp--preset--spacing--30);padding-bottom:var(--wp--preset--spacing--30);padding-left:var(--wp--preset--spacing--30)"><summary>Create New Unity Project</summary>
 <details class="wp-block-details has-vivid-red-background-color has-background is-layout-flow wp-block-details-is-layout-flow" style="padding-top:var(--wp--preset--spacing--30);padding-right:var(--wp--preset--spacing--30);padding-bottom:var(--wp--preset--spacing--30);padding-left:var(--wp--preset--spacing--30)" open=""><summary>YouTube</summary>
 <figure class="wp-block-embed is-type-video is-provider-youtube wp-block-embed-youtube wp-embed-aspect-16-9 wp-has-aspect-ratio"><div class="wp-block-embed__wrapper">
 <div class="embed-youtube"><iframe title="Unity VR Roller Coaster Shooter Tutorial (1) - Create New Unity Project" width="500" height="281" src="https://www.youtube.com/embed/LB24GchJPZA?feature=oembed" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen=""></iframe></div>
@@ -887,14 +894,63 @@ public class TimeScaleExample : MonoBehaviour
 
 
 
-<p>Unity Hub &gt; Project > Add > Add from disk > select the unzipped project directory <br></p>
+<p>Unity Hub &gt; New Project <br>&nbsp; &nbsp; &gt; Template = 3D Core Template<br>&nbsp; &nbsp; &gt; Project name = VRRollerCoasterShooter-Project<br>&nbsp; &nbsp; &gt; Project location = <em>../Documents/Unity/Project/VRRollerCoasterShooter<br>&nbsp; &nbsp; &gt; </em>Create Project</p>
 
+
+
+<details class="wp-block-details has-pale-cyan-blue-background-color has-background is-layout-flow wp-block-details-is-layout-flow" style="padding-right:var(--wp--preset--spacing--30);padding-left:var(--wp--preset--spacing--30)" open=""><summary>Notes</summary>
+<p>Open the Unity Hub application and click on New project to create a new project. <br>For the project’s template choose the regular 3D Core Template.<br>For the project name enter VRRollerCoasterShooter-Project. <br>(you can of course choose your own name, just make sure that you add -Project to the end of the name to make things clear.)<br>For the location to create the project in choose the <em>../Documents/Unity/Projects/VRRollerCoasterShooter</em> folder that you’ve created in the previous step.</p>
+
+
+
+<figure class="wp-block-image aligncenter size-large is-resized"><img data-attachment-id="6923" data-permalink="https://timcoster.com/2024/01/23/unity-vr-roller-coaster-shooter-game-tutorial/unity-vrrollercoastershootertutorial-newunityproject/" data-orig-file="https://timcoster.com/wp-content/uploads/2023/09/unity-vrrollercoastershootertutorial-newunityproject.png" data-orig-size="1812,1213" data-comments-opened="1" data-image-meta="{&quot;aperture&quot;:&quot;0&quot;,&quot;credit&quot;:&quot;&quot;,&quot;camera&quot;:&quot;&quot;,&quot;caption&quot;:&quot;&quot;,&quot;created_timestamp&quot;:&quot;0&quot;,&quot;copyright&quot;:&quot;&quot;,&quot;focal_length&quot;:&quot;0&quot;,&quot;iso&quot;:&quot;0&quot;,&quot;shutter_speed&quot;:&quot;0&quot;,&quot;title&quot;:&quot;&quot;,&quot;orientation&quot;:&quot;0&quot;}" data-image-title="Unity-VRRollerCoasterShooterTutorial-NewUnityProject" data-image-description="" data-image-caption="" data-medium-file="https://timcoster.com/wp-content/uploads/2023/09/unity-vrrollercoastershootertutorial-newunityproject.png?w=300" data-large-file="https://timcoster.com/wp-content/uploads/2023/09/unity-vrrollercoastershootertutorial-newunityproject.png?w=1024" width="1024" height="685" src="https://timcoster.com/wp-content/uploads/2023/09/unity-vrrollercoastershootertutorial-newunityproject.png?w=1024" alt="" class="wp-image-6923" style="width:633px;height:auto" srcset="https://timcoster.com/wp-content/uploads/2023/09/unity-vrrollercoastershootertutorial-newunityproject.png?w=1024 1024w, https://timcoster.com/wp-content/uploads/2023/09/unity-vrrollercoastershootertutorial-newunityproject.png?w=150 150w, https://timcoster.com/wp-content/uploads/2023/09/unity-vrrollercoastershootertutorial-newunityproject.png?w=300 300w, https://timcoster.com/wp-content/uploads/2023/09/unity-vrrollercoastershootertutorial-newunityproject.png?w=768 768w, https://timcoster.com/wp-content/uploads/2023/09/unity-vrrollercoastershootertutorial-newunityproject.png 1812w" sizes="(max-width: 1024px) 100vw, 1024px"></figure>
+
+
+
+<p>Click on Create project. <br>Unity will create a folder with the project name that you’ve chosen inside of the <em>../Documents/Unity/Projects/VRRollerCoasterShooter</em> folder in which all the necessary project settings files will be created so if you look in the Windows File Explorer after Unity is done creating the project files you will see these folders inside of <em>../Documents/Unity/Projects/VRRollerCoasterShooter/</em>:</p>
+<p><em>../Documents/Unity/Projects/VRRollerCoasterShooter/<br>&nbsp; &nbsp; /Backups</em><br><em>&nbsp; &nbsp; /Builds</em><br><em>&nbsp; &nbsp; /VRRollerCoasterShooter-Project&nbsp;</em>&nbsp;&nbsp;</p>
+
+
+
+<p>Inside the <em>../VRRollerCoasterShooter-Project</em> folder Unity will also create a folder named <em>/Assets.</em> <br>All of the game asset files that we are going to put into our game will go end up in the <em>../VRRollerCoasterShooter-Project/Assets</em> folder, but we will add all of those asset files to our game from within Unity, in the Unity Project view, (Unity’s own file explorer), so not from outside Unity using the Windows File Explorer, to keep things easy, but know that the <em>../Assets</em> folder that you see in the Unity Project view, is the same <em>/Assets</em> folder that you see in your Windows File Explorer! <br>The <em>../Documents/Unity/Projects/VRRollerCoasterShooter/VRRollerCoasterShooter-Project/Assets</em> folder will be like the ‘root’<em> </em>folder of your game inside of the Unity Editor.<br><br>When Unity is done creating the project directory and files the Unity Editor will launch and will open in a empty template ‘Sample Scene.unity’ level with nothing but a camera and a sun (directional light). <br>We are now ready to start building our game but before we start adding things to the now empty game world, we are going to create a basic folder structure inside of the <em>/Assets</em> folder for all of the game files first (there will be a lot of those), using the Unity Project view. We’ll also do the necessary setup for creating a Android Quest VR game and download the packages and assets to work with first..</p>
+</details>
 </details>
 
 
 
 <div style="height:10px" aria-hidden="true" class="wp-block-spacer"></div>
 
+
+
+<details class="wp-block-details alignwide has-very-light-gray-to-cyan-bluish-gray-gradient-background has-background is-layout-flow wp-container-core-details-is-layout-16 wp-block-details-is-layout-flow" style="border-style:none;border-width:0px;padding-top:var(--wp--preset--spacing--30);padding-right:var(--wp--preset--spacing--30);padding-bottom:var(--wp--preset--spacing--30);padding-left:var(--wp--preset--spacing--30)"><summary>Create Project Folder Structure</summary>
+<details class="wp-block-details has-vivid-red-background-color has-background is-layout-flow wp-block-details-is-layout-flow" style="padding-top:var(--wp--preset--spacing--30);padding-right:var(--wp--preset--spacing--30);padding-bottom:var(--wp--preset--spacing--30);padding-left:var(--wp--preset--spacing--30)" open=""><summary>YouTube</summary>
+<figure class="wp-block-embed is-type-video is-provider-youtube wp-block-embed-youtube wp-embed-aspect-16-9 wp-has-aspect-ratio"><div class="wp-block-embed__wrapper">
+<div class="embed-youtube"><iframe title="Unity VR Roller Coaster Shooter Tutorial (2) - Create Project Folder Structure" width="500" height="281" src="https://www.youtube.com/embed/BCyQ83-G0R4?feature=oembed" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen=""></iframe></div>
+</div></figure>
+</details>
+
+
+
+<p>Project View &gt; <em>/Assets</em> &gt; right click &gt; Create &gt; Folder..</p>
+<p><em>../MyGame</em><br><em>&nbsp; &nbsp; /3DModels</em><br><em>&nbsp; &nbsp; /Audio<br>&nbsp; &nbsp; &nbsp; &nbsp; /Music<br>&nbsp; &nbsp; &nbsp; &nbsp; /SoundFX<br>&nbsp; &nbsp; /LensFlares</em><br><em>&nbsp; &nbsp; /Materials</em><br><em>&nbsp; &nbsp; /Prefabs</em><br><em>&nbsp; &nbsp; /Scenes</em><br><em>&nbsp; &nbsp; /Scripts</em><br><em>&nbsp; &nbsp; /Skyboxes</em><br><em>&nbsp; &nbsp; /Terrains</em><br><em>&nbsp; &nbsp; &nbsp; &nbsp; /TerrainData</em><br><em>&nbsp; &nbsp; &nbsp; &nbsp; /TerrainLayers</em><br><em>&nbsp; &nbsp; /Textures</em><br><em>&nbsp; &nbsp; /Trees</em></p>
+
+
+
+<details class="wp-block-details has-pale-cyan-blue-background-color has-background is-layout-flow wp-block-details-is-layout-flow" style="padding-right:var(--wp--preset--spacing--30);padding-left:var(--wp--preset--spacing--30)" open=""><summary>Notes</summary>
+<p>Create the folder structure that you see above here inside of the <em>/Assets</em> folder of your new empty Unity project, to store all the files for your game. <br>First create a folder named ‘MyGame’ by right clicking on the <em>/Assets</em> folder in the Unity Project view, and selecting Create &gt; Folder. <br>Then create the folders with the names ‘3DModels’, ‘Audio’, ‘LensFlares’, ‘Materials’, etcetera, inside of the <em>Assets/MyGame</em> folder.</p>
+<p>Also create two folders inside the Audio folder for SoundFX and Music, and two folders inside the Terrains folder for TerrainData and TerrainLayers.</p>
+</details>
+
+
+
+<details class="wp-block-details has-electric-grass-gradient-background has-background is-layout-flow wp-block-details-is-layout-flow" style="padding-right:var(--wp--preset--spacing--30);padding-left:var(--wp--preset--spacing--30)" open=""><summary>Links</summary>
+<p><strong>Unity Manual / Working in Unity / Unity’s interface</strong><br><a href="https://docs.unity3d.com/Manual/UsingTheEditor.html" target="_blank" rel="noopener">https://docs.unity3d.com/Manual/UsingTheEditor.html</a><br><strong>Unity Manual / Working in Unity / Unity’s interface / The Project Window</strong><br><a href="https://docs.unity3d.com/Manual/ProjectView.html" target="_blank" rel="noopener">https://docs.unity3d.com/Manual/ProjectView.html</a><br><strong>Unity Manual / Working in Unity / Unity’s interface / The Scene View</strong><br><a href="https://docs.unity3d.com/Manual/UsingTheSceneView.html" target="_blank" rel="noopener">https://docs.unity3d.com/Manual/UsingTheSceneView.html</a><br><strong>Unity Manual / Working in Unity / Unity’s interface / The Game View</strong><br><a href="https://docs.unity3d.com/Manual/GameView.html" target="_blank" rel="noopener">https://docs.unity3d.com/Manual/GameView.html</a><br><strong>Unity Manual / Working in Unity / Unity’s interface / The Hierarchy Window</strong><br><a href="https://docs.unity3d.com/Manual/Hierarchy.html" target="_blank" rel="noopener">https://docs.unity3d.com/Manual/Hierarchy.html</a><br><strong>Unity Manual / Working in Unity / Unity’s interface / The Inspector Window</strong><br><a href="https://docs.unity3d.com/Manual/UsingTheInspector.html" target="_blank" rel="noopener">https://docs.unity3d.com/Manual/UsingTheInspector.html</a></p>
+</details>
+</details>
+
+
+
+<div style="height:10px" aria-hidden="true" class="wp-block-spacer"></div>
 
 
 
@@ -913,6 +969,75 @@ public class TimeScaleExample : MonoBehaviour
 <div style="height:10px" aria-hidden="true" class="wp-block-spacer"></div>
 
 
+
+<details class="wp-block-details alignwide has-very-light-gray-to-cyan-bluish-gray-gradient-background has-background is-layout-flow wp-block-details-is-layout-flow" style="padding-top:var(--wp--preset--spacing--30);padding-right:var(--wp--preset--spacing--30);padding-bottom:var(--wp--preset--spacing--30);padding-left:var(--wp--preset--spacing--30)"><summary>Create Empty Script Files</summary>
+<p>Project view &gt; <em>Assets/MyGame/Scripts</em> &gt; right click &gt;&nbsp; Create &gt; C# Script * 9</p>
+<p><em>Assets/MyGame/Scripts</em><br><em>&nbsp; &nbsp; /AnimateRollerCoasterTrain.cs</em><br><em>&nbsp; &nbsp; /Bullet.cs<br>&nbsp; &nbsp; /CustomEventTrigger.cs<br>&nbsp; &nbsp; /GameManager.cs<br>&nbsp; &nbsp; /GameOverCanvas.cs<br>&nbsp; &nbsp; /MainMenuCanvas.cs<br>&nbsp; &nbsp; /RollerCoasterTrain.cs<br>&nbsp; &nbsp; /Target.cs<br>&nbsp; &nbsp; /VRGun.cs<br>&nbsp; &nbsp; /VRPlayer.cs</em></p>
+
+
+
+<details class="wp-block-details has-pale-cyan-blue-background-color has-background is-layout-flow wp-block-details-is-layout-flow" style="padding-right:var(--wp--preset--spacing--30);padding-left:var(--wp--preset--spacing--30)" open=""><summary>Notes</summary>
+<p>In the list above you can see the script files that are going to be created during this tutorial. The tutorial will go over how to create each script individually in the steps of the tutorial but you can choose to create the empty script files with the names that you see above here beforehand.<br>Make sure to copy the name of each script exactly (filenames are case sensitive) and make sure that the class names written at the top inside of each script in line 5 match the scripts filenames or you will get error messages popping up in the Unity Console view:</p>
+
+
+<div class="wp-block-syntaxhighlighter-code "><pre class="brush: plain; auto-links: false; highlight: [5]; title: ; quick-code: false; notranslate" title="">using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class Bullet : MonoBehaviour
+{
+    // Start is called before the first frame update
+    void Start()
+    {
+
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+        
+    }
+}
+</pre></div>
+
+
+<p>If you name scripts immediately during creation then Unity will write the correct class name inside the script but if you rename a script after it is created then you will have to open the script and rename the class file manually. <br>To do this simply double click on a script file in the Project view to open it in your script editor, rename the name of the class and save the script (Ctrl+S).</p>
+</details>
+</details>
+
+
+
+<div style="height:10px" aria-hidden="true" class="wp-block-spacer"></div>
+
+
+
+<details class="wp-block-details alignwide has-very-light-gray-to-cyan-bluish-gray-gradient-background has-background is-layout-flow wp-block-details-is-layout-flow" style="padding-top:var(--wp--preset--spacing--30);padding-right:var(--wp--preset--spacing--30);padding-bottom:var(--wp--preset--spacing--30);padding-left:var(--wp--preset--spacing--30)"><summary>Create Empty Scene Files</summary>
+<details class="wp-block-details has-vivid-red-background-color has-background is-layout-flow wp-block-details-is-layout-flow" style="padding-top:var(--wp--preset--spacing--30);padding-right:var(--wp--preset--spacing--30);padding-bottom:var(--wp--preset--spacing--30);padding-left:var(--wp--preset--spacing--30)" open=""><summary>YouTube</summary>
+<figure class="wp-block-embed is-type-video is-provider-youtube wp-block-embed-youtube wp-embed-aspect-16-9 wp-has-aspect-ratio"><div class="wp-block-embed__wrapper">
+<div class="embed-youtube"><iframe title="Unity VR Roller Coaster Shooter Tutorial (3) - Create Empty Scene Files" width="500" height="281" src="https://www.youtube.com/embed/r21wwuxwN7M?feature=oembed" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen=""></iframe></div>
+</div></figure>
+</details>
+
+
+
+<p>Project view &gt; <em>Assets/MyGame/Scenes</em>&gt; right click &gt;&nbsp; Create &gt; Scene * 4</p>
+<p><em>Assets/MyGame/Scenes</em><br><em>&nbsp; &nbsp; /Level 1.unity</em><br><em>&nbsp; &nbsp; /Level 2.unity<br>&nbsp; &nbsp; /Level 3.unity<br>&nbsp; &nbsp; /MainMenu.unity<br></em></p>
+
+
+
+<details class="wp-block-details has-pale-cyan-blue-background-color has-background is-layout-flow wp-block-details-is-layout-flow" style="padding-right:var(--wp--preset--spacing--30);padding-left:var(--wp--preset--spacing--30)" open=""><summary>Notes</summary>
+<p>In the list above you can see the Scene (Level) files that are going to be created during this tutorial. The tutorial will go over how to create each Scene individually in the steps of this tutorial but you can choose to create the empty Scene files with the names that you see above here beforehand. Creating the empty Scene files beforehand will make the loading of next level scenes and going from a level back to the main menu scene easier to test.</p>
+<p>Of course feel free to create your own scenes for instance if you want to test stuff in a empty scene. I also recommend working on two or three levels at the same time by copy and pasting things from one scene to the other so you can find out what each level will have to have in common and so you can learn to make re-usable GameObjects and component based systems for your own game(s).</p>
+<p>Keep in mind that Scenes are called scenes because they don’t always have to be levels for your game,<br>a scene can also be a cut-scene movie, a loading screen, a main menu, a multiplayer lobby with chat or something else, and that one level of your game can consist of multiple scenes loaded one after each other, or loaded at the same time and stacked on top of each other. <br>For instance one scene could be used as a base scene that contains all the GameObjects that are always needed in each level (think camera’s, game managers, a lighting setup etcetera) which ‘additively’ loads the individual level scenes with the level geometries from script. So there is a lot of flexibility, but that is a story for another time…</p>
+</details>
+</details>
+
+
+
+<div style="height:10px" aria-hidden="true" class="wp-block-spacer"></div>
+
+
+
 <details class="wp-block-details alignwide has-very-light-gray-to-cyan-bluish-gray-gradient-background has-background is-layout-flow wp-block-details-is-layout-flow" style="padding-top:var(--wp--preset--spacing--30);padding-right:var(--wp--preset--spacing--30);padding-bottom:var(--wp--preset--spacing--30);padding-left:var(--wp--preset--spacing--30)"><summary>Switch Build Platform</summary>
 <details class="wp-block-details has-vivid-red-background-color has-background is-layout-flow wp-block-details-is-layout-flow" style="padding-top:var(--wp--preset--spacing--30);padding-right:var(--wp--preset--spacing--30);padding-bottom:var(--wp--preset--spacing--30);padding-left:var(--wp--preset--spacing--30)" open=""><summary>YouTube</summary>
 <figure class="wp-block-embed is-type-video is-provider-youtube wp-block-embed-youtube wp-embed-aspect-16-9 wp-has-aspect-ratio"><div class="wp-block-embed__wrapper">
@@ -929,6 +1054,96 @@ public class TimeScaleExample : MonoBehaviour
 <details class="wp-block-details has-pale-cyan-blue-background-color has-background is-layout-flow wp-block-details-is-layout-flow" style="padding-right:var(--wp--preset--spacing--30);padding-left:var(--wp--preset--spacing--30)" open=""><summary>Notes</summary>
 <p>Open the Build Settings window and choose Android from the list of Platforms on the left side of the window. Then tell Unity to switch the build platform to Android by pressing the Switch Platform button.<br> <br>You can always switch the build platform of a project later on but because each platform can have different (graphics) quality settings, depending on the platform that you choose, Unity will automatically reimport all of the asset files in your project and adjust their import settings when you switch platform so that for instance textures have a lower max resolution setting when built to mobile devices than they have when built to PC’s or other consoles.<br>Switching platforms and reimporting assets later is not a problem but it can take a lot longer to reimport all the assets when there are already a lot of assets in your game..<br><br>If you look at the Quality settings in the Project Setting window you can see the default quality settings for each individual platform. The default quality setting for Android is set to Medium as opposed to the default Quality setting for PC which is High, so expect the quality of shadows and textures etcetera to be a lot lower when you run your game on the Quest’s hardware instead of while playtesting in the Unity Editor using the Oculus Rift software, with the Quest in Quest Link mode. But you can create your own custom quality settings if you want to increase the quality of the graphics on the Quest hardware!</p>
 </details>
+</details>
+
+
+
+<div style="height:10px" aria-hidden="true" class="wp-block-spacer"></div>
+
+
+
+<details class="wp-block-details alignwide has-very-light-gray-to-cyan-bluish-gray-gradient-background has-background is-layout-flow wp-block-details-is-layout-flow" style="padding-top:var(--wp--preset--spacing--30);padding-right:var(--wp--preset--spacing--30);padding-bottom:var(--wp--preset--spacing--30);padding-left:var(--wp--preset--spacing--30)"><summary>Install ‘XR Plugin Management’ Package </summary>
+<details class="wp-block-details has-vivid-red-background-color has-background is-layout-flow wp-block-details-is-layout-flow" style="padding-top:var(--wp--preset--spacing--30);padding-right:var(--wp--preset--spacing--30);padding-bottom:var(--wp--preset--spacing--30);padding-left:var(--wp--preset--spacing--30)" open=""><summary>YouTube</summary>
+<figure class="wp-block-embed is-type-video is-provider-youtube wp-block-embed-youtube wp-embed-aspect-16-9 wp-has-aspect-ratio"><div class="wp-block-embed__wrapper">
+<div class="embed-youtube"><iframe title="Unity VR Roller Coaster Shooter Tutorial (5) - Install XR Plugin Management Package" width="500" height="281" src="https://www.youtube.com/embed/F16H9bsBKGY?feature=oembed" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen=""></iframe></div>
+</div></figure>
+</details>
+
+
+
+<p>Unity Menu Bar &gt; Window &gt; Package Manager <br>&nbsp; &nbsp; &gt; switch ‘Packages: in Project’ to ‘Packages: Unity Registry’)<br>&nbsp; &nbsp; &gt; Packages &gt; XR Plugin Management &gt; click Install<br>&nbsp; &nbsp; &gt; Restart? &gt; Yes</p>
+</details>
+
+
+
+<div style="height:10px" aria-hidden="true" class="wp-block-spacer"></div>
+
+
+
+<details class="wp-block-details alignwide has-very-light-gray-to-cyan-bluish-gray-gradient-background has-background is-layout-flow wp-block-details-is-layout-flow" style="padding-top:var(--wp--preset--spacing--30);padding-right:var(--wp--preset--spacing--30);padding-bottom:var(--wp--preset--spacing--30);padding-left:var(--wp--preset--spacing--30)"><summary>Change Project Settings</summary>
+<details class="wp-block-details has-vivid-red-background-color has-background is-layout-flow wp-block-details-is-layout-flow" style="padding-top:var(--wp--preset--spacing--30);padding-right:var(--wp--preset--spacing--30);padding-bottom:var(--wp--preset--spacing--30);padding-left:var(--wp--preset--spacing--30)" open=""><summary>YouTube</summary>
+<figure class="wp-block-embed is-type-video is-provider-youtube wp-block-embed-youtube wp-embed-aspect-16-9 wp-has-aspect-ratio"><div class="wp-block-embed__wrapper">
+<div class="embed-youtube"><iframe title="Unity VR Roller Coaster Shooter Tutorial (6) - Change Project Settings" width="500" height="281" src="https://www.youtube.com/embed/vaJeveJWXMU?feature=oembed" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen=""></iframe></div>
+</div></figure>
+</details>
+
+
+
+<p>Unity Menu Bar &gt; Edit &gt; Project Settings <br>&nbsp; &nbsp; &gt; XR Plug-in Management <br>&nbsp; &nbsp; &nbsp; &nbsp; &gt; Android Settings tab &gt; Plug-in Providers = Oculus<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; (this will automatically install the Oculus XR Plugin package)<br>&nbsp; &nbsp; &nbsp; &nbsp; &gt; Windows, Mac, Linux Settings tab &gt; Plug-in Providers = OpenXR<br>&nbsp; &nbsp; &nbsp; &nbsp; &gt; OpenXR &gt; Windows, Mac, Linux Settings tab &gt; Interaction Profiles &gt; + (click Plus Button) &gt; Oculus Touch Controller Profile<br>&nbsp; &nbsp; &gt; Player<br>&nbsp; &nbsp; &nbsp; &nbsp; &gt; Company Name = &lt;Your Company Name&gt;<br>&nbsp; &nbsp; &nbsp; &nbsp; &gt; Product Name = VR Roller Coaster Shooter&nbsp;<br>&nbsp; &nbsp; &nbsp; &nbsp; &gt; Android Settings Tab<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &gt; Other Settings<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &gt; Rendering<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &gt; Color Space = Linear<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &gt; Auto Graphics API = Off<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &gt; Graphics APIs = Vulkan, OpenGLES3<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &gt; Identification<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &gt; Override Default Package Name = Off<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &gt; Minimum API Level = Android 10.0 (API level 29)<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &gt; Configuration<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &gt; Scripting Backend = IL2CPP<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &gt; Target Architectures = Arm64<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &gt; Install Location = Automatic</p>
+</details>
+
+
+
+<div style="height:10px" aria-hidden="true" class="wp-block-spacer"></div>
+
+
+
+<details class="wp-block-details alignwide has-very-light-gray-to-cyan-bluish-gray-gradient-background has-background is-layout-flow wp-block-details-is-layout-flow" style="padding-top:var(--wp--preset--spacing--30);padding-right:var(--wp--preset--spacing--30);padding-bottom:var(--wp--preset--spacing--30);padding-left:var(--wp--preset--spacing--30)"><summary>Install ‘XR Interaction Toolkit’ Package </summary>
+<details class="wp-block-details has-vivid-red-background-color has-background is-layout-flow wp-block-details-is-layout-flow" style="padding-top:var(--wp--preset--spacing--30);padding-right:var(--wp--preset--spacing--30);padding-bottom:var(--wp--preset--spacing--30);padding-left:var(--wp--preset--spacing--30)" open=""><summary>YouTube</summary>
+<figure class="wp-block-embed is-type-video is-provider-youtube wp-block-embed-youtube wp-embed-aspect-16-9 wp-has-aspect-ratio"><div class="wp-block-embed__wrapper">
+<div class="embed-youtube"><iframe title="Unity VR Roller Coaster Shooter Tutorial (7) - Install XR Interaction Toolkit Package" width="500" height="281" src="https://www.youtube.com/embed/gOcVq5TS5JI?feature=oembed" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen=""></iframe></div>
+</div></figure>
+</details>
+
+
+
+<p>Unity Menu Bar &gt; Window &gt; Package Manager &gt; Packages &gt; XR Interaction Toolkit &gt; click Install</p>
+</details>
+
+
+
+<div style="height:10px" aria-hidden="true" class="wp-block-spacer"></div>
+
+
+
+<details class="wp-block-details alignwide has-very-light-gray-to-cyan-bluish-gray-gradient-background has-background is-layout-flow wp-block-details-is-layout-flow" style="padding-top:var(--wp--preset--spacing--30);padding-right:var(--wp--preset--spacing--30);padding-bottom:var(--wp--preset--spacing--30);padding-left:var(--wp--preset--spacing--30)"><summary>Install XR Interaction Toolkit Samples</summary>
+<details class="wp-block-details has-vivid-red-background-color has-background is-layout-flow wp-block-details-is-layout-flow" style="padding-top:var(--wp--preset--spacing--30);padding-right:var(--wp--preset--spacing--30);padding-bottom:var(--wp--preset--spacing--30);padding-left:var(--wp--preset--spacing--30)" open=""><summary>YouTube</summary>
+<figure class="wp-block-embed is-type-video is-provider-youtube wp-block-embed-youtube wp-embed-aspect-16-9 wp-has-aspect-ratio"><div class="wp-block-embed__wrapper">
+<div class="embed-youtube"><iframe title="Unity VR Roller Coaster Shooter Tutorial (8) - Install XR Interaction Toolkit Samples" width="500" height="281" src="https://www.youtube.com/embed/fomW8Aj-F6M?feature=oembed" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen=""></iframe></div>
+</div></figure>
+</details>
+
+
+
+<p>Unity Menu Bar &gt; Window &gt; Package Manager &gt; Packages &gt; XR Interaction Toolkit &gt; Samples &gt; Starter Assets &gt; click Import</p>
+</details>
+
+
+
+<div style="height:10px" aria-hidden="true" class="wp-block-spacer"></div>
+
+
+
+<details class="wp-block-details alignwide has-very-light-gray-to-cyan-bluish-gray-gradient-background has-background is-layout-flow wp-block-details-is-layout-flow" style="padding-top:var(--wp--preset--spacing--30);padding-right:var(--wp--preset--spacing--30);padding-bottom:var(--wp--preset--spacing--30);padding-left:var(--wp--preset--spacing--30)"><summary>Import TextMeshPro Examples</summary>
+<details class="wp-block-details has-vivid-red-background-color has-background is-layout-flow wp-block-details-is-layout-flow" style="padding-top:var(--wp--preset--spacing--30);padding-right:var(--wp--preset--spacing--30);padding-bottom:var(--wp--preset--spacing--30);padding-left:var(--wp--preset--spacing--30)" open=""><summary>YouTube</summary>
+<figure class="wp-block-embed is-type-video is-provider-youtube wp-block-embed-youtube wp-embed-aspect-16-9 wp-has-aspect-ratio"><div class="wp-block-embed__wrapper">
+<div class="embed-youtube"><iframe title="Unity VR Roller Coaster Shooter Tutorial (9) - Import TextMeshPro Examples" width="500" height="281" src="https://www.youtube.com/embed/kuYgLDxzw0U?feature=oembed" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen=""></iframe></div>
+</div></figure>
+</details>
+
+
+
+<p>Unity Menu Bar &gt; Window &gt; TextMeshPro <br>&nbsp; &nbsp; &gt; Import TMP Essential Resources<br>&nbsp; &nbsp; &gt; Import TMP Examples &amp; Extras</p>
 </details>
 
 
@@ -960,6 +1175,61 @@ public class TimeScaleExample : MonoBehaviour
 
 
 <div style="height:10px" aria-hidden="true" class="wp-block-spacer"></div>
+
+
+
+<details class="wp-block-details alignwide has-very-light-gray-to-cyan-bluish-gray-gradient-background has-background is-layout-flow wp-block-details-is-layout-flow" style="padding-top:var(--wp--preset--spacing--30);padding-right:var(--wp--preset--spacing--30);padding-bottom:var(--wp--preset--spacing--30);padding-left:var(--wp--preset--spacing--30)"><summary>Download Roller Coaster Train Sound Effect</summary>
+<details class="wp-block-details has-vivid-red-background-color has-background is-layout-flow wp-block-details-is-layout-flow" style="padding-top:var(--wp--preset--spacing--30);padding-right:var(--wp--preset--spacing--30);padding-bottom:var(--wp--preset--spacing--30);padding-left:var(--wp--preset--spacing--30)" open=""><summary>YouTube</summary>
+<figure class="wp-block-embed is-type-video is-provider-youtube wp-block-embed-youtube wp-embed-aspect-16-9 wp-has-aspect-ratio"><div class="wp-block-embed__wrapper">
+<div class="embed-youtube"><iframe title="Unity VR Roller Coaster Shooter Tutorial (10) - Download Roller Coaster Train Sound Effect" width="500" height="281" src="https://www.youtube.com/embed/xqmXod7GdPc?feature=oembed" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen=""></iframe></div>
+</div></figure>
+</details>
+
+
+
+<p><strong>Download roller coaster train wheels sound loop</strong><br><a href="https://freesound.org/people/wmquincy101/sounds/351382/" target="_blank" rel="noopener">https://freesound.org/people/wmquincy101/sounds/351382/</a></p>
+
+
+
+<div class="wp-block-file has-pale-cyan-blue-background-color has-background" style="padding-right:var(--wp--preset--spacing--30);padding-left:var(--wp--preset--spacing--30)"><a id="wp-block-file--media-15b44ce7-6674-43c5-8179-b8d09578c7eb" href="https://timcoster.com/wp-content/uploads/2023/09/351382__wmquincy101__minecart.wav">351382__wmquincy101__minecart</a><a href="https://timcoster.com/wp-content/uploads/2023/09/351382__wmquincy101__minecart.wav" class="wp-block-file__button wp-element-button" download="" aria-describedby="wp-block-file--media-15b44ce7-6674-43c5-8179-b8d09578c7eb">Download</a></div>
+</details>
+
+
+
+<div style="height:10px" aria-hidden="true" class="wp-block-spacer"></div>
+
+
+
+<details class="wp-block-details alignwide has-very-light-gray-to-cyan-bluish-gray-gradient-background has-background is-layout-flow wp-block-details-is-layout-flow" style="padding-top:var(--wp--preset--spacing--30);padding-right:var(--wp--preset--spacing--30);padding-bottom:var(--wp--preset--spacing--30);padding-left:var(--wp--preset--spacing--30)"><summary>Download Skyboxes</summary>
+<details class="wp-block-details has-vivid-red-background-color has-background is-layout-flow wp-block-details-is-layout-flow" style="padding-top:var(--wp--preset--spacing--30);padding-right:var(--wp--preset--spacing--30);padding-bottom:var(--wp--preset--spacing--30);padding-left:var(--wp--preset--spacing--30)" open=""><summary>YouTube</summary>
+<figure class="wp-block-embed is-type-video is-provider-youtube wp-block-embed-youtube wp-embed-aspect-16-9 wp-has-aspect-ratio"><div class="wp-block-embed__wrapper">
+<div class="embed-youtube"><iframe title="Unity VR Roller Coaster Shooter Tutorial (11) - Download Skyboxes" width="500" height="281" src="https://www.youtube.com/embed/dX6oC1eRT40?feature=oembed" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen=""></iframe></div>
+</div></figure>
+</details>
+
+
+
+<p><strong>Add Skyboxes package from the Unity Asset Store to Your Assets</strong><br>Unity Menu Bar &gt; Window &gt; Asset Store &gt; search ‘Allsky Free – 10 Sky / Skybox Set’</p>
+<p><a href="https://assetstore.unity.com/packages/2d/textures-materials/sky/allsky-free-10-sky-skybox-set-146014" target="_blank" rel="noreferrer noopener">https://assetstore.unity.com/packages/2d/textures-materials/sky/allsky-free-10-sky-skybox-set-146014</a></p>
+<p><strong>Import Skyboxes package into your project</strong><br>Unity Menu Bar &gt; Window &gt; Package Manager <br>&nbsp; &nbsp; &gt; Package Manager Menu Bar &gt; Packages: = My Assets<br>&nbsp; &nbsp; &gt; AllSky Free – 10 Sky / Skybox Set <br>&nbsp; &nbsp; &nbsp; &nbsp; &gt; click Download<br>&nbsp; &nbsp; &nbsp; &nbsp; &gt; click Import<br>&nbsp; &nbsp; &nbsp; &nbsp; &gt; import All</p>
+
+
+
+<p><strong>Move Allskyfree folder to MyGame/Skyboxes folder</strong><br>Project View &gt; move folder <em>Assets/Allskyfree</em> to folder <em>Assets/MyGame/Skyboxes</em></p>
+<p><em>/Assets</em><br><em>&nbsp; &nbsp; /MyGame</em><br><em>&nbsp; &nbsp; &nbsp; &nbsp; /3DModels</em><br><em>&nbsp; &nbsp; &nbsp; &nbsp; /Audio<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; /Music<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; /SoundFX</em><br><em>&nbsp; &nbsp; &nbsp; &nbsp; /Materials</em><br><em>&nbsp; &nbsp; &nbsp; &nbsp; /Prefabs</em><br><em>&nbsp; &nbsp; &nbsp; &nbsp; /Scenes</em><br><em>&nbsp; &nbsp; &nbsp; &nbsp; /Scripts</em><br><em>&nbsp; &nbsp; &nbsp; &nbsp; /Skyboxes<br><strong>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; /AllSkyFree</strong></em><br><em>&nbsp; &nbsp; &nbsp; &nbsp; /Terrains</em><br><em>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; /TerrainData</em><br><em>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; /TerrainLayers</em><br><em>&nbsp; &nbsp; &nbsp; &nbsp; /Textures</em><br><em>&nbsp; &nbsp; &nbsp; &nbsp; /Trees</em></p>
+
+
+
+<details class="wp-block-details has-pale-cyan-blue-background-color has-background is-layout-flow wp-block-details-is-layout-flow" style="padding-right:var(--wp--preset--spacing--30);padding-left:var(--wp--preset--spacing--30)" open=""><summary>Notes</summary>
+<p>Go to the Unity Asset Store in your webbrowser and search for the Allsky Free skyboxes package with the Store search bar. Add the Allsky Free Skyboxes package to ‘Your Assets’. When the website asks if you want to open the package in Unity click yes to be taken back to Unity to the Package Manager window from where you can download the skyboxes package to your computer. (All Asset store packages that you download will be placed in the …. folder) <br>Click on Import to import the skyboxes into your project folder after the package is downloaded. Finally move the AllSkyFree folder from the root Assets/ folder  of your project to the Assets/MyGame/Skyboxes folder.</p>
+</details>
+</details>
+
+
+
+<div style="height:10px" aria-hidden="true" class="wp-block-spacer"></div>
+
+
 
 <details class="wp-block-details alignwide has-very-light-gray-to-cyan-bluish-gray-gradient-background has-background is-layout-flow wp-block-details-is-layout-flow" style="padding-top:var(--wp--preset--spacing--30);padding-right:var(--wp--preset--spacing--30);padding-bottom:var(--wp--preset--spacing--30);padding-left:var(--wp--preset--spacing--30)"><summary>Setup Skybox</summary>
 <details class="wp-block-details has-vivid-red-background-color has-background is-layout-flow wp-block-details-is-layout-flow" style="padding-top:var(--wp--preset--spacing--30);padding-right:var(--wp--preset--spacing--30);padding-bottom:var(--wp--preset--spacing--30);padding-left:var(--wp--preset--spacing--30)" open=""><summary>YouTube</summary>
@@ -1115,6 +1385,26 @@ public class TimeScaleExample : MonoBehaviour
 
 
 
+<details class="wp-block-details alignwide has-very-light-gray-to-cyan-bluish-gray-gradient-background has-background is-layout-flow wp-block-details-is-layout-flow" style="padding-top:var(--wp--preset--spacing--30);padding-right:var(--wp--preset--spacing--30);padding-bottom:var(--wp--preset--spacing--30);padding-left:var(--wp--preset--spacing--30)"><summary>Download Trees</summary>
+<details class="wp-block-details has-vivid-red-background-color has-background is-layout-flow wp-block-details-is-layout-flow" style="padding-top:var(--wp--preset--spacing--30);padding-right:var(--wp--preset--spacing--30);padding-bottom:var(--wp--preset--spacing--30);padding-left:var(--wp--preset--spacing--30)" open=""><summary>YouTube</summary>
+<figure class="wp-block-embed is-type-video is-provider-youtube wp-block-embed-youtube wp-embed-aspect-16-9 wp-has-aspect-ratio"><div class="wp-block-embed__wrapper">
+<div class="embed-youtube"><iframe title="Unity VR Roller Coaster Shooter Tutorial (16) - Download Trees" width="500" height="281" src="https://www.youtube.com/embed/pR8NiBkcihc?feature=oembed" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen=""></iframe></div>
+</div></figure>
+</details>
+
+
+
+<p>Unity Menu Bar &gt; Window &gt; Asset Store &gt; Fantasy Forest Trees or Polygon trees<br><a href="https://assetstore.unity.com/packages/3d/environments/fantasy/fantasy-forest-environment-free-demo-35361" target="_blank" rel="noreferrer noopener">https://assetstore.unity.com/packages/3d/environments/fantasy/fantasy-forest-environment...<a href=https://assetstore.unity.com/packages/3d/vegetation/trees/polygon-trees-224068" target="_blank" rel="noreferrer noopener">https://assetstore.unity.com/packages/3d/vegetation/trees/polygon-trees...</a> </p>
+<p>Project view <br>&nbsp; &nbsp; &gt; move folder <em>Assets/Dream Forest Tree/</em> to <em>Assets/MyGame/Trees/</em><br>&nbsp; &nbsp; &gt; remove folder <em>Assets/MyGame/Trees/DreamForestTree/PostProcessing</em><br>&nbsp; &nbsp; (For PostProcessing effects download the latest version of the Unity Post Processing package from the Package Manager instead)</p>
+<p>Try both tree packages, depending on your rendering enige some trees may be purple the use the other package
+</details>
+
+
+
+<div style="height:10px" aria-hidden="true" class="wp-block-spacer"></div>
+
+
+
 <details class="wp-block-details alignwide has-very-light-gray-to-cyan-bluish-gray-gradient-background has-background is-layout-flow wp-block-details-is-layout-flow" style="padding-top:var(--wp--preset--spacing--30);padding-right:var(--wp--preset--spacing--30);padding-bottom:var(--wp--preset--spacing--30);padding-left:var(--wp--preset--spacing--30)"><summary>Download Textures</summary>
 <p>This project uses terrain textures (images for use in games) from the Dream Forest Tree package and from other packages used in the tutorial. Of course feel free to download your own textures from any source available. There are many free textures packages in the Unity Asset store and you can search for textures with Google images etcetera. If you want textures that can be repeated/tiled without any visible seams at the edges then search for ’tileable’ or ‘seamless’ textures and go for square textures because they’re easier to work with when tiling and offsetting them on materials. <br>To check if a texture is square you can look at the pixel dimensions/resolution of the texture’s properties, shown as two numbers for the width and height of the texture with an x in between, like so: 1024 x 1024.<br>If you search for tileable wood, stone, metal, grass, brick or sci-fi textures you will probably find a lot of textures that are useful for your games.<br>I also recommend downloading a bunch of ‘debug’ textures with just basic grids, lines, sizes and other shapes on them that might help with building your level geometry to a certain scale.</p>
 </details>
@@ -1259,7 +1549,6 @@ public class TimeScaleExample : MonoBehaviour
 
 <details class="wp-block-details has-electric-grass-gradient-background has-background is-layout-flow wp-block-details-is-layout-flow" style="padding-right:var(--wp--preset--spacing--30);padding-left:var(--wp--preset--spacing--30)" open=""><summary>Links</summary>
 <p><strong>Unity Manual / World Building / Terrain / Trees<br></strong><a href="https://docs.unity3d.com/2022.3/Documentation/Manual/terrain-Trees.html" target="_blank" rel="noopener">https://docs.unity3d.com/2022.3/Documentation/Manual/terrain-Trees.html</a></p>
-<p>For more trees you can try these other packages. Unity Menu Bar &gt; Window &gt; Asset Store &gt; Fantasy Forest Trees or Polygon trees<br><a href="https://assetstore.unity.com/packages/3d/environments/fantasy/fantasy-forest-environment-free-demo-35361" target="_blank" rel="noreferrer noopener">https://assetstore.unity.com/packages/3d/environments/fantasy/fantasy-forest-environment...<a href=https://assetstore.unity.com/packages/3d/vegetation/trees/polygon-trees-224068" target="_blank" rel="noreferrer noopener">https://assetstore.unity.com/packages/3d/vegetation/trees/polygon-trees...</a> </p>
 </details>
 </details>
 
@@ -1304,6 +1593,32 @@ public class TimeScaleExample : MonoBehaviour
 
 <p><strong>Draw Grass<br><img src="./ARVR/drawGrass.png"><br></strong>&nbsp; &nbsp; Inspector view &gt; Terrain.Terrain<br>&nbsp; &nbsp; &nbsp; &nbsp; .Terrain Settings<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; .Tree &amp; Detail Objects.Detail Distance = ~150<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; .Wind Settings for Grass<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; .Speed = 0.7<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; .Bending = 0.25<br>&nbsp; &nbsp; &nbsp; &nbsp; .Paint Details<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; .Brush Strength = 1<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; .Brush Size = 10<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; (Use left mouse button to draw and shift+left mouse button to erase)</p>
 <p><strong>Draw Details<br></strong>(Use left mouse button to draw and shift+left mouse button to erase)<strong><br></strong></p>
+</details>
+
+
+
+<div style="height:10px" aria-hidden="true" class="wp-block-spacer"></div>
+
+
+
+<details class="wp-block-details alignwide has-very-light-gray-to-cyan-bluish-gray-gradient-background has-background is-layout-flow wp-block-details-is-layout-flow" style="padding-top:var(--wp--preset--spacing--30);padding-right:var(--wp--preset--spacing--30);padding-bottom:var(--wp--preset--spacing--30);padding-left:var(--wp--preset--spacing--30)"><summary>Install ‘Terrain Tools’ Package</summary>
+<details class="wp-block-details has-vivid-red-background-color has-background is-layout-flow wp-block-details-is-layout-flow" style="padding-top:var(--wp--preset--spacing--30);padding-right:var(--wp--preset--spacing--30);padding-bottom:var(--wp--preset--spacing--30);padding-left:var(--wp--preset--spacing--30)" open=""><summary>YouTube</summary>
+<figure class="wp-block-embed is-type-video is-provider-youtube wp-block-embed-youtube wp-embed-aspect-16-9 wp-has-aspect-ratio"><div class="wp-block-embed__wrapper">
+<div class="embed-youtube"><iframe title="Unity VR Roller Coaster Shooter Tutorial (23) Install Terrain Tools Package" width="500" height="281" src="https://www.youtube.com/embed/l0MEiBYnPIo?feature=oembed" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen=""></iframe></div>
+</div></figure>
+</details>
+
+
+
+<p>Unity Menu Bar &gt; Window &gt; Package Manager<br>&nbsp; &nbsp; &gt; Package Manager Menu Bar &gt; Packages: = Unity Registry<br>&nbsp; &nbsp; &gt; Packages <br>&nbsp; &nbsp; &nbsp; &nbsp; &gt; Terrain Tools &gt; click Install<br>&nbsp; &nbsp; &nbsp; &nbsp; &gt; Terrain Tools &gt; Download Asset Samples from Asset Store (Optional)</p>
+<p>(The Terrain Tools package adds a lot of extra functionality to the default Unity Terrain component and adds tools to generate realistic wind, water or heat erosion effects for the terrain, making it easier to create more natural, complex-looking terrain and also adds the option to use Brush Mask Filters, making it easier to, for instance, paint terrain textures based on the slope of the terrain, so you can choose to only draw grass on flat terrain areas and ground on steep terrain areas.</p>
+<p>Keep in mind that after you’ve installed the Terrain Tools package the Unity Terrain Component will look different and will have a lot more options!)</p>
+
+
+
+<details class="wp-block-details has-electric-grass-gradient-background has-background is-layout-flow wp-block-details-is-layout-flow" style="padding-right:var(--wp--preset--spacing--30);padding-left:var(--wp--preset--spacing--30)" open=""><summary>Links</summary>
+<p><strong>&nbsp;Unity Manual / Terrain Tools</strong><br>&nbsp;<a href="https://docs.unity3d.com/Packages/com.unity.terrain-tools@5.0/manual/index.html" target="_blank" rel="noopener">https://docs.unity3d.com/Packages/com.unity.terrain-tools@5.0/manual/index.html</a></p>
+</details>
 </details>
 
 
@@ -1650,6 +1965,25 @@ public class VRPlayer: MonoBehaviour
 <details class="wp-block-details has-pale-cyan-blue-background-color has-background is-layout-flow wp-block-details-is-layout-flow" style="padding-right:var(--wp--preset--spacing--30);padding-left:var(--wp--preset--spacing--30)" open=""><summary>Notes</summary>
 <p>To test your game in VR in the Unity Editor during Play Mode you first have to turn on your Quest headset and connect it to your computer with the USB link cable. Then you have to launch the Oculus App on your computer and make sure your headset shows up as connected in the Oculus App &gt; Devices window. Then when you put on the Quest headset you should see a pop up window asking if you want to enable Oculus Link and a pop up window asking if you want to enable USB debugging, press yes on both pop ups. <br>When Oculus Link is enabled you will see the Oculus Dashboard instead of the regular Stand alone Quest dashboard environment. <br>(If you didn’t get the pop-up message then you can still enable Oculus link manually on the Quest, in the Quest’s Quick Settings window.)<br>When you are in the Oculus dashboard on your Quest then you can press Play in Unity on your computer. Your scene will load and you can playtest it in VR!</p>
 </details>
+</details>
+
+
+
+<div style="height:10px" aria-hidden="true" class="wp-block-spacer"></div>
+
+
+
+<details class="wp-block-details alignwide has-very-light-gray-to-cyan-bluish-gray-gradient-background has-background is-layout-flow wp-block-details-is-layout-flow" style="padding-top:var(--wp--preset--spacing--30);padding-right:var(--wp--preset--spacing--30);padding-bottom:var(--wp--preset--spacing--30);padding-left:var(--wp--preset--spacing--30)"><summary>Install Splines Package</summary>
+<details class="wp-block-details has-vivid-red-background-color has-background is-layout-flow wp-block-details-is-layout-flow" style="padding-top:var(--wp--preset--spacing--30);padding-right:var(--wp--preset--spacing--30);padding-bottom:var(--wp--preset--spacing--30);padding-left:var(--wp--preset--spacing--30)" open=""><summary>YouTube</summary>
+<figure class="wp-block-embed is-type-video is-provider-youtube wp-block-embed-youtube wp-embed-aspect-16-9 wp-has-aspect-ratio"><div class="wp-block-embed__wrapper">
+<div class="embed-youtube"><iframe title="Unity VR Roller Coaster Shooter Tutorial (30) Install Splines Package" width="500" height="281" src="https://www.youtube.com/embed/7CiZxKaGDYs?feature=oembed" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen=""></iframe></div>
+</div></figure>
+</details>
+
+
+
+<p><strong>Download the Splines package</strong><br>Unity Menu Bar &gt; Window &gt; Package Manager<br>Package Manager <br>&nbsp; &nbsp; &gt; Package Manager Menu Bar &gt; switch Packages: In Project to Packages: Unity Registry <br>&nbsp; &nbsp; &gt; Packages &gt; Splines &gt; click Install</p>
+<p><strong>Download the Spline Examples sample&nbsp;<br></strong>Unity Menu Bar &gt; Window &gt; Package Manager<br>Package Manager <br>&nbsp; &nbsp; &gt; Package Manager Menu Bar &gt; switch Packages: In Project to Packages: Unity Registry <br>&nbsp; &nbsp; &gt; Packages &gt; Splines &gt; Samples &gt; Spline Examples &gt; Import<strong><br></strong></p>
 </details>
 
 
