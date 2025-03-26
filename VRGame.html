@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>Single File Three.js VR Example</title>
+    <style>
+        /* Basic CSS to remove margins and make canvas fullscreen */
+        body {
+            margin: 0;
+            overflow: hidden; /* Hide scrollbars */
+            background-color: #000; /* Optional: Set background */
+        }
+        canvas {
+            display: block; /* Remove potential space below canvas */
+        }
+        /* Style the VR button slightly */
+        #vr-button {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 12px 24px;
+            border: 1px solid #fff;
+            border-radius: 4px;
+            background: rgba(0, 0, 0, 0.5);
+            color: #fff;
+            font: normal 13px sans-serif;
+            text-align: center;
+            opacity: 0.8;
+            outline: none;
+            z-index: 999;
+            cursor: pointer;
+        }
+         #vr-button:hover {
+            opacity: 1.0;
+         }
+    </style>
+</head>
+<body>
+    <!-- No canvas element needed; Three.js will create it -->
+
+    <!-- Import Map: Tells the browser where to find modules -->
+    <script type="importmap">
+        {
+            "imports": {
+                "three": "https://unpkg.com/three@0.166.1/build/three.module.js",
+                "three/addons/": "https://unpkg.com/three@0.166.1/examples/jsm/"
+            }
+        }
+    </script>
+
+    <!-- Main Game Logic (as a Module) -->
+    <script type="module">
+        // Import necessary modules
+        import * as THREE from 'three';
+        import { VRButton } from 'three/addons/webxr/VRButton.js';
+        import { BoxLineGeometry } from 'three/addons/geometries/BoxLineGeometry.js'; // For room outline
+        import { OrbitControls } from 'three/addons/controls/OrbitControls.js'; // For desktop view control
+
+        let camera, scene, renderer;
+        let controller1, controller2;
+        let room;
+        let cube;
+        let controls; // For desktop OrbitControls
+
+        init();
+        animate(); // Use animate instead of setAnimationLoop directly initially
+
+        function init() {
+            // 1. Scene
+            scene = new THREE.Scene();
+            scene.background = new THREE.Color(0x505050); // Grey background
+
+            // 2. Camera (Initial setup for desktop view)
+            camera = new THREE.PerspectiveCamera(
+                50, // Field of View (adjust for VR later implicitly)
+                window.innerWidth / window.innerHeight, // Aspect Ratio
+                0.1, // Near clipping plane
+                100 // Far clipping plane
+            );
+            camera.position.set(0, 1.6, 3); // Position slightly up and back
+
+            // 3. Basic Scene Content
+            // Room Outline
+            room = new THREE.LineSegments(
+                new BoxLineGeometry(6, 6, 6, 10, 10, 10),
+                new THREE.LineBasicMaterial({ color: 0x808080 })
+            );
+            room.geometry.translate(0, 3, 0); // Position room centered around origin height
+            scene.add(room);
+
+            // Simple Cube
+            const geometry = new THREE.BoxGeometry(0.5, 0.5, 0.5);
+            const material = new THREE.MeshStandardMaterial({
+                color: 0x00ff00,
+                roughness: 0.7,
+                metalness: 0.3
+             });
+            cube = new THREE.Mesh(geometry, material);
+            cube.position.set(0, 1.6, -1); // Position it in front of the user start
+            scene.add(cube);
+
+            // Lights
+            scene.add(new THREE.HemisphereLight(0x606060, 0x404040)); // Ambient light
+
+            const light = new THREE.DirectionalLight(0xffffff);
+            light.position.set(1, 1, 1).normalize();
+            scene.add(light);
+
+            // 4. Renderer
+            renderer = new THREE.WebGLRenderer({ antialias: true });
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            renderer.setPixelRatio(window.devicePixelRatio); // Important for sharp rendering
+            document.body.appendChild(renderer.domElement);
+
+            // 5. Enable WebXR
+            renderer.xr.enabled = true;
+
+            // Add VR Button to the page
+            const vrButton = VRButton.createButton(renderer);
+            vrButton.id = 'vr-button'; // Assign an ID for potential styling
+            document.body.appendChild(vrButton);
+
+            // 6. Controllers (Basic Setup)
+            controller1 = renderer.xr.getController(0);
+            controller1.addEventListener('selectstart', onSelectStart);
+            controller1.addEventListener('selectend', onSelectEnd);
+            scene.add(controller1);
+
+            controller2 = renderer.xr.getController(1);
+            controller2.addEventListener('selectstart', onSelectStart);
+            controller2.addEventListener('selectend', onSelectEnd);
+            scene.add(controller2);
+
+            // Add simple visuals for controllers (optional but helpful)
+            const controllerGrip1 = renderer.xr.getControllerGrip(0);
+            controllerGrip1.add(new THREE.Mesh(
+                new THREE.BoxGeometry(0.05, 0.1, 0.05),
+                new THREE.MeshStandardMaterial({ color: 0xffffff * Math.random() })
+            ));
+            scene.add(controllerGrip1);
+
+            const controllerGrip2 = renderer.xr.getControllerGrip(1);
+            controllerGrip2.add(new THREE.Mesh(
+                new THREE.BoxGeometry(0.05, 0.1, 0.05),
+                new THREE.MeshStandardMaterial({ color: 0xffffff * Math.random() })
+            ));
+            scene.add(controllerGrip2);
+
+            // 7. Desktop Controls (for non-VR viewing)
+            controls = new OrbitControls(camera, renderer.domElement);
+            controls.target.set(0, 1.6, 0); // Point controls towards the center of action
+            controls.update();
+
+            // 8. Handle Window Resize
+            window.addEventListener('resize', onWindowResize, false);
+        }
+
+        function onSelectStart(event) {
+            // Example: Change cube color on trigger press
+            cube.material.color.set(Math.random() * 0xffffff);
+            // You could add more complex interactions here (e.g., raycasting)
+            const controller = event.target; // Get the controller that fired the event
+            // Maybe vibrate the controller slightly
+            if (controller.gamepad && controller.gamepad.hapticActuators) {
+                controller.gamepad.hapticActuators[0]?.pulse(0.5, 100); // intensity, duration ms
+            }
+        }
+
+        function onSelectEnd(event) {
+            // Example: Revert color or do something else on release
+            // cube.material.color.set(0x00ff00); // Revert color if needed
+        }
+
+        function onWindowResize() {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        }
+
+        // Render Loop
+        function animate() {
+            // Use setAnimationLoop for VR rendering sync
+            renderer.setAnimationLoop(render);
+        }
+
+        function render() {
+            // Update game logic
+            cube.rotation.y += 0.01; // Simple rotation
+
+            // Update controls only if not in VR session
+            // (OrbitControls interferes with VR camera)
+            if (!renderer.xr.isPresenting) {
+                 controls.update();
+            }
+
+            // Render the scene
+            renderer.render(scene, camera);
+        }
+
+    </script>
+</body>
+</html>
