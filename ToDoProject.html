@@ -1,0 +1,1291 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Todoist Clone Tutorial (PHP, MySQL, Alpine.js, Tailwind)</title>
+    <!-- Include Tailwind CSS via CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Add some basic styles for readability */
+        body {
+            font-family: sans-serif;
+            line-height: 1.6;
+            padding: 20px;
+            background-color: #f7fafc; /* Tailwind gray-100 */
+        }
+        h1, h2, h3 {
+            margin-bottom: 0.5em;
+            font-weight: 600; /* Tailwind semibold */
+        }
+        h1 { font-size: 2.25rem; /* Tailwind text-4xl */ }
+        h2 { font-size: 1.875rem; /* Tailwind text-3xl */ border-bottom: 1px solid #e2e8f0; /* Tailwind gray-300 */ padding-bottom: 0.2em; margin-top: 1.5em;}
+        h3 { font-size: 1.5rem; /* Tailwind text-2xl */ margin-top: 1em; }
+        p { margin-bottom: 1em; }
+        code {
+            background-color: #edf2f7; /* Tailwind gray-200 */
+            padding: 0.2em 0.4em;
+            border-radius: 3px;
+            font-family: monospace;
+        }
+        pre {
+            background-color: #2d3748; /* Tailwind gray-800 */
+            color: #e2e8f0; /* Tailwind gray-300 */
+            padding: 1em;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin-bottom: 1em;
+        }
+        .stage-section {
+            background-color: #ffffff; /* Tailwind white */
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06); /* Tailwind shadow */
+            margin-bottom: 2em;
+        }
+        ul { list-style: disc; margin-left: 20px; margin-bottom: 1em;}
+    </style>
+</head>
+<body class="bg-gray-100 text-gray-800">
+
+    <div class="container mx-auto max-w-4xl">
+
+        <h1 class="text-4xl font-bold text-center text-blue-600 mb-8">Build Your Own Todoist Clone!</h1>
+
+        <p class="text-lg text-center mb-6">A beginner-friendly tutorial using PHP, MySQL (XAMPP), Alpine.js, and Tailwind CSS.</p>
+
+        <p class="mb-6">Welcome! This tutorial will guide you through building a simple Todoist-like web application in five manageable stages. We'll start with basic HTML and styling, gradually adding PHP for dynamic content, a database for persistence, JavaScript for interactivity, and finally user authentication and routing to create a multi-page application (MPA).</p>
+
+        <p class="mb-8"><strong>Prerequisites:</strong> Basic understanding of HTML. Some familiarity with programming concepts is helpful but not strictly required. You'll need <a href="https://www.apachefriends.org/" target="_blank" class="text-blue-500 hover:underline">XAMPP</a> installed (or a similar local server environment with PHP and MySQL).</p>
+
+        <!-- Stage 1: Basic HTML & Tailwind -->
+        <div class="stage-section" id="stage-1">
+            <h2 class="text-3xl mb-4">Stage 1: Static Foundation (HTML & Tailwind CSS)</h2>
+            <p>Let's start by creating the basic structure of our app using HTML and styling it with Tailwind CSS. At this stage, the task list will be static (hardcoded in the HTML).</p>
+
+            <h3 class="text-2xl mt-4 mb-2">Goals:</h3>
+            <ul>
+                <li>Set up the basic HTML structure.</li>
+                <li>Apply Tailwind CSS classes for layout and styling.</li>
+                <li>Display a static list of tasks.</li>
+            </ul>
+
+            <h3 class="text-2xl mt-4 mb-2">File Structure (Stage 1):</h3>
+            <pre><code>
+project-root/
+└── index.html
+            </code></pre>
+
+            <h3 class="text-2xl mt-4 mb-2">Instructions:</h3>
+            <ol class="list-decimal ml-6 mb-4">
+                <li>Create a folder for your project (e.g., `todoist-clone`).</li>
+                <li>Inside this folder, create a file named `index.html`.</li>
+                <li>Add the following HTML structure to `index.html`. We're including Tailwind via CDN in the `<head>`.</li>
+            </ol>
+
+            <h3 class="text-2xl mt-4 mb-2">Code: `index.html`</h3>
+            <pre><code class="language-html"><!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simple Todo App</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100">
+    <div class="container mx-auto max-w-lg mt-10 bg-white p-6 rounded shadow-md">
+        <h1 class="text-2xl font-bold mb-4 text-center">My Tasks</h1>
+
+        <!-- Task Input Form (Static Structure) -->
+        <div class="mb-4">
+            <input type="text" placeholder="Add a new task" class="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring focus:border-blue-300">
+            <!-- We'll make this button work later -->
+            <button class="mt-2 w-full bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded">
+                Add Task
+            </button>
+        </div>
+
+        <!-- Task List (Static) -->
+        <ul>
+            <!-- Sample Task 1 (Completed) -->
+            <li class="flex justify-between items-center p-2 border-b border-gray-200">
+                <span class="line-through text-gray-500">Learn HTML</span>
+                <div>
+                    <!-- Buttons (non-functional yet) -->
+                    <button class="text-green-500 hover:text-green-700 mr-2">✓</button>
+                    <button class="text-red-500 hover:text-red-700">✗</button>
+                </div>
+            </li>
+            <!-- Sample Task 2 (Incomplete) -->
+            <li class="flex justify-between items-center p-2 border-b border-gray-200">
+                <span>Learn Tailwind CSS</span>
+                <div>
+                    <!-- Buttons (non-functional yet) -->
+                    <button class="text-gray-400 hover:text-green-500 mr-2">✓</button>
+                    <button class="text-red-500 hover:text-red-700">✗</button>
+                </div>
+            </li>
+             <!-- Add more static tasks if you like -->
+        </ul>
+    </div>
+</body>
+</html>
+            </code></pre>
+            <p>Open this `index.html` file in your browser. You should see a basic, styled task list. Nothing works yet, but we have our visual foundation!</p>
+        </div>
+
+        <!-- Stage 2: Introduce PHP -->
+        <div class="stage-section" id="stage-2">
+            <h2 class="text-3xl mb-4">Stage 2: Dynamic Rendering with PHP</h2>
+            <p>Now, let's replace the static task list with dynamic content generated by PHP. We'll use a simple PHP array to hold the tasks for now, introducing server-side rendering.</p>
+
+            <h3 class="text-2xl mt-4 mb-2">Goals:</h3>
+            <ul>
+                <li>Rename `index.html` to `index.php`.</li>
+                <li>Define tasks in a PHP array.</li>
+                <li>Use a PHP loop to render the task list dynamically.</li>
+                <li>Ensure XAMPP (or equivalent) is running and serving the `.php` file.</li>
+            </ul>
+
+            <h3 class="text-2xl mt-4 mb-2">File Structure (Stage 2):</h3>
+             <pre><code>
+project-root/
+└── index.php  <span class="text-yellow-400"><-- Renamed from index.html</span>
+            </code></pre>
+
+             <h3 class="text-2xl mt-4 mb-2">Instructions:</h3>
+             <ol class="list-decimal ml-6 mb-4">
+                <li>Make sure XAMPP (or your local server) is running Apache.</li>
+                <li>Place your `project-root` folder inside XAMPP's `htdocs` directory (e.g., `C:/xampp/htdocs/todoist-clone/`).</li>
+                <li>Rename `index.html` to `index.php`.</li>
+                <li>Modify `index.php` to include the PHP code below.</li>
+                <li>Access the file through your browser via `http://localhost/todoist-clone/` (adjust the path if needed).</li>
+            </ol>
+
+            <h3 class="text-2xl mt-4 mb-2">Code: `index.php` (Modifications)</h3>
+            <p>Replace the static `<ul>` section in your `index.php` file with the following PHP block:</p>
+            <pre><code class="language-php"><?php
+// index.php
+
+// Define tasks in a PHP array (temporary data source)
+$tasks = [
+    ['id' => 1, 'title' => 'Learn basic PHP', 'completed' => true],
+    ['id' => 2, 'title' => 'Understand PHP loops', 'completed' => false],
+    ['id' => 3, 'title' => 'Set up XAMPP', 'completed' => true],
+];
+
+// We will add functions for adding/deleting later
+// function addTask($title) { /* Add logic later */ }
+// function deleteTask($id) { /* Add logic later */ }
+// function toggleTask($id) { /* Add logic later */ }
+
+?>
+
+<!-- ... (Keep the head and top part of the body) ... -->
+
+<body class="bg-gray-100">
+    <div class="container mx-auto max-w-lg mt-10 bg-white p-6 rounded shadow-md">
+        <h1 class="text-2xl font-bold mb-4 text-center">My Tasks</h1>
+
+        <!-- Task Input Form (Still static HTML for now) -->
+        <div class="mb-4">
+            <input type="text" placeholder="Add a new task" class="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring focus:border-blue-300">
+            <button class="mt-2 w-full bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded">
+                Add Task
+            </button>
+        </div>
+
+        <!-- Task List (Dynamic PHP Rendering) -->
+        <ul>
+            <?php if (!empty($tasks)): ?>
+                <?php foreach ($tasks as $task): ?>
+                    <li class="flex justify-between items-center p-2 border-b border-gray-200">
+                        <span class="<?php echo $task['completed'] ? 'line-through text-gray-500' : ''; ?>">
+                            <?php echo htmlspecialchars($task['title']); // Use htmlspecialchars for security ?>
+                        </span>
+                        <div>
+                            <!-- Buttons (Still non-functional links/placeholders) -->
+                            <a href="#" class="<?php echo $task['completed'] ? 'text-gray-400' : 'text-green-500'; ?> hover:text-green-700 mr-2">✓</a> <!-- Link placeholder -->
+                            <a href="#" class="text-red-500 hover:text-red-700">✗</a> <!-- Link placeholder -->
+                        </div>
+                    </li>
+                <?php endforeach; ?>
+            <?php else: ?>
+                <li class="text-gray-500 text-center p-2">No tasks yet!</li>
+            <?php endif; ?>
+        </ul>
+    </div>
+</body>
+</html>
+            </code></pre>
+            <p>Now, when you view `http://localhost/todoist-clone/` in your browser, the task list should be generated from the PHP array. Changing the array in the code will change the list on refresh.</p>
+        </div>
+
+        <!-- Stage 3: Database Integration (XAMPP, MySQL, CRUD) -->
+        <div class="stage-section" id="stage-3">
+            <h2 class="text-3xl mb-4">Stage 3: Database Persistence (MySQL & CRUD)</h2>
+            <p>It's time to store our tasks permanently! We'll set up a MySQL database using XAMPP's phpMyAdmin and connect our PHP application to it. We'll implement basic CRUD (Create, Read, Update, Delete) operations.</p>
+
+            <h3 class="text-2xl mt-4 mb-2">Goals:</h3>
+            <ul>
+                <li>Create a MySQL database and a `tasks` table using phpMyAdmin.</li>
+                <li>Create configuration and function files in PHP.</li>
+                <li>Connect PHP to the MySQL database.</li>
+                <li>Implement functions to:
+                    <ul>
+                        <li>Read tasks from the database.</li>
+                        <li>Add new tasks to the database.</li>
+                        <li>Update task completion status in the database.</li>
+                        <li>Delete tasks from the database.</li>
+                    </ul>
+                </li>
+                <li>Modify `index.php` to use these functions and interact with the database.</li>
+            </ul>
+
+             <h3 class="text-2xl mt-4 mb-2">File Structure (Stage 3):</h3>
+            <pre><code>
+project-root/
+├── config/
+│   └── database.php      <span class="text-lime-400"><-- New</span>
+├── includes/
+│   └── functions.php     <span class="text-lime-400"><-- New</span>
+└── public/               <span class="text-lime-400"><-- New (Best practice: keep web accessible files here)</span>
+│   └── index.php         <span class="text-yellow-400"><-- Moved & Modified</span>
+└── .htaccess             <span class="text-lime-400"><-- Optional: For cleaner URLs later (if needed)</span>
+            </code></pre>
+            <p class="text-sm italic">Note: We've moved `index.php` into a `public` folder. You'll need to configure your Apache server (or adjust your URL) to point to this `public` directory as the document root for `http://localhost/todoist-clone/`. For simplicity in XAMPP, you might initially keep `index.php` in the root and adjust paths, but using a `public` folder is better practice.</p>
+
+
+            <h3 class="text-2xl mt-4 mb-2">Database Setup (phpMyAdmin):</h3>
+            <ol class="list-decimal ml-6 mb-4">
+                <li>Open phpMyAdmin (usually accessible via the XAMPP control panel or `http://localhost/phpmyadmin`).</li>
+                <li>Create a new database (e.g., `todoist_clone_db`).</li>
+                <li>Select the new database and go to the SQL tab.</li>
+                <li>Run the following SQL command to create the `tasks` table:</li>
+            </ol>
+            <pre><code class="language-sql">CREATE TABLE tasks (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    title VARCHAR(255) NOT NULL,
+    completed BOOLEAN DEFAULT FALSE,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+            </code></pre>
+
+            <h3 class="text-2xl mt-4 mb-2">Code: `config/database.php`</h3>
+             <pre><code class="language-php"><?php
+// config/database.php
+
+// Database configuration constants
+define('DB_HOST', 'localhost');        // Or your DB host (usually localhost for XAMPP)
+define('DB_USER', 'root');            // Your MySQL username (default 'root' for XAMPP)
+define('DB_PASS', '');                // Your MySQL password (default empty for XAMPP)
+define('DB_NAME', 'todoist_clone_db'); // The database name you created
+
+// Function to establish database connection (using mysqli)
+function connectDB() {
+    // Create connection
+    $conn = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
+
+    // Check connection
+    if ($conn->connect_error) {
+        die("Connection failed: " . $conn->connect_error); // Basic error handling
+    }
+
+    return $conn;
+}
+
+// You might want to add error reporting settings here for development
+// error_reporting(E_ALL);
+// ini_set('display_errors', 1);
+
+?>
+            </code></pre>
+
+            <h3 class="text-2xl mt-4 mb-2">Code: `includes/functions.php`</h3>
+            <pre><code class="language-php"><?php
+// includes/functions.php
+
+// Make sure to include the database configuration
+// Note the path adjustment if index.php is in public/
+require_once __DIR__ . '/../config/database.php';
+
+// Function to get all tasks from the database
+function getAllTasks() {
+    $conn = connectDB();
+    $tasks = []; // Initialize empty array
+
+    // SQL query to select all tasks, ordered by creation date
+    $sql = "SELECT id, title, completed FROM tasks ORDER BY created_at DESC";
+    $result = $conn->query($sql);
+
+    if ($result && $result->num_rows > 0) {
+        // Fetch all results into an associative array
+        $tasks = $result->fetch_all(MYSQLI_ASSOC);
+    }
+
+    $conn->close(); // Close the connection
+    return $tasks;
+}
+
+// Function to add a new task
+// Takes the task title as input
+function addTask($title) {
+    $conn = connectDB();
+    $title = $conn->real_escape_string(trim($title)); // Sanitize input
+
+    if (!empty($title)) {
+        // SQL query to insert a new task
+        $sql = "INSERT INTO tasks (title) VALUES ('$title')";
+        $conn->query($sql);
+        // Basic error checking could be added here: if ($conn->error) { ... }
+    }
+
+    $conn->close();
+}
+
+// Function to delete a task by its ID
+function deleteTask($id) {
+    $conn = connectDB();
+    $id = (int)$id; // Cast to integer for security
+
+    if ($id > 0) {
+        // SQL query to delete a task
+        $sql = "DELETE FROM tasks WHERE id = $id";
+        $conn->query($sql);
+        // Basic error checking could be added here
+    }
+
+    $conn->close();
+}
+
+// Function to toggle the completion status of a task by its ID
+function toggleTask($id) {
+    $conn = connectDB();
+    $id = (int)$id; // Cast to integer
+
+    if ($id > 0) {
+        // SQL query to toggle the 'completed' status
+        // Flips the boolean value (0 becomes 1, 1 becomes 0)
+        $sql = "UPDATE tasks SET completed = NOT completed WHERE id = $id";
+        $conn->query($sql);
+        // Basic error checking could be added here
+    }
+
+    $conn->close();
+}
+
+?>
+            </code></pre>
+
+            <h3 class="text-2xl mt-4 mb-2">Code: `public/index.php` (Modifications)</h3>
+            <pre><code class="language-php"><?php
+// public/index.php
+
+// Include necessary files
+// Note the path adjustment because index.php is inside 'public'
+require_once __DIR__ . '/../includes/functions.php';
+
+// --- Form Handling ---
+// Check if the request method is POST (form submitted)
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    // Check if the 'action' field is set
+    if (isset($_POST['action'])) {
+        $action = $_POST['action'];
+        $taskId = isset($_POST['task_id']) ? (int)$_POST['task_id'] : 0;
+
+        switch ($action) {
+            case 'add':
+                if (!empty($_POST['task_title'])) {
+                    addTask($_POST['task_title']);
+                }
+                break;
+            case 'delete':
+                if ($taskId > 0) {
+                    deleteTask($taskId);
+                }
+                break;
+            case 'toggle':
+                 if ($taskId > 0) {
+                    toggleTask($taskId);
+                 }
+                break;
+        }
+
+        // Redirect back to the index page to prevent form resubmission on refresh
+        // This is a common pattern called Post/Redirect/Get (PRG)
+        header("Location: index.php");
+        exit; // Important to stop script execution after redirection
+    }
+}
+
+// --- Data Fetching ---
+// Get all tasks from the database AFTER any potential modifications
+$tasks = getAllTasks();
+
+?>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- ... (keep head content: meta, title, tailwind cdn) ... -->
+    <title>Todo App - DB</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100">
+    <div class="container mx-auto max-w-lg mt-10 bg-white p-6 rounded shadow-md">
+        <h1 class="text-2xl font-bold mb-4 text-center">My Tasks</h1>
+
+        <!-- Task Input Form - Now functional! -->
+        <form action="index.php" method="POST" class="mb-4">
+            <input type="hidden" name="action" value="add"> <!-- Hidden field to specify action -->
+            <input type="text" name="task_title" placeholder="Add a new task" class="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring focus:border-blue-300" required>
+            <button type="submit" class="mt-2 w-full bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded">
+                Add Task
+            </button>
+        </form>
+
+        <!-- Task List (Dynamic from Database) -->
+        <ul>
+            <?php if (!empty($tasks)): ?>
+                <?php foreach ($tasks as $task): ?>
+                    <li class="flex justify-between items-center p-2 border-b border-gray-200">
+                        <span class="<?php echo $task['completed'] ? 'line-through text-gray-500' : ''; ?>">
+                            <?php echo htmlspecialchars($task['title']); ?>
+                        </span>
+                        <div class="flex space-x-2">
+                            <!-- Toggle Form -->
+                            <form action="index.php" method="POST" class="inline-block">
+                                <input type="hidden" name="action" value="toggle">
+                                <input type="hidden" name="task_id" value="<?php echo $task['id']; ?>">
+                                <button type="submit" class="<?php echo $task['completed'] ? 'text-gray-400' : 'text-green-500'; ?> hover:text-green-700">✓</button>
+                            </form>
+                             <!-- Delete Form -->
+                            <form action="index.php" method="POST" class="inline-block">
+                                <input type="hidden" name="action" value="delete">
+                                <input type="hidden" name="task_id" value="<?php echo $task['id']; ?>">
+                                <button type="submit" class="text-red-500 hover:text-red-700" onclick="return confirm('Are you sure you want to delete this task?');">✗</button>
+                            </form>
+                        </div>
+                    </li>
+                <?php endforeach; ?>
+            <?php else: ?>
+                <li class="text-gray-500 text-center p-2">No tasks yet! Add one above.</li>
+            <?php endif; ?>
+        </ul>
+    </div>
+</body>
+</html>
+            </code></pre>
+             <p>Now, your application reads and writes tasks to the database. Adding, completing (toggling), and deleting tasks involves submitting forms, which PHP processes, modifies the database, and then reloads the page to show the updated list (thanks to the PRG pattern).</p>
+        </div>
+
+        <!-- Stage 4: Frontend Interactivity with Alpine.js -->
+        <div class="stage-section" id="stage-4">
+            <h2 class="text-3xl mb-4">Stage 4: Frontend Interactivity (Alpine.js)</h2>
+            <p>Currently, every action (completing, deleting) requires a full page reload. Let's use Alpine.js, a lightweight JavaScript framework, to handle some interactions directly in the browser for a smoother user experience. We'll focus on toggling task completion without a page refresh (using AJAX/Fetch API behind the scenes).</p>
+
+            <h3 class="text-2xl mt-4 mb-2">Goals:</h3>
+            <ul>
+                <li>Include Alpine.js library.</li>
+                <li>Modify the task list rendering to use Alpine.js directives (`x-data`, `x-for`, `@click`).</li>
+                <li>Create a new PHP endpoint (e.g., `api.php`) to handle AJAX requests for toggling tasks.</li>
+                <li>Use JavaScript's `fetch` API within Alpine.js to call the PHP endpoint.</li>
+                <li>Update the task's appearance instantly on the frontend upon successful completion toggle.</li>
+                <li>(Optional) Apply similar logic for deleting tasks without page reload.</li>
+            </ul>
+
+            <h3 class="text-2xl mt-4 mb-2">File Structure (Stage 4):</h3>
+            <pre><code>
+project-root/
+├── config/
+│   └── database.php
+├── includes/
+│   └── functions.php
+├── public/
+│   ├── index.php         <span class="text-yellow-400"><-- Modified for Alpine.js</span>
+│   └── api.php           <span class="text-lime-400"><-- New: Handles AJAX requests</span>
+└── .htaccess             <span class="text-gray-500"><-- (Optional)</span>
+            </code></pre>
+
+            <h3 class="text-2xl mt-4 mb-2">Instructions:</h3>
+             <ol class="list-decimal ml-6 mb-4">
+                <li>Ensure Alpine.js is included (via CDN) in `public/index.php`. Add `defer` to the script tag.</li>
+                <li>Create `public/api.php` to handle task updates via Fetch/AJAX.</li>
+                <li>Modify `public/index.php` to integrate Alpine.js for managing the task list state and interactions.</li>
+            </ol>
+
+             <h3 class="text-2xl mt-4 mb-2">Code: `public/index.php` (Add Alpine.js CDN & Modify Body)</h3>
+             <p>Add the Alpine.js CDN script tag to the `<head>` section of `public/index.php`:</p>
+             <pre><code class="language-html"><!-- Inside <head> in public/index.php -->
+<script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+</code></pre>
+             <p>Modify the main `div` and the task list `ul` within the `<body>` of `public/index.php`:</p>
+            <pre><code class="language-php"><?php
+// public/index.php
+require_once __DIR__ . '/../includes/functions.php';
+
+// --- Form Handling for ADDING tasks (still uses POST/Redirect/Get) ---
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['action'] === 'add') {
+    if (!empty($_POST['task_title'])) {
+        addTask($_POST['task_title']);
+    }
+    header("Location: index.php"); // Redirect after adding
+    exit;
+}
+// Note: Deleting/Toggling will now be handled by api.php via Alpine.js
+
+// --- Initial Data Fetching ---
+$initialTasks = getAllTasks(); // Fetch tasks only on initial page load
+
+?>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- ... meta, title, tailwind ... -->
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <title>Todo App - Alpine.js</title>
+</head>
+<body class="bg-gray-100">
+    <!-- Wrap the main content in an Alpine component -->
+    <div
+        class="container mx-auto max-w-lg mt-10 bg-white p-6 rounded shadow-md"
+        x-data="{ tasks: <?php echo json_encode($initialTasks); ?>, newTaskTitle: '' }"
+    >
+        <h1 class="text-2xl font-bold mb-4 text-center">My Tasks (Alpine.js)</h1>
+
+        <!-- Task Input Form (Modified slightly for potential Alpine integration if needed later) -->
+        <form action="index.php" method="POST" class="mb-4" @submit="/* Optional: Add Alpine submit handling later */">
+            <input type="hidden" name="action" value="add">
+            <input type="text" name="task_title" placeholder="Add a new task" class="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring focus:border-blue-300" required x-model="newTaskTitle">
+            <button type="submit" class="mt-2 w-full bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded">
+                Add Task (Reloads)
+            </button>
+        </form>
+
+        <!-- Task List (Managed by Alpine.js) -->
+        <ul>
+            <!-- Use x-for to loop through tasks data -->
+            <template x-for="task in tasks" :key="task.id">
+                <li class="flex justify-between items-center p-2 border-b border-gray-200">
+                    <span :class="{ 'line-through text-gray-500': task.completed }" x-text="task.title"></span>
+                    <div class="flex space-x-2">
+                        <!-- Toggle Button (Calls Alpine function) -->
+                        <button
+                            @click="toggleTask(task)"
+                            :class="task.completed ? 'text-gray-400' : 'text-green-500'"
+                            class="hover:text-green-700">✓</button>
+
+                        <!-- Delete Button (Calls Alpine function - implementation pending) -->
+                        <button
+                            @click="deleteTask(task.id)"
+                             class="text-red-500 hover:text-red-700">✗</button>
+                    </div>
+                </li>
+            </template>
+
+            <!-- Show message if no tasks -->
+            <template x-if="tasks.length === 0">
+                 <li class="text-gray-500 text-center p-2">No tasks yet! Add one above.</li>
+            </template>
+        </ul>
+
+        <!-- Alpine.js Logic -->
+        <script>
+            document.addEventListener('alpine:init', () => {
+                Alpine.data('tasks', () => ({
+                    // tasks array is initialized via x-data above using PHP
+                    // newTaskTitle is initialized via x-data above
+
+                    toggleTask(task) {
+                        // Find the index of the task to update its state visually *immediately*
+                        const index = this.tasks.findIndex(t => t.id === task.id);
+                        if (index === -1) return; // Safety check
+
+                        // Optimistically update the UI
+                        const originalCompleted = this.tasks[index].completed;
+                        this.tasks[index].completed = !this.tasks[index].completed;
+
+                        // Prepare data for the API request
+                        const formData = new FormData();
+                        formData.append('action', 'toggle');
+                        formData.append('task_id', task.id);
+
+                        // Make the actual API call to the backend
+                        fetch('api.php', {
+                            method: 'POST',
+                            body: formData
+                        })
+                        .then(response => {
+                            if (!response.ok) {
+                                // If API fails, revert the optimistic UI update
+                                console.error('API Error:', response.statusText);
+                                this.tasks[index].completed = originalCompleted;
+                                alert('Failed to update task status.'); // Basic error feedback
+                            }
+                            // No need to parse JSON if api.php doesn't return useful data on success
+                            // else { return response.json(); /* If api.php returns JSON */ }
+                        })
+                        // .then(data => { /* Handle successful JSON response if needed */ })
+                        .catch(error => {
+                             // If fetch fails, revert the optimistic UI update
+                            console.error('Fetch Error:', error);
+                            this.tasks[index].completed = originalCompleted;
+                            alert('Failed to update task status.'); // Basic error feedback
+                        });
+                    },
+
+                    deleteTask(taskId) {
+                        // Implementation similar to toggleTask:
+                        // 1. Confirm deletion
+                        if (!confirm('Are you sure you want to delete this task?')) {
+                            return;
+                        }
+                        // 2. Optimistically remove from UI: find index, use this.tasks.splice(index, 1)
+                        const index = this.tasks.findIndex(t => t.id === taskId);
+                         if (index === -1) return;
+                         const removedTask = this.tasks.splice(index, 1)[0]; // Remove and store for potential revert
+
+                        // 3. Prepare FormData (action=delete, task_id=taskId)
+                        const formData = new FormData();
+                        formData.append('action', 'delete');
+                        formData.append('task_id', taskId);
+
+                        // 4. fetch('api.php', ...)
+                        fetch('api.php', {
+                             method: 'POST',
+                             body: formData
+                         })
+                        .then(response => {
+                            if (!response.ok) {
+                                console.error('API Error:', response.statusText);
+                                // Revert UI change if API fails
+                                this.tasks.splice(index, 0, removedTask); // Add back the removed task
+                                alert('Failed to delete task.');
+                            }
+                        })
+                        .catch(error => {
+                            console.error('Fetch Error:', error);
+                            // Revert UI change if fetch fails
+                             this.tasks.splice(index, 0, removedTask); // Add back the removed task
+                            alert('Failed to delete task.');
+                        });
+                    }
+
+                    // Maybe add addTaskViaAlpine() later...
+
+                }));
+            });
+        </script>
+
+    </div> <!-- End Alpine component -->
+</body>
+</html>
+            </code></pre>
+
+            <h3 class="text-2xl mt-4 mb-2">Code: `public/api.php`</h3>
+            <pre><code class="language-php"><?php
+// public/api.php
+
+// Include functions (adjust path as needed)
+require_once __DIR__ . '/../includes/functions.php';
+
+// Basic API endpoint for handling AJAX requests
+// We expect POST requests with an 'action' parameter
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
+    $action = $_POST['action'];
+    $taskId = isset($_POST['task_id']) ? (int)$_POST['task_id'] : 0;
+
+    // Set header to indicate JSON response (optional but good practice)
+    // header('Content-Type: application/json'); // Uncomment if sending JSON back
+
+    $success = false; // Flag to indicate success
+
+    if ($taskId > 0) {
+        switch ($action) {
+            case 'toggle':
+                // Call the existing toggle function
+                // In a real API, you might want connectDB() inside the function
+                // or have the function return success/failure
+                toggleTask($taskId);
+                // For this simple case, assume success if no DB error occurred
+                $success = true; // Assume success for now
+                break;
+
+            case 'delete':
+                // Call the existing delete function
+                deleteTask($taskId);
+                $success = true; // Assume success for now
+                break;
+
+             // Add other actions like 'update_title' later if needed
+        }
+    }
+
+    // Send a response (optional, could be simple status or JSON)
+    if ($success) {
+        // Send a minimal success response (HTTP 200 is default)
+        // echo json_encode(['success' => true]); // Example JSON response
+        http_response_code(200); // OK
+    } else {
+        // Send an error response code
+        http_response_code(400); // Bad Request (or 500 Internal Server Error if DB failed)
+        // echo json_encode(['success' => false, 'message' => 'Invalid request or task ID']);
+    }
+
+} else {
+    // Not a POST request or action not set
+    http_response_code(405); // Method Not Allowed
+    // echo json_encode(['success' => false, 'message' => 'Invalid request method']);
+}
+
+exit; // Stop script execution
+
+?>
+            </code></pre>
+            <p>Now, try toggling tasks. They should update instantly without a page reload! Deleting (with confirmation) should also work via AJAX if you implemented the `deleteTask` part in Alpine.js. Adding tasks still requires a page reload for now.</p>
+        </div>
+
+        <!-- Stage 5: User Authentication & Routing -->
+        <div class="stage-section" id="stage-5">
+            <h2 class="text-3xl mb-4">Stage 5: User Authentication & Routing (MPA)</h2>
+            <p>Finally, let's turn this into a proper Multi-Page Application (MPA) by adding user accounts. Users should only see their own tasks. We'll need registration, login, logout functionality, and basic routing to handle different pages.</p>
+
+            <h3 class="text-2xl mt-4 mb-2">Goals:</h3>
+            <ul>
+                <li>Add a `users` table to the database.</li>
+                <li>Modify the `tasks` table to link tasks to users (add `user_id`).</li>
+                <li>Implement user registration (hashing passwords!).</li>
+                <li>Implement user login (verifying passwords).</li>
+                <li>Use PHP sessions to manage logged-in state.</li>
+                <li>Create separate pages/routes for login, registration, and the main task list (`index.php`).</li>
+                <li>Implement logout functionality.</li>
+                <li>Update database functions (`getAllTasks`, `addTask`, etc.) to be user-specific.</li>
+                <li>Protect the main task page, redirecting unauthenticated users to the login page.</li>
+            </ul>
+
+            <h3 class="text-2xl mt-4 mb-2">File Structure (Stage 5):</h3>
+            <pre><code>
+project-root/
+├── config/
+│   └── database.php
+├── includes/
+│   ├── functions.php     <span class="text-yellow-400"><-- Modified for users & user-specific tasks</span>
+│   ├── auth.php          <span class="text-lime-400"><-- New: Auth related functions (login, register, check session)</span>
+│   └── header.php        <span class="text-lime-400"><-- New: Shared header content (nav, logout)</span>
+│   └── footer.php        <span class="text-lime-400"><-- New: Shared footer content</span>
+├── public/
+│   ├── index.php         <span class="text-yellow-400"><-- Main task page (requires login)</span>
+│   ├── login.php         <span class="text-lime-400"><-- New: Login page</span>
+│   ├── register.php      <span class="text-lime-400"><-- New: Registration page</span>
+│   ├── logout.php        <span class="text-lime-400"><-- New: Handles logout process</span>
+│   └── api.php           <span class="text-yellow-400"><-- Modified to check user session</span>
+└── .htaccess             <span class="text-gray-500"><-- (Optional: Could add rewrite rules for cleaner URLs)</span>
+            </code></pre>
+
+            <h3 class="text-2xl mt-4 mb-2">Database Setup (phpMyAdmin):</h3>
+             <ol class="list-decimal ml-6 mb-4">
+                <li>Go back to phpMyAdmin and select your `todoist_clone_db` database.</li>
+                <li>Run the following SQL to create the `users` table:</li>
+            </ol>
+            <pre><code class="language-sql">CREATE TABLE users (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    username VARCHAR(50) NOT NULL UNIQUE,
+    password VARCHAR(255) NOT NULL, -- Store hashed passwords!
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+            </code></pre>
+             <ol start="3" class="list-decimal ml-6 mb-4">
+                 <li>Modify the existing `tasks` table to add a `user_id` column and a foreign key constraint:</li>
+             </ol>
+             <pre><code class="language-sql">-- Add the user_id column
+ALTER TABLE tasks
+ADD COLUMN user_id INT NULL AFTER id; -- Start with NULL allowed if tasks exist
+
+-- Optional: Update existing tasks to belong to a test user if needed
+-- UPDATE tasks SET user_id = 1 WHERE user_id IS NULL; -- Replace 1 with a valid user ID
+
+-- Make user_id NOT NULL after assigning values (if applicable) and add foreign key
+ALTER TABLE tasks
+MODIFY COLUMN user_id INT NOT NULL,
+ADD CONSTRAINT fk_user_id
+FOREIGN KEY (user_id) REFERENCES users(id)
+ON DELETE CASCADE; -- If a user is deleted, delete their tasks too
+            </code></pre>
+
+            <h3 class="text-2xl mt-4 mb-2">Code Snippets (Placeholders & Structure):</h3>
+
+            <p>We'll create new files and modify existing ones. Below are structural placeholders. You would fill in the logic using PHP sessions (`session_start()`, `$_SESSION`), password hashing (`password_hash()`, `password_verify()`), and updated database queries.</p>
+
+            <h4 class="text-xl mt-3 mb-1">`includes/auth.php` (New)</h4>
+            <pre><code class="language-php"><?php
+// includes/auth.php
+require_once __DIR__ . '/../config/database.php';
+
+// Start session on any page that uses authentication
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
+
+function registerUser($username, $password) {
+    // 1. Connect to DB
+    // 2. Check if username already exists
+    // 3. Hash the password using password_hash()
+    // 4. Insert new user into 'users' table
+    // 5. Return true on success, false on failure (or error message)
+    /* ... Placeholder for registration logic ... */
+    return false; // Placeholder
+}
+
+function loginUser($username, $password) {
+    // 1. Connect to DB
+    // 2. Find user by username
+    // 3. If user found, verify password using password_verify()
+    // 4. If password matches, store user ID and username in $_SESSION
+    // 5. Return true on success, false on failure
+    /* ... Placeholder for login logic ... */
+    return false; // Placeholder
+}
+
+function logoutUser() {
+    // 1. Unset all session variables: $_SESSION = array();
+    // 2. Destroy the session: session_destroy();
+    /* ... Placeholder for logout logic ... */
+}
+
+function isLoggedIn() {
+    // Check if user ID is set in the session
+    return isset($_SESSION['user_id']);
+}
+
+function requireLogin() {
+    // If user is not logged in, redirect to login page
+    if (!isLoggedIn()) {
+        header('Location: login.php');
+        exit;
+    }
+}
+
+function getCurrentUserId() {
+    // Get the logged-in user's ID from the session
+    return $_SESSION['user_id'] ?? null;
+}
+
+?>
+            </code></pre>
+
+            <h4 class="text-xl mt-3 mb-1">`includes/functions.php` (Modify Task Functions)</h4>
+            <pre><code class="language-php"><?php
+// includes/functions.php
+require_once __DIR__ . '/../config/database.php';
+// We might need auth functions here too, or include auth.php
+require_once __DIR__ . '/auth.php'; // Make sure session is started
+
+// Modify functions to accept and use user_id
+function getAllTasks($userId) { // Add $userId parameter
+    if (!$userId) return []; // Return empty if no user ID
+    $conn = connectDB();
+    $tasks = [];
+    // Modify SQL to filter by user_id
+    $sql = "SELECT id, title, completed FROM tasks WHERE user_id = ? ORDER BY created_at DESC";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("i", $userId); // Bind user ID parameter
+    $stmt->execute();
+    $result = $stmt->get_result();
+    if ($result) {
+        $tasks = $result->fetch_all(MYSQLI_ASSOC);
+    }
+    $stmt->close();
+    $conn->close();
+    return $tasks;
+}
+
+function addTask($title, $userId) { // Add $userId parameter
+     if (!$userId || empty(trim($title))) return;
+     $conn = connectDB();
+     // Use prepared statements to prevent SQL injection
+     $sql = "INSERT INTO tasks (title, user_id) VALUES (?, ?)";
+     $stmt = $conn->prepare($sql);
+     $stmt->bind_param("si", $title, $userId); // 's' for string, 'i' for integer
+     $stmt->execute();
+     $stmt->close();
+     $conn->close();
+}
+
+function deleteTask($taskId, $userId) { // Add $userId parameter
+    if (!$userId || !$taskId) return;
+    $conn = connectDB();
+    // Add user_id check to ensure users can only delete their own tasks
+    $sql = "DELETE FROM tasks WHERE id = ? AND user_id = ?";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("ii", $taskId, $userId);
+    $stmt->execute();
+    // Check affected rows if needed: $stmt->affected_rows > 0
+    $stmt->close();
+    $conn->close();
+}
+
+function toggleTask($taskId, $userId) { // Add $userId parameter
+    if (!$userId || !$taskId) return;
+    $conn = connectDB();
+    // Add user_id check
+    $sql = "UPDATE tasks SET completed = NOT completed WHERE id = ? AND user_id = ?";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("ii", $taskId, $userId);
+    $stmt->execute();
+    $stmt->close();
+    $conn->close();
+}
+?>
+            </code></pre>
+
+             <h4 class="text-xl mt-3 mb-1">`includes/header.php` (New)</h4>
+            <pre><code class="language-php"><?php
+// includes/header.php
+// Ensure session is started (might be done in auth.php already)
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
+?>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Include Alpine only on pages that need it (index.php) -->
+    <?php if (basename($_SERVER['PHP_SELF']) == 'index.php'): ?>
+        <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <?php endif; ?>
+    <title><?php echo $pageTitle ?? 'Todo App'; // Allow setting page title ?></title>
+</head>
+<body class="bg-gray-100">
+    <nav class="bg-blue-600 text-white p-4 mb-6">
+        <div class="container mx-auto flex justify-between items-center">
+            <a href="index.php" class="text-xl font-bold">Todoist Clone</a>
+            <div>
+                <?php if (isset($_SESSION['user_id'])): ?>
+                    <span class="mr-4">Welcome, <?php echo htmlspecialchars($_SESSION['username'] ?? 'User'); ?>!</span>
+                    <a href="logout.php" class="hover:underline">Logout</a>
+                <?php else: ?>
+                    <a href="login.php" class="hover:underline mr-4">Login</a>
+                    <a href="register.php" class="hover:underline">Register</a>
+                <?php endif; ?>
+            </div>
+        </div>
+    </nav>
+    <!-- Main content starts after this in each page -->
+            </code></pre>
+
+             <h4 class="text-xl mt-3 mb-1">`includes/footer.php` (New)</h4>
+            <pre><code class="language-php"><?php
+// includes/footer.php
+?>
+    <!-- Main content ends before this -->
+    <footer class="text-center text-gray-500 text-sm mt-10 mb-4">
+        © <?php echo date('Y'); ?> Todoist Clone Tutorial
+    </footer>
+</body>
+</html>
+            </code></pre>
+
+
+            <h4 class="text-xl mt-3 mb-1">`public/login.php` (New)</h4>
+            <pre><code class="language-php"><?php
+// public/login.php
+require_once __DIR__ . '/../includes/auth.php';
+
+$error = ''; // Variable to hold error messages
+
+// Redirect if already logged in
+if (isLoggedIn()) {
+    header('Location: index.php');
+    exit;
+}
+
+// Handle form submission
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $username = $_POST['username'] ?? '';
+    $password = $_POST['password'] ?? '';
+
+    if (loginUser($username, $password)) {
+        // Redirect to the main task page on successful login
+        header('Location: index.php');
+        exit;
+    } else {
+        // Set error message for display
+        $error = "Invalid username or password.";
+    }
+}
+
+$pageTitle = "Login"; // For header
+include __DIR__ . '/../includes/header.php';
+?>
+
+<div class="container mx-auto max-w-sm mt-10">
+    <div class="bg-white p-6 rounded shadow-md">
+        <h1 class="text-2xl font-bold mb-4 text-center">Login</h1>
+
+        <?php if ($error): ?>
+            <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4" role="alert">
+                <span class="block sm:inline"><?php echo $error; ?></span>
+            </div>
+        <?php endif; ?>
+
+        <form action="login.php" method="POST">
+            <div class="mb-4">
+                <label for="username" class="block text-gray-700 text-sm font-bold mb-2">Username:</label>
+                <input type="text" name="username" id="username" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" required>
+            </div>
+            <div class="mb-6">
+                <label for="password" class="block text-gray-700 text-sm font-bold mb-2">Password:</label>
+                <input type="password" name="password" id="password" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline" required>
+            </div>
+            <div class="flex items-center justify-between">
+                <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
+                    Sign In
+                </button>
+                <a class="inline-block align-baseline font-bold text-sm text-blue-500 hover:text-blue-800" href="register.php">
+                    Need an account?
+                </a>
+            </div>
+        </form>
+    </div>
+</div>
+
+<?php include __DIR__ . '/../includes/footer.php'; ?>
+            </code></pre>
+
+            <h4 class="text-xl mt-3 mb-1">`public/register.php` (New)</h4>
+             <p>Structure similar to `login.php`, but calls `registerUser()` and handles registration-specific errors/success messages.</p>
+            <pre><code class="language-php"><?php
+// public/register.php
+require_once __DIR__ . '/../includes/auth.php';
+
+$error = '';
+$success = '';
+
+// Redirect if logged in
+if (isLoggedIn()) {
+    header('Location: index.php');
+    exit;
+}
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    // Get username, password, maybe confirm_password
+    // Validate input (e.g., password match, length)
+    // If valid, call registerUser()
+    // Set $success or $error message
+    /* ... Placeholder for registration form handling ... */
+    $error = "Registration logic not implemented."; // Placeholder
+}
+
+$pageTitle = "Register";
+include __DIR__ . '/../includes/header.php';
+?>
+<!-- HTML Form similar to login, with fields for username, password, confirm password -->
+<!-- Display $error or $success messages -->
+<div class="container mx-auto max-w-sm mt-10">
+    <!-- Registration form structure here... -->
+    <p class="text-center mt-4">Registration form placeholder. <a href="login.php" class="text-blue-500 hover:underline">Already have an account?</a></p>
+    <?php if ($error): ?><p class="text-red-500 text-center"><?php echo $error; ?></p><?php endif; ?>
+    <?php if ($success): ?><p class="text-green-500 text-center"><?php echo $success; ?></p><?php endif; ?>
+</div>
+
+<?php include __DIR__ . '/../includes/footer.php'; ?>
+            </code></pre>
+
+            <h4 class="text-xl mt-3 mb-1">`public/logout.php` (New)</h4>
+            <pre><code class="language-php"><?php
+// public/logout.php
+require_once __DIR__ . '/../includes/auth.php';
+
+logoutUser(); // Call the logout function
+
+// Redirect to login page after logout
+header('Location: login.php');
+exit;
+?>
+            </code></pre>
+
+            <h4 class="text-xl mt-3 mb-1">`public/index.php` (Modify for Auth & User Tasks)</h4>
+            <pre><code class="language-php"><?php
+// public/index.php
+require_once __DIR__ . '/../includes/auth.php'; // Auth first
+require_once __DIR__ . '/../includes/functions.php'; // Then functions
+
+requireLogin(); // Redirect to login if not authenticated
+
+$userId = getCurrentUserId(); // Get logged-in user's ID
+
+// Handle ADD task form submission (user-specific)
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['action'] === 'add') {
+    if (!empty($_POST['task_title']) && $userId) {
+        addTask($_POST['task_title'], $userId); // Pass user ID
+    }
+    header("Location: index.php"); // PRG pattern
+    exit;
+}
+
+// Fetch only the current user's tasks
+$initialTasks = getAllTasks($userId);
+
+$pageTitle = "My Tasks";
+include __DIR__ . '/../includes/header.php'; // Include shared header
+?>
+
+<!-- Alpine.js x-data component (keep similar structure) -->
+<div
+    class="container mx-auto max-w-lg mt-10 bg-white p-6 rounded shadow-md"
+    x-data="{ tasks: <?php echo htmlspecialchars(json_encode($initialTasks), ENT_QUOTES, 'UTF-8'); ?>, newTaskTitle: '' }"
+>
+    <h1 class="text-2xl font-bold mb-4 text-center">My Tasks</h1>
+
+    <!-- Add Task Form (no change needed here, PHP handles user ID) -->
+    <form action="index.php" method="POST" class="mb-4">
+        <!-- ... form content ... -->
+    </form>
+
+    <!-- Task List (no change needed here, Alpine gets user-specific tasks via PHP) -->
+    <ul>
+        <!-- Alpine template x-for loop remains the same -->
+        <template x-for="task in tasks" :key="task.id">
+            <!-- ... li structure with toggle/delete buttons ... -->
+             <li class="flex justify-between items-center p-2 border-b border-gray-200">
+                <span :class="{ 'line-through text-gray-500': task.completed }" x-text="task.title"></span>
+                <div class="flex space-x-2">
+                    <button @click="toggleTask(task)" :class="task.completed ? 'text-gray-400' : 'text-green-500'" class="hover:text-green-700">✓</button>
+                    <button @click="deleteTask(task.id)" class="text-red-500 hover:text-red-700">✗</button>
+                </div>
+            </li>
+        </template>
+        <!-- ... no tasks message ... -->
+        <template x-if="tasks.length === 0">
+             <li class="text-gray-500 text-center p-2">No tasks yet! Add one above.</li>
+        </template>
+    </ul>
+
+    <!-- Alpine.js Logic (toggleTask/deleteTask need no changes as api.php handles user context) -->
+    <script>
+        document.addEventListener('alpine:init', () => {
+            Alpine.data('tasks', () => ({
+                // tasks and newTaskTitle initialized in x-data
+                toggleTask(task) {
+                    // Same frontend logic as before
+                    const index = this.tasks.findIndex(t => t.id === task.id);
+                    if (index === -1) return;
+                    const originalCompleted = this.tasks[index].completed;
+                    this.tasks[index].completed = !this.tasks[index].completed;
+
+                    const formData = new FormData();
+                    formData.append('action', 'toggle');
+                    formData.append('task_id', task.id);
+
+                    fetch('api.php', { method: 'POST', body: formData })
+                        .then(response => { if (!response.ok) throw new Error('API Error'); })
+                        .catch(error => {
+                            console.error('Toggle Error:', error);
+                            this.tasks[index].completed = originalCompleted; // Revert on error
+                            alert('Failed to update task status.');
+                        });
+                },
+                deleteTask(taskId) {
+                    // Same frontend logic as before
+                    if (!confirm('Are you sure?')) return;
+                    const index = this.tasks.findIndex(t => t.id === taskId);
+                    if (index === -1) return;
+                    const removedTask = this.tasks.splice(index, 1)[0];
+
+                    const formData = new FormData();
+                    formData.append('action', 'delete');
+                    formData.append('task_id', taskId);
+
+                    fetch('api.php', { method: 'POST', body: formData })
+                        .then(response => { if (!response.ok) throw new Error('API Error'); })
+                        .catch(error => {
+                            console.error('Delete Error:', error);
+                            this.tasks.splice(index, 0, removedTask); // Revert on error
+                             alert('Failed to delete task.');
+                        });
+                }
+            }));
+        });
+    </script>
+
+</div> <!-- End Alpine component -->
+
+<?php include __DIR__ . '/../includes/footer.php'; // Include shared footer ?>
+            </code></pre>
+
+             <h4 class="text-xl mt-3 mb-1">`public/api.php` (Modify for Auth)</h4>
+            <pre><code class="language-php"><?php
+// public/api.php
+require_once __DIR__ . '/../includes/auth.php'; // Auth first
+require_once __DIR__ . '/../includes/functions.php';
+
+// API requests must come from a logged-in user
+if (!isLoggedIn()) {
+    http_response_code(401); // Unauthorized
+    echo json_encode(['success' => false, 'message' => 'Authentication required.']);
+    exit;
+}
+
+$userId = getCurrentUserId(); // Get the current user's ID
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $userId) {
+    $action = $_POST['action'];
+    $taskId = isset($_POST['task_id']) ? (int)$_POST['task_id'] : 0;
+    $success = false;
+
+    if ($taskId > 0) {
+        switch ($action) {
+            case 'toggle':
+                // Call function with user ID check included
+                toggleTask($taskId, $userId);
+                $success = true; // Assume success if function doesn't throw error
+                break;
+            case 'delete':
+                 // Call function with user ID check included
+                deleteTask($taskId, $userId);
+                $success = true; // Assume success
+                break;
+        }
+    }
+
+    if ($success) {
+        http_response_code(200);
+        // echo json_encode(['success' => true]); // Optional success response
+    } else {
+        http_response_code(400); // Bad Request or task not found/not owned
+        // echo json_encode(['success' => false, 'message' => 'Invalid request or task ID.']);
+    }
+
+} else {
+    http_response_code(400); // Bad Request if method isn't POST or action missing
+}
+exit;
+?>
+            </code></pre>
+
+            <p>With these changes (once fully implemented), you'll have a multi-page application where users can register, log in, and manage their own private task lists. Tasks are loaded and modified via PHP and the database, with Alpine.js providing a smoother frontend experience for toggling and deleting.</p>
+        </div>
+
+        <h2 class="text-3xl mt-12 mb-4">Conclusion & Next Steps</h2>
+        <p>Congratulations! You've progressively built a Todoist clone, starting from static HTML and ending with a database-backed, interactive, multi-user application using PHP, MySQL, Tailwind CSS, and Alpine.js.</p>
+        <p>From here, you could:</p>
+        <ul>
+            <li>Improve error handling and user feedback.</li>
+            <li>Implement task editing (not just adding/deleting/toggling).</li>
+            <li>Add features like due dates, priorities, or projects.</li>
+            <li>Refine the UI/UX further.</li>
+            <li>Implement "Add Task" using Alpine.js and the API instead of a full page reload.</li>
+            <li>Explore more advanced routing techniques or a simple PHP router.</li>
+            <li>Strengthen security (more robust input validation, CSRF protection).</li>
+            <li>Learn about object-oriented PHP (OOP) to better organize your code.</li>
+            <li>Consider using a PHP framework (like Laravel or Symfony) for larger projects.</li>
+        </ul>
+        <p>Keep practicing and building!</p>
+
+    </div> <!-- End Container -->
+
+</body>
+</html>
