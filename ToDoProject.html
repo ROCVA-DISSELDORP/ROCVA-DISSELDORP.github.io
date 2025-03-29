@@ -22,20 +22,39 @@
         h2 { font-size: 1.875rem; /* Tailwind text-3xl */ border-bottom: 1px solid #e2e8f0; /* Tailwind gray-300 */ padding-bottom: 0.2em; margin-top: 1.5em;}
         h3 { font-size: 1.5rem; /* Tailwind text-2xl */ margin-top: 1em; }
         p { margin-bottom: 1em; }
+        /* Base style for inline code */
         code {
             background-color: #edf2f7; /* Tailwind gray-200 */
             padding: 0.2em 0.4em;
             border-radius: 3px;
             font-family: monospace;
+            color: #4a5568; /* Tailwind gray-700 - Ensure inline code has dark text */
         }
+        /* Style for code blocks */
         pre {
             background-color: #2d3748; /* Tailwind gray-800 */
-            color: #e2e8f0; /* Tailwind gray-300 */
+            color: #e2e8f0; /* Tailwind gray-300 - Default text color for pre */
             padding: 1em;
             border-radius: 5px;
             overflow-x: auto;
             margin-bottom: 1em;
         }
+        /* --- FIX START --- */
+        /* Specific styling for code elements INSIDE pre blocks */
+        pre code {
+            background-color: transparent !important; /* No background override */
+            color: inherit !important; /* Inherit text color from pre */
+            padding: 0 !important; /* Reset padding */
+            border-radius: 0 !important; /* Reset border-radius */
+            font-family: monospace; /* Ensure font */
+        }
+        /* Ensure spans within pre code use their Tailwind colors */
+        pre code span[class*="text-"] {
+             /* Tailwind classes should handle this, but !important can be added if needed */
+             /* e.g., color: var(--tw-text-opacity) !important; - Not usually needed */
+        }
+        /* --- FIX END --- */
+
         .stage-section {
             background-color: #ffffff; /* Tailwind white */
             padding: 20px;
