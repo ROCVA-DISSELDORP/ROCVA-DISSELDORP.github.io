@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tutorial: Zon en Zekerheid Website Bouwen (Conceptueel)</title>
+    <style>
+        body {
+            font-family: sans-serif;
+            line-height: 1.6;
+            margin: 20px;
+            background-color: #f9f9f9;
+        }
+        h1, h2, h3 {
+            color: #333;
+        }
+        h2 {
+            border-bottom: 2px solid #eee;
+            padding-bottom: 5px;
+            margin-top: 30px;
+        }
+        h3 {
+            margin-top: 20px;
+            color: #555;
+        }
+        /* Inline code style */
+        code {
+            background-color: #eee;
+            padding: 2px 5px;
+            border-radius: 3px;
+            font-family: monospace;
+            white-space: nowrap;
+        }
+        /* Block code style (used for pseudocode/descriptions) */
+        pre {
+            background-color: #e3f2fd; /* Lighter blue background */
+            border-left: 4px solid #90caf9; /* Blue border */
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            white-space: pre-wrap; /* Allow wrapping AND preserve line breaks */
+            font-family: monospace;
+            color: #333;
+            line-height: 1.5; /* Improved line spacing */
+        }
+        pre code {
+          display: block;
+          padding: 0;
+          background: none;
+          white-space: pre-wrap; /* Inherit wrap and break preservation */
+          border-radius: 0;
+          line-height: inherit; /* Inherit line spacing */
+        }
+        .note {
+            background-color: #fffbe6;
+            border-left: 4px solid #ffe58f;
+            padding: 10px 15px;
+            margin: 15px 0;
+        }
+        ul li {
+          margin-bottom: 5px;
+        }
+        strong { /* Highlight key terms */
+            color: #1976d2; /* Darker blue for emphasis */
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Tutorial: Bouw de 'Zon en Zekerheid' Website (Conceptueel)</h1>
+    <p>Hoi! Deze tutorial helpt je op weg met het bouwen van de 'Zon en Zekerheid' website. We richten ons op het *begrijpen* van de stappen, de juiste HTML-structuur (semantiek) en hoe je CSS (vooral Flexbox) gebruikt voor layout en styling. We werken <strong>mobile-first</strong>: eerst voor kleine schermen, dan voor grotere.</p>
+
+    <div class="note">
+        <h3>Belangrijke Regels & Tips (Lees dit goed!)</h3>
+        <ul>
+            <li><strong>Jouw Code:</strong> Schrijf de HTML en CSS zélf. Deze tutorial geeft richting, geen kopieerbare code.</li>
+            <li><strong>AI Hulp:</strong> Gebruik AI voor *tekstcontent* is prima. Kleine code *snippets* genereren ter inspiratie mag, maar je moet <strong>alles</strong> kunnen uitleggen. Begrijp je je eigen code niet in de video? Dan is het fraude = onvoldoende.</li>
+            <li><strong>Geen Kopieerwerk:</strong> Code van anderen overnemen = plagiaat = onvoldoende.</li>
+            <li><strong>Assets:</strong> Zoek zelf rechtenvrije afbeeldingen/video's (bv. Pexels). Geen placeholders.</li>
+            <li><strong>Eindproduct:</strong> Werkende, responsive site (.zip) + video (max 5 min) met uitleg van je code (structuur, CSS-keuzes, responsive aanpak).</li>
+            <li><strong>Focus:</strong> Semantische HTML, Flexbox voor layout, Mobile-First CSS.</li>
+        </ul>
+    </div>
+
+    <h2>Stap 0: De Basis Setup</h2>
+    <p>Zet je projectstructuur op:</p>
+    <ol>
+        <li>Maak een projectmap (bv. <code>zon-en-zekerheid</code>).</li>
+        <li>Maak hierin: <code>index.html</code>, <code>blog.html</code>, <code>style.css</code>, en een map <code>images</code>.</li>
+        <li>Zet de minimale HTML-basisstructuur in beide <code>.html</code> bestanden. Denk aan:
+            <pre><code>Definieer het documenttype (&lt;!DOCTYPE html&gt;).
+Start het HTML-document (&lt;html lang="nl"&gt;).
+Maak een &lt;head&gt; sectie met:
+    Karakterset (&lt;meta charset="UTF-8"&gt;).
+    Viewport instellingen voor responsiviteit (&lt;meta name="viewport" ...&gt;).
+    Een passende &lt;title&gt;.
+    Een link naar je CSS-bestand (&lt;link rel="stylesheet" href="style.css"&gt;).
+Maak een lege &lt;body&gt; sectie waar de content komt.
+Sluit &lt;html&gt; af.</code></pre>
+        </li>
+        <li>Controleer of de <code>&lt;link&gt;</code> naar <code>style.css</code> correct is.</li>
+    </ol>
+    <p>Nu zijn we klaar voor de homepage: <code>index.html</code>.</p>
+
+    <h2>Stap 1: Homepage (`index.html`) - De Header</h2>
+    <p>Dit deel bevat je logo en de hoofdnavigatie.</p>
+
+    <h3>HTML Structuur (Concept)</h3>
+    <p>Denk semantisch! Wat is de functie van dit blok?</p>
+    <pre><code>Gebruik het <strong>&lt;header&gt;</strong> element voor de bovenste balk van je pagina.
+
+Plaats daarbinnen een <strong>&lt;div&gt;</strong> met een class (bv. `container`) om de inhoud te groeperen en later de breedte te beheren.
+
+In de container, maak je een element voor je logo (dit kan een <strong>&lt;div&gt;</strong> zijn, of direct een <strong>&lt;img&gt;</strong> als je een afbeelding gebruikt). Geef het een class (bv. `logo`).
+
+Voeg ook een <strong>&lt;nav&gt;</strong> element toe voor de navigatielinks; dit is semantisch correct.
+
+Binnen de &lt;nav&gt;, gebruik een ongeordende lijst (<strong>&lt;ul&gt;</strong>) voor de menu-items.
+
+Elk menu-item is een lijstitem (<strong>&lt;li&gt;</strong>) met daarin een link (<strong>&lt;a&gt;</strong>).
+
+Geef de "Boek nu" link een extra class (bv. `btn btn-primary`) zodat je deze als knop kunt stylen. Zorg dat de "Blog" link naar `blog.html` wijst.</code></pre>
+
+    <h3>CSS Styling (Concept)</h3>
+    <p>Begin met de basisstijlen die altijd gelden (mobile-first).</p>
+    <pre><code><strong>Globale Styles:</strong>
+Reset browser defaults voor `margin` op de `body`.
+Stel een basis `font-family` in.
+Definieer je `.container` class: geef het een procentuele `width` (bv. 90%) voor flexibiliteit, een `max-width` voor grote schermen, en `margin: 0 auto` om te centreren.
+
+<strong>Header Styles (Mobile):</strong>
+Geef de `header` wat `padding` boven/onder en misschien een `border-bottom`.
+Style het logo (bv. `font-weight`, `font-size`).
+Style de navigatielijst (`ul`): verwijder `list-style` en default `padding`/`margin`.
+Style de navigatielinks (`a`): zet `text-decoration` op `none`, kies een `color`.
+Overweeg hoe de items op mobiel staan: misschien `display: inline-block` op de `li`'s met wat `margin-left` ertussen?
+
+<strong>Knop Styles:</strong>
+Definieer de `.btn` class (bv. `padding`, `display: inline-block`, `border-radius`, `text-align: center`).
+Definieer `.btn-primary` specifiek voor de hoofdkleur (bv. `background-color`, `color`).
+
+<strong>Desktop Layout (Media Query):</strong>
+Maak een `@media (min-width: ...)` query (bv. 768px).
+Selecteer de `.container` binnen de `header`. Gebruik <strong>`display: flex`</strong> om Flexbox te activeren.
+Gebruik <strong>`justify-content: space-between`</strong> om de logo-div en nav-div uit elkaar te duwen (logo links, nav rechts).
+Gebruik <strong>`align-items: center`</strong> om ze verticaal netjes uit te lijnen.
+Selecteer de `nav ul` en maak deze ook een flex-container (`display: flex`, `align-items: center`) om de links en de knop mooi naast elkaar te krijgen en verticaal uit te lijnen.
+Pas eventueel de `margin` op de `li`-elementen aan voor meer ruimte op desktop.</code></pre>
+    <p>Controleer in je browser hoe de header zich gedraagt bij verschillende schermbreedtes.</p>
+
+    <h2>Stap 2: Homepage - Hero Sectie</h2>
+    <p>Het grote blok bovenaan met titel, tekst en afbeelding.</p>
+    <h3>HTML Structuur (Concept)</h3>
+    <pre><code>Gebruik het <strong>&lt;main&gt;</strong> element om de hoofdinhoud van je pagina te omsluiten (alles behalve header en footer).
+
+Start deze sectie met een <strong>&lt;section&gt;</strong> element, geef het een class (bv. `hero`).
+
+Gebruik weer een `div.container` binnen de sectie.
+
+In de container, maak twee hoofdelementen:
+Een <strong>&lt;div&gt;</strong> voor de tekst (class `hero-text`).
+Een <strong>&lt;div&gt;</strong> voor de afbeelding (class `hero-image`).
+
+Vul de `hero-text` div:
+Gebruik een <strong>&lt;h1&gt;</strong> voor de hoofdtitel van de pagina.
+Voeg een paragraaf (<strong>&lt;p&gt;</strong>) toe voor de slogan (geef deze evt. een class `slogan`).
+Voeg nog een &lt;p&gt; toe voor de beschrijvende tekst.
+
+Plaats in de `hero-image` div een <strong>&lt;img&gt;</strong> tag. Vergeet niet een duidelijke `alt`-tekst toe te voegen en de `src` te laten verwijzen naar jouw afbeelding.</code></pre>
+
+    <h3>CSS Styling (Concept)</h3>
+    <pre><code><strong>Sectie Styles (Mobile):</strong>
+Geef de `.hero` sectie `padding` en eventueel een `background-color`.
+Style de typografie: `h1` (grootte, marge), `.slogan` (grootte, stijl), `p` (regelafstand).
+
+<strong>Afbeelding Styles (Mobile):</strong>
+Zorg dat de afbeelding schaalt: gebruik <strong>`max-width: 100%`</strong> en `height: auto`.
+Gebruik `display: block` om extra witruimte onder de afbeelding te voorkomen.
+Geef op mobiel wat `margin-top` aan de afbeelding om ruimte te creëren onder de tekst.
+
+<strong>Desktop Layout (Media Query):</strong>
+In je `@media` query:
+Selecteer de `.hero .container`. Pas <strong>`display: flex`</strong> toe.
+Gebruik <strong>`align-items: center`</strong> voor verticale uitlijning.
+Gebruik <strong>`gap`</strong> (of `margin` op de elementen) om ruimte tussen de tekst- en afbeelding-divs te maken.
+Geef de `.hero-text` en `.hero-image` divs een basisgrootte met <strong>`flex-basis`</strong> (bv. 50% elk, of andere verhouding) of maak ze flexibel met <strong>`flex: 1`</strong>.
+Reset de `margin-top` van de afbeelding die je voor mobiel had ingesteld.</code></pre>
+
+    <h2>Stap 3: Homepage - Video Sectie</h2>
+    <p>Een sectie om een video te tonen.</p>
+    <h3>HTML Structuur (Concept)</h3>
+    <pre><code>Maak een nieuwe <strong>&lt;section&gt;</strong> (bv. class `video-section`) binnen de `&lt;main&gt;`.
+
+Optioneel: voeg een titel toe met <strong>&lt;h2&gt;</strong>.
+
+Plaats de video binnen een `div.container`.
+
+Voor responsieve video's (vooral `iframe`s) is het handig een extra wrapper <strong>&lt;div&gt;</strong> te gebruiken (class `video-wrapper`) direct om de video heen.
+
+Plaats hierin je <strong>&lt;iframe&gt;</strong> code (van YouTube/Vimeo) of een HTML5 <strong>&lt;video&gt;</strong> element met een <strong>&lt;source&gt;</strong> tag.</code></pre>
+
+    <h3>CSS Styling (Concept)</h3>
+    <pre><code><strong>Sectie Styles:</strong>
+Geef de `.video-section` wat `padding`.
+Style eventueel de `h2` (bv. `text-align: center`, `margin-bottom`).
+
+<strong>Responsive Video Wrapper (Aspect Ratio Trick):</strong>
+Style de `.video-wrapper`:
+    Zet <strong>`position: relative`</strong>.
+    Zet <strong>`padding-bottom`</strong> met een percentage dat de aspect ratio bepaalt (bv. `56.25%` voor 16:9).
+    Zet `height: 0` en `overflow: hidden`.
+Style de `iframe` (of `video`) binnen de wrapper:
+    Zet <strong>`position: absolute`</strong>, `top: 0`, `left: 0`.
+    Zet <strong>`width: 100%`</strong>, en <strong>`height: 100%`</strong>.
+
+<strong>Alternatief (Simpeler):</strong>
+Als de exacte aspect ratio minder belangrijk is:
+Laat de wrapper weg.
+Style de `iframe` of `video` direct met `max-width: 100%` en `height: auto`.
+Centreer eventueel met `display: block` en `margin: auto`.</code></pre>
+
+    <h2>Stap 4: Homepage - Over Ons Sectie</h2>
+    <p>Lijkt op de Hero, maar met andere content en mogelijk layoutvolgorde.</p>
+    <h3>HTML Structuur (Concept)</h3>
+    <pre><code>Maak weer een <strong>&lt;section&gt;</strong> (class `about-us`) binnen `&lt;main&gt;`.
+
+Gebruik een `div.container`.
+
+Plaats twee `div`s binnen de container:
+Eén voor de afbeelding (`about-image`).
+Eén voor de tekst (`about-text`).
+Zet ze in de volgorde zoals in het design (bv. afbeelding links, tekst rechts).
+
+Plaats een <strong>&lt;img&gt;</strong> (met `src` en `alt`) in de `about-image` div.
+
+Plaats een <strong>&lt;h2&gt;</strong> en een of meer <strong>&lt;p&gt;</strong> elementen in de `about-text` div.</code></pre>
+
+    <h3>CSS Styling (Concept)</h3>
+    <pre><code><strong>Sectie Styles (Mobile):</strong>
+Geef `padding`, eventueel een andere `background-color`.
+Style de `h2` en `p` tags.
+Zorg dat de afbeelding (`.about-image img`) responsive is (`max-width: 100%`, `height: auto`, `display: block`).
+Geef de afbeelding `margin-bottom` voor ruimte op mobiel.
+
+<strong>Desktop Layout (Media Query):</strong>
+Binnen de `@media` query:
+Selecteer `.about-us .container`. Pas <strong>`display: flex`</strong>, `align-items: center`, en `gap` toe.
+Gebruik <strong>`flex-basis`</strong> of `flex: 1` op de `.about-image` en `.about-text` divs om hun breedteverhouding te bepalen.
+Verwijder de `margin-bottom` van de afbeelding.</code></pre>
+
+    <h2>Stap 5: Homepage - Bestemmingen Sectie</h2>
+    <p>Hier tonen we de reisopties als 'kaarten'.</p>
+    <h3>HTML Structuur (Concept)</h3>
+    <pre><code>Maak een <strong>&lt;section&gt;</strong> (class `destinations`) binnen `&lt;main&gt;`.
+
+Plaats een `div.container` en een <strong>&lt;h2&gt;</strong> voor de sectietitel.
+
+Maak een wrapper <strong>&lt;div&gt;</strong> (class `destination-cards`) die alle kaarten bevat.
+
+Voor elke bestemming, gebruik een <strong>&lt;article&gt;</strong> element (class `card`).
+
+Binnen elke `card`:
+    Plaats een <strong>&lt;img&gt;</strong> (met `src` en `alt`).
+    Maak een <strong>&lt;div&gt;</strong> (class `card-content`) voor de tekst en knop.
+    In `card-content`:
+        Een <strong>&lt;h3&gt;</strong> voor de naam.
+        Een <strong>&lt;p&gt;</strong> voor de prijs (class `price`).
+        Een <strong>&lt;a&gt;</strong> tag gestyled als knop (bv. `btn btn-secondary`).
+
+Herhaal de `&lt;article class="card"&gt;...&lt;/article&gt;` structuur voor alle vier bestemmingen.</code></pre>
+
+    <h3>CSS Styling (Concept)</h3>
+    <pre><code><strong>Sectie Styles (Mobile):</strong>
+Geef de sectie `padding` en eventueel `background-color`.
+Centreer de `h2` en geef het `margin-bottom`.
+
+<strong>Card Styles (Mobile):</strong>
+Style de `.card`: `background-color` (bv. wit), `border`, `border-radius`.
+Geef `margin-bottom` voor ruimte tussen de kaarten (die nu onder elkaar staan).
+Gebruik <strong>`overflow: hidden`</strong> als je `border-radius` op de kaart hebt en de afbeelding bovenaan zit.
+Style de `img` binnen de kaart (`max-width: 100%`, `display: block`).
+Style de `.card-content` div (`padding`).
+Style de `h3`, `.price` (maak deze opvallend met `font-weight`, `color`, `font-size`).
+Style de `.btn-secondary` (misschien een andere achtergrondkleur dan `.btn-primary`).
+
+<strong>Desktop Layout (Media Queries):</strong>
+    &lt;em&gt;Tablet / Small Desktop (bv. `@media (min-width: 600px)`):&lt;/em&gt;
+        Selecteer de `.destination-cards` wrapper. Pas <strong>`display: flex`</strong> toe.
+        Cruciaal: gebruik <strong>`flex-wrap: wrap`</strong> zodat kaarten naar de volgende regel kunnen springen.
+        Gebruik `gap` voor ruimte tussen kaarten.
+        Selecteer de `.card`. Gebruik <strong>`flex-basis: calc(50% - helft_van_gap)`</strong> om twee kaarten per rij te krijgen.
+        Behoud `margin-bottom` voor het geval van een oneven aantal kaarten.
+
+    &lt;em&gt;Wider Desktop (bv. `@media (min-width: 992px)`):&lt;/em&gt;
+        Selecteer de `.card` opnieuw binnen deze query.
+        Pas de <strong>`flex-basis`</strong> aan voor vier kolommen, bv. <strong>`calc(25% - aangepaste_gap_berekening)`</strong>.
+        Experimenteer eventueel met simpele percentages en `justify-content` op de container.</code></pre>
+
+    <h2>Stap 6: Homepage - Footer</h2>
+    <p>De afsluitende balk onderaan.</p>
+    <h3>HTML Structuur (Concept)</h3>
+    <pre><code>Gebruik het semantische <strong>&lt;footer&gt;</strong> element na het `&lt;main&gt;` element.
+
+Plaats er een `div.container` in.
+
+Voeg een <strong>&lt;p&gt;</strong> element toe met je copyright informatie (bv. `&amp;copy; 2024 Naam - Klas - School`).</code></pre>
+
+    <h3>CSS Styling (Concept)</h3>
+    <pre><code>Style de `footer`:
+Geef het een `background-color`, `color` (voor de tekst), `text-align: center`, en `padding`.
+Geef het eventueel `margin-top` om het los te maken van de content erboven.
+Style de `p` binnen de footer (bv. `margin: 0` om extra ruimte te voorkomen).
+Deze styling is vaak hetzelfde voor mobiel en desktop.</code></pre>
+
+    <p><strong>Homepage klaar (conceptueel)!</strong> Vul nu alles met echte content.</p>
+    <hr style="margin: 40px 0;">
+
+    <h2>Stap 7: Blogpagina (`blog.html`) - Structuur</h2>
+    <p>Deze pagina hergebruikt de header en footer.</p>
+    <h3>HTML Structuur (Concept)</h3>
+    <pre><code><strong>Hergebruik Header/Footer:</strong>
+Kopieer de volledige HTML van je `&lt;header&gt;` en `&lt;footer&gt;` uit `index.html` naar `blog.html`.
+
+Maak een <strong>&lt;main&gt;</strong> element voor de blog content.
+
+<strong>Afbeeldingen Sectie:</strong>
+    Maak een <strong>&lt;section&gt;</strong> (class `blog-images`).
+    Plaats een `div.container`.
+    Maak twee <strong>&lt;div&gt;</strong> elementen (class `image-placeholder`).
+    Plaats in elke div een <strong>&lt;img&gt;</strong> met `src` en `alt` voor je blogafbeeldingen.
+
+<strong>Lijsten Sectie:</strong>
+    Maak een <strong>&lt;section&gt;</strong> (class `blog-lists`).
+    Plaats een `div.container`.
+    Maak drie aparte blokken, bijvoorbeeld met <strong>&lt;div&gt;</strong> (class `list-block`).
+    In elk blok:
+        Een <strong>&lt;h2&gt;</strong> met de titel van de lijst ("5 Dingen geleerd...", etc.).
+        Daaronder een genummerde lijst (<strong>&lt;ol&gt;</strong>).
+        Vul de lijst met <strong>&lt;li&gt;</strong> elementen waarin je daadwerkelijk je punten noteert.</code></pre>
+
+    <h2>Stap 8: Blogpagina (`blog.html`) - CSS Styling</h2>
+    <p>Voeg deze stijlen toe aan je bestaande <code>style.css</code>.</p>
+    <h3>CSS Styling (Concept)</h3>
+    <pre><code><strong>Afbeeldingen Sectie (Mobile):</strong>
+Style `.blog-images` (bv. `padding`, `background-color`).
+Zorg dat de afbeeldingen (`.image-placeholder img`) responsive zijn (`max-width: 100%`, etc.).
+Geef ze `margin-bottom`.
+
+<strong>Lijsten Sectie (Mobile):</strong>
+Style `.blog-lists` (`padding`).
+Style `.list-block` (`margin-bottom` om ze uit elkaar te houden).
+Style de `h2` binnen de lijsten (bv. `font-size`, `border-bottom`).
+Style de `ol` en `li` elementen (standaard `padding-left` op `ol` is vaak ok, geef `li` wat `margin-bottom` en/of `line-height`).
+
+<strong>Desktop Layout (Media Query):</strong>
+    Selecteer `.blog-images .container`. Pas <strong>`display: flex`</strong> en `gap` toe.
+    Geef de `.image-placeholder` divs een <strong>`flex-basis`</strong> van `calc(50% - half_gap)` om ze naast elkaar te krijgen.
+    Reset de `margin-bottom` op de afbeeldingen.
+    De lijsten sectie (`.blog-lists`) blijft waarschijnlijk prima onder elkaar staan.</code></pre>
+
+    <h2>Stap 9: Afronden en Controleren</h2>
+    <p>De laatste loodjes!</p>
+    <ol>
+        <li><strong>Content!</strong> Vul écht alle teksten in, plaats je gevonden afbeeldingen en video. Schrijf zinvolle <code>alt</code>-teksten. Vul de lijsten op de blogpagina.</li>
+        <li><strong>Testen, Testen, Testen:</strong> Check beide pagina's op verschillende schermbreedtes (gebruik de developer tools van je browser!). Werkt de responsive layout? Ziet alles er netjes uit? Geen rare overlappingen of te kleine tekst?</li>
+        <li><strong>Links:</strong> Werkt de navigatie tussen de homepage en blogpagina?</li>
+        <li><strong>Validatie (Bonus):</strong> Controleer je HTML en CSS op fouten met online validators.</li>
+        <li><strong>Video Maken:</strong> Neem je scherm op. Laat de werkende site zien (ook responsive!). Loop kort door je HTML en CSS: leg uit *waarom* je bepaalde tags en properties hebt gebruikt (semantiek, Flexbox, mobile-first). Focus op begrip. Max 5 minuten.</li>
+        <li><strong>Inpakken:</strong> Maak een .zip van je projectmap.</li>
+        <li><strong>Inleveren:</strong> Dien het .zip bestand en je video in.</li>
+    </ol>
+
+    <div class="note">
+        <p><strong>Top!</strong> Met deze conceptuele gids heb je de handvatten om de website zelfstandig op te bouwen en te begrijpen wat je doet. Focus op de structuur, de semantiek en de logica van CSS en Flexbox. Succes!</p>
+    </div>
+
+</body>
+</html>
