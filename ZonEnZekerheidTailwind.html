@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tutorial: Zon en Zekerheid Website Bouwen met Tailwind CSS (Conceptueel)</title>
+    <!-- Voeg hier de Tailwind CSS link toe (bv. via CDN voor eenvoudig starten) -->
+    <script src="https://cdn.tailwindcss.com?plugins=forms,typography,aspect-ratio"></script>
+    <style type="text/tailwindcss">
+        /* Optioneel: Hier kun je kleine Tailwind @apply regels of basis overrides toevoegen */
+        /* Bijvoorbeeld een algemeen font voor de body */
+        body {
+            @apply font-sans leading-relaxed; /* Stelt basis font en regelafstand in */
+        }
+        /* Een centrale container - Tailwind heeft een eigen 'container' class, die je kunt configureren, */
+        /* maar een custom hier kan ook voor specifieke breedtes */
+        .container-custom {
+             width: 90%;
+             max-width: 1140px; /* Of een andere max-width */
+             margin-left: auto;
+             margin-right: auto;
+        }
+        /* We gebruiken de ingebouwde 'container' van Tailwind waar mogelijk */
+    </style>
+    <style>
+        /* Behoud basis stijlen voor de tutorial zelf */
+        body {
+            font-family: sans-serif;
+            line-height: 1.6;
+            margin: 20px;
+            background-color: #f9f9f9;
+            color: #333; /* Standaard tekstkleur toegevoegd */
+        }
+        h1, h2, h3 {
+            color: #333;
+        }
+        h2 {
+            border-bottom: 2px solid #eee;
+            padding-bottom: 5px;
+            margin-top: 30px;
+        }
+        h3 {
+            margin-top: 20px;
+            color: #555;
+        }
+        code {
+            background-color: #eee;
+            padding: 2px 5px;
+            border-radius: 3px;
+            font-family: monospace;
+            white-space: nowrap; /* Behoud nowrap voor inline code */
+            color: #c7254e; /* Betere kleur voor inline code */
+        }
+        pre {
+            background-color: #e3f2fd;
+            border-left: 4px solid #90caf9;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            white-space: pre-wrap;
+            font-family: monospace;
+            color: #333;
+            line-height: 1.5;
+        }
+        /* Verwijder de `code` block styling binnen `pre` om dubbele styling te voorkomen */
+        pre code {
+          display: block; /* Laat het als block staan voor layout */
+          padding: 0;
+          margin: 0;
+          background: none;
+          white-space: pre-wrap; /* Wrap code binnen pre */
+          border-radius: 0;
+          line-height: inherit;
+          color: inherit; /* Gebruik de kleur van de pre tag */
+        }
+        .note {
+            background-color: #fffbe6;
+            border-left: 4px solid #ffe58f;
+            padding: 10px 15px;
+            margin: 15px 0;
+        }
+        ul li {
+          margin-bottom: 5px;
+        }
+        strong {
+            color: #1976d2;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Tutorial: Bouw de 'Zon en Zekerheid' Website met Tailwind CSS (Conceptueel)</h1>
+    <p>Hoi! Deze tutorial helpt je op weg met het bouwen van de 'Zon en Zekerheid' website met <strong>Tailwind CSS</strong>. We richten ons op het *begrijpen* van de stappen, de juiste HTML-structuur (semantiek) en hoe je Tailwind utility classes gebruikt voor layout en styling. We werken <strong>mobile-first</strong>.</p>
+
+    <div class="note">
+        <h3>Belangrijke Regels & Tips (Lees dit goed!)</h3>
+        <ul>
+            <li><strong>Jouw Code:</strong> Schrijf de HTML en pas de Tailwind classes zélf toe. Deze tutorial geeft richting en conceptuele voorbeelden van classes.</li>
+            <li><strong>AI Hulp:</strong> Gebruik AI voor *tekstcontent* is prima. Kleine Tailwind *combinaties* genereren ter inspiratie mag, maar je moet <strong>alles</strong> kunnen uitleggen. Begrijp je je eigen HTML/Tailwind niet in de video? Dan is het fraude = onvoldoende.</li>
+            <li><strong>Geen Kopieerwerk:</strong> Code van anderen overnemen = plagiaat = onvoldoende.</li>
+            <li><strong>Assets:</strong> Zoek zelf rechtenvrije afbeeldingen/video's (bv. Pexels). Geen placeholders.</li>
+            <li><strong>Eindproduct:</strong> Werkende, responsive site (.zip) + video (max 5 min) met uitleg van je code (structuur, Tailwind-keuzes, responsive aanpak).</li>
+            <li><strong>Focus:</strong> Semantische HTML, Tailwind utility classes voor layout/styling, Mobile-First responsive design met Tailwind's breakpoints (bv. <code>md:</code>, <code>lg:</code>).</li>
+        </ul>
+    </div>
+
+    <h2>Stap 0: De Basis Setup</h2>
+    <p>Zet je projectstructuur op:</p>
+    <ol>
+        <li>Maak een projectmap (bv. <code>zon-en-zekerheid-tailwind</code>).</li>
+        <li>Maak hierin: <code>index.html</code>, <code>blog.html</code>, en een map <code>images</code>. Een apart <code>style.css</code> bestand is nu *niet* de primaire focus, tenzij je specifieke kleine overrides of componenten wilt maken met <code>@apply</code>.</li>
+        <li>Zet de minimale HTML-basisstructuur in beide <code>.html</code> bestanden. Denk aan:
+            <pre><code>Definieer het documenttype (&lt;!DOCTYPE html&gt;).
+Start het HTML-document (&lt;html lang="nl"&gt;).
+Maak een &lt;head&gt; sectie met:
+    Karakterset (&lt;meta charset="UTF-8"&gt;).
+    Viewport instellingen voor responsiviteit (&lt;meta name="viewport" ...&gt;).
+    Een passende &lt;title&gt;.
+    Een link naar Tailwind CSS (bv. via CDN, zie bovenaan dit document).
+Maak een lege &lt;body&gt; sectie waar de content komt. Geef deze eventueel basis Tailwind classes zoals `bg-gray-100 text-gray-800`.
+Sluit &lt;html&gt; af.</code></pre>
+        </li>
+        <li>Controleer of Tailwind werkt (bv. door een <code>&lt;h1 class="text-3xl font-bold text-blue-600"&gt;Test&lt;/h1&gt;</code> in je body te zetten en te kijken of de stijl wordt toegepast).</li>
+    </ol>
+    <p>Nu zijn we klaar voor de homepage: <code>index.html</code>.</p>
+
+    <h2>Stap 1: Homepage (`index.html`) - De Header</h2>
+    <p>Dit deel bevat je logo en de hoofdnavigatie.</p>
+
+    <h3>HTML Structuur (Concept)</h3>
+    <p>Denk semantisch! De HTML blijft hetzelfde, we passen alleen Tailwind classes toe.</p>
+    <pre><code>Gebruik het <strong>&lt;header&gt;</strong> element. Geef het Tailwind classes voor basis styling zoals `bg-white shadow-md`.
+
+Plaats daarbinnen een <strong>&lt;div&gt;</strong> met de Tailwind class `container mx-auto px-4` (of je eigen container class) om de inhoud te centreren en padding te geven.
+
+In de container, maak je een element voor je logo (bv. een <strong>&lt;div&gt;</strong> of <strong>&lt;a href="/"&gt;</strong>). Geef het Tailwind classes voor styling (bv. `text-xl font-bold text-blue-700`).
+
+Voeg ook een <strong>&lt;nav&gt;</strong> element toe voor de navigatielinks.
+
+Binnen de &lt;nav&gt;, gebruik een ongeordende lijst (<strong>&lt;ul&gt;</strong>). Geef deze classes om de lijstitems te layouten (bv. begin met basis styling, later `flex`).
+
+Elk menu-item is een lijstitem (<strong>&lt;li&gt;</strong>) met daarin een link (<strong>&lt;a&gt;</strong>). Geef de `&lt;a&gt;` tags classes voor styling (bv. `text-gray-600 hover:text-blue-600 px-3 py-2`).
+
+Geef de "Boek nu" link extra Tailwind classes om het als een knop te stylen (bv. `bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600`). Zorg dat de "Blog" link naar `blog.html` wijst.</code></pre>
+
+    <h3>Tailwind Styling (Concept)</h3>
+    <p>Pas utility classes direct toe op de HTML elementen. Denk mobile-first.</p>
+    <pre><code><strong>Header Container (Mobile):</strong>
+Pas op de container `div` binnen de `header` classes toe om elementen onder elkaar te zetten of basis layout te geven. Misschien `flex flex-col items-center` of gewoon standaard block layout.
+
+<strong>Logo/Nav (Mobile):</strong>
+Style het logo met font/kleur classes.
+Style de nav `ul` en `li`'s: misschien wat `mt-4` (margin-top) op de `nav` als het onder het logo staat. Reset lijststijlen doet Tailwind automatisch.
+Style de links (`a`) met `block` of `inline-block`, padding (`px-`, `py-`), tekstkleur (`text-gray-700`), hover effect (`hover:text-blue-500`).
+
+<strong>Knop Styles:</strong>
+Combineer classes voor de knop: achtergrond (`bg-blue-500`), tekstkleur (`text-white`), padding (`px-4 py-2`), afronding (`rounded`), hover state (`hover:bg-blue-600`).
+
+<strong>Desktop Layout (Responsive Prefixes):</strong>
+Gebruik Tailwind's responsive prefixes (bv. `md:` of `lg:`).
+Selecteer de container `div` in de header. Voeg `md:flex md:justify-between md:items-center` toe. Dit activeert Flexbox *vanaf* het medium breakpoint, zet ruimte tussen logo en nav, en lijnt ze verticaal uit.
+Selecteer de `nav ul`. Voeg `md:flex md:space-x-4 md:items-center` toe om de links en de knop naast elkaar te zetten met ruimte ertussen en verticaal uitgelijnd op desktop.
+Pas eventuele margins die alleen voor mobiel waren aan met `md:mt-0`.</code></pre>
+    <p>Controleer in je browser hoe de header zich gedraagt bij verschillende schermbreedtes.</p>
+
+    <h2>Stap 2: Homepage - Hero Sectie</h2>
+    <p>Het grote blok bovenaan met titel, tekst en afbeelding.</p>
+    <h3>HTML Structuur (Concept)</h3>
+    <pre><code>Gebruik het <strong>&lt;main&gt;</strong> element om de hoofdinhoud te omsluiten.
+
+Start deze sectie met een <strong>&lt;section&gt;</strong> element. Geef het classes voor padding en achtergrond (bv. `py-12 bg-gradient-to-r from-blue-50 to-cyan-50`).
+
+Gebruik weer een `div` met `container mx-auto px-4`.
+
+In de container, maak twee hoofdelementen:
+Een <strong>&lt;div&gt;</strong> voor de tekst.
+Een <strong>&lt;div&gt;</strong> voor de afbeelding.
+
+Vul de tekst-div:
+Gebruik een <strong>&lt;h1&gt;</strong>. Geef classes voor grootte, dikte, kleur, marge (bv. `text-4xl font-bold text-gray-800 mb-4`).
+Voeg een paragraaf (<strong>&lt;p&gt;</strong>) toe voor de slogan. Geef classes (bv. `text-lg text-gray-600 mb-2`).
+Voeg nog een &lt;p&gt; toe voor de beschrijvende tekst. Geef classes (bv. `text-base text-gray-700 leading-relaxed`).
+
+Plaats in de afbeelding-div een <strong>&lt;img&gt;</strong> tag. Geef het classes voor styling en responsiviteit (bv. `w-full h-auto rounded-lg shadow-lg`). Vergeet `alt`-tekst en `src`.</code></pre>
+
+    <h3>Tailwind Styling (Concept)</h3>
+    <pre><code><strong>Sectie Styles (Mobile):</strong>
+Gebruik padding utilities (`py-16`, `px-4`) en achtergrondkleuren (`bg-gray-100`) op de `section`.
+Style de typografie met text size (`text-3xl`, `text-lg`), weight (`font-bold`), color (`text-gray-900`), margin (`mb-4`) classes.
+Geef de afbeelding `mt-8` (margin-top) voor ruimte onder de tekst op mobiel. Zorg dat het `max-w-full` of `w-full` en `h-auto` heeft. Afronding (`rounded-md`) en schaduw (`shadow-xl`) kunnen ook.
+
+<strong>Desktop Layout (Responsive Prefixes):</strong>
+Selecteer de `container div`. Voeg `md:flex md:items-center md:gap-8` toe. `gap-8` voegt ruimte toe tussen de flex items.
+Geef de tekst-div en afbeelding-div een breedte op desktop. Gebruik `md:w-1/2` voor 50/50 verdeling, of `md:flex-1` om ze flexibel te laten groeien.
+Verwijder de mobiele margin op de afbeelding: `md:mt-0`.</code></pre>
+
+    <h2>Stap 3: Homepage - Video Sectie</h2>
+    <p>Een sectie om een video te tonen.</p>
+    <h3>HTML Structuur (Concept)</h3>
+    <pre><code>Maak een nieuwe <strong>&lt;section&gt;</strong> (bv. `py-12`).
+
+Optioneel: voeg een titel toe met <strong>&lt;h2&gt;</strong> (bv. class `text-3xl font-semibold text-center mb-8`).
+
+Plaats de video binnen een `div` met `container mx-auto px-4`.
+
+Voor responsieve video's (vooral `iframe`s):
+    *Optie 1 (Makkelijkst met Tailwind Plugin):* Als je de `aspect-ratio` plugin hebt (zie CDN link bovenaan), gebruik een wrapper div:
+     `&lt;div class="aspect-w-16 aspect-h-9"&gt;`
+        `&lt;iframe class="w-full h-full" src="..."&gt;&lt;/iframe&gt;`
+     `&lt;/div&gt;`
+    *Optie 2 (Simpeler, zonder plugin):* Plaats de `iframe` of `video` direct. Geef het classes zoals `w-full max-w-3xl mx-auto h-auto` (beperk max breedte en centreer). Je hebt minder controle over de exacte aspect ratio.
+
+Gebruik een HTML5 <strong>&lt;video&gt;</strong> element met <strong>&lt;source&gt;</strong> tag als je een eigen videobestand hebt. Geef de `video` tag classes zoals `w-full h-auto`. Voeg `controls` toe.</code></pre>
+
+    <h3>Tailwind Styling (Concept)</h3>
+    <pre><code><strong>Sectie Styles:</strong>
+Geef de `section` padding (`py-12`).
+Style de `h2` met grootte, centrering, marge (`text-3xl text-center mb-8`).
+
+<strong>Video Styling:</strong>
+    Als je de aspect-ratio plugin gebruikt: De wrapper `div` doet het werk. De `iframe`/`video` erin heeft `w-full h-full`.
+    Als je de simpele methode gebruikt: Geef de `iframe` of `video` `w-full` (of `max-w-xl mx-auto` om te centreren en niet te breed te maken) en `h-auto`. Gebruik `block` indien nodig.</code></pre>
+
+    <h2>Stap 4: Homepage - Over Ons Sectie</h2>
+    <p>Lijkt op de Hero, maar met andere content en mogelijk layoutvolgorde.</p>
+    <h3>HTML Structuur (Concept)</h3>
+    <pre><code>Maak weer een <strong>&lt;section&gt;</strong> (bv. `py-12 bg-white`).
+
+Gebruik een `div` met `container mx-auto px-4`.
+
+Plaats twee `div`s binnen de container, in de gewenste volgorde (bv. afbeelding eerst):
+Eén voor de afbeelding.
+Eén voor de tekst.
+
+Plaats een <strong>&lt;img&gt;</strong> (met `src`, `alt` en classes als `w-full h-auto rounded-lg`) in de afbeelding-div.
+
+Plaats een <strong>&lt;h2&gt;</strong> (bv. `text-3xl font-semibold mb-4`) en een of meer <strong>&lt;p&gt;</strong> elementen (bv. `text-gray-700 mb-4 leading-relaxed`) in de tekst-div.</code></pre>
+
+    <h3>Tailwind Styling (Concept)</h3>
+    <pre><code><strong>Sectie Styles (Mobile):</strong>
+Geef `padding` (`py-12`) en eventueel `bg-white`.
+Style de `h2` en `p` tags met text/margin utilities.
+Zorg dat de afbeelding responsive is (`w-full h-auto`). Geef het `mb-6` (margin-bottom) voor ruimte op mobiel.
+
+<strong>Desktop Layout (Responsive Prefixes):</strong>
+Selecteer de container `div`. Pas `md:flex md:items-center md:gap-12` toe.
+Gebruik `md:w-1/2` op beide `div`s voor de breedteverhouding.
+Als de afbeelding *na* de tekst moet komen op desktop, maar *ervoor* op mobiel, gebruik dan `md:order-last` op de afbeelding-div en `md:order-first` op de tekst-div binnen de flex container.
+Verwijder de mobiele `mb-6` van de afbeelding: `md:mb-0`.</code></pre>
+
+    <h2>Stap 5: Homepage - Bestemmingen Sectie</h2>
+    <p>Hier tonen we de reisopties als 'kaarten'. Tailwind's Grid is hier heel geschikt voor.</p>
+    <h3>HTML Structuur (Concept)</h3>
+    <pre><code>Maak een <strong>&lt;section&gt;</strong> (bv. `py-12 bg-gray-50`).
+
+Plaats een `div` met `container mx-auto px-4`. Voeg een <strong>&lt;h2&gt;</strong> toe (bv. `text-3xl font-semibold text-center mb-10`).
+
+Maak een wrapper <strong>&lt;div&gt;</strong> die alle kaarten bevat. Geef deze de grid-layout classes.
+
+Voor elke bestemming, gebruik een <strong>&lt;article&gt;</strong> element. Geef het card styling classes.
+
+Binnen elke `article` (kaart):
+    Plaats een <strong>&lt;img&gt;</strong> (met `src`, `alt` en classes als `w-full h-48 object-cover`). `object-cover` zorgt dat de afbeelding de ruimte vult zonder vervorming.
+    Maak een <strong>&lt;div&gt;</strong> voor de tekst en knop. Geef padding (bv. `p-6`).
+    In deze div:
+        Een <strong>&lt;h3&gt;</strong> (bv. `text-xl font-semibold mb-2`).
+        Een <strong>&lt;p&gt;</strong> voor de prijs (bv. `text-blue-600 font-bold text-lg mb-4`).
+        Een <strong>&lt;a&gt;</strong> tag gestyled als knop (bv. `inline-block bg-green-500 text-white px-4 py-2 rounded text-sm hover:bg-green-600`).
+
+Herhaal de `&lt;article&gt;` structuur voor alle vier bestemmingen.</code></pre>
+
+    <h3>Tailwind Styling (Concept)</h3>
+    <pre><code><strong>Sectie Styles (Mobile):</strong>
+Geef de sectie `padding` en `bg-gray-50`. Centreer de `h2` (`text-center`) en geef `margin-bottom` (`mb-10`).
+
+<strong>Card Styles (Mobile):</strong>
+Style elke `article`: achtergrond (`bg-white`), afronding (`rounded-lg`), schaduw (`shadow-md`), overflow (`overflow-hidden`).
+Geef `margin-bottom` (`mb-6`) voor ruimte tussen de kaarten (ze staan standaard onder elkaar).
+Style de `img`: `w-full`, een vaste hoogte (`h-48` of `h-56`), `object-cover`.
+Style de content `div`: padding (`p-4` of `p-6`).
+Style `h3`, prijs `p`, en de knop `a` met text/color/margin/padding/background utilities. Gebruik andere kleuren voor deze knop (`bg-green-500`).
+
+<strong>Desktop Layout (Responsive Prefixes met Grid):</strong>
+Selecteer de wrapper `div` rond de kaarten.
+    *Voor Tablet (bv. 2 kolommen):* Voeg `md:grid md:grid-cols-2 md:gap-6` toe.
+    *Voor bredere Desktop (bv. 4 kolommen):* Voeg `lg:grid-cols-4` toe. De `gap-6` blijft van `md:` gelden.
+Verwijder de mobiele `margin-bottom` van de kaarten als ze in de grid staan: `md:mb-0`.</code></pre>
+
+    <h2>Stap 6: Homepage - Footer</h2>
+    <p>De afsluitende balk onderaan.</p>
+    <h3>HTML Structuur (Concept)</h3>
+    <pre><code>Gebruik het semantische <strong>&lt;footer&gt;</strong> element na `&lt;main&gt;`.
+
+Plaats er een `div` met `container mx-auto px-4` in.
+
+Voeg een <strong>&lt;p&gt;</strong> element toe met je copyright informatie.</code></pre>
+
+    <h3>Tailwind Styling (Concept)</h3>
+    <pre><code>Style de `footer`:
+Geef het een achtergrond (`bg-gray-800`), tekstkleur (`text-gray-300`), centrering (`text-center`), padding (`py-6`).
+Geef het `margin-top` (`mt-12` of `mt-16`).
+Style de `p` binnen de footer (bv. `text-sm`). Tailwind's reset haalt meestal de default marge weg, dus `m-0` is vaak niet nodig.
+Deze styling is vaak hetzelfde voor mobiel en desktop.</code></pre>
+
+    <p><strong>Homepage klaar (conceptueel)!</strong> Vul nu alles met echte content en de juiste Tailwind classes.</p>
+    <hr style="margin: 40px 0;">
+
+    <h2>Stap 7: Blogpagina (`blog.html`) - Structuur</h2>
+    <p>Deze pagina hergebruikt de header en footer.</p>
+    <h3>HTML Structuur (Concept)</h3>
+    <pre><code><strong>Hergebruik Header/Footer:</strong>
+Kopieer de volledige HTML van je `&lt;header&gt;` en `&lt;footer&gt;` (inclusief alle Tailwind classes) uit `index.html` naar `blog.html`.
+
+Maak een <strong>&lt;main&gt;</strong> element.
+
+<strong>Afbeeldingen Sectie:</strong>
+    Maak een <strong>&lt;section&gt;</strong> (bv. `py-10 bg-blue-50`).
+    Plaats een `div` met `container mx-auto px-4`.
+    Maak binnen de container een `div` die de grid layout krijgt.
+    Plaats hierin twee <strong>&lt;div&gt;</strong> elementen (of direct `&lt;img&gt;` tags).
+    Geef de <strong>&lt;img&gt;</strong> tags `src`, `alt` en Tailwind classes (bv. `w-full h-auto rounded-lg shadow`).
+
+<strong>Lijsten Sectie:</strong>
+    Maak een <strong>&lt;section&gt;</strong> (bv. `py-10`).
+    Plaats een `div` met `container mx-auto px-4`.
+    Maak drie aparte blokken, bijvoorbeeld met <strong>&lt;div&gt;</strong>. Geef ze marge onderaan (`mb-10`).
+    In elk blok:
+        Een <strong>&lt;h2&gt;</strong> met titel (bv. `text-2xl font-semibold mb-4 border-b pb-2`).
+        Daaronder een genummerde lijst (<strong>&lt;ol&gt;</strong>). Geef classes zoals `list-decimal pl-5 space-y-2`. `space-y-2` voegt ruimte tussen list items toe.
+        Vul de lijst met <strong>&lt;li&gt;</strong> elementen (bv. `text-gray-700`).</code></pre>
+
+    <h2>Stap 8: Blogpagina (`blog.html`) - Tailwind Styling</h2>
+    <p>Pas Tailwind classes toe voor de blogpagina-specifieke elementen.</p>
+    <h3>Tailwind Styling (Concept)</h3>
+    <pre><code><strong>Afbeeldingen Sectie (Mobile):</strong>
+Style de `section` (`py-10 bg-blue-50`).
+Zorg dat de afbeeldingen responsive zijn (`w-full h-auto rounded-lg shadow`). Geef ze `mb-4` voor ruimte onder elkaar.
+
+<strong>Lijsten Sectie (Mobile):</strong>
+Style de `section` (`py-10`).
+Geef de list blocks `mb-8` of `mb-10`.
+Style de `h2` binnen de lijsten (`text-2xl`, `font-semibold`, `mb-4`, `border-b`, `pb-2`).
+Style de `ol` met `list-decimal` (voor nummers), `pl-5` (indentatie), `space-y-2` (ruimte tussen `li`'s).
+Style de `li` met `text-gray-700`.
+
+<strong>Desktop Layout (Responsive Prefixes):</strong>
+    Selecteer de container of de grid `div` in de afbeeldingen sectie. Pas `md:grid md:grid-cols-2 md:gap-6` toe.
+    Verwijder de mobiele margin van de afbeeldingen: `md:mb-0`.
+    De lijsten sectie (`.blog-lists`) blijft waarschijnlijk prima onder elkaar staan (geen grid of flex nodig).</code></pre>
+
+    <h2>Stap 9: Afronden en Controleren</h2>
+    <p>De laatste loodjes!</p>
+    <ol>
+        <li><strong>Content!</strong> Vul écht alle teksten in, plaats je gevonden afbeeldingen en video. Schrijf zinvolle <code>alt</code>-teksten. Vul de lijsten op de blogpagina.</li>
+        <li><strong>Testen, Testen, Testen:</strong> Check beide pagina's op verschillende schermbreedtes (gebruik de developer tools van je browser!). Werkt de responsive layout dankzij de `md:`, `lg:` prefixes? Ziet alles er netjes uit?</li>
+        <li><strong>Links:</strong> Werkt de navigatie tussen de homepage en blogpagina?</li>
+        <li><strong>Purging (Optioneel, voor productie):</strong> Als je een build step gebruikt, zorg dan dat ongebruikte Tailwind classes worden verwijderd om de bestandsgrootte te minimaliseren. Voor deze opdracht is dit niet per se nodig.</li>
+        <li><strong>Video Maken:</strong> Neem je scherm op. Laat de werkende site zien (ook responsive!). Loop kort door je HTML en de toegepaste Tailwind classes: leg uit *waarom* je bepaalde utilities hebt gebruikt (layout, spacing, typografie, responsive aanpassingen). Focus op begrip. Max 5 minuten.</li>
+        <li><strong>Inpakken:</strong> Maak een .zip van je projectmap (inclusief `index.html`, `blog.html`, `images` map).</li>
+        <li><strong>Inleveren:</strong> Dien het .zip bestand en je video in.</li>
+    </ol>
+
+    <div class="note">
+        <p><strong>Top!</strong> Met deze conceptuele gids heb je de handvatten om de website zelfstandig met Tailwind CSS op te bouwen en te begrijpen wat je doet. Focus op de structuur, de semantiek en de logica van Tailwind's utility classes en responsive design. Succes!</p>
+    </div>
+
+</body>
+</html>
