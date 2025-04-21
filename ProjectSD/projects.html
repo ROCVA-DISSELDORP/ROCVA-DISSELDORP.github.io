@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Innovatech Solutions - Projecten</title>
+    <!-- CSS link -->
+    <style>
+        body { font-family: sans-serif; line-height: 1.6; padding: 20px; }
+        header, nav, section, footer { margin-bottom: 20px; }
+        nav ul { list-style: none; padding: 0; }
+        nav ul li { display: inline; margin-right: 10px; }
+        nav a { text-decoration: none; color: blue; }
+        h1, h2, h3 { color: #333; }
+        .project { border: 1px solid #eee; padding: 15px; margin-bottom: 15px; }
+        .project-purpose { font-style: italic; margin-bottom: 10px; color: #555; }
+        footer { font-size: 0.8em; color: #666; border-top: 1px solid #ccc; padding-top: 10px;}
+    /* Stijlen voor de Easter Egg Logo interactie */
+#footer-logo-egg {
+    /* Basis stijlen (pas hoogte/opacity aan indien nodig) */
+    height: 18px;
+    opacity: 0.7; /* Iets meer doorzichtig om te beginnen */
+    vertical-align: middle;
+    cursor: pointer; /* Maakt duidelijk dat je kunt klikken */
+    transition: transform 0.2s ease-in-out, opacity 0.2s ease-in-out; /* Vloeiende overgang */
+}
+
+#footer-logo-egg:hover {
+    transform: scale(1.2); /* Maakt het logo 20% groter op hover */
+    opacity: 1; /* Maakt het logo volledig zichtbaar op hover */
+}
+    
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>Innovatech Solutions</h1>
+    </header>
+
+    <nav>
+        <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="about-us.html">Over Ons</a></li>
+            <li><a href="projects.html">Projecten</a></li>
+            <li><a href="vacatures.html">Vacatures</a></li>
+        </ul>
+    </nav>
+
+    <section id="projects">
+        <h2>Onze SaaS Oplossingen: Impact door Technologie</h2>
+        <p>Hier zie je enkele van onze kernproducten. Achter elke technische uitdaging schuilt een doel: het leven van onze gebruikers makkelijker maken of hun bedrijfsvoering verbeteren. Duik in de projecten en ontdek hoe we technologie inzetten!</p>
+
+        <div class="project">
+            <h3>Project Alpha: QuantumLeap CRM</h3>
+            <p class="project-purpose">
+                <strong>Doel:</strong> Sales professionals helpen hun klantrelaties efficiënter te beheren, deals te volgen en verkoopprocessen te stroomlijnen, zodat ze meer tijd hebben voor wat echt telt: de klant.
+            </p>
+            <p>
+                <strong>Tech Stack Highlights:</strong> Backend ontwikkeld in <strong>Laravel (PHP 10+)</strong>, gebruikmakend van Eloquent ORM tegen een <strong>PostgreSQL</strong> DB. De frontend is een performante <strong>Vue.js 3</strong> SPA met Pinia state management. Communicatie verloopt via RESTful <strong>API's</strong>, beveiligd met <strong>JWT</strong>. De UI is gebouwd met <strong>Tailwind CSS</strong> voor maximale flexibiliteit. Deployment geschiedt via geautomatiseerde CI/CD pipelines (GitHub Actions) naar <strong>Azure</strong> App Services. <strong>Git</strong> wordt gebruikt voor VC, gehost op <strong>GitHub</strong>. Architectuur volgt deels DDD principes.
+            </p>
+        </div>
+
+        <div class="project">
+            <h3>Project Beta: NexusFlow Analytics</h3>
+             <p class="project-purpose">
+                <strong>Doel:</strong> Bedrijven in staat stellen om snel inzicht te krijgen in hun data door middel van heldere visualisaties, zodat ze data-gedreven beslissingen kunnen nemen voor groei en optimalisatie.
+            </p>
+            <p>
+                <strong>Tech Stack Highlights:</strong> Data-ingestie via diverse <strong>API's</strong> (REST, GraphQL). De processing engine gebruikt Laravel Queues & Workers. Frontend is een <strong>Nuxt.js</strong> applicatie, profiterend van SSR voor SEO en performance. Dataopslag in een geoptimaliseerde <strong>PostgreSQL</strong> database met complexe indexering. Authenticatie via <strong>JWT</strong> tokens. Volledig gehost op <strong>Azure</strong> (VMs, DBaaS). Infrastructure as Code (IaC) via Terraform. VC via <strong>Git/GitHub</strong>. Frontend styling met <strong>Bootstrap 5</strong> components. CQRS pattern overwogen voor read/write optimalisatie. Vereist goede basis <strong>HTML/CSS</strong>.
+            </p>
+        </div>
+
+        <div class="project">
+            <h3>Project Gamma: SynapseConnect iPaaS</h3>
+            <p class="project-purpose">
+                <strong>Doel:</strong> De frustratie wegnemen van losstaande softwarepakketten door een platform te bieden dat verschillende bedrijfsapplicaties naadloos met elkaar verbindt, wat leidt tot efficiëntere workflows en data-uitwisseling.
+            </p>
+            <p>
+                <strong>Tech Stack Highlights:</strong> Gebaseerd op een microservices architectuur, waarbij individuele services (<strong>Laravel</strong>/Lumen) communiceren via message queues (RabbitMQ/Azure Service Bus). Admin frontend in <strong>Vue.js</strong>. Zware focus op <strong>API</strong> design (OpenAPI spec) en security (OAuth2, <strong>JWT</strong>). <strong>PostgreSQL</strong> wordt gebruikt voor configuratie en metadata. <strong>Git/GitHub</strong> voor source control. Deployment naar <strong>Azure</strong> Kubernetes Service (AKS) met Docker containers. Monitoring via Azure Monitor & Application Insights. Werken met <strong>HTML/CSS</strong> voor basis templating.
+            </p>
+        </div>
+
+    </section>
+
+    <footer style="display: flex; justify-content: space-between; align-items: center; font-size: 0.8em; color: #666; border-top: 1px solid #ccc; padding-top: 10px;">
+        <span>© 2024 Innovatech Solutions. Alle rechten voorbehouden.</span>
+        <!-- Easter Egg: Visueel logo -->
+        <img id="footer-logo-egg"
+             src="image.png"
+             alt="Innovatech Solutions Subtiel Logo: Gestileerde blauwe I met S"
+             title="Innovatech Solutions"
+             style="height: 30px; opacity: 0.8; vertical-align: middle;">
+    </footer>
+    <script>
+        // --- Bestaande code (zoals de console.log op index.html) kan hier staan ---
+        // console.log("Innovatech Kernwaarde: 'Pragmatische Innovatie'. Gevonden! Vermeld 'Code PI24' in je sollicitatie voor bonuspunten.");
+    
+        // --- NIEUWE CODE VOOR LOGO KLIK ---
+        const logoElement = document.getElementById('footer-logo-egg');
+    
+        if (logoElement) { // Goede praktijk: controleer of het element bestaat
+            logoElement.addEventListener('click', function() {
+                // Toon de alert boodschap wanneer op het logo geklikt wordt
+                alert('Goed gevonden! Dit is ons Innovatech logo. Onthoud dit detail voor je sollicitatiegesprek!');
+            });
+        }
+        // --- EINDE NIEUWE CODE ---
+    </script>
+</body>
+</html>

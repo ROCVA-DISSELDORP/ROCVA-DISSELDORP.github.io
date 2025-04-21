@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Innovatech Solutions - Cutting-Edge SaaS Oplossingen</title>
+    <!-- CSS link -->
+    <style>
+        body { font-family: sans-serif; line-height: 1.6; padding: 20px; }
+        header, nav, section, footer { margin-bottom: 20px; }
+        nav ul { list-style: none; padding: 0; }
+        nav ul li { display: inline; margin-right: 10px; }
+        nav a { text-decoration: none; color: blue; }
+        h1, h2 { color: #333; }
+        .highlight { background-color: #f0f8ff; padding: 10px; border-left: 3px solid blue; margin-top: 15px; }
+        footer { font-size: 0.8em; color: #666; border-top: 1px solid #ccc; padding-top: 10px;}
+   
+   /* Stijlen voor de Easter Egg Logo interactie */
+#footer-logo-egg {
+    /* Basis stijlen (pas hoogte/opacity aan indien nodig) */
+    height: 18px;
+    opacity: 0.7; /* Iets meer doorzichtig om te beginnen */
+    vertical-align: middle;
+    cursor: pointer; /* Maakt duidelijk dat je kunt klikken */
+    transition: transform 0.2s ease-in-out, opacity 0.2s ease-in-out; /* Vloeiende overgang */
+}
+
+#footer-logo-egg:hover {
+    transform: scale(1.2); /* Maakt het logo 20% groter op hover */
+    opacity: 1; /* Maakt het logo volledig zichtbaar op hover */
+}
+   </style>
+</head>
+<body>
+
+    <header>
+        <h1>Innovatech Solutions</h1>
+        <p>Pioniers in Schaalbare Software-as-a-Service Platforms</p>
+    </header>
+
+    <nav>
+        <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="about-us.html">Over Ons</a></li>
+            <li><a href="projects.html">Projecten</a></li>
+            <li><a href="vacatures.html">Vacatures</a></li>
+        </ul>
+    </nav>
+
+    <section id="welcome">
+        <h2>Welkom bij Innovatech Solutions</h2>
+        <p>
+            Wij zijn een dynamisch softwarebedrijf gespecialiseerd in de conceptualisatie, ontwikkeling en deployment van geavanceerde SaaS-applicaties. Ons team van experts benut de kracht van moderne technologie stacks om robuuste, schaalbare en veilige oplossingen te leveren die bedrijfsprocessen optimaliseren en digitale transformatie versnellen.
+        </p>
+        <p>
+            <strong>Onze passie? Complexe problemen oplossen met slimme software.</strong> We geloven dat technologie bedrijven kan helpen efficiënter te werken, betere beslissingen te nemen en uiteindelijk succesvoller te zijn. Daar zetten wij ons elke dag voor in.
+        </p>
+        <p>
+            Ontdek hoe onze synergetische aanpak van development en operations (DevOps) en onze focus op een <strong>collaboratieve teamomgeving</strong> leiden tot innovatieve producten die voldoen aan de complexe eisen van de hedendaagse markt. Bekijk onze <a href="projects.html">projecten</a> voor een inzicht in onze technologische capabilities en de impact die we maken.
+        </p>
+
+        <div class="highlight">
+            <strong>Waarom kiezen studenten en starters voor Innovatech?</strong><br>
+            Bij ons krijg je de kans om te werken met cutting-edge technologie (zoals <strong>Laravel, Vue/Nuxt, Azure</strong>), te leren van ervaren collega's in een Agile setting, en direct bij te dragen aan SaaS-producten die <strong>echt waarde toevoegen</strong> voor onze klanten. We investeren in jouw groei!
+        </div>
+    </section>
+
+    <footer style="display: flex; justify-content: space-between; align-items: center; font-size: 0.8em; color: #666; border-top: 1px solid #ccc; padding-top: 10px;">
+        <span>© 2024 Innovatech Solutions. Alle rechten voorbehouden.</span>
+        <!-- Easter Egg: Visueel logo -->
+        <img id="footer-logo-egg"
+             src="image.png"
+             alt="Innovatech Solutions Subtiel Logo: Gestileerde blauwe I met S"
+             title="Innovatech Solutions"
+             style="height: 30px; opacity: 0.8; vertical-align: middle;">
+    </footer>
+
+    <script>
+        // --- Bestaande code (zoals de console.log op index.html) kan hier staan ---
+        // console.log("Innovatech Kernwaarde: 'Pragmatische Innovatie'. Gevonden! Vermeld 'Code PI24' in je sollicitatie voor bonuspunten.");
+    
+        // --- NIEUWE CODE VOOR LOGO KLIK ---
+        const logoElement = document.getElementById('footer-logo-egg');
+    
+        if (logoElement) { // Goede praktijk: controleer of het element bestaat
+            logoElement.addEventListener('click', function() {
+                // Toon de alert boodschap wanneer op het logo geklikt wordt
+                alert('Goed gevonden! Dit is ons Innovatech logo. Onthoud dit detail voor je sollicitatiegesprek!');
+            });
+        }
+        // --- EINDE NIEUWE CODE ---
+    </script>
+
+</body>
+</html>

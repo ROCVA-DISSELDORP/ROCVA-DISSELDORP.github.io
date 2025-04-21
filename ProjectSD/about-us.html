@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Innovatech Solutions - Over Ons</title>
+    <!-- CSS link -->
+    <style>
+        body { font-family: sans-serif; line-height: 1.6; padding: 20px; }
+        header, nav, section, footer { margin-bottom: 20px; }
+        nav ul { list-style: none; padding: 0; }
+        nav ul li { display: inline; margin-right: 10px; }
+        nav a { text-decoration: none; color: blue; }
+        h1, h2, h3 { color: #333; }
+        .culture-point { margin-left: 20px; font-style: italic; }
+        footer { font-size: 0.8em; color: #666; border-top: 1px solid #ccc; padding-top: 10px;}
+
+        /* Stijlen voor de Easter Egg Logo interactie */
+#footer-logo-egg {
+    /* Basis stijlen (pas hoogte/opacity aan indien nodig) */
+    height: 18px;
+    opacity: 0.7; /* Iets meer doorzichtig om te beginnen */
+    vertical-align: middle;
+    cursor: pointer; /* Maakt duidelijk dat je kunt klikken */
+    transition: transform 0.2s ease-in-out, opacity 0.2s ease-in-out; /* Vloeiende overgang */
+}
+
+#footer-logo-egg:hover {
+    transform: scale(1.2); /* Maakt het logo 20% groter op hover */
+    opacity: 1; /* Maakt het logo volledig zichtbaar op hover */
+}
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>Innovatech Solutions</h1>
+    </header>
+
+    <nav>
+        <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="about-us.html">Over Ons</a></li>
+            <li><a href="projects.html">Projecten</a></li>
+            <li><a href="vacatures.html">Vacatures</a></li>
+        </ul>
+    </nav>
+
+    <section id="about">
+        <h2>Over Innovatech Solutions</h2>
+
+        <h3>Onze Missie</h3>
+        <p>
+            Het leveren van state-of-the-art SaaS-oplossingen die <strong>bedrijven helpen groeien en innoveren</strong>. We maken complexe bedrijfsprocessen toegankelijk en beheersbaar door technologische excellentie, data-gedreven inzichten en een onwrikbare focus op user experience (UX).
+        </p>
+
+        <h3>Onze Visie</h3>
+        <p>
+            De voorkeurspartner zijn voor organisaties die streven naar digitale superioriteit. We willen vooroplopen door continu te innoveren binnen cloud-native architecturen (zoals <strong>Azure</strong>) en geavanceerde software engineering principes toe te passen, en tegelijkertijd een <strong>inspirerende werkplek</strong> te zijn waar talent zich kan ontwikkelen.
+        </p>
+
+        <h3>Kernwaarden & Aanpak: Meer dan alleen Code</h3>
+        <p>
+            Technologie is ons middel, maar onze aanpak is mensgericht. Bij Innovatech hanteren we een Agile methodologie (Scrum/Kanban) en een DevOps-cultuur voor snelle iteraties en continue waardecreatie. Maar wat betekent dat concreet voor jou?
+        </p>
+        <ul>
+            <li><strong>Samenwerking staat centraal:</strong> Onze cross-functionele teams werken nauw samen. Je leert van elkaar, deelt kennis en viert successen samen. We gebruiken <strong>Git/GitHub</strong> intensief voor transparante samenwerking aan code.</li>
+            <li><strong>Focus op Kwaliteit & Leren:</strong> TDD (Test-Driven Development) en BDD (Behavior-Driven Development) zijn niet alleen buzzwords; ze helpen ons robuuste software te bouwen. We moedigen <strong>continu leren</strong> aan en bieden ruimte om nieuwe technieken te ontdekken.</li>
+            <li><strong>Security by Design:</strong> We nemen beveiliging serieus gedurende de hele secure development lifecycle (SDL), inclusief robuuste authenticatie (<strong>JWT</strong>/OAuth2).</li>
+            <li><strong>Moderne Infrastructuur:</strong> Onze infrastructuur, primair op <strong>Azure</strong>, wordt beheerd via IaC (Infrastructure as Code) principes. Dit biedt een stabiele en schaalbare omgeving om op te bouwen.</li>
+        </ul>
+
+         <h3>Technologie Focus: Onze Gereedschapskist</h3>
+        <p>
+            We zijn trots op onze technische expertise en gebruiken graag de juiste tool voor de job. Dit zijn de technologieën waar je bij ons veel mee in aanraking komt en waar je je verder in kunt ontwikkelen:
+        </p>
+         <ul>
+             <li>Backend: <strong>Laravel (PHP)</strong> voor krachtige API's, vaak gebaseerd op microservices of modulaire monoliths.</li>
+             <li>Frontend: Moderne JavaScript frameworks zoals <strong>Vue.js</strong> (voor SPAs) en <strong>Nuxt.js</strong> (voor SSR/SSG). Uiteraard met solide <strong>HTML/CSS</strong> als basis.</li>
+             <li>Database: Voornamelijk <strong>PostgreSQL</strong> (RDBMS) voor betrouwbare data persistence.</li>
+             <li>Styling: Utility-first (<strong>Tailwind CSS</strong>) of component-based (<strong>Bootstrap</strong>) voor efficiënte UI ontwikkeling.</li>
+             <li>Cloud & DevOps: <strong>Azure</strong> voor hosting en services, <strong>Git/GitHub</strong> voor version control, CI/CD pipelines voor automatisering.</li>
+             <li>Integraties: Veel werk met externe en interne <strong>API's</strong>.</li>
+         </ul>
+        <p>
+             Deze stack stelt ons in staat om de innovatieve SaaS-producten te bouwen die je op onze <a href="projects.html">projectenpagina</a> ziet.
+        </p>
+    </section>
+
+    <footer style="display: flex; justify-content: space-between; align-items: center; font-size: 0.8em; color: #666; border-top: 1px solid #ccc; padding-top: 10px;">
+        <span>© 2024 Innovatech Solutions. Alle rechten voorbehouden.</span>
+        <!-- Easter Egg: Visueel logo -->
+        <img id="footer-logo-egg"
+             src="image.png"
+             alt="Innovatech Solutions Subtiel Logo: Gestileerde blauwe I met S"
+             title="Innovatech Solutions"
+             style="height: 30px; opacity: 0.8; vertical-align: middle;">
+    </footer>
+    <script>
+        // --- Bestaande code (zoals de console.log op index.html) kan hier staan ---
+        // console.log("Innovatech Kernwaarde: 'Pragmatische Innovatie'. Gevonden! Vermeld 'Code PI24' in je sollicitatie voor bonuspunten.");
+    
+        // --- NIEUWE CODE VOOR LOGO KLIK ---
+        const logoElement = document.getElementById('footer-logo-egg');
+    
+        if (logoElement) { // Goede praktijk: controleer of het element bestaat
+            logoElement.addEventListener('click', function() {
+                // Toon de alert boodschap wanneer op het logo geklikt wordt
+                alert('Goed gevonden! Dit is ons Innovatech logo. Onthoud dit detail voor je sollicitatiegesprek!');
+            });
+        }
+        // --- EINDE NIEUWE CODE ---
+    </script>
+
+</body>
+</html>
