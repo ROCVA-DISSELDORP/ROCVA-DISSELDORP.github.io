@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Unity VR Roller Coaster Shooter Game Tutorial Pt.1 – Simplified</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Simple styles for the details/summary elements */
+        details > summary {
+            list-style: none;
+        }
+        details > summary::-webkit-details-marker {
+            display: none;
+        }
+        details > summary::before {
+            content: '►';
+            margin-right: 0.5rem;
+            display: inline-block;
+            transition: transform 0.2s;
+        }
+        details[open] > summary::before {
+            transform: rotate(90deg);
+        }
+        /* Basic styling for code blocks */
+        pre {
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+    </style>
+</head>
+<body class="bg-gray-100 text-gray-800 font-sans leading-relaxed">
+
+    <div class="max-w-4xl mx-auto p-4 sm:p-8 bg-white shadow-lg my-8 rounded-lg">
+        <header>
+            <h1 class="text-3xl md:text-5xl font-bold text-gray-900 mb-6">Unity VR Roller Coaster Shooter Game Tutorial Pt.1</h1>
+        </header>
+
+        <main class="space-y-12">
+
+            <!-- Image Gallery -->
+            <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
+                <img src="https://timcoster.com/wp-content/uploads/2023/11/unity-vrrollercoastershootertutorial-processimg-002.png" alt="VR Rollercoaster Screenshot 1" class="rounded-lg shadow-md w-full h-auto">
+                <img src="https://timcoster.com/wp-content/uploads/2023/11/unity-vrrollercoastershootertutorial-processimg-000.png" alt="VR Rollercoaster Screenshot 2" class="rounded-lg shadow-md w-full h-auto">
+                <img src="https://timcoster.com/wp-content/uploads/2023/09/screenshot-2023-09-13-at-09.13.13.png" alt="VR Rollercoaster Screenshot 3" class="rounded-lg shadow-md w-full h-auto">
+                <img src="https://timcoster.com/wp-content/uploads/2023/11/unity-vrrollercoastershootertutorial-processimg-001.png" alt="VR Rollercoaster Screenshot 4" class="rounded-lg shadow-md w-full h-auto">
+                <img src="https://timcoster.com/wp-content/uploads/2023/11/unity-vrrollercoastershootertutorial-processimg-003.png" alt="VR Rollercoaster Screenshot 5" class="rounded-lg shadow-md w-full h-auto">
+                <img src="https://timcoster.com/wp-content/uploads/2023/09/screenshot-2023-09-23-152915.png" alt="VR Gun Model" class="rounded-lg shadow-md w-full h-auto">
+            </div>
+
+            <!-- YouTube Video -->
+            <details class="bg-gray-50 rounded-lg p-4" open>
+                <summary class="font-semibold text-lg cursor-pointer py-2">YouTube Demo</summary>
+                <div class="mt-4">
+                    <div class="aspect-w-16 aspect-h-9">
+                        <iframe class="w-full h-full rounded-md" src="https://www.youtube.com/embed/hkJvA8-PTig" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                    </div>
+                </div>
+            </details>
+
+            <!-- Introduction -->
+            <section>
+                <h2 class="text-2xl font-bold text-center my-4">Introduction</h2>
+                <p class="text-center font-semibold text-red-600">⚠️ (This tutorial is currently under construction) ⚠️</p>
+                <p class="mt-4">
+                    In this tutorial we are going to create a VR Roller Coaster Shooter Game (an on-rails shooter) for the Oculus/Meta Quest 2 headset!
+                </p>
+                <p class="mt-2">
+                    The gameplay for the game that we are going to make is inspired by Until Dawn: Rush of Blood, one of the first games I ever played in VR. Until Dawn: Rush of Blood is a horror themed on-rails VR shooter game from Supermassive Games, the creators of the 2015 PS4 horror game Until Dawn and the 2022 PS5 horror game The Quarry.
+                </p>
+                <p class="mt-2">
+                    The concept of the game works really well in VR, because you’re probably sitting down in reality and because you’re also sitting down in the virtual reality rollercoaster train cart, it just feels right. Looking around while riding a rollercoaster and shooting at targets placed alongside the rollercoaster tracks from inside the rollercoaster train is a lot of fun and can be really challenging when there are lots of targets to hit and when the train is moving at a high velocity.
+                </p>
+                <p class="mt-2">
+                    Also, you know that queasy feeling in your stomach when you’re on a actual rollercoaster that is going into a steep drop? That turns out to be something your brain does to you because you will also get that same stomach feeling in VR when the roller coaster train makes a steep drop, making everything feel extra real!
+                </p>
+                <h3 class="font-semibold mt-6 mb-2">In this tutorial you will learn:</h3>
+                <ul class="list-disc list-inside space-y-1">
+                    <li>How to setup your project for building to the Oculus/Meta Quest 2 VR headset.</li>
+                    <li>How to setup your project for VR using the XR Interaction Toolkit package.</li>
+                    <li>How to setup a VR Player Controller with Full Locomotion using dual thumb sticks.</li>
+                    <li>How to test your game in VR during Unity Playmode with Quest Link.</li>
+                    <li>How to create a Unity Terrain with hills, grass, trees, bushes and water.</li>
+                    <li>How to setup a skybox.</li>
+                    <li>How to create a roller coaster track using the Unity Splines Package.</li>
+                    <li>How to make a train cart follow the spline of the roller coaster track.</li>
+                    <li>How to let the player enter and exit the train.</li>
+                    <li>How to make pistols and rifles that can be picked up and fired with.</li>
+                    <li>How to make moving targets for the player that can be shot.</li>
+                    <li>How to create a player scoring system and UI score display.</li>
+                    <li>How to create a invisible trigger box that can make ‘things’ happen when the player enters.</li>
+                    <li>How to create a VR Title scene with a floating Main Menu window for your game.</li>
+                    <li>How to build your game to your Quest 2 VR headset.</li>
+                </ul>
+                <p class="text-center italic mt-6">
+                    This tutorial was created using <strong>Unity 2022.3.9f1 LTS</strong> with the <strong>3D Core</strong> project template.
+                </p>
+            </section>
+
+            <!-- Dependencies -->
+            <section class="space-y-4">
+                <h3 class="text-xl font-bold">Dependencies</h3>
+                <div>
+                    <h4 class="font-semibold">Hardware Requirements</h4>
+                    <ul class="list-disc list-inside ml-4">
+                        <li>A VR Ready PC with a USB-C port</li>
+                        <li>An Oculus/Meta Quest 2, 3 or Pro VR HMD (Head Mounted Display)</li>
+                        <li>An Oculus/Meta Quest Link capable USB-C cable</li>
+                    </ul>
+                </div>
+
+                <details class="bg-blue-50 border border-blue-200 rounded-lg p-4">
+                    <summary class="font-semibold cursor-pointer">Notes on Quest Link</summary>
+                    <div class="mt-3 space-y-2">
+                        <p>To use the Quest as a regular PC connected VR Headset, instead of a stand alone mobile one, a Quest Link cable is required. Connecting the Quest to your PC using the Link cable will allow you to play test your game live in the Unity Editor while you are creating it.</p>
+                        <img src="https://timcoster.com/wp-content/uploads/2023/09/metaquestlinkcable.webp?w=300" alt="Meta Quest Link Cable" class="mx-auto my-4 rounded-lg">
+                        <p>Without the Quest Link cable you can still connect your Quest to the Oculus PC application over Wi-Fi but then you’re Wi-Fi router/connection has to be fast enough (6G Wi-Fi) or you may experience motion sickness very quickly.</p>
+                        <p>The default USB-C Quest charging cable that came with the Quest can only be used to charge the headset and to transfer data/builds to the Quest but not to transfer the large display data.</p>
+                        <p>To get a better clue on what is going on with those expensive USB-C cables I recommend watching this YouTube video from Adam Savage: <a href="https://www.youtube.com/watch?v=AD5aAd8Oy84" class="text-blue-600 hover:underline" target="_blank" rel="noopener">https://www.youtube.com/watch?v=AD5aAd8Oy84</a></p>
+                    </div>
+                </details>
+
+                <div>
+                    <h4 class="font-semibold">Software</h4>
+                    <ul class="list-disc list-inside ml-4">
+                        <li>Unity Hub</li>
+                        <li>Unity 2022.3.7f1 LTS</li>
+                        <li>Visual Studio Code (or other code editor)</li>
+                        <li>Oculus Rift Software</li>
+                        <li>Meta Quest Developer Hub (Optional)</li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h4 class="font-semibold">Unity Packages and Assets</h4>
+                    <p>You don’t have to download these packages right away, we’ll go over installing them individually.</p>
+                    <h5 class="font-medium mt-2">Packages: Unity Registry</h5>
+                    <ul class="list-disc list-inside ml-4">
+                        <li>XR Plugin Management</li>
+                        <li>XR Interaction Toolkit + Starter Assets Samples</li>
+                        <li>Oculus XR Plugin</li>
+                        <li>Splines</li>
+                        <li>TextMesh Pro + Samples</li>
+                        <li>Terrain Tools (Optional)</li>
+                    </ul>
+                    <h5 class="font-medium mt-2">Packages: Asset Store</h5>
+                    <ul class="list-disc list-inside ml-4">
+                        <li>Allsky Free – 10 Sky / Skybox Set: <a href="https://assetstore.unity.com/packages/2d/textures-materials/sky/allsky-free-10-sky-skybox-set-146014" class="text-blue-600 hover:underline" target="_blank">Link</a></li>
+                        <li>Dream Forest Tree: <a href="https://assetstore.unity.com/packages/3d/vegetation/trees/dream-forest-tree-105297" class="text-blue-600 hover:underline" target="_blank">Link</a></li>
+                        <li>Unity Technologies Particle Pack: <a href="https://assetstore.unity.com/packages/vfx/particles/particle-pack-127325" class="text-blue-600 hover:underline" target="_blank">Link</a></li>
+                    </ul>
+                </div>
+            </section>
+
+            <!-- Steps -->
+            <section class="space-y-4">
+                <h2 class="text-2xl font-bold text-center pt-8 pb-4">Steps: Phase 1</h2>
+                <p class="text-center italic">Phase one will be all about creating a VR Roller Coaster Shooter ‘template’ project first, meaning that we’ll create the basic structure and prototype game objects for the entire game so that in Phase two we can iterate on it, and develop things further.</p>
+
+                <!-- Step Details Block -->
+                <div class="space-y-3">
+                    <details class="bg-gray-50 border rounded-lg">
+                        <summary class="font-semibold text-lg cursor-pointer p-4">Install the Visual Studio Code script editor</summary>
+                        <div class="p-4 border-t space-y-2">
+                            <p><strong>Download & Install Visual Studio Code:</strong> <a href="https://code.visualstudio.com/" class="text-blue-600 hover:underline" target="_blank">https://code.visualstudio.com/</a></p>
+                            <p><strong>Install the Unity for Visual Studio Code extension:</strong> In VS Code > Extensions > search ‘Unity’ > Install.</p>
+                            <p><strong>Download & Install the .NET 7.0 Core SDK:</strong> <a href="https://dotnet.microsoft.com/en-us/download" class="text-blue-600 hover:underline" target="_blank">https://dotnet.microsoft.com/en-us/download</a></p>
+                        </div>
+                    </details>
+                    
+                    <details class="bg-gray-50 border rounded-lg">
+                        <summary class="font-semibold text-lg cursor-pointer p-4">Download starter project with all dependencies</summary>
+                        <div class="p-4 border-t space-y-2">
+                            <p>Download the starter project from the link below and unzip it to a folder of your choice.</p>
+                            <a href="https://github.com/ROCVA-DISSELDORP/VRRollerCoasterSampleProject6.0" class="text-blue-600 hover:underline" target="_blank">https://github.com/ROCVA-DISSELDORP/VRRollerCoasterSampleProject6.0</a>
+                        </div>
+                    </details>
+
+                    <details class="bg-gray-50 border rounded-lg">
+                        <summary class="font-semibold text-lg cursor-pointer p-4">Install the Unity Editor (with Android build support)</summary>
+                        <div class="p-4 border-t space-y-2">
+                            <p>Unity Hub > Installs > Install Editor > Official releases > 6000.0 LTS > Install</p>
+                            <ul class="list-disc list-inside ml-4">
+                                <li>select Android Build Support</li>
+                                <li>select Windows Build Support (IL2CPP)</li>
+                                <li>Install</li>
+                            </ul>
+                        </div>
+                    </details>
+                    
+                    <details class="bg-gray-50 border rounded-lg">
+                        <summary class="font-semibold text-lg cursor-pointer p-4">Add Downloaded Unity Project</summary>
+                        <div class="p-4 border-t space-y-2">
+                            <p>Unity Hub > Project > Add > Add from disk > select the unzipped project directory</p>
+                        </div>
+                    </details>
+
+                    <details class="bg-gray-50 border rounded-lg">
+                        <summary class="font-semibold text-lg cursor-pointer p-4">Set Visual Studio Code as the default external script editor</summary>
+                        <div class="p-4 border-t space-y-2">
+                            <p>Unity Menu Bar > Edit > Preferences > External Tools</p>
+                            <ul class="list-disc list-inside ml-4">
+                                <li>External Script Editor = Visual Studio Code</li>
+                                <li>click Regenerate Project Files</li>
+                            </ul>
+                        </div>
+                    </details>
+                    
+                    <details class="bg-gray-50 border rounded-lg">
+                        <summary class="font-semibold text-lg cursor-pointer p-4">Switch Build Platform</summary>
+                        <div class="p-4 border-t space-y-2">
+                            <p>Unity Menu Bar > File > Build Settings</p>
+                             <ul class="list-disc list-inside ml-4">
+                                <li>Platform > select Android</li>
+                                <li>click Switch Platform</li>
+                            </ul>
+                        </div>
+                    </details>
+
+                    <details class="bg-gray-50 border rounded-lg">
+                        <summary class="font-semibold text-lg cursor-pointer p-4">Setup Level 1.unity Scene</summary>
+                        <div class="p-4 border-t space-y-2">
+                            <p><strong>Create new Level 1.unity scene file:</strong> In <em>Assets/MyGame/Scenes</em>, right click > Create > Scene and rename to '<em>Level 1.unity</em>'.</p>
+                            <p><strong>Open Level 1.unity:</strong> Double click the file to open it.</p>
+                        </div>
+                    </details>
+
+                    <details class="bg-gray-50 border rounded-lg">
+                        <summary class="font-semibold text-lg cursor-pointer p-4">Setup Skybox</summary>
+                        <div class="p-4 border-t space-y-2">
+                            <p><strong>Apply skybox material:</strong> Unity Menu Bar > Window > Rendering > Lighting > Environment > Skybox Material = Epic_BlueSunset.mat</p>
+                            <p><strong>Save Changes:</strong> Press Ctrl + S.</p>
+                        </div>
+                    </details>
+                    
+                    <details class="bg-gray-50 border rounded-lg">
+                        <summary class="font-semibold text-lg cursor-pointer p-4">Enable Fog</summary>
+                        <div class="p-4 border-t space-y-2">
+                            <p><strong>Enable camera fog:</strong> Unity Menu Bar > Window > Rendering > Lighting > Environment > Other Settings</p>
+                            <ul class="list-disc list-inside ml-4">
+                                <li>Fog = Enabled</li>
+                                <li>Density = 0.02</li>
+                            </ul>
+                            <p><strong>Save Changes:</strong> Press Ctrl + S.</p>
+                        </div>
+                    </details>
+
+                    <details class="bg-gray-50 border rounded-lg">
+                        <summary class="font-semibold text-lg cursor-pointer p-4">Setup Sun</summary>
+                        <div class="p-4 border-t space-y-2">
+                             <p>In Hierarchy, rename ‘Directional Light’ to ‘Sun’ and select it.</p>
+                             <p>In Inspector > Light component:</p>
+                             <ul class="list-disc list-inside ml-4">
+                                <li>Color = White (1, 1, 1, 1)</li>
+                                <li>Intensity = ~4</li>
+                             </ul>
+                             <p><strong>Save Changes:</strong> Press Ctrl + S.</p>
+                        </div>
+                    </details>
+
+                    <details class="bg-gray-50 border rounded-lg">
+                        <summary class="font-semibold text-lg cursor-pointer p-4">Fire VRGun</summary>
+                        <div class="p-4 border-t space-y-2">
+                            <p><strong>Add new public variables to VRGun class:</strong></p>
+                            <pre class="bg-gray-800 text-gray-200 p-4 rounded-md overflow-x-auto"><code>public Transform bulletSpawnTransform;
+public GameObject bulletPrefab;
+public ParticleSystem gunFireParticleSystem;
+public AudioSource gunFireAudioSource;
+
+public float fireSpeed = 125.0f;</code></pre>
+
+                            <p><strong>Add new public FireBullet() function to VRGun class:</strong></p>
+                             <pre class="bg-gray-800 text-gray-200 p-4 rounded-md overflow-x-auto"><code>public void FireBullet()
+{
+    Debug.Log("Gun is Fired!!!");
+    
+    // Play effects
+    gunFireParticleSystem.Play();
+    gunFireAudioSource.Play();
+
+    // Spawn bullet
+    GameObject spawnedBullet = Instantiate(bulletPrefab);
+    spawnedBullet.transform.position = bulletSpawnTransform.position;
+    spawnedBullet.transform.rotation = bulletSpawnTransform.rotation;
+
+    // Fire it
+    spawnedBullet.GetComponent<Rigidbody>().velocity = spawnedBullet.transform.forward * fireSpeed;
+    
+    // Destroy it after 5 seconds
+    Destroy(spawnedBullet, 5);
+}</code></pre>
+                            
+                            <p><strong>Setup Gun Firing in Inspector:</strong></p>
+                             <ul class="list-disc list-inside ml-4">
+                                <li>Assign all the new public variables (BulletSpawnTransform, Bullet-Prefab, etc.) by dragging GameObjects from the Hierarchy/Project view.</li>
+                                <li>In VRGun > XR Grab Interactable > Interactable Events > Activated, click '+' and hook up the VRGun.FireBullet() function.</li>
+                             </ul>
+                        </div>
+                    </details>
+
+                    <!-- ... other steps would be converted similarly ... -->
+                </div>
+            </section>
+            
+            <footer class="text-center pt-8 border-t">
+                 <a href="https://timcoster.com/2024/01/23/unity-vr-roller-coaster-shooter-game-tutorial-pt-2-2/" class="inline-block bg-blue-600 text-white font-bold py-3 px-6 rounded-lg hover:bg-blue-700 transition-colors">
+                    Go to Part 2 >
+                </a>
+            </footer>
+
+        </main>
+    </div>
+</body>
+</html>
