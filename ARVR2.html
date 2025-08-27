@@ -947,6 +947,339 @@ public class VRGun: MonoBehaviour
                 <p class="mt-2">Once configured, drag the '<em>Bullet-Prefab</em>' into your prefabs folder and delete it from the scene.</p>
             </div>
         </details>
+
+        <!-- Setup Bullet Prefab -->
+<details class="bg-gray-50 border rounded-lg">
+    <summary class="font-semibold text-lg cursor-pointer p-4">Setup Bullet Prefab</summary>
+    <div class="p-4 border-t space-y-4">
+
+        <div class="aspect-w-16 aspect-h-9">
+            <iframe class="w-full h-full rounded-md" src="https://www.youtube.com/embed/NY4Kzy5xZkY" title="Unity Bullet Setup Tutorial" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+        </div>
+
+        <div>
+            <h4 class="font-semibold">1. Create Bullet-Prefab</h4>
+            <ul class="list-disc list-inside ml-4 mt-2 space-y-1">
+                <li>Create a <em>Sphere</em> 3D object and rename it <strong>Bullet-Prefab</strong>.</li>
+                <li>Scale: <strong>(0.05, 0.05, 0.05)</strong>.</li>
+                <li>Apply the red debug material.</li>
+            </ul>
+        </div>
+
+        <div>
+            <h4 class="font-semibold">2. Add Components</h4>
+            <ul class="list-disc list-inside ml-4 mt-2 space-y-1">
+                <li><strong>Rigidbody</strong> → Use Gravity: <em>false</em>, Collision Detection: <em>Continuous Dynamic</em>.</li>
+                <li><strong>SphereCollider</strong> (default on Sphere).</li>
+                <li><strong>Particle System</strong> → Shrink size over lifetime, small sphere emission.</li>
+                <li><strong>Audio Source</strong> → Assign <em>Button Pop.wav</em> (XR Starter Assets).</li>
+            </ul>
+        </div>
+
+        <div>
+            <h4 class="font-semibold">3. Create Bullet Script</h4>
+            <p>Create <code>Bullet.cs</code> in <em>/Assets/MyGame/Scripts</em> and attach it to <em>Bullet-Prefab</em>:</p>
+            <pre class="mt-2"><code>using UnityEngine;
+
+public class Bullet : MonoBehaviour
+{
+    public ParticleSystem explosionParticleSystem;
+    public AudioSource explosionAudioSource;
+
+    void OnCollisionEnter(Collision collider)
+    {
+        Debug.Log("Bullet HIT!!!");
+        explosionParticleSystem.Play();
+        explosionAudioSource.Play();
+
+        GetComponent&lt;SphereCollider&gt;().enabled = false;
+        GetComponent&lt;MeshRenderer&gt;().enabled = false;
+    }
+}</code></pre>
+        </div>
+
+        <div>
+            <h4 class="font-semibold">4. Link References</h4>
+            <ul class="list-disc list-inside ml-4 mt-2 space-y-1">
+                <li>Drag <strong>Particle System</strong> into <em>Explosion Particles</em>.</li>
+                <li>Drag <strong>Audio Source</strong> into <em>Explosion Audio</em>.</li>
+            </ul>
+        </div>
+
+        <div>
+            <h4 class="font-semibold">5. Save as Prefab</h4>
+            <p>Drag <em>Bullet-Prefab</em> into <em>Assets/MyGame/Prefabs</em> and remove it from the scene.</p>
+        </div>
+    </div>
+</details>
+
+<!-- Fire VRGun & Automatically Destroy Bullets -->
+<details class="bg-gray-50 border rounded-lg">
+    <summary class="font-semibold text-lg cursor-pointer p-4">Fire VRGun & Automatically Destroy Bullets</summary>
+    <div class="p-4 border-t space-y-4">
+        <div class="aspect-w-16 aspect-h-9">
+            <iframe class="w-full h-full rounded-md" src="https://www.youtube.com/embed/zPccr1q-q5Q" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+        </div>
+        <div>
+            <h4 class="font-semibold">1. Create/Update VRGun.cs Script</h4>
+            <p>Add the following code to your <em>VRGun.cs</em> script. This single block includes public variables for the editor, the firing logic, and automatically destroys the bullet after 5 seconds.</p>
+            <pre class="mt-2"><code>
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class VRGun : MonoBehaviour
+{
+    // Assign these in the Unity Inspector
+    public Transform gunSnapTransform;
+    public Transform bulletSpawnTransform;
+    public GameObject bulletPrefab;
+    public ParticleSystem gunFireParticleSystem;
+    public AudioSource gunFireAudioSource;
+    
+    public float fireSpeed = 125.0f;
+
+    // Called when the gun is grabbed
+    public void OnGrab()
+    {
+        Debug.Log("Gun is Grabbed!!!");
+    }
+
+    // Called when the gun is released
+    public void OnRelease()
+    {
+        Debug.Log("Gun is Dropped!!!");
+        transform.position = gunSnapTransform.position;
+        transform.rotation = gunSnapTransform.rotation;
+        GetComponent&lt;Rigidbody&gt;().isKinematic = true;
+    }
+
+    // Called by the XR Grab Interactable 'Activated' event
+    public void FireBullet()
+    {
+        Debug.Log("Gun is Fired!!!");
+        
+        // Play effects
+        gunFireParticleSystem.Play();
+        gunFireAudioSource.Play();
+
+        // Create a new bullet from the prefab
+        GameObject spawnedBullet = Instantiate(bulletPrefab);
+
+        // Position the bullet at the tip of the gun barrel
+        spawnedBullet.transform.position = bulletSpawnTransform.position;
+        spawnedBullet.transform.rotation = bulletSpawnTransform.rotation;
+
+        // Fire the bullet forward
+        spawnedBullet.GetComponent&lt;Rigidbody&gt;().velocity = spawnedBullet.transform.forward * fireSpeed;
+        
+        // Destroy the bullet after 5 seconds to clean up the scene
+        Destroy(spawnedBullet, 5);
+    }
+}
+</code></pre>
+        </div>
+        <div>
+            <h4 class="font-semibold">2. Setup VRGun Component in Inspector</h4>
+            <p>Select your '<em>VRGun</em>' GameObject and drag the corresponding objects from the Hierarchy or Project view into the script's public fields:</p>
+            <ul class="list-disc list-inside ml-4 mt-2 space-y-1">
+                <li><strong>Bullet Spawn Transform:</strong> The empty GameObject at the tip of the barrel.</li>
+                <li><strong>Bullet Prefab:</strong> Your '<em>Bullet-Prefab</em>' from the Assets folder.</li>
+                <li><strong>Gun Fire Particle System:</strong> The Particle System on the gun.</li>
+                <li><strong>Gun Fire Audio Source:</strong> The Audio Source on the gun.</li>
+            </ul>
+        </div>
+        <div>
+            <h4 class="font-semibold">3. Hook up the Fire Event</h4>
+            <p>On the '<em>VRGun</em>' GameObject, find the 'XR Grab Interactable' component and expand the 'Interactable Events' section:</p>
+            <ul class="list-disc list-inside ml-4 mt-2 space-y-1">
+                <li>Under '<strong>Activated (+)</strong>', click the '<strong>+</strong>' button.</li>
+                <li>Drag the '<em>VRGun</em>' GameObject itself into the 'None (Object)' field.</li>
+                <li>From the 'No Function' dropdown, select '<strong>VRGun</strong>' > '<strong>FireBullet ()</strong>'.</li>
+            </ul>
+        </div>
+    </div>
+</details>
+
+<!-- Make VRGun Grabbable by Two Hands -->
+<details class="bg-gray-50 border rounded-lg">
+    <summary class="font-semibold text-lg cursor-pointer p-4">Make VRGun Grabbable by Two Hands</summary>
+    <div class="p-4 border-t space-y-4">
+        <div class="aspect-w-16 aspect-h-9">
+            <iframe class="w-full h-full rounded-md" src="https://www.youtube.com/embed/9V1S5C4fKSU" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+        </div>
+        <div>
+            <h4 class="font-semibold">Enable Two-Handed Grabbing</h4>
+            <p>To allow the player to hold the gun with both hands for better aiming, make a simple change in the Inspector.</p>
+            <ul class="list-disc list-inside ml-4 mt-2 space-y-1">
+                <li>Select the '<em>VRGun</em>' GameObject in the Hierarchy.</li>
+                <li>In the 'XR Grab Interactable' component, change the '<strong>Select Mode</strong>' from 'Single' to '<strong>Multiple</strong>'.</li>
+            </ul>
+        </div>
+        <details class="bg-blue-50 border border-blue-200 rounded-lg">
+            <summary class="font-semibold cursor-pointer p-3">Notes</summary>
+            <div class="p-3 border-t">
+                <p>This setting allows a second controller to grab the interactable without releasing it from the first. This creates a stable, two-handed grip effect, which is ideal for rifles and larger weapons.</p>
+            </div>
+        </details>
+    </div>
+</details>
+
+<!-- Testing VR in Unity Editor Play Mode -->
+<details class="bg-gray-50 border rounded-lg">
+    <summary class="font-semibold text-lg cursor-pointer p-4">Testing VR in Unity Editor Play Mode</summary>
+    <div class="p-4 border-t space-y-4">
+        <div class="aspect-w-16 aspect-h-9">
+            <iframe class="w-full h-full rounded-md" src="https://www.youtube.com/embed/e_48-xaTVH0" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+        </div>
+        <div>
+            <h4 class="font-semibold">Setup Steps</h4>
+            <ul class="list-disc list-inside ml-4 mt-2 space-y-1">
+                <li>Download & Install the <a href="https://www.oculus.com/Setup/" class="text-blue-600 hover:underline" target="_blank">Oculus PC App</a>.</li>
+                <li>Connect your headset to your PC with Oculus Link (a USB-C cable is recommended).</li>
+                <li>In the Oculus PC app, go to <strong>Settings > General</strong> and enable '<strong>Unknown Sources</strong>'. This allows Unity to connect to your headset.</li>
+            </ul>
+        </div>
+        <div>
+            <h4 class="font-semibold">Playtest Your Game</h4>
+            <ul class="list-disc list-inside ml-4 mt-2 space-y-1">
+                <li>With your headset connected and Oculus Link active, press the <strong>Play</strong> button in the Unity Editor.</li>
+                <li>Put on your headset to test the grabbing and firing mechanics live in your game scene.</li>
+            </ul>
+        </div>
+    </div>
+</details>
+
+<!-- Advanced VR Gun Firing Logic -->
+<details class="bg-gray-50 border rounded-lg">
+    <summary class="font-semibold text-lg cursor-pointer p-4">Advanced VR Gun Firing (Physics Accuracy)</summary>
+    <div class="p-4 border-t space-y-4">
+        <div class="aspect-w-16 aspect-h-9">
+            <iframe class="w-full h-full rounded-md" src="https://www.youtube.com/embed/PwZEQ7rJ0zc" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+        </div>
+        <div>
+            <h4 class="font-semibold">1. Final VRGun.cs Script</h4>
+            <p>Replace the code in your <em>VRGun.cs</em> script with this complete version. It includes logic to handle firing while moving, preventing self-collision, and cleaning up bullets automatically.</p>
+            <pre class="mt-2"><code>
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class VRGun : MonoBehaviour
+{
+    // --- Assign in Inspector ---
+    public Transform gunSnapTransform;
+    public Transform bulletSpawnTransform;
+    public GameObject bulletPrefab;
+    public ParticleSystem gunFireParticleSystem;
+    public AudioSource gunFireAudioSource;
+    public Collider[] gunColliders; // Assign all gun mesh colliders here
+    
+    public float fireSpeed = 125.0f;
+
+    // --- Private Variables ---
+    private Vector3 gunVelocity;
+    private Vector3 previousPosition;
+    private bool fireFlag = false;
+
+    void Start()
+    {
+        // Set initial position for velocity calculation
+        previousPosition = bulletSpawnTransform.position;
+    }
+
+    void Update()
+    { 
+        // Calculate the gun's velocity based on its movement each frame
+        gunVelocity = (bulletSpawnTransform.position - previousPosition) / Time.deltaTime;
+        previousPosition = bulletSpawnTransform.position;
+    }
+
+    // Physics calculations are done in FixedUpdate for consistency
+    void FixedUpdate()
+    {
+        // If the trigger was pulled (fireFlag set to true), call the Fire() method
+        if(fireFlag == true)
+        {
+            fireFlag = false; // Reset the flag
+            Fire();
+        }
+    }
+
+    // Called by the XR Grab Interactable's 'Activated' event.
+    // This just raises the flag for FixedUpdate to handle the firing.
+    public void FireBullet()
+    {
+        fireFlag = true;
+    }
+
+    // This method contains the actual firing logic
+    private void Fire()
+    {
+        Debug.Log("Gun is Fired!!!");
+        
+        // Play firing effects
+        gunFireParticleSystem.Play();
+        gunFireAudioSource.Play();
+
+        // Create a bullet
+        GameObject spawnedBullet = Instantiate(bulletPrefab);
+        spawnedBullet.transform.position = bulletSpawnTransform.position;
+        spawnedBullet.transform.rotation = bulletSpawnTransform.rotation;
+
+        // Get the bullet's Rigidbody and its collider
+        Rigidbody bulletRigidbody = spawnedBullet.GetComponent&lt;Rigidbody&gt;();
+        SphereCollider spawnedBulletCollider = spawnedBullet.GetComponent&lt;SphereCollider&gt;();
+        
+        // Make the bullet ignore collisions with all parts of the gun
+        for(int i = 0; i < gunColliders.Length; i++)
+        {
+            Physics.IgnoreCollision(spawnedBulletCollider, gunColliders[i], true);
+        }
+
+        // Set the bullet's velocity, adding the gun's current velocity
+        // This makes shooting from a moving object (like a roller coaster) accurate
+        bulletRigidbody.velocity = gunVelocity + (spawnedBullet.transform.forward * fireSpeed);
+        
+        // Destroy the bullet after 5 seconds to keep the scene clean
+        Destroy(spawnedBullet, 5);
+    }
+
+    // Called when the gun is grabbed
+    public void OnGrab()
+    {
+        Debug.Log("Gun is Grabbed!!!");
+    }
+
+    // Called when the gun is released
+    public void OnRelease()
+    {
+        Debug.Log("Gun is Dropped!!!");
+        transform.position = gunSnapTransform.position;
+        transform.rotation = gunSnapTransform.rotation;
+        GetComponent&lt;Rigidbody&gt;().isKinematic = true;
+    }
+}
+</code></pre>
+        </div>
+        <div>
+            <h4 class="font-semibold">2. Setup in Unity Inspector</h4>
+            <p>Select your '<em>VRGun</em>' GameObject and update its script component in the Inspector:</p>
+            <ul class="list-disc list-inside ml-4 mt-2 space-y-1">
+                <li>Find the '<strong>Gun Colliders</strong>' array on the 'VRGun' script. Set its 'Size' to match the number of primitive shapes in your gun's '<em>Mesh</em>' (e.g., 8 if you have 4 spheres and 4 cylinders).</li>
+                <li>Drag each individual Sphere and Cylinder collider from the gun's '<em>Mesh</em>' object into the empty slots of the 'Gun Colliders' array.</li>
+                <li>Ensure the 'Activated' event on the 'XR Grab Interactable' component is still calling the <strong>FireBullet()</strong> function.</li>
+            </ul>
+        </div>
+        <details class="bg-blue-50 border border-blue-200 rounded-lg">
+            <summary class="font-semibold cursor-pointer p-3">Notes</summary>
+            <div class="p-3 border-t">
+                <p>These changes make the physics-based gun much more reliable and realistic. By firing in <strong>FixedUpdate</strong>, we sync with Unity's physics engine. Adding the gun's own velocity to the bullet ensures that shots are accurate even when you are moving quickly. Finally, ignoring collisions between the bullet and the gun prevents the bullet from hitting the barrel and flying off in a random direction.</p>
+            </div>
+        </details>
+    </div>
+</details>
+
                 </div>
             </section>
             
