@@ -1,0 +1,899 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Unity VR Roller Coaster Shooter Tutorial - Part 2</title>
+    
+    <!-- This script includes the Tailwind CSS library, which provides the styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <style>
+        /* A small custom style to make open/closed details markers more visible */
+        details > summary {
+            list-style: none;
+        }
+        details > summary::-webkit-details-marker {
+            display: none;
+        }
+        details > summary::before {
+            content: '►';
+            margin-right: 0.5rem;
+            font-size: 0.8em;
+            transition: transform 0.2s;
+        }
+        details[open] > summary::before {
+            transform: rotate(90deg);
+        }
+    </style>
+</head>
+<body class="bg-gray-100 font-sans">
+
+    <!-- Increased padding on the main container for more space -->
+    <div class="container mx-auto px-4 py-8 md:px-10 md:py-12">
+        
+        <header class="mb-6 border-b pb-6">
+            <h1 class="text-4xl font-bold text-gray-800">Unity VR Roller Coaster Shooter Tutorial</h1>
+            <h2 class="text-2xl text-gray-600 mt-2">Part 2: Targets, Scoring, and Game Loop</h2>
+        </header>
+
+        <!-- "Go Back" button added here -->
+        <div class="mb-8">
+            <a href="ARVR2.html" class="inline-block bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-lg transition-colors duration-200">
+                &larr; Back to Part 1
+            </a>
+        </div>
+
+        <main class="space-y-4">
+
+          
+<!-- Create Shooting Target -->
+<details class="bg-gray-50 border rounded-lg">
+    <summary class="font-semibold text-lg cursor-pointer p-4">1. Create the Shooting Target Prefab</summary>
+    <div class="p-4 border-t space-y-4">
+        <div class="aspect-w-16 aspect-h-9">
+            <iframe class="w-full h-full rounded-md" src="https://www.youtube.com/embed/uqFEXvsM7T4" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+        </div>
+        <div>
+            <h4 class="font-semibold">1. Build the Target Model</h4>
+            <ul class="list-disc list-inside ml-4 mt-2 space-y-1">
+                <li>Create an empty GameObject and name it '<em>ShootingTarget-Prefab</em>'.</li>
+                <li>Create a 'Cylinder' 3D object, name it '<em>Target</em>', and parent it to '<em>ShootingTarget-Prefab</em>'.</li>
+                <li>Set the '<em>Target</em>' transform:
+                    <ul class="list-['-_'] list-inside ml-6">
+                        <li>Position: (0, 2, 0)</li>
+                        <li>Rotation: (90, 0, 0)</li>
+                        <li>Scale: (1, 0.05, 1)</li>
+                    </ul>
+                </li>
+                 <li>On the '<em>Target</em>', remove the 'Capsule Collider' and add a '<strong>Mesh Collider</strong>', then check the '<strong>Convex</strong>' box.</li>
+            </ul>
+        </div>
+        <div>
+            <h4 class="font-semibold">2. Create and Apply Material</h4>
+             <ul class="list-disc list-inside ml-4 mt-2 space-y-1">
+                <li>Create a new Material named '<em>ShootingTarget-Mat</em>'.</li>
+                <li>Set its 'Albedo' color to bright red.</li>
+                <li>Enable '<strong>Emission</strong>', set the color to red, and the 'Intensity' to 1.</li>
+                <li>Apply this material to the '<em>Target</em>' GameObject.</li>
+            </ul>
+        </div>
+        <div>
+            <h4 class="font-semibold">3. Add Effects</h4>
+             <ul class="list-disc list-inside ml-4 mt-2 space-y-1">
+                <li>Create a 'Particle System' and an 'Audio Source'.</li>
+                <li>Parent both to the '<em>ShootingTarget-Prefab</em>' and set their position to (0, 2, 0).</li>
+            </ul>
+        </div>
+    </div>
+</details>
+
+<!-- Setup Shooting Target & Script -->
+<details class="bg-gray-50 border rounded-lg">
+    <summary class="font-semibold text-lg cursor-pointer p-4">2. Setup Target Behavior and Scoring</summary>
+    <div class="p-4 border-t space-y-4">
+        <div class="aspect-w-16 aspect-h-9">
+            <iframe class="w-full h-full rounded-md" src="https://www.youtube.com/embed/bW3yF8f_QWE" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+        </div>
+        <div>
+            <h4 class="font-semibold">1. Configure Target Effects</h4>
+            <p>Select the '<em>Particle System</em>' on the target and apply these main settings:</p>
+            <pre class="mt-2"><code>
+Duration: 1.0
+Looping: false
+Play on Awake: false
+Start Lifetime: 2.0
+Start Speed: 8.0
+Start Size: 0.2
+Gravity Modifier: 1.0
+// Emission Module
+Rate over Time: 0
+Bursts: Add one burst of 30 particles
+// Shape Module
+Shape: Sphere
+Radius: 0.5
+// Size over Lifetime Module (Enabled)
+Curve: Linear from 1 down to 0
+// Collision Module (Enabled)
+Type: World
+            </code></pre>
+            <p class="mt-2">For the '<em>Audio Source</em>', assign a sound to the 'AudioClip' field (e.g., '<em>Button Pop.wav</em>') and uncheck 'Play On Awake'.</p>
+        </div>
+        <div>
+            <h4 class="font-semibold">2. Create Target.cs Script</h4>
+            <p>Create a new C# script named '<em>Target.cs</em>'. This script handles what happens when the target is hit, including playing effects and telling the GameManager to increase the score.</p>
+            <pre class="mt-2"><code>
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.Events;
+
+public class Target : MonoBehaviour
+{
+    public int targetPointsValue = 100;
+    public ParticleSystem targetParticleSystem;
+    public AudioSource targetAudioSource;
+    public UnityEvent onTargetHitEvent;
+
+    private GameManager gameManager;
+
+    void Start()
+    {
+        // Find the GameManager in the scene when the game starts
+        gameManager = FindObjectOfType&lt;GameManager&gt;();
+    }
+    
+    // Called automatically by Unity's physics system on collision
+    private void OnCollisionEnter(Collision collider)
+    {
+        Debug.Log("Target was hit by: " + collider.gameObject.name);
+
+        // Play hit effects
+        targetParticleSystem.Play();
+        targetAudioSource.Play();
+
+        // Add points to the player's score via the GameManager
+        if (gameManager != null)
+        {
+            gameManager.IncreasePlayerScore(targetPointsValue);
+        }
+
+        // Invoke any events assigned in the Inspector (like starting the ride)
+        if (onTargetHitEvent != null)
+        {
+            onTargetHitEvent.Invoke();
+        }
+        
+        // Disable the target so it can't be hit again
+        GetComponent&lt;MeshCollider&gt;().enabled = false;
+        GetComponent&lt;MeshRenderer&gt;().enabled = false;
+    }
+}
+</code></pre>
+        </div>
+        <div>
+            <h4 class="font-semibold">3. Finalize the Prefab</h4>
+             <ul class="list-disc list-inside ml-4 mt-2 space-y-1">
+                 <li>Add the '<em>Target.cs</em>' script to the '<em>Target</em>' child GameObject.</li>
+                 <li>Drag the 'Particle System' and 'Audio Source' into the corresponding fields on the 'Target' script in the Inspector.</li>
+                 <li>Drag the parent '<em>ShootingTarget-Prefab</em>' from the Hierarchy into your Prefabs folder to save it. You can now delete it from the scene.</li>
+             </ul>
+        </div>
+    </div>
+</details>
+
+<!-- Create GameManager -->
+<details class="bg-gray-50 border rounded-lg">
+    <summary class="font-semibold text-lg cursor-pointer p-4">3. Create the GameManager and Game Loop</summary>
+    <div class="p-4 border-t space-y-4">
+        <div class="aspect-w-16 aspect-h-9">
+            <iframe class="w-full h-full rounded-md" src="https://www.youtube.com/embed/G5uneKfd3_4" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+        </div>
+        <div>
+            <h4 class="font-semibold">1. Create the GameManager Object and Script</h4>
+            <p>Create an empty GameObject named '<em>GameManager</em>'. Then, create a C# script named '<em>GameManager.cs</em>' and add it to the object. This script will control the overall game state, including starting/stopping the ride, managing the UI, and handling scene changes.</p>
+            <pre class="mt-2"><code>
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.Splines;
+using UnityEngine.SceneManagement;
+
+public class GameManager : MonoBehaviour
+{
+    // Assign these in the Unity Inspector
+    public VRPlayer player;
+    public RollerCoasterTrain rollerCoasterTrain;
+    public GameObject tutorialCanvas;
+    public GameOverCanvas gameOverCanvas;
+    public PlayerScoreCanvas playerScoreCanvas;
+
+    void Start()
+    {
+        // Hide the game over screen at the start
+        gameOverCanvas.gameObject.SetActive(false);
+    }
+
+    public void StartRollerCoasterRide()
+    {
+        rollerCoasterTrain.GetComponent&lt;SplineAnimate&gt;().Play();
+        tutorialCanvas.SetActive(false); // Hide the tutorial text
+    }
+
+    public void StopRollerCoasterRide()
+    {
+        rollerCoasterTrain.GetComponent&lt;SplineAnimate&gt;().Pause();
+    }
+
+    public void GameOver()
+    {
+        gameOverCanvas.gameObject.SetActive(true); // Show the game over screen
+    }
+
+    public void IncreasePlayerScore(int amount)
+    {
+        player.playerScore += amount;
+        // Update the score display
+        playerScoreCanvas.playerScoreValueText.text = player.playerScore.ToString();
+    }
+
+    // --- Scene Management ---
+    public void LoadScene(string sceneName)
+    {
+        SceneManager.LoadScene(sceneName);
+    }
+
+    public void LoadNextScene()
+    {
+        int nextSceneIndex = SceneManager.GetActiveScene().buildIndex + 1;
+        // If there is a next scene, load it. Otherwise, loop back to the main menu (index 0).
+        if (SceneManager.sceneCountInBuildSettings > nextSceneIndex)
+        {
+            SceneManager.LoadScene(nextSceneIndex);
+        }
+        else
+        {
+            SceneManager.LoadScene(0);
+        }
+    }
+
+    public void RestartScene()
+    {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+    }
+}
+</code></pre>
+        <p class="mt-2">You will also need a simple script for the player to hold the score. Create '<em>VRPlayer.cs</em>' and add it to your 'VRPlayer' GameObject.</p>
+         <pre class="mt-2"><code>
+using UnityEngine;
+
+public class VRPlayer : MonoBehaviour
+{
+    public int playerScore = 0;
+}
+</code></pre>
+        </div>
+        <div>
+            <h4 class="font-semibold">2. Place Targets and Triggers in the Scene</h4>
+            <ul class="list-disc list-inside ml-4 mt-2 space-y-1">
+                <li>Create an empty GameObject named '<em>ShootingTargets</em>' to keep your hierarchy clean.</li>
+                <li>Drag instances of your '<em>ShootingTarget-Prefab</em>' from the Prefabs folder into the scene and parent them to '<em>ShootingTargets</em>'.</li>
+                <li>Place one target directly in front of the player's starting position. This will be the "start" button.</li>
+                <li>Place about 50 other targets around your roller coaster track.</li>
+            </ul>
+        </div>
+         <div>
+            <h4 class="font-semibold">3. Hook up the Start Event</h4>
+            <p>Select the first shooting target you placed. In the Inspector, find the 'On Target Hit Event' on its 'Target' script component.</p>
+             <ul class="list-disc list-inside ml-4 mt-2 space-y-1">
+                 <li>Click the '<strong>+</strong>' to add an event.</li>
+                 <li>Drag the '<em>GameManager</em>' GameObject into the object field.</li>
+                 <li>From the function dropdown, select <strong>GameManager > StartRollerCoasterRide()</strong>.</li>
+                 <li><strong>Important:</strong> On your '<em>RollerCoasterTrain</em>', make sure the 'Spline Animate' component has 'Play On Awake' <strong>unchecked</strong>.</li>
+             </ul>
+        </div>
+    </div>
+</details>
+
+<!-- Create Event Trigger -->
+<details class="bg-gray-50 border rounded-lg">
+    <summary class="font-semibold text-lg cursor-pointer p-4">4. Create a Reusable Event Trigger</summary>
+    <div class="p-4 border-t space-y-4">
+        <div class="aspect-w-16 aspect-h-9">
+            <iframe class="w-full h-full rounded-md" src="https://www.youtube.com/embed/8-ikcCDyans" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+        </div>
+        <div>
+            <h4 class="font-semibold">1. Create the Trigger Object and Script</h4>
+            <p>This trigger will be an invisible box that can fire events when the player enters it. We'll use it to end the ride.</p>
+             <ul class="list-disc list-inside ml-4 mt-2 space-y-1">
+                <li>Create a 'Cube' 3D object and name it '<em>CustomEventTrigger-Prefab</em>'.</li>
+                <li>In the Inspector, <strong>uncheck</strong> the 'Mesh Renderer' to make it invisible.</li>
+                <li>On the 'Box Collider', check the '<strong>Is Trigger</strong>' box.</li>
+                <li>Create a C# script named '<em>CustomEventTrigger.cs</em>' and add it to the object.</li>
+             </ul>
+             <pre class="mt-2"><code>
+using UnityEngine;
+using UnityEngine.Events;
+
+public class CustomEventTrigger : MonoBehaviour
+{
+    // The tag of the object that will activate this trigger
+    public string triggerTag = "Player";
+
+    // Events that can be assigned in the Inspector
+    public UnityEvent onTriggerEnterEvent;
+    
+    // Draws a visible box in the Scene view so we can see the trigger area
+    void OnDrawGizmos()
+    {
+        Gizmos.color = new Color(0, 1, 1, 0.5f); // Cyan
+        Gizmos.matrix = transform.localToWorldMatrix;
+        Gizmos.DrawCube(Vector3.zero, Vector3.one);
+    }
+    
+    // Called when another collider enters this trigger
+    private void OnTriggerEnter(Collider other)
+    {
+        // Check if the entering object has the correct tag
+        if (other.CompareTag(triggerTag) && onTriggerEnterEvent != null)
+        {
+            Debug.Log(other.name + " entered the trigger.");
+            onTriggerEnterEvent.Invoke();
+        }
+    }
+}
+</code></pre>
+        </div>
+        <div>
+            <h4 class="font-semibold">2. End the Ride with the Trigger</h4>
+             <ul class="list-disc list-inside ml-4 mt-2 space-y-1">
+                <li>Tag your '<em>VRPlayer</em>' GameObject with the '<strong>Player</strong>' tag. If it doesn't exist, create it via 'Add Tag...'.</li>
+                <li>Place an instance of the '<em>CustomEventTrigger-Prefab</em>' near the end of your roller coaster track. Scale it so the player will definitely pass through it.</li>
+                <li>Select the trigger in the Hierarchy. Find the 'On Trigger Enter Event' on its script component.</li>
+                <li>Click '<strong>+</strong>' and drag the '<em>GameManager</em>' into the object field.</li>
+                <li>From the function dropdown, select <strong>GameManager > StopRollerCoasterRide()</strong>.</li>
+                <li>Add another event by clicking '<strong>+</strong>' again. Drag in the '<em>GameManager</em>' and select <strong>GameManager > GameOver()</strong>.</li>
+             </ul>
+        </div>
+    </div>
+</details>
+
+<!-- Create UI Canvases -->
+<details class="bg-gray-50 border rounded-lg">
+    <summary class="font-semibold text-lg cursor-pointer p-4">5. Create the Game UI</summary>
+    <div class="p-4 border-t space-y-4">
+        <div class="aspect-w-16 aspect-h-9">
+            <iframe class="w-full h-full rounded-md" src="https://www.youtube.com/embed/umRgWTWHpvI" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+        </div>
+        <div>
+            <h4 class="font-semibold">1. Create the Tutorial Canvas</h4>
+            <p>This canvas will show instructions at the start of the game.</p>
+             <ul class="list-disc list-inside ml-4 mt-2 space-y-1">
+                <li>Create a new UI Canvas (GameObject > UI > Canvas) and name it '<em>TutorialCanvas</em>'.</li>
+                <li>In the Inspector, set its 'Render Mode' to '<strong>World Space</strong>'.</li>
+                <li>Position it in front of the player's starting view. A good starting RectTransform is:
+                    <ul class="list-['-_'] list-inside ml-6">
+                        <li>Position: (0, 2.3, 5), Scale: (0.001, 0.001, 0.001)</li>
+                    </ul>
+                </li>
+                 <li>Add a 'Panel' and 'Text - TextMeshPro' object to the canvas.</li>
+                 <li>Write your tutorial text, e.g., "Grab the gun and shoot the target to start!".</li>
+             </ul>
+        </div>
+        <div>
+            <h4 class="font-semibold">2. Create the Game Over Canvas</h4>
+             <ul class="list-disc list-inside ml-4 mt-2 space-y-1">
+                 <li>Create another 'World Space' canvas named '<em>GameOverCanvas</em>'. Position it near the end of the ride.</li>
+                 <li>Add a dark, semi-transparent 'Panel' to serve as a background.</li>
+                 <li>Add 'Text - TextMeshPro' elements for "GAME OVER!", "YOUR SCORE:", and a placeholder for the score value (e.g., "99999").</li>
+                 <li>Add three UI Buttons: '<em>Button-Quit</em>', '<em>Button-Restart</em>', and '<em>Button-NextRide</em>'.</li>
+                 <li><strong>Crucially</strong>, add the '<strong>Tracked Device Graphic Raycaster</strong>' component to this canvas so you can interact with the buttons in VR.</li>
+                 <li>Create an empty script '<em>GameOverCanvas.cs</em>' and add it to the canvas object. (It can remain empty for now).</li>
+             </ul>
+        </div>
+        <div>
+            <h4 class="font-semibold">3. Create the Player Score Canvas</h4>
+             <ul class="list-disc list-inside ml-4 mt-2 space-y-1">
+                 <li>Create a small 'World Space' canvas named '<em>PlayerScoreCanvas</em>'.</li>
+                 <li><strong>Parent it to the '<em>RollerCoasterTrain</em>'</strong> so it moves with the player.</li>
+                 <li>Position it in the player's view, like a dashboard display. A good starting RectTransform is:
+                    <ul class="list-['-_'] list-inside ml-6">
+                        <li>Position: (0, 1.6, 0.575), Scale: (0.001, 0.001, 0.001), Width: 200, Height: 50</li>
+                    </ul>
+                 </li>
+                 <li>Add a 'Panel' and a 'Text - TextMeshPro' object to display the score, starting with "0".</li>
+                 <li>Create '<em>PlayerScoreCanvas.cs</em>', add it to the canvas, and add this code to it:</li>
+             </ul>
+             <pre class="mt-2"><code>
+using UnityEngine;
+using TMPro;
+
+public class PlayerScoreCanvas : MonoBehaviour
+{
+    // Assign the score Text object to this field in the Inspector
+    public TMP_Text playerScoreValueText;
+}
+            </code></pre>
+        </div>
+    </div>
+</details>
+
+<!-- Main Menu & Build -->
+<details class="bg-gray-50 border rounded-lg">
+    <summary class="font-semibold text-lg cursor-pointer p-4">6. Create the Main Menu & Build the Game</summary>
+    <div class="p-4 border-t space-y-4">
+        <div>
+            <h4 class="font-semibold">1. Create a New Scene for the Main Menu</h4>
+             <ul class="list-disc list-inside ml-4 mt-2 space-y-1">
+                <li>Create a new scene and save it as '<em>MainMenu.unity</em>'.</li>
+                <li>Add a simple 'Cube' to act as a floor.</li>
+                <li>Add your '<em>VRPlayer</em>' prefab to the scene.</li>
+                <li>Create a 'World Space' canvas similar to the Game Over screen, but with "Play", "Settings", and "Quit" buttons. Add the 'Tracked Device Graphic Raycaster' component.</li>
+             </ul>
+        </div>
+        <div>
+            <h4 class="font-semibold">2. Script the Main Menu Buttons</h4>
+            <p>Create a C# script named '<em>MainMenuCanvas.cs</em>', add it to your main menu canvas, and paste this code:</p>
+            <pre class="mt-2"><code>
+using UnityEngine;
+using UnityEngine.SceneManagement;
+
+public class MainMenuCanvas : MonoBehaviour
+{
+    // Loads the scene with the given name (e.g., "Level 1")
+    public void LoadScene(string sceneName)
+    {
+        SceneManager.LoadScene(sceneName);
+    }
+
+    // Quits the application
+    public void QuitGame()
+    {
+        Application.Quit();
+        #if UNITY_EDITOR
+        UnityEditor.EditorApplication.isPlaying = false; 
+        #endif
+    }
+}
+</code></pre>
+            <p class="mt-2">Hook up the buttons in the Inspector:</p>
+            <ul class="list-disc list-inside ml-4 mt-2 space-y-1">
+                <li><strong>Play Button:</strong> OnClick() -> MainMenuCanvas.LoadScene("Level 1")</li>
+                <li><strong>Quit Button:</strong> OnClick() -> MainMenuCanvas.QuitGame()</li>
+            </ul>
+        </div>
+        <div>
+            <h4 class="font-semibold">3. Build and Run the Game</h4>
+             <ul class="list-disc list-inside ml-4 mt-2 space-y-1">
+                <li>Go to <strong>File > Build Settings</strong>.</li>
+                <li>Click 'Add Open Scenes' to add your Main Menu. Then open your 'Level 1' scene and add it as well.</li>
+                <li>Drag 'MainMenu' to the top of the list (index 0) so it loads first.</li>
+                <li>Connect your Quest headset via USB.</li>
+                <li>Under 'Run Device', select your headset.</li>
+                <li>Click '<strong>Build and Run</strong>' to compile the game and install it on your headset.</li>
+             </ul>
+        </div>
+    </div>
+</details>
+
+<!-- 
+============================================================================
+//  PHASE 1 REVIEW SECTION
+============================================================================
+-->
+
+<div class="pt-8 mt-8 border-t">
+     <h2 class="text-3xl font-bold text-gray-700">Phase 1 Review: Completed Assets</h2>
+     <p class="text-md text-gray-600 mt-2">Here are the final scene hierarchies and C# scripts from the end of Part 1 for your reference. AI generated can contain mistakes, check <a href="https://timcoster.com/2024/01/23/unity-vr-roller-coaster-shooter-game-tutorial-pt-2-2/" class="text-blue-600">original tutorial</a> when having errors)</p>
+</div>
+
+<!-- Completed Scripts (Phase 1) -->
+<details class="bg-gray-50 border rounded-lg">
+    <summary class="font-semibold text-lg cursor-pointer p-4">Completed Scripts (Phase 1)</summary>
+    <div class="p-4 border-t space-y-6">
+        <div>
+            <h4 class="font-semibold text-gray-700">VRGun.cs</h4>
+            <pre class="mt-2 bg-gray-200 text-sm p-3 rounded-md overflow-x-auto"><code class="language-csharp">
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class VRGun: MonoBehaviour
+{
+    public Transform gunSnapTransform;
+    public Transform bulletSpawnTransform;
+    public GameObject bulletPrefab;
+    public ParticleSystem gunFireParticleSystem;
+    public AudioSource gunFireAudioSource;
+    public Collider[] gunColliders;
+    
+    public float fireSpeed = 125.0f;
+
+    private Vector3 gunVelocity;
+    private Vector3 previousPosition;
+    private bool fireFlag = false;
+
+    void Start()
+    {
+        previousPosition = bulletSpawnTransform.position;
+    }
+
+    void Update()
+    { 
+        gunVelocity = (bulletSpawnTransform.position - previousPosition) / Time.deltaTime;
+        previousPosition = bulletSpawnTransform.position;
+    }
+
+    void FixedUpdate()
+    {
+        if(fireFlag == true)
+        {
+            fireFlag = false;
+            Fire();
+        }
+    }
+
+    public void FireBullet()
+    {
+        fireFlag = true;
+    }
+
+    public void Fire()
+    {
+        gunFireParticleSystem.Play();
+        gunFireAudioSource.Play();
+
+        GameObject spawnedBullet = Instantiate(bulletPrefab);
+
+        spawnedBullet.transform.position = bulletSpawnTransform.position;
+        spawnedBullet.transform.rotation = bulletSpawnTransform.rotation;
+
+        spawnedBullet.GetComponent&lt;Rigidbody&gt;().velocity = gunVelocity + (spawnedBullet.transform.forward * fireSpeed);
+        
+        Destroy(spawnedBullet, 5);
+
+        SphereCollider spawnedBulletCollider = spawnedBullet.GetComponent&lt;SphereCollider&gt;();
+
+        for(int i=0; i&lt;gunColliders.Length; i++)
+        {
+            Physics.IgnoreCollision(spawnedBulletCollider, gunColliders[i], true);
+        }
+    }
+
+    public void OnGrab()
+    {
+        Debug.Log("Gun is Grabbed!!!");
+    }
+
+    public void OnRelease()
+    {
+        Debug.Log("Gun is Dropped!!!");
+        transform.position = gunSnapTransform.position;
+        transform.rotation = gunSnapTransform.rotation;
+        GetComponent&lt;Rigidbody&gt;().isKinematic = true;
+    }
+}
+            </code></pre>
+        </div>
+        
+        <div>
+            <h4 class="font-semibold text-gray-700">GameManager.cs</h4>
+            <pre class="mt-2 bg-gray-200 text-sm p-3 rounded-md overflow-x-auto"><code class="language-csharp">
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.Splines;
+using UnityEngine.SceneManagement;
+
+public class GameManager : MonoBehaviour
+{
+    public VRPlayer player;
+    public RollerCoasterTrain rollerCoasterTrain;
+    public GameObject tutorialCanvas;
+    public GameOverCanvas gameOverCanvas;
+    public PlayerScoreCanvas playerScoreCanvas;
+
+    void Start()
+    {
+        gameOverCanvas.gameObject.SetActive(false);
+    }
+
+    public void StartRollerCoasterRide()
+    {
+        rollerCoasterTrain.GetComponent&lt;SplineAnimate&gt;().Play();
+        tutorialCanvas.SetActive(false);
+    }
+
+    public void StopRollerCoasterRide()
+    {
+        rollerCoasterTrain.GetComponent&lt;SplineAnimate&gt;().Pause();
+    }
+
+    public void GameOver()
+    {
+        gameOverCanvas.gameObject.SetActive(true);
+    }
+
+    public void IncreasePlayerScore(int amount)
+    {
+        player.playerScore += amount;
+        playerScoreCanvas.playerScoreValueText.text = player.playerScore.ToString();
+    }
+
+    public void LoadScene(string sceneName)
+    {
+        SceneManager.LoadScene(sceneName);
+    }
+
+    public void LoadNextScene()
+    {
+        int nextSceneIndex = SceneManager.GetActiveScene().buildIndex + 1;
+        if (SceneManager.sceneCountInBuildSettings > nextSceneIndex)
+        {
+            SceneManager.LoadScene(nextSceneIndex);
+        }
+        else
+        {
+            SceneManager.LoadScene(0);
+        }
+    }
+
+    public void RestartScene()
+    {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+    }
+}
+            </code></pre>
+        </div>
+
+        <div>
+            <h4 class="font-semibold text-gray-700">Target.cs</h4>
+            <pre class="mt-2 bg-gray-200 text-sm p-3 rounded-md overflow-x-auto"><code class="language-csharp">
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.Events;
+
+public class Target : MonoBehaviour
+{
+    public int targetPointsValue = 100;
+    public ParticleSystem targetParticleSystem;
+    public AudioSource targetAudioSource;
+    public UnityEvent onTargetHitEvent;
+
+    private GameManager gameManager;
+
+    void Start()
+    {
+        gameManager = FindObjectOfType&lt;GameManager&gt;();
+    }
+    
+    private void OnCollisionEnter(Collision collider)
+    {
+        targetParticleSystem.Play();
+        targetAudioSource.Play();
+
+        if (gameManager != null)
+        {
+            gameManager.IncreasePlayerScore(targetPointsValue);
+        }
+
+        if (onTargetHitEvent != null)
+        {
+            onTargetHitEvent.Invoke();
+        }
+        
+        GetComponent&lt;MeshCollider&gt;().enabled = false;
+        GetComponent&lt;MeshRenderer&gt;().enabled = false;
+    }
+}
+            </code></pre>
+        </div>
+
+        <div>
+            <h4 class="font-semibold text-gray-700">VRPlayer.cs</h4>
+            <pre class="mt-2 bg-gray-200 text-sm p-3 rounded-md overflow-x-auto"><code class="language-csharp">
+using UnityEngine;
+
+public class VRPlayer : MonoBehaviour
+{
+    public int playerScore = 0;
+}
+            </code></pre>
+        </div>
+        
+        <div>
+            <h4 class="font-semibold text-gray-700">MainMenuCanvas.cs</h4>
+            <pre class="mt-2 bg-gray-200 text-sm p-3 rounded-md overflow-x-auto"><code class="language-csharp">
+using UnityEngine;
+using UnityEngine.SceneManagement;
+
+public class MainMenuCanvas : MonoBehaviour
+{
+    public void LoadScene(string sceneName)
+    {
+        SceneManager.LoadScene(sceneName);
+    }
+
+    public void QuitGame()
+    {
+        Application.Quit();
+        #if UNITY_EDITOR
+        UnityEditor.EditorApplication.isPlaying = false; 
+        #endif
+    }
+}
+            </code></pre>
+        </div>
+        
+        <div>
+            <h4 class="font-semibold text-gray-700">PlayerScoreCanvas.cs</h4>
+            <pre class="mt-2 bg-gray-200 text-sm p-3 rounded-md overflow-x-auto"><code class="language-csharp">
+using UnityEngine;
+using TMPro;
+
+public class PlayerScoreCanvas : MonoBehaviour
+{
+    public TMP_Text playerScoreValueText;
+}
+            </code></pre>
+        </div>
+
+        <div>
+            <h4 class="font-semibold text-gray-700">Bullet.cs</h4>
+            <pre class="mt-2 bg-gray-200 text-sm p-3 rounded-md overflow-x-auto"><code class="language-csharp">
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class Bullet : MonoBehaviour
+{
+    public ParticleSystem explosionParticleSystem;
+    public AudioSource explosionAudioSource;
+
+    IEnumerator OnCollisionEnter(Collision collider)
+    {
+        Debug.Log("Bullet HIT!!!");
+
+        explosionParticleSystem.Play();
+        explosionAudioSource.Play();
+
+        GetComponent&lt;SphereCollider&gt;().enabled = false;
+        GetComponent&lt;MeshRenderer&gt;().enabled = false;
+
+        yield return null;
+    }
+}
+            </code></pre>
+        </div>
+
+        <div>
+            <h4 class="font-semibold text-gray-700">CustomEventTrigger.cs</h4>
+            <pre class="mt-2 bg-gray-200 text-sm p-3 rounded-md overflow-x-auto"><code class="language-csharp">
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.Events;
+
+public class CustomEventTrigger : MonoBehaviour
+{
+    public string triggerTag = "Player";
+    public UnityEvent onTriggerEnterEvent;
+    public UnityEvent onTriggerStayEvent;
+    public UnityEvent onTriggerExitEvent;
+
+    void OnDrawGizmos()
+    {
+        Gizmos.color = new Color(0, 1, 1, 0.5f);
+        Gizmos.matrix = transform.localToWorldMatrix;
+        Gizmos.DrawWireCube(Vector3.zero, Vector3.one);
+    }
+
+    IEnumerator OnTriggerEnter(Collider collider)
+    {
+        if (onTriggerEnterEvent != null && collider.gameObject.tag == triggerTag)
+        {
+            onTriggerEnterEvent.Invoke();
+        }
+        yield return null;
+    }
+
+    IEnumerator OnTriggerStay(Collider collider)
+    {
+        if (onTriggerStayEvent != null && collider.gameObject.tag == triggerTag)
+        {
+            onTriggerStayEvent.Invoke();
+        }
+        yield return null;
+    }
+
+    IEnumerator OnTriggerExit(Collider collider)
+    {
+        if (onTriggerExitEvent != null && collider.gameObject.tag == triggerTag)
+        {
+            onTriggerExitEvent.Invoke();
+        }
+        yield return null;
+    }
+}
+            </code></pre>
+        </div>
+        
+    </div>
+</details>
+
+<!-- Completed Scene Hierarchies (Phase 1) -->
+<details class="bg-gray-50 border rounded-lg">
+    <summary class="font-semibold text-lg cursor-pointer p-4">Completed Scene Hierarchies (Phase 1)</summary>
+    <div class="p-4 border-t grid md:grid-cols-2 gap-6">
+         <div>
+            <h4 class="font-semibold text-gray-700">Level 1.unity</h4>
+            <pre class="mt-2 bg-gray-200 text-sm p-3 rounded-md overflow-x-auto">
+Level 1
+├── GameManager
+├── XR Interaction Setup
+│   ├── Input Action Manager
+│   ├── XR Interaction Manager
+│   └── Event System
+├── Sun
+├── Terrain
+├── Water
+├── WindZone
+├── RollerCoasterSpline
+│   └── RollerCoasterTrain
+│       ├── Mesh
+│       ├── Audio Source
+│       ├── PlayerScoreCanvas
+│       └── VRGunHolder
+│           ├── Mesh
+│           ├── GrabAttachTransform
+│           ├── BulletSpawnTransform
+│           ├── Audio Source
+│           ├── Particle System
+├── VRPlayer
+│   ├── Camera Offset
+│   ├── Left Controller
+│   ├── Left Controller Stabilized
+│   ├── Right Controller 
+│   ├── Right Controller Stabilized
+│   └── Camera Offset
+├── Targets
+│   ├── ShootingTarget-Prefab (0)
+│   ├── ShootingTarget-Prefab (1)
+│   ├── ShootingTarget-Prefab (2)
+│   └── ... (etc)
+├── TutorialCanvas
+├── GameOverCanvas
+└── CustomEventTrigger-Prefab
+            </pre>
+        </div>
+        <div>
+            <h4 class="font-semibold text-gray-700">MainMenu.unity</h4>
+            <pre class="mt-2 bg-gray-200 text-sm p-3 rounded-md overflow-x-auto">
+MainMenu
+├── Directional Light
+├── XR Interaction Setup
+├── Floor
+├── VRPlayer
+│   └── ... (XR Rig Hierarchy)
+└── MainMenuCanvas
+    └── Panel
+        ├── Text (TMP)-GameTitle
+        ├── Button-Quit
+        ├── Button-Play
+        └── Button-Settings
+            </pre>
+        </div>
+    </div>
+</details>
+
+     </main>
+
+        <footer class="mt-16 text-center text-gray-500 border-t pt-6">
+            <p>Tutorial content compiled and formatted.</p>
+        </footer>
+
+    </div>
+
+</body>
+</html>
