@@ -746,6 +746,207 @@ Cylinder(5): Pos: (0.5, 0.18, -0.6),  Rot: (90, 90, 0), Scale: (0.25, 0.1, 0.25)
                 </details>
             </div>
         </details>
+
+            <!-- Create Primitive VR Gun Model -->
+        <details class="bg-gray-50 border rounded-lg">
+            <summary class="font-semibold text-lg cursor-pointer p-4">Create Primitive VR Gun Model</summary>
+            <div class="p-4 border-t space-y-4">
+                <img src="https://timcoster.com/wp-content/uploads/2023/09/screenshot-2023-09-23-152915.png?w=1024" alt="Primitive VR Gun Model" class="mx-auto my-4 rounded-lg w-1/2">
+                <div>
+                    <h4 class="font-semibold">1. Construct Gun from Primitives</h4>
+                    <p>Create an empty GameObject named '<em>VRGun</em>' with a child empty named '<em>Mesh</em>'. Create the following primitives and parent them to '<em>Mesh</em>'.</p>
+                    <pre class="mt-2"><code>
+// --- SPHERES ---
+Sphere (0): Position: (0, 0, 0),       Scale: (0.05, 0.05, 0.05)
+Sphere (1): Position: (0, 0, 0.5),     Scale: (0.05, 0.05, 0.05)
+Sphere (2): Position: (0, -0.115, -0.16),  Scale: (0.05, 0.05, 0.05)
+Sphere (3): Position: (0, -0.115, 0.336), Scale: (0.05, 0.05, 0.05)
+
+// --- CYLINDERS ---
+Cylinder (0): Pos: (0, 0, 0.25),     Rot: (90, 0, 0), Scale: (0.04, 0.25, 0.04)
+Cylinder (1): Pos: (0, -0.114, 0.09),  Rot: (90, 0, 0), Scale: (0.04, 0.25, 0.04)
+Cylinder (2): Pos: (0, -0.057, -0.082), Rot: (55, 0, 0), Scale: (0.04, 0.1, 0.04)
+Cylinder (3): Pos: (0, -0.057, 0.418), Rot: (55, 0, 0), Scale: (0.04, 0.1, 0.04)
+                    </code></pre>
+                </div>
+                <div>
+                    <h4 class="font-semibold">2. Create and Apply Debug Material</h4>
+                    <p>Create a bright red material and apply it to all the gun's primitive shapes.</p>
+                </div>
+                <div>
+                    <h4 class="font-semibold">3. Create Bullet Spawn Point and Effects</h4>
+                    <ul class="list-disc list-inside ml-4 mt-2">
+                        <li>Create an empty GameObject named '<em>BulletSpawnTransform</em>' and parent it to '<em>VRGun</em>'. Set its position to <strong>(0, 0, 0.55)</strong>.</li>
+                        <li>Create a 'Particle System' and an 'Audio Source', parent both to '<em>VRGun</em>', and position them at <strong>(0, 0, 0.5)</strong>.</li>
+                    </ul>
+                </div>
+            </div>
+        </details>
+        
+        <!-- Setup VRGun Particle System & Audio Source -->
+        <details class="bg-gray-50 border rounded-lg">
+            <summary class="font-semibold text-lg cursor-pointer p-4">Setup VRGun Particle System & Audio Source</summary>
+            <div class="p-4 border-t space-y-4">
+                <div>
+                    <h4 class="font-semibold">Setup Particle System (Muzzle Flash)</h4>
+                    <p>Select the Particle System on the gun and adjust its main settings:</p>
+                    <pre class="mt-2"><code>
+Duration:         0.05
+Looping:          false
+Play on Awake:    false
+Start Lifetime:   0.8
+Start Speed:      25
+Start Size:       0.1
+Start Color:      RGBA (1, 0.8, 0.3, 1)
+Simulation Space: World
+
+// Emission Module
+Rate over Time:   0
+Bursts:           [+] Add one burst of 1 particle
+
+// Shape Module
+Shape:            Cone
+Angle:            10
+Radius:           0.05
+
+// Size over Lifetime Module (Enabled)
+Curve:            Linear from 1 down to 0
+                    </code></pre>
+                </div>
+                <div>
+                    <h4 class="font-semibold">Setup Audio Source</h4>
+                    <p>Assign a simple sound effect (e.g., '<em>Button Pop.wav</em>' from the XR Starter Assets) to the 'AudioClip' field of the Audio Source component.</p>
+                </div>
+            </div>
+        </details>
+
+        <!-- Attach VRGun to the front of the RollerCoasterTrain -->
+        <details class="bg-gray-50 border rounded-lg">
+            <summary class="font-semibold text-lg cursor-pointer p-4">Attach VRGun to the front of the RollerCoasterTrain</summary>
+            <div class="p-4 border-t space-y-4">
+                <div>
+                    <h4 class="font-semibold">1. Create VRGunHolder</h4>
+                    <ul class="list-disc list-inside ml-4 mt-2">
+                        <li>Create an empty '<em>VRGunHolder</em>' and parent it to the '<em>RollerCoasterTrain</em>'. Set its local position to <strong>(0, 1.65, 0.8)</strong>.</li>
+                        <li>Give the holder a simple visual mesh (e.g., a Cylinder) so you can see it.</li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-semibold">2. Create a Snap Point</h4>
+                    <p>Create an empty '<em>VRGunSnapTransform</em>' and parent it to '<em>VRGunHolder</em>'. Set its local position to <strong>(0, 0.25, 0)</strong>. This is where the gun will return when dropped.</p>
+                </div>
+                <div>
+                    <h4 class="font-semibold">3. Attach VRGun to Snap Point</h4>
+                    <p>Drag the '<em>VRGun</em>' GameObject and parent it to the '<em>VRGunSnapTransform</em>'. Reset the gun's local position to (0, 0, 0).</p>
+                </div>
+            </div>
+        </details>
+
+        <!-- Make VRGun a Grabbable GameObject -->
+        <details class="bg-gray-50 border rounded-lg">
+            <summary class="font-semibold text-lg cursor-pointer p-4">Make VRGun a Grabbable GameObject (VR sensitive step maybe contact teacher)</summary>
+            <div class="p-4 border-t space-y-4">
+                <div class="aspect-w-16 aspect-h-9">
+                    <iframe class="w-full h-full rounded-md" src="https://www.youtube.com/embed/byHbcagMJRc" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                </div>
+                <div>
+                    <h4 class="font-semibold">1. Add XR Grab Interactable Component</h4>
+                    <p>Select the '<em>VRGun</em>' GameObject and 'Add Component' > 'XR Grab Interactable'. This will also add a 'Rigidbody' component.</p>
+                </div>
+                <div>
+                    <h4 class="font-semibold">2. Setup Rigidbody</h4>
+                    <ul class="list-disc list-inside ml-4 mt-2">
+                        <li>Use Gravity: <strong>false</strong></li>
+                        <li>Is Kinematic: <strong>true</strong></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-semibold">3. Setup XR Grab Interactable</h4>
+                     <ul class="list-disc list-inside ml-4 mt-2">
+                        <li>Throw On Detach: <strong>false</strong></li>
+                        <li>Create an empty child of 'VRGun' named '<em>GrabAttachTransform</em>' at position <strong>(0, 0, 0.05)</strong> and assign it to the 'Attach Transform' field.</li>
+                        <li>Offset the gun's '<em>Mesh</em>' object by <strong>(0, 0, -0.05)</strong> to center it on the controller.</li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-semibold text-lg">4. Make Grabbable by Two Hands</h4>
+                    <p>In the 'XR Grab Interactable' component, change 'Select Mode' to <strong>Multiple</strong>.</p>
+                </div>
+            </div>
+        </details>
+
+        <!-- Snap VRGun back to VRGunHolder when dropped by the player -->
+        <details class="bg-gray-50 border rounded-lg">
+            <summary class="font-semibold text-lg cursor-pointer p-4">Snap VRGun back to VRGunHolder when dropped</summary>
+            <div class="p-4 border-t space-y-4">
+                <div class="aspect-w-16 aspect-h-9">
+                    <iframe class="w-full h-full rounded-md" src="https://www.youtube.com/embed/Jt_lrMvB7Hg" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                </div>
+                <div>
+                    <h4 class="font-semibold">1. Create VRGun.cs Script</h4>
+                    <p>Create a new C# Script named '<em>VRGun.cs</em>', add it to the 'VRGun' GameObject, and paste the following code:</p>
+                    <pre class="mt-2"><code>using UnityEngine;
+
+public class VRGun: MonoBehaviour
+{
+    public Transform gunSnapTransform;
+
+    // Called by the grab interactable when the gun is grabbed
+    public void OnGrab()
+    {
+        Debug.Log("Gun is Grabbed!!!");
+    }
+
+    // Called by the grab interactable when the gun is released
+    public void OnRelease()
+    {
+        Debug.Log("Gun is Dropped!!!");
+
+        transform.position = gunSnapTransform.position;
+        transform.rotation = gunSnapTransform.rotation;
+
+        GetComponent<Rigidbody>().isKinematic = true;
+    }
+}</code></pre>
+                </div>
+                <div>
+                    <h4 class="font-semibold">2. Setup VRGun Component</h4>
+                    <p>In the Inspector for '<em>VRGun</em>', drag the '<em>VRGunSnapTransform</em>' GameObject into the 'Gun Snap Transform' field on your new script.</p>
+                </div>
+                <div>
+                    <h4 class="font-semibold">3. Hook up Events</h4>
+                    <p>On the 'XR Grab Interactable' component, find the 'Interactable Events' section:</p>
+                    <ul class="list-disc list-inside ml-4 mt-2">
+                        <li>Under 'Last Select Exited', click '+' to add an event.</li>
+                        <li>Drag the 'VRGun' GameObject into the object field.</li>
+                        <li>From the function dropdown, select 'VRGun' > 'OnRelease()'.</li>
+                    </ul>
+                </div>
+            </div>
+        </details>
+
+        <!-- Create Primitive Bullet 3D-Model -->
+        <details class="bg-gray-50 border rounded-lg">
+            <summary class="font-semibold text-lg cursor-pointer p-4">Create Primitive Bullet 3D-Model</summary>
+            <div class="p-4 border-t space-y-4">
+                <div>
+                    <h4 class="font-semibold">1. Create Bullet GameObject</h4>
+                    <ul class="list-disc list-inside ml-4 mt-2">
+                        <li>Create a 'Sphere' 3D Object and rename it '<em>Bullet-Prefab</em>'.</li>
+                        <li>Set its scale to <strong>(0.05, 0.05, 0.05)</strong>.</li>
+                        <li>Apply the same red debug material to it.</li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-semibold">2. Add Effects Components</h4>
+                    <ul class="list-disc list-inside ml-4 mt-2">
+                        <li>Create a 'Particle System' and an 'Audio Source' and parent them to '<em>Bullet-Prefab</em>'.</li>
+                        <li>Reset their local positions and scales.</li>
+                    </ul>
+                </div>
+                <p class="mt-2">Once configured, drag the '<em>Bullet-Prefab</em>' into your prefabs folder and delete it from the scene.</p>
+            </div>
+        </details>
                 </div>
             </section>
             
