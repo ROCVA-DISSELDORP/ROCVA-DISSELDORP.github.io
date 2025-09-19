@@ -1,0 +1,639 @@
+<!DOCTYPE html>
+<html lang="nl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Tutorial: Bouw een Quiz App met Nuxt.js en Tailwind CSS</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <style>
+      /* Stijlen voor de copy-knop, zodat we geen @apply nodig hebben */
+      .copy-button {
+        position: absolute;
+        top: 0.5rem;
+        right: 0.5rem;
+        background-color: #374151; /* bg-gray-700 */
+        color: white;
+        font-family: sans-serif;
+        font-size: 0.75rem; /* text-xs */
+        padding: 0.25rem 0.5rem; /* py-1 px-2 */
+        border-radius: 0.25rem; /* rounded */
+        transition: background-color 0.2s;
+        border: none;
+        cursor: pointer;
+      }
+      .copy-button:hover {
+        background-color: #4b5563; /* hover:bg-gray-600 */
+      }
+    </style>
+    <style type="text/tailwindcss">
+      body {
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+          "Helvetica Neue", Arial, sans-serif;
+        line-height: 1.7;
+      }
+      .docs-link {
+        @apply text-blue-600 hover:text-blue-800 hover:underline;
+      }
+      pre {
+        @apply bg-gray-900 text-white p-4 rounded-lg my-4 overflow-x-auto;
+      }
+      code {
+        font-family: "Courier New", Courier, monospace;
+      }
+      h2 {
+        @apply text-3xl font-bold mt-12 mb-4 border-b pb-2 border-gray-300;
+      }
+      h3 {
+        @apply text-2xl font-semibold mt-8 mb-3;
+      }
+      p,
+      li {
+        @apply text-lg;
+      }
+      .concept-box {
+        @apply bg-blue-50 border border-blue-200 p-6 rounded-lg my-6;
+      }
+      .concept-box h3 {
+        @apply mt-0 text-xl font-bold;
+      }
+      .note {
+        @apply bg-yellow-50 border border-yellow-200 p-4 rounded-lg my-4;
+      }
+    </style>
+  </head>
+  <body class="bg-gray-50 text-gray-800">
+    <div class="container mx-auto p-4 md:p-8 max-w-4xl">
+      <header class="text-center mb-16">
+        <h1 class="text-5xl font-extrabold mb-4 text-gray-900">
+          Jouw Eerste Nuxt.js Quiz App
+        </h1>
+        <p class="text-xl text-gray-600">
+          Een complete, stap-voor-stap handleiding voor het bouwen van een
+          frontend applicatie met Nuxt.js, Vue.js en Tailwind CSS.
+        </p>
+      </header>
+
+      <!-- Introductie -->
+      <section>
+        <p class="mb-4">
+          Welkom! In deze tutorial bouwen we samen de quiz-opdracht van begin
+          tot eind. Dit is waarschijnlijk je eerste kennismaking met een
+          JavaScript-framework, en dat kan best spannend zijn. We nemen alles
+          rustig door, leggen elk nieuw concept uit en verwijzen je naar de
+          officiële documentatie voor als je meer wilt weten.
+        </p>
+        <div class="concept-box">
+          <h3>Wat gaan we gebruiken?</h3>
+          <ul class="list-disc list-inside mt-2 space-y-1">
+            <li>
+              <strong>Nuxt.js:</strong> Een framework dat bovenop Vue.js is
+              gebouwd. Het neemt veel ingewikkelde zaken voor je uit handen,
+              zoals het opzetten van pagina's (routing) en het efficiënt ophalen
+              van data.
+            </li>
+            <li>
+              <strong>Vue.js:</strong> Een modern JavaScript-framework waarmee
+              we interactieve gebruikersinterfaces bouwen. We focussen op de
+              basis: componenten en "reactiviteit".
+            </li>
+            <li>
+              <strong>Tailwind CSS:</strong> Een utility-first CSS-framework. In
+              plaats van zelf CSS-bestanden te schrijven, gebruiken we
+              kant-en-klare klassen direct in onze HTML.
+            </li>
+          </ul>
+        </div>
+      </section>
+
+      <!-- Stap 1: Projectopzet -->
+      <section>
+        <h2>Stap 1: Project Opzetten</h2>
+        <p>
+          We beginnen met het aanmaken van een nieuw Nuxt-project en het
+          installeren van Tailwind CSS.
+        </p>
+
+        <h3 class="mt-6">1.1 Een nieuw Nuxt-project aanmaken</h3>
+        <p>
+          Open je terminal (bijvoorbeeld Git Bash, PowerShell of de terminal in
+          VSCode) en voer het volgende commando uit. Dit maakt een nieuwe map
+          `quiz-app` aan met alle benodigde startbestanden. Ook voegt dit direct de ui library van Nuxt toe wel zo makkelijk
+        </p>
+        <div class="relative"><pre><code>npm create nuxt@latest -- -t [naam-van-je-project]</code></pre><button onclick="copyCode(event)" class="copy-button">Kopieer</button></div>
+        <p>Alles installeren duurt wel even (5 min) en je moet een paar vragen beantwoorden. Kies voor: npm, yes initialize git project, yes install modules, gebruik spatie en pijltjes en selecteer: [eslint, icon, image, ui]. Gebruik enter om naar de volgende stap te gaan.</p>
+        <p>Navigeer naar de zojuist aangemaakte projectmap:</p>
+        <div class="relative"><pre><code>cd [naam-van-je-project]</code></pre><button onclick="copyCode(event)" class="copy-button">Kopieer</button></div>
+        <p>
+          Installeer nu alle benodigde pakketten (dependencies) die in
+          `package.json` staan. Dit doet npm (Node Package Manager) voor je.
+        </p>
+        <div class="relative"><pre><code>npm install</code></pre><button onclick="copyCode(event)" class="copy-button">Kopieer</button></div>
+
+        <h3 class="mt-6">1.2 Tailwind CSS installeren en configureren</h3>
+        <p>
+          Nuxt heeft een speciale "module" die Tailwind CSS naadloos integreert.
+          We installeren deze via de terminal. De `-D` vlag betekent dat het een
+          'development dependency' is: een tool die we alleen tijdens het
+          ontwikkelen nodig hebben.
+        </p>
+        <div class="relative"><pre><code>npm install -D @nuxtjs/tailwindcss</code></pre><button onclick="copyCode(event)" class="copy-button">Kopieer</button></div>
+        <p>
+          Open nu het bestand `nuxt.config.ts`. Dit is het centrale
+          configuratiebestand voor je Nuxt-project. Voeg `@nuxtjs/tailwindcss`
+          toe aan de `modules` array.
+        </p>
+        <div class="relative"><pre><code>// nuxt.config.ts
+export default defineNuxtConfig({
+  devtools: { enabled: true },
+  modules: [
+    '@nuxtjs/tailwindcss'
+  ]
+})</code></pre><button onclick="copyCode(event)" class="copy-button">Kopieer</button></div>
+
+        <h3 class="mt-6">1.3 De ontwikkelserver starten</h3>
+        <p>
+          Je project is nu klaar. Start de ontwikkelserver om je werk live in de
+          browser te zien.
+        </p>
+        <div class="relative"><pre><code>npm run dev</code></pre><button onclick="copyCode(event)" class="copy-button">Kopieer</button></div>
+        <p>
+          Open de URL die in je terminal verschijnt (meestal
+          <a href="http://localhost:3000" target="_blank" class="docs-link"
+            >http://localhost:3000</a
+          >). Je ziet nu de standaard welkomstpagina van Nuxt.
+        </p>
+      </section>
+
+      <!-- Stap 2: Pagina's en Componenten -->
+      <section>
+        <h2>Stap 2: De Welkomstpagina (`index.vue`)</h2>
+        <p>
+          Nuxt gebruikt een `pages` map om automatisch webpagina's (routes) aan
+          te maken. Een bestand `pages/index.vue` wordt de hoofdpagina (`/`), en
+          `pages/quiz.vue` wordt de `/quiz` pagina.
+        </p>
+
+        <div class="concept-box">
+          <h3>Concept: Single File Components (SFCs)</h3>
+          <p>
+            In Vue werken we met `.vue` bestanden. Dit zijn "Single File
+            Components". Zo'n bestand combineert de structuur, logica en styling
+            van een component op één plek:
+          </p>
+          <ul class="list-disc list-inside mt-2">
+            <li>
+              <strong><code>&lt;template&gt;</code>:</strong> Hier schrijf je de
+              HTML-structuur.
+            </li>
+            <li>
+              <strong><code>&lt;script setup&gt;</code>:</strong> Hier schrijf
+              je de JavaScript-logica (volgens de moderne Vue 3 Composition
+              API).
+            </li>
+            <li>
+              <strong><code>&lt;style&gt;</code>:</strong> Hier kun je
+              component-specifieke CSS schrijven.
+            </li>
+          </ul>
+          <p class="mt-2">
+            Lees meer in de
+            <a
+              href="https://vuejs.org/guide/scaling-up/sfc.html"
+              target="_blank"
+              class="docs-link"
+              >officiële Vue documentatie over SFC's</a
+            >.
+          </p>
+        </div>
+
+        <p>
+          Verwijder het standaard `app.vue` bestand en maak een map `pages` aan.
+          Maak in die map een nieuw bestand: `pages/index.vue`. Plak hier de
+          volgende code in.
+        </p>
+        <div class="relative"><pre><code>&lt;template&gt;
+  &lt;div class="min-h-screen bg-gray-100 flex items-center justify-center"&gt;
+    &lt;div class="bg-white p-8 rounded-lg shadow-md w-full max-w-md"&gt;
+      &lt;h1 class="text-3xl font-bold mb-2"&gt;Welkom bij de Quiz!&lt;/h1&gt;
+      &lt;p class="text-gray-600 mb-6"&gt;Voer je naam in om de quiz te starten. Je hebt 15 seconden per vraag.&lt;/p&gt;
+      
+      &lt;!-- Hier komt later de logica --&gt;
+      &lt;input 
+        type="text" 
+        placeholder="Jouw naam" 
+        class="border p-3 rounded w-full mb-4 focus:outline-none focus:ring-2 focus:ring-blue-500"
+      /&gt;
+      
+      &lt;button class="bg-blue-600 text-white w-full px-4 py-3 rounded-lg font-semibold hover:bg-blue-700 transition"&gt;
+        Start de Quiz
+      &lt;/button&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+&lt;/template&gt;
+
+&lt;script setup&gt;
+  // Hier komt onze JavaScript logica
+&lt;/script&gt;</code></pre><button onclick="copyCode(event)" class="copy-button">Kopieer</button></div>
+        <p>
+          Als je nu naar je browser gaat, zie je de welkomstpagina, gestyled met
+          Tailwind CSS!
+        </p>
+      </section>
+
+      <!-- Stap 3: State Management & Navigatie -->
+      <section>
+        <h2>Stap 3: Naam Opslaan en Navigeren</h2>
+        <p>
+          Hoe onthouden we de naam van de speler op andere pagina's? Hiervoor
+          gebruiken we een krachtig concept van Nuxt: <code>useState</code>.
+        </p>
+
+        <div class="concept-box">
+          <h3>Concept: <code>useState</code></h3>
+          <p>
+            <code>useState</code> is een functie (een "composable") in Nuxt die
+            een reactieve, gedeelde staat creëert. "Reactief" betekent dat de
+            interface automatisch update als de waarde verandert. "Gedeeld"
+            betekent dat de staat toegankelijk is in al je componenten en
+            pagina's. Perfect om data zoals een gebruikersnaam of score over de
+            hele applicatie te onthouden.
+          </p>
+          <p class="mt-2">
+            Lees meer in de
+            <a
+              href="https://nuxt.com/docs/api/composables/use-state"
+              target="_blank"
+              class="docs-link"
+              >officiële Nuxt documentatie over useState</a
+            >.
+          </p>
+        </div>
+
+        <h3 class="mt-6">3.1 Naam binden en opslaan</h3>
+        <p>
+          We updaten `pages/index.vue` om de ingevoerde naam op te slaan en de
+          gebruiker door te sturen naar de quizpagina. Bestudeer de commentaren
+          in de code.
+        </p>
+
+        <div class="relative"><pre><code>&lt;!-- In je &lt;template&gt;, voeg v-model en @click toe --&gt;
+&lt;input 
+  v-model="playerName"
+  @keyup.enter="startQuiz" &lt;!-- Bonus: start quiz ook met Enter-toets --&gt;
+  type="text" 
+  placeholder="Jouw naam" 
+  class="border p-3 rounded w-full mb-4 focus:outline-none focus:ring-2 focus:ring-blue-500"
+/&gt;
+&lt;button @click="startQuiz" class="..."&gt;Start de Quiz&lt;/button&gt;
+
+&lt;!-- Update je &lt;script setup&gt; --&gt;
+&lt;script setup&gt;
+// 1. Importeer de benodigde functies uit Vue en Nuxt
+import { ref } from 'vue'
+import { useRouter } from '#app' // of 'vue-router'
+
+// 2. Creëer een globale state voor de spelersnaam. 
+// De eerste parameter ('playerName') is een unieke sleutel.
+// De tweede is een functie die de beginwaarde retourneert.
+const user = useState('playerName', () => '')
+
+// 3. 'ref' maakt een lokale, reactieve variabele. We koppelen deze met v-model aan het inputveld.
+const playerName = ref('')
+
+// 4. 'useRouter' geeft ons toegang tot de router, waarmee we kunnen navigeren.
+const router = useRouter()
+
+// 5. Deze functie wordt aangeroepen als op de knop wordt geklikt.
+function startQuiz() {
+  if (playerName.value.trim()) {
+    // Sla de ingevulde naam op in de globale state.
+    user.value = playerName.value
+    // Stuur de gebruiker door naar de /quiz pagina.
+    router.push('/quiz')
+  } else {
+    alert('Voer alsjeblieft een naam in.')
+  }
+}
+&lt;/script&gt;
+</code></pre><button onclick="copyCode(event)" class="copy-button">Kopieer</button></div>
+        <div class="note">
+          <strong>Belangrijk:</strong> Maak nu alvast een leeg bestand
+          `pages/quiz.vue` aan. Als je dit niet doet, krijg je een 404 (Not
+          Found) foutmelding als je probeert te navigeren.
+        </div>
+      </section>
+
+      <!-- Stap 4: Data Ophalen -->
+      <section>
+        <h2>Stap 4: Quizdata Ophalen uit JSON</h2>
+        <p>
+          De vragen en antwoorden horen in een `data.json` bestand. We plaatsen
+          dit in de `public` map. Bestanden in deze map zijn direct toegankelijk
+          in de browser.
+        </p>
+
+        <h3 class="mt-6">4.1 Maak het `data.json` bestand</h3>
+        <p>
+          Maak een map `public` in de hoofdmap van je project. Maak daarin een
+          bestand `data.json` met deze inhoud:
+        </p>
+        <div class="relative"><pre><code>// public/data.json
+{
+  "questions": [
+    {
+      "question": "Welk framework gebruiken we voor deze tutorial?",
+      "image": "https://nuxtjs.org/meta_400.png",
+      "answers": [
+        { "text": "React", "correct": false },
+        { "text": "Angular", "correct": false },
+        { "text": "Nuxt.js", "correct": true },
+        { "text": "Svelte", "correct": false }
+      ]
+    },
+    {
+      "question": "Welk CSS-framework gebruiken we?",
+      "image": "https://tailwindcss.com/_next/static/media/social-card-large.a6e71726.jpg",
+      "answers": [
+        { "text": "Bootstrap", "correct": false },
+        { "text": "Tailwind CSS", "correct": true },
+        { "text": "Foundation", "correct": false },
+        { "text": "Bulma", "correct": false }
+      ]
+    }
+  ]
+}</code></pre><button onclick="copyCode(event)" class="copy-button">Kopieer</button></div>
+
+        <div class="concept-box">
+          <h3>Concept: <code>useFetch</code></h3>
+          <p>
+            <code>useFetch</code> is dé manier in Nuxt om data op te halen,
+            bijvoorbeeld uit een JSON-bestand of een externe API. Het grote
+            voordeel is dat Nuxt dit al op de server kan doen, waardoor je data
+            direct beschikbaar is als de pagina laadt. Dit maakt je website
+            sneller en beter voor zoekmachines.
+          </p>
+          <p class="mt-2">
+            Lees meer in de
+            <a
+              href="https://nuxt.com/docs/api/composables/use-fetch"
+              target="_blank"
+              class="docs-link"
+              >officiële Nuxt documentatie over useFetch</a
+            >.
+          </p>
+        </div>
+
+        <h3 class="mt-6">4.2 Data ophalen in de quizpagina</h3>
+        <p>
+          Open je (nu nog lege) `pages/quiz.vue` en gebruik `useFetch` om de
+          vragen op te halen.
+        </p>
+        <div class="relative"><pre><code>&lt;template&gt;
+  &lt;div class="p-8"&gt;
+    &lt;h1 class="text-2xl font-bold"&gt;Quiz Pagina&lt;/h1&gt;
+    &lt;p&gt;Speler: {{ user }}&lt;/p&gt;
+    
+    &lt;!-- We tonen de data hier even om te testen. Dit is een goede manier om te debuggen! --&gt;
+    &lt;pre v-if="quizData"&gt;{{ quizData.questions }}&lt;/pre&gt;
+    &lt;p v-else&gt;Quiz wordt geladen...&lt;/p&gt;
+  &lt;/div&gt;
+&lt;/template&gt;
+
+&lt;script setup&gt;
+// Haal de opgeslagen naam weer op uit de state.
+const user = useState('playerName')
+
+// Haal de quizdata op. De 'await' zorgt ervoor dat we wachten tot de data binnen is.
+const { data: quizData } = await useFetch('/data.json')
+&lt;/script&gt;</code></pre><button onclick="copyCode(event)" class="copy-button">Kopieer</button></div>
+        <p>
+          Als je nu naar de quizpagina navigeert, zie je de ruwe data van je
+          JSON-bestand op het scherm. Dit betekent dat het ophalen is gelukt!
+        </p>
+      </section>
+
+      <!-- Stap 5: De Quiz Pagina -->
+      <section>
+        <h2>Stap 5: De Quiz Pagina Bouwen</h2>
+        <p>
+          Dit is de kern van de applicatie. We moeten de vragen een voor een
+          tonen, de antwoorden shufflen en de timer implementeren.
+        </p>
+
+        <div class="concept-box">
+          <h3>
+            Concepten: <code>computed</code>, <code>v-if</code> en
+            <code>v-for</code>
+          </h3>
+          <p>
+            <strong><code>computed</code></strong
+            >: Een 'computed property' is een waarde die wordt afgeleid van
+            andere reactieve data. Het grote voordeel is dat Vue deze waarde
+            onthoudt (cached) en alleen opnieuw berekent als een van de
+            afhankelijkheden verandert. We gebruiken dit om de huidige vraag en
+            de geschudde antwoorden te bepalen. <br /><a
+              href="https://vuejs.org/guide/essentials/computed.html"
+              target="_blank"
+              class="docs-link"
+              >Lees meer over Computed Properties</a
+            >.
+          </p>
+          <p class="mt-2">
+            <strong><code>v-if</code> en <code>v-for</code></strong
+            >: Dit zijn "directives" in Vue. Met <code>v-if</code> kun je
+            elementen conditioneel tonen (alleen als een voorwaarde waar is).
+            Met <code>v-for</code> kun je door een lijst (array) loopen en voor
+            elk item een HTML-element renderen. <br /><a
+              href="https://vuejs.org/guide/essentials/conditional.html"
+              target="_blank"
+              class="docs-link"
+              >Lees meer over v-if</a
+            >
+            en
+            <a
+              href="https://vuejs.org/guide/essentials/list.html"
+              target="_blank"
+              class="docs-link"
+              >v-for</a
+            >.
+          </p>
+        </div>
+
+        <p>
+          Hieronder staat een meer complete opzet voor
+          <code>pages/quiz.vue</code>. Dit is een grote stap, dus neem de tijd
+          om de commentaren in de code te lezen.
+        </p>
+        <div class="relative"><pre><code>&lt;template&gt;
+  &lt;div class="min-h-screen bg-gray-100 flex items-center justify-center p-4"&gt;
+    &lt;!-- Gebruik v-if om te wachten tot de huidige vraag beschikbaar is --&gt;
+    &lt;div v-if="currentQuestion" class="bg-white p-8 rounded-lg shadow-md w-full max-w-2xl"&gt;
+      &lt;div class="flex justify-between items-center mb-4"&gt;
+        &lt;h2 class="text-xl font-semibold"&gt;Speler: {{ user }}&lt;/h2&gt;
+        &lt;div class="text-2xl font-bold bg-blue-600 text-white rounded-full h-16 w-16 flex items-center justify-center"&gt;
+          15 &lt;!-- Timer placeholder --&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+
+      &lt;p class="text-gray-500 mb-4"&gt;Vraag {{ currentQuestionIndex + 1 }} van {{ quizData.questions.length }}&lt;/p&gt;
+      &lt;h3 class="text-2xl mb-4 font-semibold"&gt;{{ currentQuestion.question }}&lt;/h3&gt;
+      &lt;img v-if="currentQuestion.image" :src="currentQuestion.image" alt="Vraag afbeelding" class="mb-6 rounded-lg max-h-64 mx-auto"&gt;
+
+      &lt;div class="grid grid-cols-1 md:grid-cols-2 gap-4"&gt;
+        &lt;!-- We gebruiken v-for om door de antwoorden te loopen. :key is belangrijk voor Vue. --&gt;
+        &lt;button 
+          v-for="(answer, index) in shuffledAnswers" 
+          :key="index"
+          class="bg-gray-200 p-4 rounded-lg text-left text-lg hover:bg-gray-300 transition"&gt;
+          {{ answer.text }}
+        &lt;/button&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+    &lt;div v-else class="text-center"&gt;
+        &lt;p class="text-xl"&gt;Quiz aan het voorbereiden...&lt;/p&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+&lt;/template&gt;
+
+&lt;script setup&gt;
+import { ref, computed } from 'vue'
+
+const user = useState('playerName')
+const { data: quizData } = await useFetch('/data.json')
+
+// 'ref' om de index van de huidige vraag bij te houden.
+const currentQuestionIndex = ref(0)
+
+// Een computed property die de data van de huidige vraag retourneert.
+const currentQuestion = computed(() => {
+  // Zorg ervoor dat quizData en questions bestaan voordat je ze benadert.
+  return quizData.value?.questions[currentQuestionIndex.value]
+})
+
+// Een computed property die de antwoorden voor de huidige vraag shufflet.
+const shuffledAnswers = computed(() => {
+  if (currentQuestion.value) {
+    // Maak een kopie met [...] en shuffle deze met .sort()
+    return [...currentQuestion.value.answers].sort(() => Math.random() - 0.5)
+  }
+  return []
+})
+
+// Puzzelstukjes die je zelf nog moet invullen:
+// 1. Logica voor de timer (zie de opdracht over Lifecycle Hooks).
+// 2. Een functie die wordt aangeroepen als op een antwoord wordt geklikt.
+//    - Deze functie moet het antwoord controleren.
+//    - Het antwoord opslaan.
+//    - Naar de volgende vraag gaan (currentQuestionIndex.value++).
+//    - Als er geen vragen meer zijn, navigeren naar de scorepagina.
+&lt;/script&gt;
+</code></pre><button onclick="copyCode(event)" class="copy-button">Kopieer</button></div>
+        <p>
+          Refresh de quizpagina. Je zou nu de eerste vraag moeten zien met de
+          antwoorden in een willekeurige volgorde. Refresh nog een paar keer om
+          te zien dat de volgorde steeds verandert!
+        </p>
+      </section>
+
+      <!-- Stap 6: De Score Pagina -->
+      <section>
+        <h2>Stap 6: De Score Pagina & Laatste Puzzelstukjes</h2>
+        <p>
+          De laatste stap is het tonen van de resultaten. Hiervoor heb je een
+          nieuwe `useState` nodig om de antwoorden van de gebruiker in op te
+          slaan tijdens de quiz.
+        </p>
+
+        <h3 class="mt-6">6.1 Antwoorden Opslaan</h3>
+        <p>
+          Definieer in `pages/quiz.vue` (of een aparte `composables/` map) een
+          nieuwe state:
+        </p>
+        <div class="relative"><pre><code>const userAnswers = useState('userAnswers', () => [])</code></pre><button onclick="copyCode(event)" class="copy-button">Kopieer</button></div>
+        <p>
+          Wanneer een gebruiker een antwoord kiest, voeg je een object toe aan
+          deze array. Bijvoorbeeld:
+        </p>
+        <div class="relative"><pre><code>userAnswers.value.push({
+  question: currentQuestion.value.question,
+  userAnswer: 'Het gekozen antwoord',
+  correctAnswer: 'Het juiste antwoord',
+  isCorrect: true // of false
+})</code></pre><button onclick="copyCode(event)" class="copy-button">Kopieer</button></div>
+
+        <h3 class="mt-6">6.2 De Scorepagina Bouwen</h3>
+        <p>Maak een bestand `pages/score.vue`.</p>
+        <div class="relative"><pre><code>&lt;template&gt;
+  &lt;div class="min-h-screen bg-gray-100 p-4 md:p-8"&gt;
+    &lt;div class="bg-white p-8 rounded-lg shadow-md w-full max-w-3xl mx-auto"&gt;
+      &lt;h1 class="text-3xl font-bold mb-4"&gt;Resultaten voor {{ user }}&lt;/h1&gt;
+      &lt;p class="text-xl mb-8"&gt;Je eindscore: &lt;span class="font-bold"&gt;{{ score }} / {{ userAnswers.length }}&lt;/span&gt;&lt;/p&gt;
+
+      &lt;div class="space-y-4"&gt;
+        &lt;!-- Loop door de gegeven antwoorden --&gt;
+        &lt;div v-for="(result, index) in userAnswers" :key="index" class="border-t pt-4"&gt;
+          &lt;h3 class="text-lg font-semibold"&gt;{{ result.question }}&lt;/h3&gt;
+          &lt;p&gt;Jouw antwoord: 
+            &lt;span class="font-bold" :class="result.isCorrect ? 'text-green-600' : 'text-red-600'"&gt;
+              {{ result.userAnswer }}
+            &lt;/span&gt;
+          &lt;/p&gt;
+          &lt;p v-if="!result.isCorrect"&gt;Correcte antwoord: 
+            &lt;span class="font-bold text-green-600"&gt;{{ result.correctAnswer }}&lt;/span&gt;
+          &lt;/p&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+
+    &lt;/div&gt;
+  &lt;/div&gt;
+&lt;/template&gt;
+
+&lt;script setup&gt;
+import { computed } from 'vue'
+
+const user = useState('playerName')
+const userAnswers = useState('userAnswers', () => [])
+
+// Berekent de score met een computed property
+const score = computed(() => {
+  return userAnswers.value.filter(answer => answer.isCorrect).length
+})
+&lt;/script&gt;
+</code></pre><button onclick="copyCode(event)" class="copy-button">Kopieer</button></div>
+      </section>
+
+      <!-- Conclusie -->
+      <footer class="text-center mt-16">
+        <h2 class="text-3xl font-bold">Gefeliciteerd!</h2>
+        <p class="mt-4 text-lg">
+          Je hebt nu de volledige basisstructuur voor de quiz-applicatie
+          opgezet. Je hebt kennisgemaakt met de belangrijkste concepten van Nuxt
+          en Vue. De volgende stap is om de laatste puzzelstukjes zelf in te
+          vullen: de timer, de logica voor het beantwoorden van vragen en de
+          navigatie tussen de vragen. Heel veel succes!
+        </p>
+      </footer>
+    </div>
+
+    <!-- JavaScript voor de kopieer-knop. Dit script werkt voor alle knoppen op de pagina. -->
+    <script>
+        function copyCode(event) {
+            const button = event.currentTarget;
+            const pre = button.parentElement.querySelector('pre');
+            const code = pre.querySelector('code');
+            const textToCopy = code.innerText;
+
+            navigator.clipboard.writeText(textToCopy).then(() => {
+                const originalText = button.innerText;
+                button.innerText = 'Gekopieerd!';
+                setTimeout(() => {
+                    button.innerText = originalText;
+                }, 2000);
+            }).catch(err => {
+                console.error('Kon tekst niet kopiëren: ', err);
+                button.innerText = 'Fout';
+            });
+        }
+    </script>
+  </body>
+</html>
