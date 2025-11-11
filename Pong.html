@@ -1,0 +1,695 @@
+<!DOCTYPE html>
+<html lang="nl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Unity Pong Tutorial (Object-Oriented)</title>
+    <!-- Include Tailwind CSS via CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Include Alpine.js via CDN -->
+    <script
+      defer
+      src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"
+    ></script>
+    <style>
+      body {
+        font-family: sans-serif;
+        line-height: 1.6;
+        padding: 20px;
+        background-color: #f7fafc;
+      }
+      h1,
+      h2,
+      h3 {
+        margin-bottom: 0.5em;
+        font-weight: 600;
+      }
+      h1 {
+        font-size: 2.25rem;
+      }
+      h2 {
+        font-size: 1.875rem;
+        border-bottom: 1px solid #e2e8f0;
+        padding-bottom: 0.2em;
+        margin-top: 1.5em;
+      }
+      h3 {
+        font-size: 1.5rem;
+        margin-top: 1em;
+      }
+      p {
+        margin-bottom: 1em;
+      }
+      code {
+        background-color: #edf2f7;
+        padding: 0.2em 0.4em;
+        border-radius: 3px;
+        font-family: monospace;
+        color: #4a5568;
+      }
+      pre {
+        background-color: #2d3748;
+        color: #e2e8f0;
+        padding: 1em;
+        border-radius: 5px;
+        overflow-x: auto;
+        margin-bottom: 1em;
+        position: relative;
+      }
+      pre code {
+        background-color: transparent !important;
+        color: inherit !important;
+        padding: 0 !important;
+        border-radius: 0 !important;
+      }
+      pre .copy-button {
+        position: absolute;
+        top: 0.5rem;
+        right: 0.5rem;
+        background-color: #4a5568;
+        color: #e2e8f0;
+        border: none;
+        padding: 0.25rem 0.5rem;
+        font-size: 0.75rem;
+        border-radius: 0.25rem;
+        cursor: pointer;
+        opacity: 0.7;
+        transition: opacity 0.2s ease-in-out,
+          background-color 0.2s ease-in-out;
+      }
+      pre:hover .copy-button {
+        opacity: 1;
+      }
+      pre .copy-button.copied {
+        background-color: #48bb78;
+        color: white;
+      }
+      .stage-section {
+        background-color: #ffffff;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1),
+          0 1px 2px 0 rgba(0, 0, 0, 0.06);
+        margin-bottom: 2em;
+      }
+      ul {
+        list-style: disc;
+        margin-left: 20px;
+        margin-bottom: 1em;
+      }
+      .popup-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: rgba(0, 0, 0, 0.6);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        z-index: 999;
+      }
+      .popup-content {
+        background-color: white;
+        padding: 2rem;
+        border-radius: 8px;
+        width: 90%;
+        max-width: 700px;
+      }
+      .popup-content pre {
+        max-height: 60vh;
+      }
+      .inspector-list {
+        background-color: #f7fafc;
+        border: 1px solid #e2e8f0;
+        border-radius: 5px;
+        padding: 1rem;
+      }
+      .inspector-list li {
+        margin-bottom: 0.5rem;
+      }
+    </style>
+  </head>
+  <body
+    class="bg-gray-100 text-gray-800"
+    x-data="{
+        showPopup: false,
+        password: '',
+        error: '',
+        unlocked: false,
+        contentToShow: '',
+        correctPassword: 'code',
+        openPopup(contentId) {
+            this.contentToShow = document.getElementById(contentId).innerHTML;
+            this.showPopup = true;
+            this.unlocked = false;
+            this.password = '';
+            this.error = '';
+        },
+        checkPassword() {
+            if (this.password.toLowerCase() === this.correctPassword) {
+                this.unlocked = true; this.error = '';
+            } else {
+                this.error = 'Incorrect password.';
+            }
+        },
+        closePopup() { this.showPopup = false; }
+    }"
+    @keydown.escape.window="closePopup()"
+  >
+    <!-- Popup -->
+    <div x-show="showPopup" class="popup-overlay" style="display: none">
+      <div class="popup-content" @click.outside="closePopup()">
+        <div x-show="!unlocked">
+          <h3 class="text-xl font-bold mb-4">Wachtwoord Vereist</h3>
+          <p class="mb-4">
+            Denk eerst zelf na! Voer het wachtwoord in om de oplossing te zien.
+            (Hint: het wachtwoord is `code`)
+          </p>
+          <form @submit.prevent="checkPassword()">
+            <input type="password" x-model="password" class="w-full px-3 py-2 border rounded" placeholder="Password"/>
+            <p x-text="error" class="text-red-500 text-sm mt-2"></p>
+            <div class="mt-4 flex justify-end space-x-2">
+              <button type="button" @click="closePopup()" class="bg-gray-300 font-bold py-2 px-4 rounded">Annuleren</button>
+              <button type="submit" class="bg-blue-500 text-white font-bold py-2 px-4 rounded">Ontgrendel</button>
+            </div>
+          </form>
+        </div>
+        <div x-show="unlocked">
+          <div x-html="contentToShow"></div>
+          <button @click="closePopup()" class="mt-4 w-full bg-blue-500 text-white font-bold py-2 px-4 rounded">Sluiten</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="container mx-auto max-w-4xl">
+      <h1 class="text-4xl font-bold text-center text-blue-600 mb-8">
+        Bouw Pong in Unity met Nette OOP Principes
+      </h1>
+      <p class="text-lg text-center mb-6">
+        Een beginnersvriendelijke tutorial voor het maken van een Pong-kloon met
+        een focus op code-organisatie.
+      </p>
+      <p class="mb-8">
+        <strong>Prerequisites:</strong> Unity Hub en een Unity Editor (LTS-versie
+        aanbevolen) geïnstalleerd. Basiskennis van de Unity-interface is
+        handig.
+      </p>
+
+      <!-- Stage 1: Scene Setup -->
+      <div class="stage-section" id="stage-1">
+        <h2 class="text-3xl mb-4">
+          Stage 1: Het Speelveld Opzetten (De Scene)
+        </h2>
+        <p>
+          We beginnen met het opzetten van ons digitale speelveld. We maken alle
+          visuele elementen aan: de bal, de paddles en de muren. In deze fase
+          schrijven we nog geen code.
+        </p>
+        <h3 class="text-2xl mt-4 mb-2">Goals:</h3>
+        <ul>
+          <li>Een nieuw 2D Unity-project aanmaken.</li>
+          <li>De camera instellen voor een 2D-spel.</li>
+          <li>De visuele objecten (GameObjects) aanmaken en positioneren.</li>
+          <li>De objecten de juiste physics-componenten geven.</li>
+        </ul>
+
+        <h3 class="text-2xl mt-4 mb-2">Instructies:</h3>
+        <ol class="list-decimal ml-6 mb-4">
+          <li>
+            Maak een nieuw 2D-project aan in Unity Hub. Noem het `PongOOP`.
+          </li>
+          <li>
+            Selecteer de `Main Camera`. Zet in de Inspector `Projection` op
+            <b>Orthographic</b> en `Size` op <b>5</b>. Zet de `Background` kleur
+            op zwart.
+          </li>
+          <li>
+            Maak de speelobjecten aan via `GameObject > 2D Object > Sprite > Square`. Hernoem ze en geef ze de juiste componenten en posities zoals hieronder beschreven.
+          </li>
+          <li>Maak een nieuwe Physics Material 2D aan (`Create > 2D > Physics Material 2D`). Noem het `BouncyMaterial`. Zet `Friction` op 0 en `Bounciness` op 1. Wijs dit materiaal toe aan de `Physics Material` slot van de `Rigidbody2D` van de bal en de `BoxCollider2D`'s van de paddles en muren.
+          </li>
+        </ol>
+
+        <h3 class="text-2xl mt-4 mb-2">Scene Hierarchy & Inspector Instellingen:</h3>
+        <button @click="openPopup('s1-hierarchy')" class="bg-gray-200 text-gray-800 font-bold py-2 px-4 rounded">Toon Scene Setup</button>
+        
+        <template id="s1-hierarchy">
+            <p>Maak de volgende GameObjects aan in je Hierarchy met de gespecificeerde componenten en instellingen:</p>
+            
+            <h4 class="text-xl font-bold mt-4">1. PlayerPaddle</h4>
+            <ul class="inspector-list">
+                <li><b>Position</b>: (X: -8, Y: 0, Z: 0)</li>
+                <li><b>Scale</b>: (X: 0.5, Y: 2, Z: 1)</li>
+                <li><b>Componenten</b>:
+                    <ul>
+                        <li>`Sprite Renderer` (standaard)</li>
+                        <li>`Box Collider 2D`</li>
+                        <li>`Rigidbody 2D` (Body Type: <b>Kinematic</b>)</li>
+                    </ul>
+                </li>
+            </ul>
+
+            <h4 class="text-xl font-bold mt-4">2. AIPaddle</h4>
+            <ul class="inspector-list">
+                <li><b>Position</b>: (X: 8, Y: 0, Z: 0)</li>
+                <li><b>Scale</b>: (X: 0.5, Y: 2, Z: 1)</li>
+                <li><b>Componenten</b>:
+                    <ul>
+                        <li>`Sprite Renderer`</li>
+                        <li>`Box Collider 2D`</li>
+                        <li>`Rigidbody 2D` (Body Type: <b>Kinematic</b>)</li>
+                    </ul>
+                </li>
+            </ul>
+
+            <h4 class="text-xl font-bold mt-4">3. Ball</h4>
+            <ul class="inspector-list">
+                <li><b>Position</b>: (X: 0, Y: 0, Z: 0)</li>
+                <li><b>Componenten</b>:
+                    <ul>
+                        <li>`Sprite Renderer`</li>
+                        <li>`Circle Collider 2D`</li>
+                        <li>`Rigidbody 2D` (Gravity Scale: <b>0</b>, Collision Detection: <b>Continuous</b>)</li>
+                        <li>Wijs `BouncyMaterial` toe aan de `Rigidbody 2D`.</li>
+                    </ul>
+                </li>
+            </ul>
+
+            <h4 class="text-xl font-bold mt-4">4. TopWall & BottomWall</h4>
+            <ul class="inspector-list">
+                <li>Maak twee `Square` sprites.</li>
+                <li><b>Position Top</b>: (X: 0, Y: 5, Z: 0), <b>Position Bottom</b>: (X: 0, Y: -5, Z: 0)</li>
+                <li><b>Scale</b>: (X: 18, Y: 0.5, Z: 1) voor beide.</li>
+                <li><b>Componenten</b>: `Box Collider 2D` voor beide.</li>
+            </ul>
+        </template>
+      </div>
+
+      <!-- Stage 2: Player Movement -->
+      <div class="stage-section" id="stage-2">
+        <h2 class="text-3xl mb-4">Stage 2: De Speler Laten Bewegen</h2>
+        <p>
+          Nu is het tijd voor onze eerste interactie. We schrijven een script dat
+          de paddle van de speler beweegt op basis van input. Dit is een perfect
+          voorbeeld van <b>encapsulatie</b>: het paddle-script is alleen
+          verantwoordelijk voor zijn eigen beweging.
+        </p>
+        <h3 class="text-2xl mt-4 mb-2">Goals:</h3>
+        <ul>
+          <li>Een C# script `PaddleController` aanmaken.</li>
+          <li>Input van de speler (toetsenbord) uitlezen.</li>
+          <li>De positie van de paddle aanpassen.</li>
+          <li>De beweging beperken zodat de paddle niet buiten beeld kan.</li>
+        </ul>
+        <h3 class="text-2xl mt-4 mb-2">Instructies:</h3>
+        <ol class="list-decimal ml-6 mb-4">
+            <li>Maak een nieuwe map `Scripts` in je Project view.</li>
+            <li>Maak hierin een nieuw C# Script genaamd `PaddleController`.</li>
+            <li>Voeg de onderstaande code toe aan dit script.</li>
+            <li>Sleep het `PaddleController` script op het <b>PlayerPaddle</b> GameObject in de Hierarchy.</li>
+            <li>Stel de `Speed` en `MovementLimit` waarden in de Inspector in (bv. 10 en 4).</li>
+        </ol>
+
+        <h3 class="text-2xl mt-4 mb-2">Code: `PaddleController.cs`</h3>
+        <button @click="openPopup('s2-code')" class="bg-blue-500 text-white font-bold py-2 px-4 rounded">Toon Code</button>
+        
+        <template id="s2-code">
+            <pre><button class="copy-button" onclick="copyCode(this)">Copy</button><code class="language-csharp">
+using UnityEngine;
+
+public class PaddleController : MonoBehaviour
+{
+    // [SerializeField] maakt een private variabele zichtbaar in de Unity Inspector.
+    // Dit is goede encapsulatie: andere scripts kunnen er niet direct bij,
+    // maar wij kunnen de waarde in Unity aanpassen.
+    [SerializeField] private float speed = 10f;
+    [SerializeField] private float movementLimit = 4f;
+
+    private Rigidbody2D rb;
+
+    // Awake wordt aangeroepen wanneer het script wordt geladen.
+    // Ideaal voor het initialiseren van componenten.
+    private void Awake()
+    {
+        // We 'cachen' de Rigidbody2D component voor betere prestaties.
+        rb = GetComponent<Rigidbody2D>();
+    }
+
+    // FixedUpdate is ideaal voor physics-berekeningen.
+    private void FixedUpdate()
+    {
+        // Vraag de verticale input-as op (W/S of pijl-omhoog/omlaag).
+        // De waarde is tussen -1 (omlaag) en 1 (omhoog).
+        float verticalInput = Input.GetAxis("Vertical");
+
+        // Bereken de nieuwe positie.
+        Vector2 newPosition = rb.position + Vector2.up * verticalInput * speed * Time.fixedDeltaTime;
+
+        // Beperk de Y-positie met Mathf.Clamp.
+        newPosition.y = Mathf.Clamp(newPosition.y, -movementLimit, movementLimit);
+
+        // Pas de positie van de Rigidbody aan.
+        rb.MovePosition(newPosition);
+    }
+}
+</code></pre>
+        </template>
+      </div>
+      
+      <!-- Stage 3: The Ball -->
+      <div class="stage-section" id="stage-3">
+        <h2 class="text-3xl mb-4">Stage 3: De Bal - Bewegen en Botsen</h2>
+        <p>
+            Nu de speler kan bewegen, geven we de bal leven. We maken een script dat de bal lanceert en de snelheid constant houdt. De botsingen worden al grotendeels door Unity's physics engine afgehandeld dankzij onze `BouncyMaterial`.
+        </p>
+        <h3 class="text-2xl mt-4 mb-2">Goals:</h3>
+        <ul>
+            <li>Een `BallController` script maken.</li>
+            <li>De bal een initiële snelheid geven bij de start.</li>
+            <li>Ervoor zorgen dat de bal altijd een constante snelheid heeft.</li>
+        </ul>
+        <h3 class="text-2xl mt-4 mb-2">Instructies:</h3>
+        <ol class="list-decimal ml-6 mb-4">
+            <li>Maak een C# script `BallController` in de `Scripts` map.</li>
+            <li>Voeg de onderstaande code toe.</li>
+            <li>Sleep het `BallController` script op het <b>Ball</b> GameObject.</li>
+            <li>Stel de `Initial Speed` in de Inspector in (bv. 7).</li>
+        </ol>
+
+        <h3 class="text-2xl mt-4 mb-2">Code: `BallController.cs`</h3>
+        <button @click="openPopup('s3-code')" class="bg-blue-500 text-white font-bold py-2 px-4 rounded">Toon Code</button>
+
+        <template id="s3-code">
+        <pre><button class="copy-button" onclick="copyCode(this)">Copy</button><code class="language-csharp">
+using UnityEngine;
+
+public class BallController : MonoBehaviour
+{
+    [SerializeField] private float initialSpeed = 7f;
+
+    private Rigidbody2D rb;
+
+    private void Awake()
+    {
+        rb = GetComponent<Rigidbody2D>();
+    }
+
+    // Start wordt aangeroepen na Awake, net voordat de eerste frame update plaatsvindt.
+    private void Start()
+    {
+        Launch();
+    }
+
+    private void FixedUpdate()
+    {
+        // Zorg ervoor dat de bal altijd de 'initialSpeed' heeft.
+        // Dit voorkomt dat de bal vertraagt door kleine physics onnauwkeurigheden.
+        rb.velocity = rb.velocity.normalized * initialSpeed;
+    }
+
+    public void Launch()
+    {
+        // Bepaal een willekeurige startrichting (links of rechts).
+        float xDirection = Random.value < 0.5f ? -1.0f : 1.0f;
+        
+        // Bepaal een willekeurige verticale hoek.
+        float yDirection = Random.Range(-0.8f, 0.8f);
+
+        // Creëer de richting vector en normaliseer deze (lengte 1).
+        Vector2 direction = new Vector2(xDirection, yDirection).normalized;
+
+        // Geef de bal zijn snelheid.
+        rb.velocity = direction * initialSpeed;
+    }
+    
+    public void ResetBall()
+    {
+        // Reset positie en snelheid voor de volgende ronde.
+        rb.velocity = Vector2.zero;
+        transform.position = Vector2.zero;
+
+        // Wacht even en lanceer opnieuw.
+        // Invoke start een methode na een bepaalde tijd.
+        Invoke(nameof(Launch), 1f);
+    }
+}
+</code></pre>
+        </template>
+      </div>
+
+      <!-- Stage 4: Game Logic -->
+      <div class="stage-section" id="stage-4">
+        <h2 class="text-3xl mb-4">Stage 4: Scoren en Spelregels (GameManager)</h2>
+        <p>
+            Dit is de kern van onze OOP-architectuur. We creëren een centrale `GameManager` die de spelstaat beheert. De 'Goals' (onzichtbare zones) weten niets van de score; ze geven alleen een signaal (een <b>event</b>) af wanneer de bal hen raakt. De `GameManager` luistert naar deze signalen. Dit principe heet <b>decoupling</b> (ontkoppeling) en is essentieel voor schaalbare en onderhoudbare code.
+        </p>
+        <h3 class="text-2xl mt-4 mb-2">Goals:</h3>
+        <ul>
+            <li>Onzichtbare 'Goal' zones maken die detecteren wanneer er gescoord wordt.</li>
+            <li>Een `Goal` script dat een event uitzendt bij een doelpunt.</li>
+            <li>Een `GameManager` script dat de score bijhoudt en de UI update.</li>
+            <li>UI-elementen (Text) aanmaken om de score te tonen.</li>
+            <li>De `GameManager` laten luisteren naar de events van de `Goal`s.</li>
+        </ul>
+        <h3 class="text-2xl mt-4 mb-2">Instructies:</h3>
+        <ol class="list-decimal ml-6 mb-4">
+            <li><b>Maak de Goals</b>: Maak twee lege GameObjects, `LeftGoal` en `RightGoal`. Geef beide een `BoxCollider2D` en zet `Is Trigger` aan. Positioneer ze achter de paddles (bv. X op -10 en 10) en schaal de collider zodat hij het hele doelgebied dekt.</li>
+            <li><b>Maak de UI</b>: Maak een UI Canvas (`GameObject > UI > Canvas`). Daarin maak je twee UI Text-objecten (`UI > Text` of `Text - TextMeshPro`). Positioneer ze waar je de scores wilt hebben.</li>
+            <li><b>Maak de Scripts</b>: Maak de scripts `Goal.cs` en `GameManager.cs`. Voeg de code toe.</li>
+            <li><b>Wijs Scripts toe</b>:
+                <ul>
+                    <li>Wijs `Goal.cs` toe aan `LeftGoal` en `RightGoal`.</li>
+                    <li>Maak een nieuw leeg GameObject genaamd `GameManager` en wijs `GameManager.cs` toe.</li>
+                    <li>Sleep de Text-objecten, de Goals en de Bal naar de juiste velden in de Inspector van de `GameManager`.</li>
+                </ul>
+            </li>
+        </ol>
+
+        <h3 class="text-2xl mt-4 mb-2">Code: `Goal.cs`</h3>
+        <button @click="openPopup('s4-code-goal')" class="bg-blue-500 text-white font-bold py-2 px-4 rounded">Toon Code</button>
+        <template id="s4-code-goal">
+        <pre><button class="copy-button" onclick="copyCode(this)">Copy</button><code class="language-csharp">
+using System;
+using UnityEngine;
+
+public class Goal : MonoBehaviour
+{
+    // Een 'event' is als een radiozender. Dit script zendt een signaal uit.
+    // Andere scripts kunnen zich abonneren (luisteren) op dit signaal.
+    // 'static' betekent dat het event bij de 'Goal' klasse hoort, niet bij een individueel object.
+    public static event Action<Goal> OnGoalScored;
+
+    // OnTriggerEnter2D wordt aangeroepen wanneer een andere collider deze trigger binnenkomt.
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+        // Controleer of het de bal is.
+        if (other.CompareTag("Ball")) // Tip: Geef je Ball GameObject de tag "Ball" in de Inspector!
+        {
+            // Zend het signaal uit en geef dit goal-object mee als informatie.
+            OnGoalScored?.Invoke(this);
+        }
+    }
+}
+</code></pre>
+        </template>
+        
+        <h3 class="text-2xl mt-4 mb-2">Code: `GameManager.cs`</h3>
+        <button @click="openPopup('s4-code-manager')" class="bg-blue-500 text-white font-bold py-2 px-4 rounded">Toon Code</button>
+        <template id="s4-code-manager">
+        <pre><button class="copy-button" onclick="copyCode(this)">Copy</button><code class="language-csharp">
+using UnityEngine;
+using UnityEngine.UI; // Namespace voor UI elementen
+
+public class GameManager : MonoBehaviour
+{
+    [Header("Game Objects")]
+    [SerializeField] private BallController ball;
+    [SerializeField] private Goal leftGoal;
+    [SerializeField] private Goal rightGoal;
+
+    [Header("UI")]
+    [SerializeField] private Text leftPlayerScoreText;
+    [SerializeField] private Text rightPlayerScoreText;
+
+    private int leftPlayerScore;
+    private int rightPlayerScore;
+    
+    // OnEnable wordt aangeroepen wanneer het object actief wordt.
+    private void OnEnable()
+    {
+        // We abonneren de HandleGoalScored methode op het OnGoalScored event.
+        // Nu, elke keer dat Goal.OnGoalScored wordt aangeroepen, wordt onze methode uitgevoerd.
+        Goal.OnGoalScored += HandleGoalScored;
+    }
+
+    // OnDisable wordt aangeroepen wanneer het object inactief wordt.
+    // Het is belangrijk om je weer af te melden om memory leaks te voorkomen.
+    private void OnDisable()
+    {
+        Goal.OnGoalScored -= HandleGoalScored;
+    }
+
+    private void Start()
+    {
+        // Initialiseer de scores
+        leftPlayerScore = 0;
+        rightPlayerScore = 0;
+        UpdateScoreUI();
+    }
+
+    private void HandleGoalScored(Goal scoredGoal)
+    {
+        // Controleer welk goal het signaal stuurde.
+        if (scoredGoal == leftGoal)
+        {
+            rightPlayerScore++;
+        }
+        else if (scoredGoal == rightGoal)
+        {
+            leftPlayerScore++;
+        }
+
+        UpdateScoreUI();
+        
+        // Vertel de bal dat hij moet resetten.
+        ball.ResetBall();
+    }
+
+    private void UpdateScoreUI()
+    {
+        leftPlayerScoreText.text = leftPlayerScore.ToString();
+        rightPlayerScoreText.text = rightPlayerScore.ToString();
+    }
+}
+</code></pre>
+        </template>
+      </div>
+
+      <!-- Stage 5: Finishing Touches -->
+      <div class="stage-section" id="stage-5">
+        <h2 class="text-3xl mb-4">Stage 5: Afwerking en een Simpele AI</h2>
+        <p>
+            Het spel werkt, maar we kunnen het afmaken met een simpele AI voor de tweede paddle en een manier om het spel te starten. We breiden de `PaddleController` uit zodat hij ook een AI kan besturen.
+        </p>
+        <h3 class="text-2xl mt-4 mb-2">Goals:</h3>
+        <ul>
+            <li>De `PaddleController` aanpassen zodat hij zowel door een speler als door de computer bestuurd kan worden.</li>
+            <li>Een simpele "volg de bal" logica implementeren voor de AI.</li>
+        </ul>
+        <h3 class="text-2xl mt-4 mb-2">Instructies:</h3>
+        <ol class="list-decimal ml-6 mb-4">
+            <li>Open het `PaddleController` script en vervang de code met de onderstaande, bijgewerkte versie.</li>
+            <li>Sleep het `PaddleController` script ook op het <b>AIPaddle</b> GameObject.</li>
+            <li>Selecteer de `PlayerPaddle`: zorg dat in de Inspector `Controller Type` op <b>Player</b> staat.</li>
+            <li>Selecteer de `AIPaddle`: zet `Controller Type` op <b>AI</b> en sleep het `Ball` GameObject naar het `Ball To Follow` veld.</li>
+        </ol>
+
+        <h3 class="text-2xl mt-4 mb-2">Code: `PaddleController.cs` (Bijgewerkt)</h3>
+        <button @click="openPopup('s5-code')" class="bg-blue-500 text-white font-bold py-2 px-4 rounded">Toon Code</button>
+
+        <template id="s5-code">
+        <pre><button class="copy-button" onclick="copyCode(this)">Copy</button><code class="language-csharp">
+using UnityEngine;
+
+public class PaddleController : MonoBehaviour
+{
+    // Een enum definieert een set van benoemde constanten.
+    // Dit maakt de code veel leesbaarder dan bv. een boolean 'isAI'.
+    public enum ControllerType { Player, AI }
+
+    [Header("Configuration")]
+    [SerializeField] private ControllerType controllerType = ControllerType.Player;
+    [SerializeField] private float speed = 10f;
+    [SerializeField] private float movementLimit = 4f;
+
+    [Header("AI Specifics")]
+    [SerializeField] private Transform ballToFollow; // AI heeft een referentie naar de bal nodig
+
+    private Rigidbody2D rb;
+
+    private void Awake()
+    {
+        rb = GetComponent<Rigidbody2D>();
+    }
+
+    private void FixedUpdate()
+    {
+        // Afhankelijk van het type, roepen we een andere methode aan.
+        // Dit is een simpele vorm van een 'State' pattern.
+        switch (controllerType)
+        {
+            case ControllerType.Player:
+                HandlePlayerMovement();
+                break;
+            case ControllerType.AI:
+                HandleAIMovement();
+                break;
+        }
+    }
+
+    private void HandlePlayerMovement()
+    {
+        float verticalInput = Input.GetAxis("Vertical");
+        MovePaddle(verticalInput);
+    }
+
+    private void HandleAIMovement()
+    {
+        // Simpele AI: als de bal hoger is, ga omhoog. Als hij lager is, ga omlaag.
+        if (ballToFollow.position.y > transform.position.y)
+        {
+            MovePaddle(1); // Beweeg omhoog
+        }
+        else if (ballToFollow.position.y < transform.position.y)
+        {
+            MovePaddle(-1); // Beweeg omlaag
+        }
+    }
+
+    private void MovePaddle(float direction)
+    {
+        Vector2 newPosition = rb.position + Vector2.up * direction * speed * Time.fixedDeltaTime;
+        newPosition.y = Mathf.Clamp(newPosition.y, -movementLimit, movementLimit);
+        rb.MovePosition(newPosition);
+    }
+}
+</code></pre>
+        </template>
+      </div>
+      
+      <h2 class="text-3xl mt-12 mb-4">Conclusie & Volgende Stappen</h2>
+      <p>
+        Gefeliciteerd! Je hebt een werkende Pong-kloon gebouwd in Unity met een
+        schone, objectgeoriënteerde structuur. De verschillende onderdelen van
+        het spel (Paddle, Bal, Goal, GameManager) hebben duidelijke, gescheiden
+        verantwoordelijkheden en communiceren via een event-systeem, wat een
+        uitstekende programmeerpraktijk is.
+      </p>
+      <p>Vanaf hier kun je het project uitbreiden:</p>
+      <ul>
+        <li><b>Geluidseffecten:</b> Voeg geluiden toe voor het raken van de bal en het scoren.</li>
+        <li><b>Start- en eindschermen:</b> Maak een hoofdmenu en een "Game Over" scherm.</li>
+        <li><b>Verbeterde AI:</b> Maak de AI slimmer (of juist dommer) door een reactietijd of onnauwkeurigheid in te bouwen.</li>
+        <li><b>Power-ups:</b> Voeg objecten toe die, als de bal ze raakt, de snelheid veranderen of de paddle vergroten/verkleinen.</li>
+        <li><b>Twee spelers:</b> Pas de input aan zodat een tweede speler de andere paddle kan besturen.</li>
+      </ul>
+      <p>Blijf experimenteren en bouwen!</p>
+    </div>
+    
+    <script>
+        function copyCode(button) {
+            const pre = button.closest('pre');
+            const code = pre.querySelector('code');
+            navigator.clipboard.writeText(code.innerText).then(() => {
+                button.innerText = 'Copied!';
+                button.classList.add('copied');
+                setTimeout(() => {
+                    button.innerText = 'Copy';
+                    button.classList.remove('copied');
+                }, 2000);
+            });
+        }
+    </script>
+  </body>
+</html>
