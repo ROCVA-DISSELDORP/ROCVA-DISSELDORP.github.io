@@ -141,7 +141,7 @@
         error: '',
         unlocked: false,
         contentToShow: '',
-        correctPassword: 'code',
+        correctPassword: 'ExamenTraining',
         
         openPopup(contentId) {
             this.contentToShow = document.getElementById(contentId).innerHTML;
@@ -178,7 +178,7 @@
           <h3 class="text-xl font-bold mb-4">Enter Password to View Content</h3>
           <p class="mb-4">
             To ensure you've thought about the step, please enter the password.
-            (Hint: the password is `code`)
+            (ask the teacher)
           </p>
           <form @submit.prevent="checkPassword()">
             <input
