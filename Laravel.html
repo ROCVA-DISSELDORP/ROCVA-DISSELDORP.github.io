@@ -236,15 +236,52 @@ Route::get('/groet', function () {
 
         <h3 class="text-2xl mt-4 mb-2">Doelen:</h3>
         <ul>
+          <li>Maak een MySQL-database aan voor je applicatie.</li>
           <li>Configureer je databaseverbinding in het `.env` bestand.</li>
           <li>Maak een database-migratie om een `tasks` tabel te definiëren.</li>
           <li>Creëer een Eloquent Model om met de `tasks` tabel te interageren.</li>
           <li>Voer basis CRUD (Create, Read, Update, Delete) operaties uit.</li>
         </ul>
+        
+        <h3 class="text-2xl mt-4 mb-2">Database Opzetten (Voorbereiding)</h3>
+        <p>Voordat Laravel met je database kan praten, moet de database eerst bestaan. We gebruiken hiervoor XAMPP en phpMyAdmin.</p>
+        <ol class="list-decimal ml-6 mb-4">
+            <li><strong>Start XAMPP:</strong> Open het XAMPP Control Panel.</li>
+            <li><strong>Start Services:</strong> Klik op 'Start' voor zowel de <strong>Apache</strong>-module als de <strong>MySQL</strong>-module. Beide moeten groen oplichten.</li>
+            <li><strong>Open phpMyAdmin:</strong> Klik in het XAMPP Control Panel op de 'Admin'-knop naast MySQL. Dit opent phpMyAdmin in je browser (meestal op `http://localhost/phpmyadmin`).</li>
+            <li><strong>Maak een Database:</strong>
+                <ul>
+                    <li>Klik linksboven op 'Nieuw'.</li>
+                    <li>Onder 'Database aanmaken', voer een databasenaam in. Laten we <code>laravel_taken_app</code> gebruiken.</li>
+                    <li>Kies als collatie <code>utf8mb4_unicode_ci</code> voor de beste ondersteuning van verschillende tekens.</li>
+                    <li>Klik op 'Aanmaken'.</li>
+                </ul>
+            </li>
+        </ol>
+        <p>Dat is alles! Je hebt nu een lege database klaarstaan. De volgende stap is om Laravel te vertellen hoe het verbinding kan maken met deze specifieke database.</p>
 
         <h3 class="text-2xl mt-4 mb-2">Instructies:</h3>
         <ol class="list-decimal ml-6 mb-4">
-          <li>Open het `.env` bestand in de hoofdmap van je project en configureer je databasegegevens.</li>
+          <li>Open het `.env` bestand in de hoofdmap van je project. Dit bestand bevat al je omgevingsspecifieke configuraties, zoals databasegegevens.</li>
+          <li>Zoek de <code>DB_</code> variabelen en pas deze aan om overeen te komen met je zojuist aangemaakte database. Voor een standaard XAMPP-installatie zijn dit de juiste waarden:</li>
+        </ol>
+        <h3 class="text-2xl mt-4 mb-2">Code: `.env` Database Configuratie</h3>
+        <pre><button class="copy-button" x-data="{}" @click="
+          const codeElement = $event.target.closest('pre').querySelector('code');
+          navigator.clipboard.writeText(codeElement.innerText).then(() => {
+              $event.target.innerText = 'Copied!';
+              $event.target.classList.add('copied');
+              setTimeout(() => { $event.target.innerText = 'Copy'; $event.target.classList.remove('copied'); }, 2000);
+          }).catch(err => console.error('Copy failed', err));
+      ">Kopiëren</button><code>
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=laravel_taken_app
+DB_USERNAME=root
+DB_PASSWORD=
+</code></pre>
+        <ol class="list-decimal ml-6 mb-4" start="3">
           <li>Gebruik de `artisan` command-line tool om een migratie en een model te maken.</li>
           <li>Definieer de structuur van je tabel in het migratiebestand.</li>
           <li>Voer de migratie uit om de tabel in de database aan te maken.</li>
