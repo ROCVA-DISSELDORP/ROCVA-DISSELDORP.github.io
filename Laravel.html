@@ -1,0 +1,586 @@
+<!DOCTYPE html>
+<html lang="nl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Laravel Cursus: Van Beginner tot Pro</title>
+    <!-- Include Tailwind CSS via CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Include Alpine.js via CDN (defer zorgt ervoor dat het na het parsen van de HTML wordt uitgevoerd) -->
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <style>
+      /* Voeg wat basisstijlen toe voor leesbaarheid */
+      body {
+        font-family: sans-serif;
+        line-height: 1.6;
+        padding: 20px;
+        background-color: #f7fafc; /* Tailwind gray-100 */
+      }
+      h1,
+      h2,
+      h3 {
+        margin-bottom: 0.5em;
+        font-weight: 600; /* Tailwind semibold */
+      }
+      h1 {
+        font-size: 2.25rem; /* Tailwind text-4xl */
+      }
+      h2 {
+        font-size: 1.875rem; /* Tailwind text-3xl */
+        border-bottom: 1px solid #e2e8f0; /* Tailwind gray-300 */
+        padding-bottom: 0.2em;
+        margin-top: 1.5em;
+      }
+      h3 {
+        font-size: 1.5rem; /* Tailwind text-2xl */
+        margin-top: 1em;
+      }
+      p {
+        margin-bottom: 1em;
+      }
+      /* Basisstijl voor inline code */
+      code {
+        background-color: #edf2f7; /* Tailwind gray-200 */
+        padding: 0.2em 0.4em;
+        border-radius: 3px;
+        font-family: monospace;
+        color: #4a5568; /* Tailwind gray-700 - Zorg ervoor dat inline code donkere tekst heeft */
+      }
+      /* Stijl voor codeblokken */
+      pre {
+        background-color: #2d3748; /* Tailwind gray-800 */
+        color: #e2e8f0; /* Tailwind gray-300 - Standaard tekstkleur voor pre */
+        padding: 1em;
+        border-radius: 5px;
+        overflow-x: auto;
+        margin-bottom: 1em;
+        position: relative; /* Nodig voor absolute positionering van de kopieerknop */
+      }
+      /* Specifieke styling voor code-elementen BINNEN pre-blokken */
+      pre code {
+        background-color: transparent !important; /* Geen achtergrond-override */
+        color: inherit !important; /* Tekstkleur overerven van pre */
+        padding: 0 !important; /* Padding resetten */
+        border-radius: 0 !important; /* border-radius resetten */
+        font-family: monospace; /* Lettertype verzekeren */
+      }
+      /* Zorg ervoor dat spans binnen pre code hun Tailwind-kleuren gebruiken */
+      pre code span[class*="text-"] {
+        /* Tailwind-klassen moeten dit afhandelen */
+      }
+      /* Stijl voor de kopieerknop */
+      pre .copy-button {
+        position: absolute;
+        top: 0.5rem; /* Aanpassen naar behoefte */
+        right: 0.5rem; /* Aanpassen naar behoefte */
+        background-color: #4a5568; /* gray-700 */
+        color: #e2e8f0; /* gray-300 */
+        border: none;
+        padding: 0.25rem 0.5rem;
+        font-size: 0.75rem; /* text-xs */
+        border-radius: 0.25rem; /* rounded */
+        cursor: pointer;
+        opacity: 0.7;
+        transition: opacity 0.2s ease-in-out, background-color 0.2s ease-in-out;
+      }
+      pre:hover .copy-button {
+         opacity: 1;
+      }
+      pre .copy-button:hover {
+        background-color: #718096; /* gray-600 */
+      }
+       pre .copy-button.copied {
+        background-color: #48bb78; /* green-500 */
+        color: white;
+      }
+
+      .stage-section {
+        background-color: #ffffff; /* Tailwind white */
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1),
+          0 1px 2px 0 rgba(0, 0, 0, 0.06); /* Tailwind shadow */
+        margin-bottom: 2em;
+      }
+      ul {
+        list-style: disc;
+        margin-left: 20px;
+        margin-bottom: 1em;
+      }
+    </style>
+  </head>
+  <body class="bg-gray-100 text-gray-800">
+    <div class="container mx-auto max-w-4xl">
+      <h1 class="text-4xl font-bold text-center text-red-600 mb-8">
+        Word een Laravel Pro: Jouw Complete Gids!
+      </h1>
+
+      <p class="text-lg text-center mb-6">
+        Een beginnersvriendelijke cursus om moderne webapplicaties te bouwen met het Laravel PHP framework.
+      </p>
+
+      <p class="mb-6">
+        Welkom! Deze gids leidt je door vijf belangrijke stadia om een meester te worden in Laravel, een van de populairste PHP-frameworks. We beginnen met de absolute basis en bouwen geleidelijk op naar geavanceerde concepten die door professionals worden gebruikt.
+      </p>
+
+      <p class="mb-8">
+        <strong>Vereisten:</strong> Basiskennis van HTML, CSS en PHP is noodzakelijk. Je hebt een lokale ontwikkelomgeving nodig zoals XAMPP, maar bij voorkeur Laravel Herd, Valet (macOS) of Sail (Docker) en <a href="https://getcomposer.org/" target="_blank" class="text-blue-500 hover:underline">Composer</a> geïnstalleerd.
+      </p>
+
+      <!-- Fase 1: De Basisprincipes -->
+      <div class="stage-section" id="stage-1">
+        <h2 class="text-3xl mb-4">
+          Fase 1: De Fundamenten (Installatie, MVC & Routing)
+        </h2>
+        <p>
+          Laten we beginnen met het opzetten van je eerste Laravel-project en het begrijpen van de kernconcepten die het framework zo krachtig maken.
+        </p>
+
+        <h3 class="text-2xl mt-4 mb-2">Doelen:</h3>
+        <ul>
+          <li>Installeer de Laravel Installer en maak een nieuw project.</li>
+          <li>Begrijp de Model-View-Controller (MVC) architectuur.</li>
+          <li>Definieer je eerste routes en geef data door aan een view.</li>
+          <li>Maak kennis met Blade, de templating engine van Laravel.</li>
+        </ul>
+
+        <h3 class="text-2xl mt-4 mb-2">Instructies:</h3>
+        <ol class="list-decimal ml-6 mb-4">
+          <li>Installeer Laravel via Composer, de dependency manager voor PHP. Open je terminal en voer het volgende commando uit:</li>
+        </ol>
+
+        <h3 class="text-2xl mt-4 mb-2">Code: Installeer Laravel</h3>
+        <pre><button class="copy-button" x-data="{}" @click="
+          const codeElement = $event.target.closest('pre').querySelector('code');
+          navigator.clipboard.writeText(codeElement.innerText).then(() => {
+              $event.target.innerText = 'Copied!';
+              $event.target.classList.add('copied');
+              setTimeout(() => { $event.target.innerText = 'Copy'; $event.target.classList.remove('copied'); }, 2000);
+          }).catch(err => console.error('Copy failed', err));
+      ">Kopiëren</button><code>
+composer create-project laravel/laravel mijn-eerste-app
+</code></pre>
+
+        <p class="mt-4">
+          Navigeer naar de nieuwe map (`cd mijn-eerste-app`) en start de lokale ontwikkelserver:
+        </p>
+        <pre><button class="copy-button" x-data="{}" @click="
+          const codeElement = $event.target.closest('pre').querySelector('code');
+          navigator.clipboard.writeText(codeElement.innerText).then(() => {
+              $event.target.innerText = 'Copied!';
+              $event.target.classList.add('copied');
+              setTimeout(() => { $event.target.innerText = 'Copy'; $event.target.classList.remove('copied'); }, 2000);
+          }).catch(err => console.error('Copy failed', err));
+      ">Kopiëren</button><code>
+php artisan serve
+</code></pre>
+
+        <p class="mt-4">
+          Open nu <code>routes/web.php</code>. Dit bestand bevat de URL's van je applicatie. Laten we een route aanpassen om data naar een view te sturen.
+        </p>
+
+        <h3 class="text-2xl mt-4 mb-2">Code: `routes/web.php`</h3>
+         <pre><button class="copy-button" x-data="{}" @click="
+          const codeElement = $event.target.closest('pre').querySelector('code');
+          navigator.clipboard.writeText(codeElement.innerText).then(() => {
+              $event.target.innerText = 'Copied!';
+              $event.target.classList.add('copied');
+              setTimeout(() => { $event.target.innerText = 'Copy'; $event.target.classList.remove('copied'); }, 2000);
+          }).catch(err => console.error('Copy failed', err));
+      ">Kopiëren</button><code>
+use Illuminate\Support\Facades\Route;
+
+// De standaard route wijst naar de 'welcome' view
+Route::get('/', function () {
+    return view('welcome');
+});
+
+// Een nieuwe route die data doorgeeft aan een 'greeting' view
+Route::get('/groet', function () {
+    return view('greeting', ['name' => 'Laravel Beginner']);
+});
+</code></pre>
+        <p class="mt-4">
+          Maak een nieuw bestand <code>resources/views/greeting.blade.php</code>. De <code>.blade.php</code> extensie vertelt Laravel om deze view te verwerken met de Blade templating engine.
+        </p>
+        <h3 class="text-2xl mt-4 mb-2">Code: `resources/views/greeting.blade.php`</h3>
+         <pre><button class="copy-button" x-data="{}" @click="
+          const codeElement = $event.target.closest('pre').querySelector('code');
+          navigator.clipboard.writeText(codeElement.innerText).then(() => {
+              $event.target.innerText = 'Copied!';
+              $event.target.classList.add('copied');
+              setTimeout(() => { $event.target.innerText = 'Copy'; $event.target.classList.remove('copied'); }, 2000);
+          }).catch(err => console.error('Copy failed', err));
+      ">Kopiëren</button><code>
+&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;head&gt;
+    &lt;title&gt;Groet&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;h1&gt;Hallo, {{ $name }}!&lt;/h1&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
+        <p>
+          Bezoek `http://127.0.0.1:8000/groet` in je browser. Je ziet nu de begroeting met de naam die je in de route hebt meegegeven. Je hebt zojuist de basis van routing en views in Laravel geleerd!
+        </p>
+      </div>
+
+      <!-- Fase 2: Database & Eloquent ORM -->
+      <div class="stage-section" id="stage-2">
+        <h2 class="text-3xl mb-4">Fase 2: Database & Eloquent ORM</h2>
+        <p>
+          Een webapplicatie is zelden compleet zonder een database. Laravel maakt interactie met databases ongelooflijk eenvoudig via <strong>Eloquent ORM</strong>, waarmee je met databasetabellen kunt communiceren alsof het objecten zijn.
+        </p>
+
+        <h3 class="text-2xl mt-4 mb-2">Doelen:</h3>
+        <ul>
+          <li>Configureer je databaseverbinding in het `.env` bestand.</li>
+          <li>Maak een database-migratie om een `tasks` tabel te definiëren.</li>
+          <li>Creëer een Eloquent Model om met de `tasks` tabel te interageren.</li>
+          <li>Voer basis CRUD (Create, Read, Update, Delete) operaties uit.</li>
+        </ul>
+
+        <h3 class="text-2xl mt-4 mb-2">Instructies:</h3>
+        <ol class="list-decimal ml-6 mb-4">
+          <li>Open het `.env` bestand in de hoofdmap van je project en configureer je databasegegevens.</li>
+          <li>Gebruik de `artisan` command-line tool om een migratie en een model te maken.</li>
+          <li>Definieer de structuur van je tabel in het migratiebestand.</li>
+          <li>Voer de migratie uit om de tabel in de database aan te maken.</li>
+        </ol>
+
+        <h3 class="text-2xl mt-4 mb-2">Code: Maak Migratie en Model</h3>
+        <pre><button class="copy-button" x-data="{}" @click="
+          const codeElement = $event.target.closest('pre').querySelector('code');
+          navigator.clipboard.writeText(codeElement.innerText).then(() => {
+              $event.target.innerText = 'Copied!';
+              $event.target.classList.add('copied');
+              setTimeout(() => { $event.target.innerText = 'Copy'; $event.target.classList.remove('copied'); }, 2000);
+          }).catch(err => console.error('Copy failed', err));
+      ">Kopiëren</button><code>
+# Maak een Model 'Task' en tegelijkertijd een migratiebestand (-m)
+php artisan make:model Task -m
+</code></pre>
+        <p class="mt-4">
+          Open het nieuwe migratiebestand in `database/migrations/`. Pas de `up` methode aan om de kolommen voor de `tasks` tabel te definiëren.
+        </p>
+        <h3 class="text-2xl mt-4 mb-2">Code: Task Migratie</h3>
+        <pre><button class="copy-button" x-data="{}" @click="
+          const codeElement = $event.target.closest('pre').querySelector('code');
+          navigator.clipboard.writeText(codeElement.innerText).then(() => {
+              $event.target.innerText = 'Copied!';
+              $event.target.classList.add('copied');
+              setTimeout(() => { $event.target.innerText = 'Copy'; $event.target.classList.remove('copied'); }, 2000);
+          }).catch(err => console.error('Copy failed', err));
+      ">Kopiëren</button><code class="language-php">
+public function up(): void
+{
+    Schema::create('tasks', function (Blueprint $table) {
+        $table->id();
+        $table->string('title');
+        $table->text('description')->nullable();
+        $table->boolean('completed')->default(false);
+        $table->timestamps(); // Maakt created_at en updated_at kolommen
+    });
+}
+</code></pre>
+        <p class="mt-4">Voer de migratie uit om de tabel aan te maken:</p>
+        <pre><button class="copy-button" x-data="{}" @click="
+          const codeElement = $event.target.closest('pre').querySelector('code');
+          navigator.clipboard.writeText(codeElement.innerText).then(() => {
+              $event.target.innerText = 'Copied!';
+              $event.target.classList.add('copied');
+              setTimeout(() => { $event.target.innerText = 'Copy'; $event.target.classList.remove('copied'); }, 2000);
+          }).catch(err => console.error('Copy failed', err));
+      ">Kopiëren</button><code>
+php artisan migrate
+</code></pre>
+        <p>
+          Je hebt nu een `tasks` tabel! In de volgende fase gaan we deze tabel vullen en de data weergeven.
+        </p>
+      </div>
+
+      <!-- Fase 3: Controllers en CRUD -->
+      <div class="stage-section" id="stage-3">
+        <h2 class="text-3xl mb-4">
+          Fase 3: Controllers & Volledige CRUD
+        </h2>
+        <p>
+          Het is tijd om de logica uit de routes te halen en te verplaatsen naar <strong>Controllers</strong>. Dit is een kernprincipe van MVC dat je code georganiseerd en schaalbaar houdt. We bouwen een volledige CRUD-interface voor onze taken.
+        </p>
+
+        <h3 class="text-2xl mt-4 mb-2">Doelen:</h3>
+        <ul>
+          <li>Maak een `TaskController` met `artisan`.</li>
+          <li>Definieer resource-routes die automatisch linken naar controller-methoden.</li>
+          <li>Implementeer de logica voor het tonen, aanmaken, opslaan, bewerken en verwijderen van taken.</li>
+          <li>Leer hoe je formulieren verwerkt en data valideert.</li>
+        </ul>
+
+        <h3 class="text-2xl mt-4 mb-2">Code: Maak een Resource Controller</h3>
+        <pre>
+<button class="copy-button" x-data="{}" @click="
+    const codeElement = $event.target.closest('pre').querySelector('code');
+    navigator.clipboard.writeText(codeElement.innerText).then(() => {
+        $event.target.innerText = 'Copied!';
+        $event.target.classList.add('copied');
+        setTimeout(() => { $event.target.innerText = 'Copy'; $event.target.classList.remove('copied'); }, 2000);
+    }).catch(err => console.error('Copy failed', err));
+">Kopiëren</button><code>
+# De --resource flag maakt een controller met methoden voor alle CRUD-operaties
+php artisan make:controller TaskController --resource --model=Task
+</code></pre>
+        <p class="mt-4">
+          Vervang de losse routes in `routes/web.php` met één enkele resource route:
+        </p>
+        <h3 class="text-2xl mt-4 mb-2">Code: `routes/web.php`</h3>
+        <pre><button class="copy-button" x-data="{}" @click="
+          const codeElement = $event.target.closest('pre').querySelector('code');
+          navigator.clipboard.writeText(codeElement.innerText).then(() => {
+              $event.target.innerText = 'Copied!';
+              $event.target.classList.add('copied');
+              setTimeout(() => { $event.target.innerText = 'Copy'; $event.target.classList.remove('copied'); }, 2000);
+          }).catch(err => console.error('Copy failed', err));
+      ">Kopiëren</button><code class="language-php">
+use App\Http\Controllers\TaskController;
+
+Route::resource('tasks', TaskController::class);
+</code></pre>
+        <p class="mt-4">
+          Deze ene regel code maakt automatisch routes voor o.a. `tasks.index`, `tasks.create`, `tasks.store`, `tasks.show`, `tasks.edit`, `tasks.update` en `tasks.destroy`.
+        </p>
+        <h3 class="text-2xl mt-4 mb-2">Code: `app/Http/Controllers/TaskController.php` (Voorbeeld `index` en `store` methoden)</h3>
+        <pre><button class="copy-button" x-data="{}" @click="
+          const codeElement = $event.target.closest('pre').querySelector('code');
+          navigator.clipboard.writeText(codeElement.innerText).then(() => {
+              $event.target.innerText = 'Copied!';
+              $event.target.classList.add('copied');
+              setTimeout(() => { $event.target.innerText = 'Copy'; $event.target.classList.remove('copied'); }, 2000);
+          }).catch(err => console.error('Copy failed', err));
+      ">Kopiëren</button><code class="language-php">
+use App\Models\Task;
+use Illuminate\Http\Request;
+
+class TaskController extends Controller
+{
+    /**
+     * Toon een lijst van de bron.
+     */
+    public function index()
+    {
+        $tasks = Task::latest()->get(); // Haal alle taken op, nieuwste eerst
+        return view('tasks.index', ['tasks' => $tasks]);
+    }
+
+    /**
+     * Sla een nieuw aangemaakte bron op in de opslag.
+     */
+    public function store(Request $request)
+    {
+        // Valideer de inkomende data
+        $validatedData = $request->validate([
+            'title' => 'required|max:255',
+        ]);
+
+        // Maak een nieuwe taak aan
+        Task::create($validatedData);
+
+        // Stuur de gebruiker terug naar de lijst met taken
+        return redirect()->route('tasks.index')->with('success', 'Taak succesvol aangemaakt!');
+    }
+
+    // ... andere resource-methoden (create, show, edit, update, destroy)
+}
+</code></pre>
+        <p>
+          Je moet nu de bijbehorende Blade-views maken (zoals `tasks/index.blade.php` en `tasks/create.blade.php`) om de taken weer te geven en een formulier te tonen om nieuwe taken toe te voegen.
+        </p>
+      </div>
+
+      <!-- Fase 4: Authenticatie & Relaties -->
+      <div class="stage-section" id="stage-4">
+        <h2 class="text-3xl mb-4">
+          Fase 4: Authenticatie & Relaties
+        </h2>
+        <p>
+          Laten we gebruikers toevoegen. De meeste applicaties hebben een manier nodig voor gebruikers om in te loggen en hun eigen data te beheren. Laravel biedt starter kits zoals <strong>Breeze</strong> of <strong>Jetstream</strong> om dit in minuten op te zetten. We zullen ook de relatie tussen een gebruiker en zijn taken definiëren.
+        </p>
+
+        <h3 class="text-2xl mt-4 mb-2">Doelen:</h3>
+        <ul>
+          <li>Installeer Laravel Breeze voor complete en eenvoudige authenticatie.</li>
+          <li>Beveilig routes zodat alleen ingelogde gebruikers er toegang toe hebben.</li>
+          <li>Voeg een `user_id` kolom toe aan de `tasks` tabel.</li>
+          <li>Definieer de `one-to-many` relatie tussen Gebruikers en Taken.</li>
+          <li>Zorg ervoor dat gebruikers alleen hun eigen taken kunnen zien en beheren.</li>
+        </ul>
+        <h3 class="text-2xl mt-4 mb-2">Instructies:</h3>
+        <ol class="list-decimal ml-6 mb-4">
+          <li>Installeer Breeze via Composer en voer de installatiecommando's uit.</li>
+          <li>Pas je routes aan om middleware te gebruiken die authenticatie vereist.</li>
+          <li>Maak een nieuwe migratie om de `tasks` tabel aan te passen.</li>
+          <li>Definieer de relaties in de `User` en `Task` modellen.</li>
+        </ol>
+
+        <h3 class="text-2xl mt-4 mb-2">Code: Installeer Laravel Breeze</h3>
+        <pre><button class="copy-button" x-data="{}" @click="
+          const codeElement = $event.target.closest('pre').querySelector('code');
+          navigator.clipboard.writeText(codeElement.innerText).then(() => {
+              $event.target.innerText = 'Copied!';
+              $event.target.classList.add('copied');
+              setTimeout(() => { $event.target.innerText = 'Copy'; $event.target.classList.remove('copied'); }, 2000);
+          }).catch(err => console.error('Copy failed', err));
+      ">Kopiëren</button><code>
+composer require laravel/breeze --dev
+php artisan breeze:install
+npm install && npm run dev
+php artisan migrate
+</code></pre>
+        <p class="mt-4">
+          Beveilig nu de taken-routes in `routes/web.php` met de `auth` middleware.
+        </p>
+        <h3 class="text-2xl mt-4 mb-2">Code: Beveiligde Routes</h3>
+        <pre><button class="copy-button" x-data="{}" @click="
+          const codeElement = $event.target.closest('pre').querySelector('code');
+          navigator.clipboard.writeText(codeElement.innerText).then(() => {
+              $event.target.innerText = 'Copied!';
+              $event.target.classList.add('copied');
+              setTimeout(() => { $event.target.innerText = 'Copy'; $event.target.classList.remove('copied'); }, 2000);
+          }).catch(err => console.error('Copy failed', err));
+      ">Kopiëren</button><code class="language-php">
+use App\Http\Controllers\TaskController;
+
+// Deze routes zijn nu alleen toegankelijk voor ingelogde gebruikers
+Route::middleware(['auth'])->group(function () {
+    Route::resource('tasks', TaskController::class);
+});
+
+// De authenticatieroutes van Breeze
+require __DIR__.'/auth.php';
+</code></pre>
+        <p class="mt-4">
+          Definieer vervolgens de relaties in je modellen. Een gebruiker kan meerdere taken hebben.
+        </p>
+        <h3 class="text-2xl mt-4 mb-2">Code: `app/Models/User.php`</h3>
+        <pre><button class="copy-button" x-data="{}" @click="
+          const codeElement = $event.target.closest('pre').querySelector('code');
+          navigator.clipboard.writeText(codeElement.innerText).then(() => {
+              $event.target.innerText = 'Copied!';
+              $event.target.classList.add('copied');
+              setTimeout(() => { $event.target.innerText = 'Copy'; $event.target.classList.remove('copied'); }, 2000);
+          }).catch(err => console.error('Copy failed', err));
+      ">Kopiëren</button><code class="language-php">
+public function tasks()
+{
+    return $this->hasMany(Task::class);
+}
+</code></pre>
+        <p class="mt-4">
+          Een taak behoort tot één gebruiker.
+        </p>
+        <h3 class="text-2xl mt-4 mb-2">Code: `app/Models/Task.php`</h3>
+        <pre><button class="copy-button" x-data="{}" @click="
+          const codeElement = $event.target.closest('pre').querySelector('code');
+          navigator.clipboard.writeText(codeElement.innerText).then(() => {
+              $event.target.innerText = 'Copied!';
+              $event.target.classList.add('copied');
+              setTimeout(() => { $event.target.innerText = 'Copy'; $event.target.classList.remove('copied'); }, 2000);
+          }).catch(err => console.error('Copy failed', err));
+      ">Kopiëren</button><code class="language-php">
+public function user()
+{
+    return $this->belongsTo(User::class);
+}
+</code></pre>
+        <p>Pas je `TaskController` aan om alleen taken van de ingelogde gebruiker op te halen en op te slaan.</p>
+      </div>
+
+      <!-- Fase 5: Geavanceerde Concepten -->
+      <div class="stage-section" id="stage-5">
+        <h2 class="text-3xl mb-4">
+          Fase 5: Geavanceerde Concepten & Professionalisering
+        </h2>
+        <p>
+          Je hebt nu een solide basis. Het is tijd om je vaardigheden naar een professioneel niveau te tillen door geavanceerde, maar essentiële, Laravel-functies te leren.
+        </p>
+
+        <h3 class="text-2xl mt-4 mb-2">Doelen:</h3>
+        <ul>
+          <li><strong>API's & Sanctum:</strong> Bouw een simpele API voor je taken en beveilig deze met Laravel Sanctum.</li>
+          <li><strong>Queues & Jobs:</strong> Verplaats langdurige taken (zoals het versturen van e-mails) naar de achtergrond met queues voor een snellere gebruikerservaring.</li>
+          <li><strong>Testing:</strong> Schrijf geautomatiseerde tests (Unit & Feature) met Pest of PHPUnit om de betrouwbaarheid van je code te garanderen.</li>
+          <li><strong>Service Container:</strong> Begrijp de kern van Laravel: de Service Container, en leer over Dependency Injection en Facades.</li>
+          <li><strong>Deployment:</strong> Leer de basisprincipes van het deployen van een Laravel-applicatie naar een echte server.</li>
+        </ul>
+
+        <h3 class="text-2xl mt-4 mb-2">Voorbeeld: Een API Route</h3>
+        <p>
+          API-routes worden gedefinieerd in `routes/api.php`. Ze zijn standaard stateless.
+        </p>
+        <pre><button class="copy-button" x-data="{}" @click="
+          const codeElement = $event.target.closest('pre').querySelector('code');
+          navigator.clipboard.writeText(codeElement.innerText).then(() => {
+              $event.target.innerText = 'Copied!';
+              $event.target.classList.add('copied');
+              setTimeout(() => { $event.target.innerText = 'Copy'; $event.target.classList.remove('copied'); }, 2000);
+          }).catch(err => console.error('Copy failed', err));
+      ">Kopiëren</button><code class="language-php">
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Route;
+
+// Deze route is toegankelijk via /api/user
+Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
+    return $request->user();
+});
+</code></pre>
+        <h3 class="text-2xl mt-4 mb-2">Voorbeeld: Een Achtergrond Job</h3>
+        <p>
+          Maak een job die een taakrapport naar een gebruiker mailt.
+        </p>
+        <pre><button class="copy-button" x-data="{}" @click="
+          const codeElement = $event.target.closest('pre').querySelector('code');
+          navigator.clipboard.writeText(codeElement.innerText).then(() => {
+              $event.target.innerText = 'Copied!';
+              $event.target.classList.add('copied');
+              setTimeout(() => { $event.target.innerText = 'Copy'; $event.target.classList.remove('copied'); }, 2000);
+          }).catch(err => console.error('Copy failed', err));
+      ">Kopiëren</button><code>
+php artisan make:job SendTaskReport
+</code></pre>
+        <p>In je controller kun je deze job 'dispatchen' naar de queue:</p>
+        <pre><button class="copy-button" x-data="{}" @click="
+          const codeElement = $event.target.closest('pre').querySelector('code');
+          navigator.clipboard.writeText(codeElement.innerText).then(() => {
+              $event.target.innerText = 'Copied!';
+              $event.target.classList.add('copied');
+              setTimeout(() => { $event.target.innerText = 'Copy'; $event.target.classList.remove('copied'); }, 2000);
+          }).catch(err => console.error('Copy failed', err));
+      ">Kopiëren</button><code class="language-php">
+use App\Jobs\SendTaskReport;
+
+// ... in een controller methode
+SendTaskReport::dispatch(auth()->user());
+</code></pre>
+        <p>
+          De logica voor het versturen van de e-mail plaats je in de `handle()` methode van de `SendTaskReport` job. De gebruiker hoeft niet te wachten tot de e-mail is verzonden.
+        </p>
+      </div>
+
+      <h2 class="text-3xl mt-12 mb-4">Conclusie & Volgende Stappen</h2>
+      <p>
+        Gefeliciteerd! Je hebt een reis gemaakt van de absolute basis tot de geavanceerde concepten van Laravel. Je hebt nu de kennis om robuuste, moderne en professionele webapplicaties te bouwen.
+      </p>
+      <p>Vanaf hier kun je:</p>
+      <ul>
+        <li>Je verdiepen in frontend-integratie met Vue.js of React, eventueel met Laravel Inertia.</li>
+        <li>Het Laravel Ecosysteem verkennen, met tools als Cashier voor betalingen, Scout voor full-text search en Echo voor real-time events.</li>
+        <li>Je eigen Laravel packages ontwikkelen.</li>
+        <li>Bijdragen aan de open-source community.</li>
+        <li>Complexe applicaties bouwen zoals een e-commerce platform, een social network of een content management systeem.</li>
+      </ul>
+      <p>De sleutel is consistentie. Blijf elke dag coderen en bouwen, en je zult versteld staan van je vooruitgang.</p>
+    </div>
+    <!-- Einde Container -->
+  </body>
+</html>
