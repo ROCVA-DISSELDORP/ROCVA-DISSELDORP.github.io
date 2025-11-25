@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>PHP Speed-Run: Get Ready for the Todoist Tutorial</title>
+    <!-- Include Tailwind CSS via CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Include Alpine.js via CDN for button interactivity -->
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <style>
+        body { font-family: sans-serif; line-height: 1.6; padding: 20px; background-color: #f7fafc; }
+        h1, h2, h3 { margin-bottom: 0.5em; font-weight: 600; }
+        h1 { font-size: 2.25rem; }
+        h2 { font-size: 1.875rem; border-bottom: 1px solid #e2e8f0; padding-bottom: 0.2em; margin-top: 1.5em; }
+        h3 { font-size: 1.5rem; margin-top: 1em; }
+        p { margin-bottom: 1em; }
+        code { background-color: #edf2f7; padding: 0.2em 0.4em; border-radius: 3px; font-family: monospace; color: #4a5568; }
+        pre { background-color: #2d3748; color: #e2e8f0; padding: 1em; border-radius: 5px; overflow-x: auto; margin-bottom: 1em; position: relative; }
+        pre code { background-color: transparent !important; color: inherit !important; padding: 0 !important; border-radius: 0 !important; font-family: monospace; }
+        .stage-section { background-color: #ffffff; padding: 20px; border-radius: 8px; box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06); margin-bottom: 2em; }
+        ul { list-style: disc; margin-left: 20px; margin-bottom: 1em; }
+        .highlight { background-color: #fefcbf; padding: 2px 4px; border-radius: 3px; }
+        .note { background-color: #e6f4ff; border-left: 4px solid #3b82f6; padding: 1em; margin-top: 1em; }
+        
+        /* Style for the copy button */
+        pre .copy-button { position: absolute; top: 0.5rem; right: 0.5rem; background-color: #4a5568; color: #e2e8f0; border: none; padding: 0.25rem 0.5rem; font-size: 0.75rem; border-radius: 0.25rem; cursor: pointer; opacity: 0.7; transition: opacity 0.2s ease-in-out, background-color 0.2s ease-in-out; }
+        pre:hover .copy-button { opacity: 1; }
+        pre .copy-button:hover { background-color: #718096; }
+        pre .copy-button.copied { background-color: #48bb78; color: white; }
+    </style>
+</head>
+<body class="bg-gray-100 text-gray-800">
+<div class="container mx-auto max-w-4xl">
+
+    <h1 class="text-4xl font-bold text-center text-blue-600 mb-8">
+        PHP Crash Course: Get Ready for the Todoist Tutorial
+    </h1>
+
+    <p class="text-lg text-center mb-6">
+        This is a high-speed introduction to PHP for absolute beginners. It covers only what you need to know to understand the "Build Your Own Todoist Clone" project.
+    </p>
+
+    <div class="note">
+        <p class="font-bold">How PHP Works</p>
+        <p>PHP is a <span class="highlight">server-side</span> language. This means your computer (the server, via XAMPP) runs the PHP code first. It generates a plain HTML page and sends that final HTML to your browser. Your browser never sees the PHP code itself.</p>
+    </div>
+
+    <!-- Part 1: The Absolute Basics -->
+    <div class="stage-section" id="part-1">
+        <h2 class="text-3xl mb-4">Part 1: Basic Syntax & Variables</h2>
+        <p>All PHP code lives inside special tags and uses variables to store information.</p>
+
+        <h3 class="text-2xl mt-4 mb-2">PHP Tags & Output</h3>
+        <p>PHP code must be wrapped in <code>&lt;?php ... ?&gt;</code>. The <code>echo</code> command is used to print text directly into the HTML.</p>
+        <pre><button class="copy-button" x-data="{}" @click="
+          const codeElement = $event.target.closest('pre').querySelector('code');
+          navigator.clipboard.writeText(codeElement.innerText).then(() => {
+              $event.target.innerText = 'Copied!';
+              $event.target.classList.add('copied');
+              setTimeout(() => { $event.target.innerText = 'Copy'; $event.target.classList.remove('copied'); }, 2000);
+          }).catch(err => console.error('Copy failed', err));
+      ">Copy</button><code class="language-php"><span class="text-gray-400">&lt;h1&gt;</span><span class="text-pink-400">&lt;?php</span> <span class="text-purple-400">echo</span> <span class="text-orange-400">"Hello from PHP!"</span><span class="text-pink-400">;</span> <span class="text-pink-400">?&gt;</span><span class="text-gray-400">&lt;/h1&gt;</span>
+</code></pre>
+
+        <h3 class="text-2xl mt-4 mb-2">Variables</h3>
+        <p>Variables store data. In PHP, they <span class="highlight">must start with a `$` sign</span>.</p>
+        <pre><button class="copy-button" x-data="{}" @click="
+          const codeElement = $event.target.closest('pre').querySelector('code');
+          navigator.clipboard.writeText(codeElement.innerText).then(() => {
+              $event.target.innerText = 'Copied!';
+              $event.target.classList.add('copied');
+              setTimeout(() => { $event.target.innerText = 'Copy'; $event.target.classList.remove('copied'); }, 2000);
+          }).catch(err => console.error('Copy failed', err));
+      ">Copy</button><code class="language-php"><span class="text-pink-400">&lt;?php</span>
+<span class="text-gray-500">// Variables to store different data types</span>
+<span class="text-cyan-400">$username</span> <span class="text-pink-400">=</span> <span class="text-orange-400">"Alex"</span><span class="text-pink-400">;</span> <span class="text-gray-500">// String (text)</span>
+<span class="text-cyan-400">$taskCount</span> <span class="text-pink-400">=</span> <span class="text-teal-300">5</span><span class="text-pink-400">;</span>     <span class="text-gray-500">// Integer (number)</span>
+<span class="text-cyan-400">$isComplete</span> <span class="text-pink-400">=</span> <span class="text-purple-400">false</span><span class="text-pink-400">;</span> <span class="text-gray-500">// Boolean (true or false)</span>
+
+<span class="text-purple-400">echo</span> <span class="text-orange-400">"Welcome, "</span> <span class="text-pink-400">.</span> <span class="text-cyan-400">$username</span><span class="text-pink-400">;</span> <span class="text-gray-500">// The dot (.) joins strings together</span>
+<span class="text-pink-400">?&gt;</span>
+</code></pre>
+    </div>
+
+    <!-- Part 2: Arrays -->
+    <div class="stage-section" id="part-2">
+        <h2 class="text-3xl mb-4">Part 2: Storing Lists of Data with Arrays</h2>
+        <p>Arrays are special variables that can hold more than one value. This is critical for managing our list of tasks.</p>
+
+        <h3 class="text-2xl mt-4 mb-2">Associative Arrays</h3>
+        <p>
+            While some arrays just store a list of items, the Todoist tutorial uses <span class="highlight">associative arrays</span>. Think of them as a single item with multiple, named properties. This is like a JavaScript object.
+        </p>
+        <pre><button class="copy-button" x-data="{}" @click="
+          const codeElement = $event.target.closest('pre').querySelector('code');
+          navigator.clipboard.writeText(codeElement.innerText).then(() => {
+              $event.target.innerText = 'Copied!';
+              $event.target.classList.add('copied');
+              setTimeout(() => { $event.target.innerText = 'Copy'; $event.target.classList.remove('copied'); }, 2000);
+          }).catch(err => console.error('Copy failed', err));
+      ">Copy</button><code class="language-php"><span class="text-pink-400">&lt;?php</span>
+<span class="text-gray-500">// This represents ONE task</span>
+<span class="text-cyan-400">$task</span> <span class="text-pink-400">=</span> <span class="text-yellow-300">[</span>
+    <span class="text-orange-400">'id'</span> <span class="text-pink-400">=&gt;</span> <span class="text-teal-300">1</span><span class="text-pink-400">,</span>
+    <span class="text-orange-400">'title'</span> <span class="text-pink-400">=&gt;</span> <span class="text-orange-400">'Buy milk'</span><span class="text-pink-400">,</span>
+    <span class="text-orange-400">'completed'</span> <span class="text-pink-400">=&gt;</span> <span class="text-purple-400">true</span>
+<span class="text-yellow-300">]</span><span class="text-pink-400">;</span>
+
+<span class="text-gray-500">// To access a value, you use its key</span>
+<span class="text-purple-400">echo</span> <span class="text-cyan-400">$task</span><span class="text-yellow-300">[</span><span class="text-orange-400">'title'</span><span class="text-yellow-300">]</span><span class="text-pink-400">;</span> <span class="text-gray-500">// This will print "Buy milk"</span>
+<span class="text-pink-400">?&gt;</span>
+</code></pre>
+
+        <h3 class="text-2xl mt-4 mb-2">An Array of Arrays</h3>
+        <p>To create our full to-do list, we'll have an array where each item is itself an associative array.</p>
+        <pre><button class="copy-button" x-data="{}" @click="
+          const codeElement = $event.target.closest('pre').querySelector('code');
+          navigator.clipboard.writeText(codeElement.innerText).then(() => {
+              $event.target.innerText = 'Copied!';
+              $event.target.classList.add('copied');
+              setTimeout(() => { $event.target.innerText = 'Copy'; $event.target.classList.remove('copied'); }, 2000);
+          }).catch(err => console.error('Copy failed', err));
+      ">Copy</button><code class="language-php"><span class="text-pink-400">&lt;?php</span>
+<span class="text-cyan-400">$tasks</span> <span class="text-pink-400">=</span> <span class="text-yellow-300">[</span>
+    <span class="text-yellow-300">[</span><span class="text-orange-400">'id'</span> <span class="text-pink-400">=&gt;</span> <span class="text-teal-300">1</span><span class="text-pink-400">,</span> <span class="text-orange-400">'title'</span> <span class="text-pink-400">=&gt;</span> <span class="text-orange-400">'Buy milk'</span><span class="text-pink-400">,</span> <span class="text-orange-400">'completed'</span> <span class="text-pink-400">=&gt;</span> <span class="text-purple-400">true</span><span class="text-yellow-300">]</span><span class="text-pink-400">,</span>
+    <span class="text-yellow-300">[</span><span class="text-orange-400">'id'</span> <span class="text-pink-400">=&gt;</span> <span class="text-teal-300">2</span><span class="text-pink-400">,</span> <span class="text-orange-400">'title'</span> <span class="text-pink-400">=&gt;</span> <span class="text-orange-400">'Learn PHP'</span><span class="text-pink-400">,</span> <span class="text-orange-400">'completed'</span> <span class="text-pink-400">=&gt;</span> <span class="text-purple-400">false</span><span class="text-yellow-300">]</span><span class="text-pink-400">,</span>
+    <span class="text-yellow-300">[</span><span class="text-orange-400">'id'</span> <span class="text-pink-400">=&gt;</span> <span class="text-teal-300">3</span><span class="text-pink-400">,</span> <span class="text-orange-400">'title'</span> <span class="text-pink-400">=&gt;</span> <span class="text-orange-400">'Build a clone'</span><span class="text-pink-400">,</span> <span class="text-orange-400">'completed'</span> <span class="text-pink-400">=&gt;</span> <span class="text-purple-400">false</span><span class="text-yellow-300">]</span>
+<span class="text-yellow-300">]</span><span class="text-pink-400">;</span>
+<span class="text-pink-400">?&gt;</span>
+</code></pre>
+    </div>
+
+    <!-- Part 3: Control Structures -->
+    <div class="stage-section" id="part-3">
+        <h2 class="text-3xl mb-4">Part 3: Loops & Conditionals</h2>
+        <p>Control structures let us repeat actions and make decisions.</p>
+
+        <h3 class="text-2xl mt-4 mb-2">The `foreach` Loop</h3>
+        <p>This is the perfect tool to go through our `$tasks` array and display each one.</p>
+        <pre><button class="copy-button" x-data="{}" @click="
+          const codeElement = $event.target.closest('pre').querySelector('code');
+          navigator.clipboard.writeText(codeElement.innerText).then(() => {
+              $event.target.innerText = 'Copied!';
+              $event.target.classList.add('copied');
+              setTimeout(() => { $event.target.innerText = 'Copy'; $event.target.classList.remove('copied'); }, 2000);
+          }).catch(err => console.error('Copy failed', err));
+      ">Copy</button><code class="language-php"><span class="text-gray-400">&lt;ul&gt;</span>
+    <span class="text-pink-400">&lt;?php</span> <span class="text-purple-400">foreach</span> <span class="text-yellow-300">(</span><span class="text-cyan-400">$tasks</span> <span class="text-purple-400">as</span> <span class="text-cyan-400">$task</span><span class="text-yellow-300">)</span><span class="text-pink-400">:</span> <span class="text-pink-400">?&gt;</span>
+        <span class="text-gray-400">&lt;li&gt;</span>
+            <span class="text-pink-400">&lt;?php</span> <span class="text-purple-400">echo</span> <span class="text-cyan-400">$task</span><span class="text-yellow-300">[</span><span class="text-orange-400">'title'</span><span class="text-yellow-300">]</span><span class="text-pink-400">;</span> <span class="text-pink-400">?&gt;</span>
+        <span class="text-gray-400">&lt;/li&gt;</span>
+    <span class="text-pink-400">&lt;?php</span> <span class="text-purple-400">endforeach</span><span class="text-pink-400">;</span> <span class="text-pink-400">?&gt;</span>
+<span class="text-gray-400">&lt;/ul&gt;</span>
+</code></pre>
+
+        <h3 class="text-2xl mt-4 mb-2">The `if`/`else` Statement</h3>
+        <p>This lets us do something conditionally. For example, add a "line-through" style if a task is complete.</p>
+        <pre><button class="copy-button" x-data="{}" @click="
+          const codeElement = $event.target.closest('pre').querySelector('code');
+          navigator.clipboard.writeText(codeElement.innerText).then(() => {
+              $event.target.innerText = 'Copied!';
+              $event.target.classList.add('copied');
+              setTimeout(() => { $event.target.innerText = 'Copy'; $event.target.classList.remove('copied'); }, 2000);
+          }).catch(err => console.error('Copy failed', err));
+      ">Copy</button><code class="language-php"><span class="text-pink-400">&lt;?php</span> <span class="text-purple-400">foreach</span> <span class="text-yellow-300">(</span><span class="text-cyan-400">$tasks</span> <span class="text-purple-400">as</span> <span class="text-cyan-400">$task</span><span class="text-yellow-300">)</span><span class="text-pink-400">:</span> <span class="text-pink-400">?&gt;</span>
+    <span class="text-gray-400">&lt;li&gt;</span>
+        <span class="text-gray-400">&lt;span</span> <span class="text-lime-400">class</span>=<span class="text-orange-400">"&lt;?php</span> <span class="text-purple-400">if</span> <span class="text-yellow-300">(</span><span class="text-cyan-400">$task</span><span class="text-yellow-300">[</span><span class="text-orange-400">'completed'</span><span class="text-yellow-300">]</span><span class="text-yellow-300">)</span> <span class="text-yellow-300">{</span> <span class="text-purple-400">echo</span> <span class="text-orange-400">'line-through'</span><span class="text-pink-400">;</span> <span class="text-yellow-300">}</span> <span class="text-pink-400">?&gt;"</span><span class="text-gray-400">&gt;</span>
+            <span class="text-pink-400">&lt;?php</span> <span class="text-purple-400">echo</span> <span class="text-cyan-400">$task</span><span class="text-yellow-300">[</span><span class="text-orange-400">'title'</span><span class="text-yellow-300">]</span><span class="text-pink-400">;</span> <span class="text-pink-400">?&gt;</span>
+        <span class="text-gray-400">&lt;/span&gt;</span>
+    <span class="text-gray-400">&lt;/li&gt;</span>
+<span class="text-pink-400">&lt;?php</span> <span class="text-purple-400">endforeach</span><span class="text-pink-400">;</span> <span class="text-pink-400">?&gt;</span>
+</code></pre>
+    </div>
+
+    <!-- Part 4: Handling Forms -->
+    <div class="stage-section" id="part-4">
+        <h2 class="text-3xl mb-4">Part 4: Handling User Input from Forms</h2>
+        <p>PHP comes alive when it processes data submitted from an HTML form.</p>
+
+        <h3 class="text-2xl mt-4 mb-2">Superglobals: `$_POST` and `$_SERVER`</h3>
+        <p>PHP has special, built-in variables (called superglobals) that give you information about the request. The two you need to know are:</p>
+        <ul>
+            <li><code>$_SERVER['REQUEST_METHOD']</code>: Tells you if the page was loaded normally ('GET') or if a form was submitted ('POST').</li>
+            <li><code>$_POST</code>: An associative array containing all the data from a submitted form. The keys are the `name` attributes of your input fields.</li>
+        </ul>
+        <pre><button class="copy-button" x-data="{}" @click="
+          const codeElement = $event.target.closest('pre').querySelector('code');
+          navigator.clipboard.writeText(codeElement.innerText).then(() => {
+              $event.target.innerText = 'Copied!';
+              $event.target.classList.add('copied');
+              setTimeout(() => { $event.target.innerText = 'Copy'; $event.target.classList.remove('copied'); }, 2000);
+          }).catch(err => console.error('Copy failed', err));
+      ">Copy</button><code class="language-php"><span class="text-pink-400">&lt;?php</span>
+<span class="text-gray-500">// This code goes at the TOP of your PHP file</span>
+
+<span class="text-gray-500">// Check if a form was submitted to this page</span>
+<span class="text-purple-400">if</span> <span class="text-yellow-300">(</span><span class="text-cyan-400">$_SERVER</span><span class="text-yellow-300">[</span><span class="text-orange-400">'REQUEST_METHOD'</span><span class="text-yellow-300">]</span> <span class="text-pink-400">===</span> <span class="text-orange-400">'POST'</span><span class="text-yellow-300">)</span> <span class="text-yellow-300">{</span>
+    <span class="text-gray-500">// Get the value from an input field named "task_title"</span>
+    <span class="text-cyan-400">$newTaskTitle</span> <span class="text-pink-400">=</span> <span class="text-cyan-400">$_POST</span><span class="text-yellow-300">[</span><span class="text-orange-400">'task_title'</span><span class="text-yellow-300">]</span><span class="text-pink-400">;</span>
+
+    <span class="text-gray-500">// Now you can process this data (e.g., add it to the database)</span>
+    <span class="text-purple-400">echo</span> <span class="text-orange-400">"You added: "</span> <span class="text-pink-400">.</span> <span class="text-yellow-300">htmlspecialchars</span><span class="text-yellow-300">(</span><span class="text-cyan-400">$newTaskTitle</span><span class="text-yellow-300">)</span><span class="text-pink-400">;</span> <span class="text-gray-500">// IMPORTANT: Use htmlspecialchars!</span>
+<span class="text-yellow-300">}</span>
+<span class="text-pink-400">?&gt;</span>
+
+<span class="text-gray-500">&lt;!-- This HTML form sends data to the PHP code above --&gt;</span>
+<span class="text-gray-400">&lt;form</span> <span class="text-lime-400">action</span>=<span class="text-orange-400">"index.php"</span> <span class="text-lime-400">method</span>=<span class="text-orange-400">"POST"</span><span class="text-gray-400">&gt;</span>
+    <span class="text-gray-400">&lt;input</span> <span class="text-lime-400">type</span>=<span class="text-orange-400">"text"</span> <span class="text-lime-400">name</span>=<span class="text-orange-400">"task_title"</span> <span class="text-lime-400">placeholder</span>=<span class="text-orange-400">"Add a new task"</span><span class="text-gray-400">&gt;</span>
+    <span class="text-gray-400">&lt;button</span> <span class="text-lime-400">type</span>=<span class="text-orange-400">"submit"</span><span class="text-gray-400">&gt;</span>Add Task<span class="text-gray-400">&lt;/button&gt;</span>
+<span class="text-gray-400">&lt;/form&gt;</span>
+</code></pre>
+        <p class="note"><strong>Security First!</strong> Always wrap user-submitted data in <code>htmlspecialchars()</code> before `echo`-ing it. This prevents a type of attack called Cross-Site Scripting (XSS).</p>
+    </div>
+
+    <!-- Part 5: Organizing Code -->
+    <div class="stage-section" id="part-5">
+        <h2 class="text-3xl mb-4">Part 5: Organizing Code with Functions & Includes</h2>
+        <p>As your project grows, you can't keep all the code in one file.</p>
+
+        <h3 class="text-2xl mt-4 mb-2">Functions</h3>
+        <p>Functions are reusable blocks of code. You define them once and can call them many times.</p>
+        <pre><button class="copy-button" x-data="{}" @click="
+          const codeElement = $event.target.closest('pre').querySelector('code');
+          navigator.clipboard.writeText(codeElement.innerText).then(() => {
+              $event.target.innerText = 'Copied!';
+              $event.target.classList.add('copied');
+              setTimeout(() => { $event.target.innerText = 'Copy'; $event.target.classList.remove('copied'); }, 2000);
+          }).catch(err => console.error('Copy failed', err));
+      ">Copy</button><code class="language-php"><span class="text-pink-400">&lt;?php</span>
+<span class="text-gray-500">// Define a function</span>
+<span class="text-purple-400">function</span> <span class="text-yellow-300">connectToDatabase</span><span class="text-yellow-300">()</span> <span class="text-yellow-300">{</span>
+    <span class="text-gray-500">// ... connection logic would go here ...</span>
+    <span class="text-purple-400">return</span> <span class="text-orange-400">"Connected!"</span><span class="text-pink-400">;</span>
+<span class="text-yellow-300">}</span>
+
+<span class="text-gray-500">// Call the function</span>
+<span class="text-cyan-400">$status</span> <span class="text-pink-400">=</span> <span class="text-yellow-300">connectToDatabase</span><span class="text-yellow-300">()</span><span class="text-pink-400">;</span>
+<span class="text-purple-400">echo</span> <span class="text-cyan-400">$status</span><span class="text-pink-400">;</span> <span class="text-gray-500">// Prints "Connected!"</span>
+<span class="text-pink-400">?&gt;</span>
+</code></pre>
+
+        <h3 class="text-2xl mt-4 mb-2">Includes: `require_once`</h3>
+        <p>This command lets you pull code from another file into your current file. The Todoist tutorial uses this to separate database configuration, functions, and the main HTML page.</p>
+        <pre><button class="copy-button" x-data="{}" @click="
+          const codeElement = $event.target.closest('pre').querySelector('code');
+          navigator.clipboard.writeText(codeElement.innerText).then(() => {
+              $event.target.innerText = 'Copied!';
+              $event.target.classList.add('copied');
+              setTimeout(() => { $event.target.innerText = 'Copy'; $event.target.classList.remove('copied'); }, 2000);
+          }).catch(err => console.error('Copy failed', err));
+      ">Copy</button><code class="language-php"><span class="text-gray-500">// In a file named 'functions.php':</span>
+<span class="text-purple-400">function</span> <span class="text-yellow-300">sayHello</span><span class="text-yellow-300">()</span> <span class="text-yellow-300">{</span> <span class="text-purple-400">echo</span> <span class="text-orange-400">"Hello!"</span><span class="text-pink-400">;</span> <span class="text-yellow-300">}</span>
+
+<span class="text-gray-500">// In your main 'index.php' file:</span>
+<span class="text-purple-400">require_once</span> <span class="text-orange-400">'functions.php'</span><span class="text-pink-400">;</span>
+
+<span class="text-yellow-300">sayHello</span><span class="text-yellow-300">()</span><span class="text-pink-400">;</span> <span class="text-gray-500">// This works because the function was included</span>
+</code></pre>
+    </div>
+    
+    <!-- Part 6: Databases -->
+    <div class="stage-section" id="part-6">
+        <h2 class="text-3xl mb-4">Part 6: Talking to a Database (MySQL)</h2>
+        <p>This is the most critical part: making your data permanent.</p>
+
+        <h3 class="text-2xl mt-4 mb-2">The 3 Steps of a Database Query</h3>
+        <ol>
+            <li><strong>Connect:</strong> Establish a connection to the MySQL server. The tutorial puts this in a function.</li>
+            <li><strong>Query:</strong> Write an SQL command (as a string) to tell the database what to do (e.g., SELECT, INSERT, UPDATE, DELETE).</li>
+            <li><strong>Process/Close:</strong> If you're reading data, you need to fetch the results. Afterward, close the connection.</li>
+        </ol>
+
+        <h3 class="text-2xl mt-4 mb-2">Example: Reading Data</h3>
+        <pre><button class="copy-button" x-data="{}" @click="
+          const codeElement = $event.target.closest('pre').querySelector('code');
+          navigator.clipboard.writeText(codeElement.innerText).then(() => {
+              $event.target.innerText = 'Copied!';
+              $event.target.classList.add('copied');
+              setTimeout(() => { $event.target.innerText = 'Copy'; $event.target.classList.remove('copied'); }, 2000);
+          }).catch(err => console.error('Copy failed', err));
+      ">Copy</button><code class="language-php"><span class="text-pink-400">&lt;?php</span>
+<span class="text-gray-500">// 1. Connect (details from the tutorial's database.php)</span>
+<span class="text-cyan-400">$conn</span> <span class="text-pink-400">=</span> <span class="text-purple-400">new</span> <span class="text-yellow-300">mysqli</span><span class="text-yellow-300">(</span><span class="text-orange-400">'localhost'</span><span class="text-pink-400">,</span> <span class="text-orange-400">'root'</span><span class="text-pink-400">,</span> <span class="text-orange-400">''</span><span class="text-pink-400">,</span> <span class="text-orange-400">'todoist_clone_db'</span><span class="text-yellow-300">)</span><span class="text-pink-400">;</span>
+
+<span class="text-gray-500">// 2. Query</span>
+<span class="text-cyan-400">$sql</span> <span class="text-pink-400">=</span> <span class="text-orange-400">"SELECT id, title FROM tasks"</span><span class="text-pink-400">;</span>
+<span class="text-cyan-400">$result</span> <span class="text-pink-400">=</span> <span class="text-cyan-400">$conn</span><span class="text-pink-400">-&gt;</span><span class="text-yellow-300">query</span><span class="text-yellow-300">(</span><span class="text-cyan-400">$sql</span><span class="text-yellow-300">)</span><span class="text-pink-400">;</span>
+
+<span class="text-gray-500">// 3. Process</span>
+<span class="text-cyan-400">$tasks</span> <span class="text-pink-400">=</span> <span class="text-cyan-400">$result</span><span class="text-pink-400">-&gt;</span><span class="text-yellow-300">fetch_all</span><span class="text-yellow-300">(</span><span class="text-lime-400">MYSQLI_ASSOC</span><span class="text-yellow-300">)</span><span class="text-pink-400">;</span>
+
+<span class="text-gray-500">// Now $tasks is an array just like the one in Part 2, but from the database!</span>
+<span class="text-yellow-300">print_r</span><span class="text-yellow-300">(</span><span class="text-cyan-400">$tasks</span><span class="text-yellow-300">)</span><span class="text-pink-400">;</span> <span class="text-gray-500">// A useful function to inspect variables</span>
+
+<span class="text-cyan-400">$conn</span><span class="text-pink-400">-&gt;</span><span class="text-yellow-300">close</span><span class="text-yellow-300">()</span><span class="text-pink-400">;</span>
+<span class="text-pink-400">?&gt;</span>
+</code></pre>
+        <p class="note"><strong>The Security Solution: Prepared Statements.</strong> The tutorial later switches to something called "prepared statements" (using `prepare`, `bind_param`, `execute`). You don't need to be an expert, just know this: <span class="highlight">it's the modern, secure way to run database queries that involve user input</span>, and it prevents a major vulnerability called SQL Injection.</p>
+    </div>
+
+    <!-- Part 7: Sessions -->
+    <div class="stage-section" id="part-7">
+        <h2 class="text-3xl mb-4">Part 7: Remembering Users with Sessions</h2>
+        <p>How does the website know who you are on different pages? With sessions!</p>
+
+        <p>A session is a way to store information (like a user's ID) and make it available across all your pages. The process is simple:</p>
+        <ol>
+            <li>Start the session with <code>session_start();</code> at the <span class="highlight">very top</span> of every page that needs it.</li>
+            <li>Store data in the <code>$_SESSION</code> superglobal array.</li>
+            <li>Check that data on other pages to see if the user is logged in.</li>
+        </ol>
+        <pre><button class="copy-button" x-data="{}" @click="
+          const codeElement = $event.target.closest('pre').querySelector('code');
+          navigator.clipboard.writeText(codeElement.innerText).then(() => {
+              $event.target.innerText = 'Copied!';
+              $event.target.classList.add('copied');
+              setTimeout(() => { $event.target.innerText = 'Copy'; $event.target.classList.remove('copied'); }, 2000);
+          }).catch(err => console.error('Copy failed', err));
+      ">Copy</button><code class="language-php"><span class="text-pink-400">&lt;?php</span>
+<span class="text-gray-500">// In login.php, after a successful login:</span>
+<span class="text-yellow-300">session_start</span><span class="text-yellow-300">()</span><span class="text-pink-400">;</span>
+<span class="text-cyan-400">$_SESSION</span><span class="text-yellow-300">[</span><span class="text-orange-400">'user_id'</span><span class="text-yellow-300">]</span> <span class="text-pink-400">=</span> <span class="text-teal-300">123</span><span class="text-pink-400">;</span> <span class="text-gray-500">// Store the logged-in user's ID</span>
+<span class="text-cyan-400">$_SESSION</span><span class="text-yellow-300">[</span><span class="text-orange-400">'username'</span><span class="text-yellow-300">]</span> <span class="text-pink-400">=</span> <span class="text-orange-400">"Alex"</span><span class="text-pink-400">;</span>
+
+<span class="text-gray-500">// In index.php (the main tasks page):</span>
+<span class="text-yellow-300">session_start</span><span class="text-yellow-300">()</span><span class="text-pink-400">;</span>
+<span class="text-purple-400">if</span> <span class="text-yellow-300">(</span><span class="text-yellow-300">isset</span><span class="text-yellow-300">(</span><span class="text-cyan-400">$_SESSION</span><span class="text-yellow-300">[</span><span class="text-orange-400">'user_id'</span><span class="text-yellow-300">]</span><span class="text-yellow-300">)</span><span class="text-yellow-300">)</span> <span class="text-yellow-300">{</span>
+    <span class="text-purple-400">echo</span> <span class="text-orange-400">"Welcome back, "</span> <span class="text-pink-400">.</span> <span class="text-cyan-400">$_SESSION</span><span class="text-yellow-300">[</span><span class="text-orange-400">'username'</span><span class="text-yellow-300">]</span><span class="text-pink-400">;</span>
+<span class="text-yellow-300">}</span> <span class="text-purple-400">else</span> <span class="text-yellow-300">{</span>
+    <span class="text-purple-400">echo</span> <span class="text-orange-400">"Please log in."</span><span class="text-pink-400">;</span>
+    <span class="text-gray-500">// The tutorial will redirect here using header('Location: login.php');</span>
+<span class="text-yellow-300">}</span>
+<span class="text-pink-400">?&gt;</span>
+</code></pre>
+    </div>
+
+    <!-- Conclusion -->
+    <div class="stage-section bg-green-50 border-green-200 border">
+        <h2 class="text-3xl mb-4 text-green-800">You're All Set!</h2>
+        <p>
+            That's it! You've just completed a crash course in all the PHP concepts used in the Todoist clone tutorial. You now understand:
+        </p>
+        <ul>
+            <li>Basic PHP syntax, variables, and arrays.</li>
+            <li>How to use `foreach` and `if` to generate HTML dynamically.</li>
+            <li>How PHP processes form submissions using `$_POST`.</li>
+            <li>Why code is split into functions and different files (`require_once`).</li>
+            <li>The basic flow of connecting to a database and running queries.</li>
+            <li>How sessions are used to keep users logged in.</li>
+        </ul>
+        <p class="font-bold mt-4">
+            You are now perfectly prepared to follow the "Build Your Own Todoist Clone" tutorial from start to finish. Good luck!
+        </p>
+    </div>  
+</div>
+</body>
+</html>

@@ -1,0 +1,677 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>The Ultimate PHP Course: From Beginner to Pro</title>
+    <!-- Include Tailwind CSS via CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Include Alpine.js via CDN for button interactivity -->
+    <script
+      defer
+      src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"
+    ></script>
+    <style>
+      body {
+        font-family: sans-serif;
+        line-height: 1.6;
+        padding: 20px;
+        background-color: #f7fafc;
+      }
+      h1,
+      h2,
+      h3,
+      h4 {
+        margin-bottom: 0.5em;
+        font-weight: 600;
+      }
+      h1 {
+        font-size: 2.25rem;
+      }
+      h2 {
+        font-size: 1.875rem;
+        border-bottom: 1px solid #e2e8f0;
+        padding-bottom: 0.2em;
+        margin-top: 1.5em;
+      }
+      h3 {
+        font-size: 1.5rem;
+        margin-top: 1em;
+      }
+      h4 {
+        font-size: 1.25rem;
+        margin-top: 1em;
+        font-weight: 600;
+      }
+      p {
+        margin-bottom: 1em;
+      }
+      code {
+        background-color: #edf2f7;
+        padding: 0.2em 0.4em;
+        border-radius: 3px;
+        font-family: monospace;
+        color: #4a5568;
+      }
+      pre {
+        background-color: #2d3748;
+        color: #e2e8f0;
+        padding: 1em;
+        border-radius: 5px;
+        overflow-x: auto;
+        margin-bottom: 1em;
+        position: relative;
+      }
+      pre code {
+        background-color: transparent !important;
+        color: inherit !important;
+        padding: 0 !important;
+        border-radius: 0 !important;
+        font-family: monospace;
+      }
+      .stage-section {
+        background-color: #ffffff;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1),
+          0 1px 2px 0 rgba(0, 0, 0, 0.06);
+        margin-bottom: 2em;
+      }
+      ul {
+        list-style: disc;
+        margin-left: 20px;
+        margin-bottom: 1em;
+      }
+      .note {
+        background-color: #e6f4ff;
+        border-left: 4px solid #3b82f6;
+        padding: 1em;
+        margin-top: 1em;
+      }
+      pre .copy-button {
+        position: absolute;
+        top: 0.5rem;
+        right: 0.5rem;
+        background-color: #4a5568;
+        color: #e2e8f0;
+        border: none;
+        padding: 0.25rem 0.5rem;
+        font-size: 0.75rem;
+        border-radius: 0.25rem;
+        cursor: pointer;
+        opacity: 0.7;
+        transition: opacity 0.2s ease-in-out, background-color 0.2s ease-in-out;
+      }
+      pre:hover .copy-button {
+        opacity: 1;
+      }
+      pre .copy-button:hover {
+        background-color: #718096;
+      }
+      pre .copy-button.copied {
+        background-color: #48bb78;
+        color: white;
+      }
+    </style>
+  </head>
+  <body class="bg-gray-100 text-gray-800">
+    <div class="container mx-auto max-w-4xl">
+      <h1 class="text-4xl font-bold text-center text-blue-600 mb-8">
+        The Ultimate PHP Course: From Beginner to Pro
+      </h1>
+      <p class="text-lg text-center mb-6">
+        An extensive, step-by-step guide to mastering PHP for web development.
+        We'll start with the absolute basics and end with the skills needed to
+        build modern, database-driven applications.
+      </p>
+
+      <!-- Part 1: Foundations -->
+      <div class="stage-section" id="part-1">
+        <h2 class="text-3xl mb-4">Part 1: Foundations</h2>
+        <h3 class="text-2xl mt-4 mb-2">1.1 What is PHP & Its Role?</h3>
+        <p>PHP is a server-side language. Its primary job is to:</p>
+        <ol class="list-decimal ml-6">
+          <li>
+            <strong>Process Input:</strong> Receive data from a user's form
+            submission or a URL.
+          </li>
+          <li>
+            <strong>Work with Data:</strong> Communicate with a database to
+            create, read, update, or delete information.
+          </li>
+          <li>
+            <strong>Create Output:</strong> Generate a final HTML page to send
+            back to the user's browser.
+          </li>
+        </ol>
+
+        <h3 class="text-2xl mt-4 mb-2">1.2 Setup (XAMPP)</h3>
+        <p>
+          To run PHP, you need a server environment. XAMPP is a free package
+          that includes Apache (web server), MySQL (database), and PHP. Place
+          your projects in the `htdocs` directory and view them at
+          `http://localhost/your-project-folder/`.
+        </p>
+
+        <h3 class="text-2xl mt-4 mb-2">1.3 Basic Syntax & Variables</h3>
+        <p>
+          PHP code lives in `<?php ... ?>` tags. Statements end with a semicolon
+          `;`. Variables must begin with a `$` sign.
+        </p>
+        <pre><button class="copy-button" x-data="{}" @click="
+          const codeElement = $event.target.closest('pre').querySelector('code');
+          navigator.clipboard.writeText(codeElement.innerText).then(() => {
+              $event.target.innerText = 'Copied!';
+              $event.target.classList.add('copied');
+              setTimeout(() => { $event.target.innerText = 'Copy'; $event.target.classList.remove('copied'); }, 2000);
+          }).catch(err => console.error('Copy failed', err));
+      ">Copy</button><code class="language-php"><span class="text-pink-400">&lt;?php</span>
+<span class="text-gray-500">// This is a comment</span>
+<span class="text-purple-400">echo</span> <span class="text-orange-400">"Hello, World!"</span><span class="text-pink-400">;</span> <span class="text-gray-500">// echo prints output</span>
+
+<span class="text-cyan-400">$greeting</span> <span class="text-pink-400">=</span> <span class="text-orange-400">"Welcome"</span><span class="text-pink-400">;</span>      <span class="text-gray-500">// String</span>
+<span class="text-cyan-400">$userCount</span> <span class="text-pink-400">=</span> <span class="text-teal-300">100</span><span class="text-pink-400">;</span>         <span class="text-gray-500">// Integer</span>
+<span class="text-cyan-400">$isLoggedIn</span> <span class="text-pink-400">=</span> <span class="text-purple-400">true</span><span class="text-pink-400">;</span>   <span class="text-gray-500">// Boolean</span>
+
+<span class="text-gray-500">// Join strings with a dot (.)</span>
+<span class="text-purple-400">echo</span> <span class="text-cyan-400">$greeting</span> <span class="text-pink-400">.</span> <span class="text-orange-400">", you are user #"</span> <span class="text-pink-400">.</span> <span class="text-cyan-400">$userCount</span><span class="text-pink-400">;</span>
+<span class="text-pink-400">?&gt;</span>
+</code></pre>
+
+        <h3 class="text-2xl mt-4 mb-2">
+          1.4 Error Reporting (Crucial for Development)
+        </h3>
+        <p>
+          By default, PHP might hide errors. When developing, you MUST turn them
+          on to see what's wrong. Add this to the top of your main PHP file.
+        </p>
+        <pre><button class="copy-button" x-data="{}" @click="
+          const codeElement = $event.target.closest('pre').querySelector('code');
+          navigator.clipboard.writeText(codeElement.innerText).then(() => {
+              $event.target.innerText = 'Copied!';
+              $event.target.classList.add('copied');
+              setTimeout(() => { $event.target.innerText = 'Copy'; $event.target.classList.remove('copied'); }, 2000);
+          }).catch(err => console.error('Copy failed', err));
+      ">Copy</button><code class="language-php"><span class="text-pink-400">&lt;?php</span>
+<span class="text-yellow-300">ini_set</span><span class="text-yellow-300">(</span><span class="text-orange-400">'display_errors'</span><span class="text-pink-400">,</span> <span class="text-teal-300">1</span><span class="text-yellow-300">)</span><span class="text-pink-400">;</span>
+<span class="text-yellow-300">error_reporting</span><span class="text-yellow-300">(</span><span class="text-lime-400">E_ALL</span><span class="text-yellow-300">)</span><span class="text-pink-400">;</span>
+<span class="text-pink-400">?&gt;</span>
+</code></pre>
+      </div>
+
+      <!-- Part 2: Data Structures & Control Flow -->
+      <div class="stage-section" id="part-2">
+        <h2 class="text-3xl mb-4">Part 2: Data Structures & Control Flow</h2>
+        <h3 class="text-2xl mt-4 mb-2">2.1 Arrays</h3>
+        <p>
+          Arrays store multiple values. Associative arrays, with named keys, are
+          the most common type for structured data.
+        </p>
+        <pre><button class="copy-button" x-data="{}" @click="
+          const codeElement = $event.target.closest('pre').querySelector('code');
+          navigator.clipboard.writeText(codeElement.innerText).then(() => {
+              $event.target.innerText = 'Copied!';
+              $event.target.classList.add('copied');
+              setTimeout(() => { $event.target.innerText = 'Copy'; $event.target.classList.remove('copied'); }, 2000);
+          }).catch(err => console.error('Copy failed', err));
+      ">Copy</button><code class="language-php"><span class="text-pink-400">&lt;?php</span>
+<span class="text-gray-500">// Associative Array</span>
+<span class="text-cyan-400">$user</span> <span class="text-pink-400">=</span> <span class="text-yellow-300">[</span>
+    <span class="text-orange-400">'name'</span> <span class="text-pink-400">=&gt;</span> <span class="text-orange-400">'John Doe'</span><span class="text-pink-400">,</span>
+    <span class="text-orange-400">'email'</span> <span class="text-pink-400">=&gt;</span> <span class="text-orange-400">'john@example.com'</span><span class="text-pink-400">,</span>
+<span class="text-yellow-300">]</span><span class="text-pink-400">;</span>
+<span class="text-purple-400">echo</span> <span class="text-cyan-400">$user</span><span class="text-yellow-300">[</span><span class="text-orange-400">'email'</span><span class="text-yellow-300">]</span><span class="text-pink-400">;</span>
+<span class="text-pink-400">?&gt;</span>
+</code></pre>
+
+        <h3 class="text-2xl mt-4 mb-2">2.2 Control Structures</h3>
+        <p>
+          These allow your code to make decisions (`if`/`else`) and repeat
+          actions (`foreach`).
+        </p>
+        <pre><button class="copy-button" x-data="{}" @click="
+          const codeElement = $event.target.closest('pre').querySelector('code');
+          navigator.clipboard.writeText(codeElement.innerText).then(() => {
+              $event.target.innerText = 'Copied!';
+              $event.target.classList.add('copied');
+              setTimeout(() => { $event.target.innerText = 'Copy'; $event.target.classList.remove('copied'); }, 2000);
+          }).catch(err => console.error('Copy failed', err));
+      ">Copy</button><code class="language-php"><span class="text-pink-400">&lt;?php</span>
+<span class="text-cyan-400">$isLoggedIn</span> <span class="text-pink-400">=</span> <span class="text-purple-400">true</span><span class="text-pink-400">;</span>
+<span class="text-purple-400">if</span> <span class="text-yellow-300">(</span><span class="text-cyan-400">$isLoggedIn</span><span class="text-yellow-300">)</span> <span class="text-yellow-300">{</span>
+    <span class="text-purple-400">echo</span> <span class="text-orange-400">"Welcome back!"</span><span class="text-pink-400">;</span>
+<span class="text-yellow-300">}</span> <span class="text-purple-400">else</span> <span class="text-yellow-300">{</span>
+    <span class="text-purple-400">echo</span> <span class="text-orange-400">"Please log in."</span><span class="text-pink-400">;</span>
+<span class="text-yellow-300">}</span>
+<span class="text-pink-400">?&gt;</span>
+</code></pre>
+
+        <h3 class="text-2xl mt-4 mb-2">2.3 PHP Templating</h3>
+        <p>
+          PHP is often mixed with HTML. For cleaner code, you can use an
+          alternative syntax for control structures.
+        </p>
+        <pre><button class="copy-button" x-data="{}" @click="
+          const codeElement = $event.target.closest('pre').querySelector('code');
+          navigator.clipboard.writeText(codeElement.innerText).then(() => {
+              $event.target.innerText = 'Copied!';
+              $event.target.classList.add('copied');
+              setTimeout(() => { $event.target.innerText = 'Copy'; $event.target.classList.remove('copied'); }, 2000);
+          }).catch(err => console.error('Copy failed', err));
+      ">Copy</button><code class="language-php"><span class="text-pink-400">&lt;?php</span>
+<span class="text-cyan-400">$tasks</span> <span class="text-pink-400">=</span> <span class="text-yellow-300">[</span><span class="text-orange-400">'Task 1'</span><span class="text-pink-400">,</span> <span class="text-orange-400">'Task 2'</span><span class="text-pink-400">,</span> <span class="text-orange-400">'Task 3'</span><span class="text-yellow-300">]</span><span class="text-pink-400">;</span>
+<span class="text-pink-400">?&gt;</span>
+
+<span class="text-gray-400">&lt;h2&gt;</span>My Tasks<span class="text-gray-400">&lt;/h2&gt;</span>
+<span class="text-gray-400">&lt;ul&gt;</span>
+    <span class="text-pink-400">&lt;?php</span> <span class="text-purple-400">foreach</span> <span class="text-yellow-300">(</span><span class="text-cyan-400">$tasks</span> <span class="text-purple-400">as</span> <span class="text-cyan-400">$task</span><span class="text-yellow-300">)</span><span class="text-pink-400">:</span> <span class="text-pink-400">?&gt;</span>
+        <span class="text-gray-400">&lt;li&gt;</span><span class="text-pink-400">&lt;?=</span> <span class="text-cyan-400">$task</span> <span class="text-pink-400">?&gt;</span><span class="text-gray-400">&lt;/li&gt;</span> <span class="text-gray-500">&lt;-- &lt;?= is a shortcut for &lt;?php echo --&gt;</span>
+    <span class="text-pink-400">&lt;?php</span> <span class="text-purple-400">endforeach</span><span class="text-pink-400">;</span> <span class="text-pink-400">?&gt;</span>
+<span class="text-gray-400">&lt;/ul&gt;</span>
+
+<span class="text-pink-400">&lt;?php</span> <span class="text-purple-400">if</span> <span class="text-yellow-300">(</span><span class="text-yellow-300">empty</span><span class="text-yellow-300">(</span><span class="text-cyan-400">$tasks</span><span class="text-yellow-300">)</span><span class="text-yellow-300">)</span><span class="text-pink-400">:</span> <span class="text-pink-400">?&gt;</span>
+    <span class="text-gray-400">&lt;p&gt;</span>No tasks yet!<span class="text-gray-400">&lt;/p&gt;</span>
+<span class="text-pink-400">&lt;?php</span> <span class="text-purple-400">endif</span><span class="text-pink-400">;</span> <span class="text-pink-400">?&gt;</span>
+</code></pre>
+      </div>
+
+      <!-- Part 3: Reusing & Organizing Code -->
+      <div class="stage-section" id="part-3">
+        <h2 class="text-3xl mb-4">Part 3: Reusing & Organizing Code</h2>
+        <h3 class="text-2xl mt-4 mb-2">3.1 Functions</h3>
+        <p>
+          Functions are reusable blocks of code. They help keep your code clean
+          and prevent repetition.
+        </p>
+
+        <h3 class="text-2xl mt-4 mb-2">3.2 Building a Basic Template</h3>
+        <p>
+          You can create reusable HTML parts like a header and footer. Use
+          `include_once` to pull them into your pages.
+        </p>
+        <h4 class="text-xl mt-3 mb-1">`header.php`</h4>
+        <pre><button class="copy-button" x-data="{}" @click="
+          const codeElement = $event.target.closest('pre').querySelector('code');
+          navigator.clipboard.writeText(codeElement.innerText).then(() => {
+              $event.target.innerText = 'Copied!';
+              $event.target.classList.add('copied');
+              setTimeout(() => { $event.target.innerText = 'Copy'; $event.target.classList.remove('copied'); }, 2000);
+          }).catch(err => console.error('Copy failed', err));
+      ">Copy</button><code class="language-php"><span class="text-gray-400">&lt;!DOCTYPE html&gt;</span>
+<span class="text-gray-400">&lt;html&gt;</span>
+<span class="text-gray-400">&lt;head&gt;&lt;title&gt;</span>My Website<span class="text-gray-400">&lt;/title&gt;&lt;/head&gt;</span>
+<span class="text-gray-400">&lt;body&gt;</span>
+    <span class="text-gray-400">&lt;header&gt;&lt;h1&gt;</span>My Awesome Site<span class="text-gray-400">&lt;/h1&gt;&lt;/header&gt;</span>
+</code></pre>
+        <h4 class="text-xl mt-3 mb-1">`footer.php`</h4>
+        <pre><button class="copy-button" x-data="{}" @click="
+          const codeElement = $event.target.closest('pre').querySelector('code');
+          navigator.clipboard.writeText(codeElement.innerText).then(() => {
+              $event.target.innerText = 'Copied!';
+              $event.target.classList.add('copied');
+              setTimeout(() => { $event.target.innerText = 'Copy'; $event.target.classList.remove('copied'); }, 2000);
+          }).catch(err => console.error('Copy failed', err));
+      ">Copy</button><code class="language-php"><span class="text-gray-400">&lt;footer&gt;</span>
+    <span class="text-gray-400">&lt;p&gt;</span>Copyright <span class="text-pink-400">&lt;?=</span> <span class="text-yellow-300">date</span><span class="text-yellow-300">(</span><span class="text-orange-400">'Y'</span><span class="text-yellow-300">)</span> <span class="text-pink-400">?&gt;</span><span class="text-gray-400">&lt;/p&gt;</span>
+<span class="text-gray-400">&lt;/footer&gt;</span>
+<span class="text-gray-400">&lt;/body&gt;</span>
+<span class="text-gray-400">&lt;/html&gt;</span>
+</code></pre>
+        <h4 class="text-xl mt-3 mb-1">`index.php`</h4>
+        <pre><button class="copy-button" x-data="{}" @click="
+          const codeElement = $event.target.closest('pre').querySelector('code');
+          navigator.clipboard.writeText(codeElement.innerText).then(() => {
+              $event.target.innerText = 'Copied!';
+              $event.target.classList.add('copied');
+              setTimeout(() => { $event.target.innerText = 'Copy'; $event.target.classList.remove('copied'); }, 2000);
+          }).catch(err => console.error('Copy failed', err));
+      ">Copy</button><code class="language-php"><span class="text-pink-400">&lt;?php</span> <span class="text-purple-400">include_once</span> <span class="text-orange-400">'header.php'</span><span class="text-pink-400">;</span> <span class="text-pink-400">?&gt;</span>
+
+<span class="text-gray-400">&lt;main&gt;</span>
+    <span class="text-gray-400">&lt;p&gt;</span>This is the main content of the page.<span class="text-gray-400">&lt;/p&gt;</span>
+<span class="text-gray-400">&lt;/main&gt;</span>
+
+<span class="text-pink-400">&lt;?php</span> <span class="text-purple-400">include_once</span> <span class="text-orange-400">'footer.php'</span><span class="text-pink-400">;</span> <span class="text-pink-400">?&gt;</span>
+</code></pre>
+      </div>
+
+      <!-- Part 4: Web Interaction -->
+      <div class="stage-section" id="part-4">
+        <h2 class="text-3xl mb-4">Part 4: Handling User Interaction</h2>
+        <p>
+          This is where PHP shines: processing form data, managing user
+          sessions, and interacting with the browser.
+        </p>
+
+        <h3 class="text-2xl mt-4 mb-2">
+          4.1 Superglobals: `$_GET` and `$_POST`
+        </h3>
+        <p>
+          PHP provides special "superglobal" variables to access web data. They
+          are available in any scope.
+        </p>
+        <ul>
+          <li>
+            <code>$_GET</code>: An associative array of variables passed in the
+            URL's query string (e.g., `page.php?id=123`).
+          </li>
+          <li>
+            <code>$_POST</code>: An associative array of variables passed from a
+            submitted HTML form with `method="POST"`.
+          </li>
+        </ul>
+        <pre><button class="copy-button" x-data="{}" @click="
+          const codeElement = $event.target.closest('pre').querySelector('code');
+          navigator.clipboard.writeText(codeElement.innerText).then(() => {
+              $event.target.innerText = 'Copied!';
+              $event.target.classList.add('copied');
+              setTimeout(() => { $event.target.innerText = 'Copy'; $event.target.classList.remove('copied'); }, 2000);
+          }).catch(err => console.error('Copy failed', err));
+      ">Copy</button><code class="language-php"><span class="text-gray-500">&lt;!-- form.html --&gt;</span>
+<span class="text-gray-400">&lt;form</span> <span class="text-lime-400">action</span>=<span class="text-orange-400">"process.php"</span> <span class="text-lime-400">method</span>=<span class="text-orange-400">"POST"</span><span class="text-gray-400">&gt;</span>
+    <span class="text-gray-400">&lt;input</span> <span class="text-lime-400">type</span>=<span class="text-orange-400">"text"</span> <span class="text-lime-400">name</span>=<span class="text-orange-400">"username"</span><span class="text-gray-400">&gt;</span>
+    <span class="text-gray-400">&lt;button</span> <span class="text-lime-400">type</span>=<span class="text-orange-400">"submit"</span><span class="text-gray-400">&gt;</span>Submit<span class="text-gray-400">&lt;/button&gt;</span>
+<span class="text-gray-400">&lt;/form&gt;</span>
+
+<span class="text-gray-500">&lt;!-- process.php --&gt;</span>
+<span class="text-pink-400">&lt;?php</span>
+<span class="text-purple-400">if</span> <span class="text-yellow-300">(</span><span class="text-yellow-300">isset</span><span class="text-yellow-300">(</span><span class="text-cyan-400">$_POST</span><span class="text-yellow-300">[</span><span class="text-orange-400">'username'</span><span class="text-yellow-300">]</span><span class="text-yellow-300">)</span><span class="text-yellow-300">)</span> <span class="text-yellow-300">{</span>
+    <span class="text-cyan-400">$name</span> <span class="text-pink-400">=</span> <span class="text-yellow-300">htmlspecialchars</span><span class="text-yellow-300">(</span><span class="text-cyan-400">$_POST</span><span class="text-yellow-300">[</span><span class="text-orange-400">'username'</span><span class="text-yellow-300">]</span><span class="text-yellow-300">)</span><span class="text-pink-400">;</span>
+    <span class="text-purple-400">echo</span> <span class="text-orange-400">"Hello, "</span> <span class="text-pink-400">.</span> <span class="text-cyan-400">$name</span><span class="text-pink-400">;</span>
+<span class="text-yellow-300">}</span>
+<span class="text-pink-400">?&gt;</span>
+</code></pre>
+
+        <h3 class="text-2xl mt-4 mb-2">4.2 Sessions</h3>
+        <p>
+          Sessions are used to store user information across multiple pages
+          (e.g., keeping a user logged in). The data is stored on the server,
+          not the browser.
+        </p>
+        <pre><button class="copy-button" x-data="{}" @click="
+          const codeElement = $event.target.closest('pre').querySelector('code');
+          navigator.clipboard.writeText(codeElement.innerText).then(() => {
+              $event.target.innerText = 'Copied!';
+              $event.target.classList.add('copied');
+              setTimeout(() => { $event.target.innerText = 'Copy'; $event.target.classList.remove('copied'); }, 2000);
+          }).catch(err => console.error('Copy failed', err));
+      ">Copy</button><code class="language-php"><span class="text-pink-400">&lt;?php</span>
+<span class="text-gray-500">// Must be at the VERY TOP of the file</span>
+<span class="text-yellow-300">session_start</span><span class="text-yellow-300">()</span><span class="text-pink-400">;</span>
+
+<span class="text-gray-500">// Storing a session variable (e.g., after login)</span>
+<span class="text-cyan-400">$_SESSION</span><span class="text-yellow-300">[</span><span class="text-orange-400">'user_id'</span><span class="text-yellow-300">]</span> <span class="text-pink-400">=</span> <span class="text-teal-300">123</span><span class="text-pink-400">;</span>
+
+<span class="text-gray-500">// Accessing it on another page</span>
+<span class="text-purple-400">if</span> <span class="text-yellow-300">(</span><span class="text-yellow-300">isset</span><span class="text-yellow-300">(</span><span class="text-cyan-400">$_SESSION</span><span class="text-yellow-300">[</span><span class="text-orange-400">'user_id'</span><span class="text-yellow-300">]</span><span class="text-yellow-300">)</span><span class="text-yellow-300">)</span> <span class="text-yellow-300">{</span>
+    <span class="text-purple-400">echo</span> <span class="text-orange-400">"You are logged in!"</span><span class="text-pink-400">;</span>
+<span class="text-yellow-300">}</span>
+
+<span class="text-gray-500">// To log out</span>
+<span class="text-yellow-300">session_destroy</span><span class="text-yellow-300">()</span><span class="text-pink-400">;</span>
+<span class="text-pink-400">?&gt;</span>
+</code></pre>
+      </div>
+
+      <!-- Part 5: Databases -->
+      <div class="stage-section" id="part-5">
+        <h2 class="text-3xl mb-4">Part 5: Working with Databases (MySQLi)</h2>
+        <p>
+          This is the core of any dynamic web application. We'll use the
+          `mysqli` (MySQL Improved) extension.
+        </p>
+
+        <h3 class="text-2xl mt-4 mb-2">5.1 Connecting to MySQL</h3>
+        <pre><button class="copy-button" x-data="{}" @click="
+          const codeElement = $event.target.closest('pre').querySelector('code');
+          navigator.clipboard.writeText(codeElement.innerText).then(() => {
+              $event.target.innerText = 'Copied!';
+              $event.target.classList.add('copied');
+              setTimeout(() => { $event.target.innerText = 'Copy'; $event.target.classList.remove('copied'); }, 2000);
+          }).catch(err => console.error('Copy failed', err));
+      ">Copy</button><code class="language-php"><span class="text-pink-400">&lt;?php</span>
+<span class="text-cyan-400">$db_host</span> <span class="text-pink-400">=</span> <span class="text-orange-400">'localhost'</span><span class="text-pink-400">;</span>
+<span class="text-cyan-400">$db_user</span> <span class="text-pink-400">=</span> <span class="text-orange-400">'root'</span><span class="text-pink-400">;</span>
+<span class="text-cyan-400">$db_pass</span> <span class="text-pink-400">=</span> <span class="text-orange-400">''</span><span class="text-pink-400">;</span> <span class="text-gray-500">// Default for XAMPP</span>
+<span class="text-cyan-400">$db_name</span> <span class="text-pink-400">=</span> <span class="text-orange-400">'my_database'</span><span class="text-pink-400">;</span>
+
+<span class="text-cyan-400">$conn</span> <span class="text-pink-400">=</span> <span class="text-purple-400">new</span> <span class="text-yellow-300">mysqli</span><span class="text-yellow-300">(</span><span class="text-cyan-400">$db_host</span><span class="text-pink-400">,</span> <span class="text-cyan-400">$db_user</span><span class="text-pink-400">,</span> <span class="text-cyan-400">$db_pass</span><span class="text-pink-400">,</span> <span class="text-cyan-400">$db_name</span><span class="text-yellow-300">)</span><span class="text-pink-400">;</span>
+
+<span class="text-gray-500">// Always check the connection</span>
+<span class="text-purple-400">if</span> <span class="text-yellow-300">(</span><span class="text-cyan-400">$conn</span><span class="text-pink-400">-&gt;</span><span class="text-lime-400">connect_error</span><span class="text-yellow-300">)</span> <span class="text-yellow-300">{</span>
+    <span class="text-purple-400">die</span><span class="text-yellow-300">(</span><span class="text-orange-400">"Connection Failed: "</span> <span class="text-pink-400">.</span> <span class="text-cyan-400">$conn</span><span class="text-pink-400">-&gt;</span><span class="text-lime-400">connect_error</span><span class="text-yellow-300">)</span><span class="text-pink-400">;</span>
+<span class="text-yellow-300">}</span>
+<span class="text-pink-400">?&gt;</span>
+</code></pre>
+        <h3 class="text-2xl mt-4 mb-2">
+          5.2 The Secure Way: Prepared Statements
+        </h3>
+        <p>
+          To prevent a major vulnerability called
+          <strong>SQL Injection</strong>, you must use prepared statements for
+          any query that includes user data. This is non-negotiable for
+          professional code.
+        </p>
+        <h4 class="text-xl mt-4 mb-1">Fetching Data (SELECT)</h4>
+        <pre><button class="copy-button" x-data="{}" @click="
+          const codeElement = $event.target.closest('pre').querySelector('code');
+          navigator.clipboard.writeText(codeElement.innerText).then(() => {
+              $event.target.innerText = 'Copied!';
+              $event.target.classList.add('copied');
+              setTimeout(() => { $event.target.innerText = 'Copy'; $event.target.classList.remove('copied'); }, 2000);
+          }).catch(err => console.error('Copy failed', err));
+      ">Copy</button><code class="language-php"><span class="text-pink-400">&lt;?php</span>
+<span class="text-cyan-400">$sql</span> <span class="text-pink-400">=</span> <span class="text-orange-400">"SELECT * FROM users WHERE id = ?"</span><span class="text-pink-400">;</span>
+<span class="text-cyan-400">$stmt</span> <span class="text-pink-400">=</span> <span class="text-cyan-400">$conn</span><span class="text-pink-400">-&gt;</span><span class="text-yellow-300">prepare</span><span class="text-yellow-300">(</span><span class="text-cyan-400">$sql</span><span class="text-yellow-300">)</span><span class="text-pink-400">;</span>
+<span class="text-cyan-400">$stmt</span><span class="text-pink-400">-&gt;</span><span class="text-yellow-300">bind_param</span><span class="text-yellow-300">(</span><span class="text-orange-400">"i"</span><span class="text-pink-400">,</span> <span class="text-cyan-400">$userId</span><span class="text-yellow-300">)</span><span class="text-pink-400">;</span> <span class="text-gray-500">// "i" for integer</span>
+<span class="text-cyan-400">$stmt</span><span class="text-pink-400">-&gt;</span><span class="text-yellow-300">execute</span><span class="text-yellow-300">()</span><span class="text-pink-400">;</span>
+<span class="text-cyan-400">$result</span> <span class="text-pink-400">=</span> <span class="text-cyan-400">$stmt</span><span class="text-pink-400">-&gt;</span><span class="text-yellow-300">get_result</span><span class="text-yellow-300">()</span><span class="text-pink-400">;</span>
+<span class="text-cyan-400">$user</span> <span class="text-pink-400">=</span> <span class="text-cyan-400">$result</span><span class="text-pink-400">-&gt;</span><span class="text-yellow-300">fetch_assoc</span><span class="text-yellow-300">()</span><span class="text-pink-400">;</span>
+<span class="text-pink-400">?&gt;</span>
+</code></pre>
+        <h4 class="text-xl mt-4 mb-1">Inserting Data (INSERT)</h4>
+        <pre><button class="copy-button" x-data="{}" @click="
+          const codeElement = $event.target.closest('pre').querySelector('code');
+          navigator.clipboard.writeText(codeElement.innerText).then(() => {
+              $event.target.innerText = 'Copied!';
+              $event.target.classList.add('copied');
+              setTimeout(() => { $event.target.innerText = 'Copy'; $event.target.classList.remove('copied'); }, 2000);
+          }).catch(err => console.error('Copy failed', err));
+      ">Copy</button><code class="language-php"><span class="text-pink-400">&lt;?php</span>
+<span class="text-cyan-400">$sql</span> <span class="text-pink-400">=</span> <span class="text-orange-400">"INSERT INTO users (username, email) VALUES (?, ?)"</span><span class="text-pink-400">;</span>
+<span class="text-cyan-400">$stmt</span> <span class="text-pink-400">=</span> <span class="text-cyan-400">$conn</span><span class="text-pink-400">-&gt;</span><span class="text-yellow-300">prepare</span><span class="text-yellow-300">(</span><span class="text-cyan-400">$sql</span><span class="text-yellow-300">)</span><span class="text-pink-400">;</span>
+<span class="text-cyan-400">$stmt</span><span class="text-pink-400">-&gt;</span><span class="text-yellow-300">bind_param</span><span class="text-yellow-300">(</span><span class="text-orange-400">"ss"</span><span class="text-pink-400">,</span> <span class="text-cyan-400">$username</span><span class="text-pink-400">,</span> <span class="text-cyan-400">$email</span><span class="text-yellow-300">)</span><span class="text-pink-400">;</span> <span class="text-gray-500">// "s" for string</span>
+<span class="text-cyan-400">$stmt</span><span class="text-pink-400">-&gt;</span><span class="text-yellow-300">execute</span><span class="text-yellow-300">()</span><span class="text-pink-400">;</span>
+<span class="text-pink-400">?&gt;</span>
+</code></pre>
+      </div>
+
+      <!-- Part 6: Essential Security Practices -->
+      <div class="stage-section" id="part-6">
+        <h2 class="text-3xl mb-4">Part 6: Essential Security Practices</h2>
+        <p>
+          Writing secure code is not optional. These are the absolute minimum
+          practices you must follow.
+        </p>
+        <h3 class="text-2xl mt-4 mb-2">
+          6.1 Preventing XSS with `htmlspecialchars()`
+        </h3>
+        <p>
+          Whenever you print data that a user has submitted, wrap it in
+          `htmlspecialchars()`. This prevents users from injecting malicious
+          HTML or JavaScript into your pages.
+        </p>
+        <pre><button class="copy-button" x-data="{}" @click="
+          const codeElement = $event.target.closest('pre').querySelector('code');
+          navigator.clipboard.writeText(codeElement.innerText).then(() => {
+              $event.target.innerText = 'Copied!';
+              $event.target.classList.add('copied');
+              setTimeout(() => { $event.target.innerText = 'Copy'; $event.target.classList.remove('copied'); }, 2000);
+          }).catch(err => console.error('Copy failed', err));
+      ">Copy</button><code class="language-php"><span class="text-purple-400">echo</span> <span class="text-yellow-300">htmlspecialchars</span><span class="text-yellow-300">(</span><span class="text-cyan-400">$userComment</span><span class="text-yellow-300">)</span><span class="text-pink-400">;</span>
+</code></pre>
+
+        <h3 class="text-2xl mt-4 mb-2">6.2 Secure Password Handling</h3>
+        <p>
+          <strong>NEVER store passwords as plain text.</strong> Use PHP's
+          built-in functions to securely hash and verify passwords.
+        </p>
+        <pre><button class="copy-button" x-data="{}" @click="
+          const codeElement = $event.target.closest('pre').querySelector('code');
+          navigator.clipboard.writeText(codeElement.innerText).then(() => {
+              $event.target.innerText = 'Copied!';
+              $event.target.classList.add('copied');
+              setTimeout(() => { $event.target.innerText = 'Copy'; $event.target.classList.remove('copied'); }, 2000);
+          }).catch(err => console.error('Copy failed', err));
+      ">Copy</button><code class="language-php"><span class="text-pink-400">&lt;?php</span>
+<span class="text-gray-500">// Hashing a password during registration</span>
+<span class="text-cyan-400">$passwordFromUser</span> <span class="text-pink-400">=</span> <span class="text-orange-400">'user-password123'</span><span class="text-pink-400">;</span>
+<span class="text-cyan-400">$hashedPassword</span> <span class="text-pink-400">=</span> <span class="text-yellow-300">password_hash</span><span class="text-yellow-300">(</span><span class="text-cyan-400">$passwordFromUser</span><span class="text-pink-400">,</span> <span class="text-lime-400">PASSWORD_DEFAULT</span><span class="text-yellow-300">)</span><span class="text-pink-400">;</span>
+<span class="text-gray-500">// Store $hashedPassword in your database</span>
+
+<span class="text-gray-500">// Verifying a password during login</span>
+<span class="text-cyan-400">$passwordFromDb</span> <span class="text-pink-400">=</span> <span class="text-gray-500">/* fetch the hash from the DB */</span><span class="text-pink-400">;</span>
+<span class="text-purple-400">if</span> <span class="text-yellow-300">(</span><span class="text-yellow-300">password_verify</span><span class="text-yellow-300">(</span><span class="text-cyan-400">$passwordFromUser</span><span class="text-pink-400">,</span> <span class="text-cyan-400">$passwordFromDb</span><span class="text-yellow-300">)</span><span class="text-yellow-300">)</span> <span class="text-yellow-300">{</span>
+    <span class="text-purple-400">echo</span> <span class="text-orange-400">'Password is correct!'</span><span class="text-pink-400">;</span>
+<span class="text-yellow-300">}</span>
+<span class="text-pink-400">?&gt;</span>
+</code></pre>
+      </div>
+
+      <!-- Part 7: The Path to Modern PHP -->
+      <div class="stage-section" id="part-7">
+        <h2 class="text-3xl mb-4">Part 7: The Path to Modern PHP</h2>
+        <h3 class="text-2xl mt-4 mb-2">
+          7.1 Introduction to Object-Oriented PHP (OOP)
+        </h3>
+        <p>
+          OOP organizes code into reusable blueprints (`classes`) for creating
+          objects. This is the dominant paradigm in modern PHP. 
+        </p>
+
+        <h3 class="text-2xl mt-4 mb-2">7.2 Classes and Objects</h3>
+        <p>
+          A <strong>class</strong> is a blueprint (e.g., `User`). An
+          <strong>object</strong> is an instance of that class (e.g., a specific
+          user like `$john`).
+        </p>
+        <pre><button class="copy-button" x-data="{}" @click="
+              const codeElement = $event.target.closest('pre').querySelector('code');
+              navigator.clipboard.writeText(codeElement.innerText).then(() => {
+                  $event.target.innerText = 'Copied!';
+                  $event.target.classList.add('copied');
+                  setTimeout(() => { $event.target.innerText = 'Copy'; $event.target.classList.remove('copied'); }, 2000);
+              }).catch(err => console.error('Copy failed', err));
+          ">Copy</button><code class="language-php"><span class="text-pink-400">&lt;?php</span>
+      <span class="text-purple-400">class</span> <span class="text-yellow-300">User</span> <span class="text-yellow-300">{</span>
+        <span class="text-gray-500">// Properties (class variables)</span>
+        <span class="text-purple-400">public</span> <span class="text-cyan-400">$username</span><span class="text-pink-400">;</span>
+        <span class="text-purple-400">private</span> <span class="text-cyan-400">$email</span><span class="text-pink-400">;</span> <span class="text-gray-500">// private means it can only be accessed from inside this class</span>
+      
+        <span class="text-gray-500">// Constructor (runs when a new object is created)</span>
+        <span class="text-purple-400">public</span> <span class="text-purple-400">function</span> <span class="text-yellow-300">__construct</span><span class="text-yellow-300">(</span><span class="text-cyan-400">$username</span><span class="text-pink-400">,</span> <span class="text-cyan-400">$email</span><span class="text-yellow-300">)</span> <span class="text-yellow-300">{</span>
+            <span class="text-cyan-400">$this</span><span class="text-pink-400">-&gt;</span><span class="text-lime-400">username</span> <span class="text-pink-400">=</span> <span class="text-cyan-400">$username</span><span class="text-pink-400">;</span>
+            <span class="text-cyan-400">$this</span><span class="text-pink-400">-&gt;</span><span class="text-lime-400">email</span> <span class="text-pink-400">=</span> <span class="text-cyan-400">$email</span><span class="text-pink-400">;</span>
+        <span class="text-yellow-300">}</span>
+      
+        <span class="text-gray-500">// Method (class function)</span>
+        <span class="text-purple-400">public</span> <span class="text-purple-400">function</span> <span class="text-yellow-300">sayHello</span><span class="text-yellow-300">()</span> <span class="text-yellow-300">{</span>
+            <span class="text-purple-400">return</span> <span class="text-orange-400">"Hello, my name is "</span> <span class="text-pink-400">.</span> <span class="text-cyan-400">$this</span><span class="text-pink-400">-&gt;</span><span class="text-lime-400">username</span><span class="text-pink-400">;</span>
+        <span class="text-yellow-300">}</span>
+      <span class="text-yellow-300">}</span>
+      
+      <span class="text-gray-500">// Create an object (an instance of the User class)</span>
+      <span class="text-cyan-400">$user1</span> <span class="text-pink-400">=</span> <span class="text-purple-400">new</span> <span class="text-yellow-300">User</span><span class="text-yellow-300">(</span><span class="text-orange-400">'JohnDoe'</span><span class="text-pink-400">,</span> <span class="text-orange-400">'john@example.com'</span><span class="text-yellow-300">)</span><span class="text-pink-400">;</span>
+      <span class="text-purple-400">echo</span> <span class="text-cyan-400">$user1</span><span class="text-pink-400">-&gt;</span><span class="text-yellow-300">sayHello</span><span class="text-yellow-300">()</span><span class="text-pink-400">;</span>
+      <span class="text-pink-400">?&gt;</span>
+      </code></pre>
+
+        <h4 class="text-xl mt-4 mb-1">Practical Example: A Database Class</h4>
+        <p>
+          A great use for a class is to wrap up your database connection logic
+          so it's easy to reuse and manage.
+        </p>
+        <pre><button class="copy-button" x-data="{}" @click="
+          const codeElement = $event.target.closest('pre').querySelector('code');
+          navigator.clipboard.writeText(codeElement.innerText).then(() => {
+              $event.target.innerText = 'Copied!';
+              $event.target.classList.add('copied');
+              setTimeout(() => { $event.target.innerText = 'Copy'; $event.target.classList.remove('copied'); }, 2000);
+          }).catch(err => console.error('Copy failed', err));
+      ">Copy</button><code class="language-php"><span class="text-pink-400">&lt;?php</span>
+<span class="text-purple-400">class</span> <span class="text-yellow-300">Database</span> <span class="text-yellow-300">{</span>
+    <span class="text-purple-400">public</span> <span class="text-cyan-400">$connection</span><span class="text-pink-400">;</span>
+    <span class="text-purple-400">public</span> <span class="text-purple-400">function</span> <span class="text-yellow-300">__construct</span><span class="text-yellow-300">(</span><span class="text-cyan-400">$host</span><span class="text-pink-400">,</span> <span class="text-cyan-400">$user</span><span class="text-pink-400">,</span> <span class="text-cyan-400">$pass</span><span class="text-pink-400">,</span> <span class="text-cyan-400">$name</span><span class="text-yellow-300">)</span> <span class="text-yellow-300">{</span>
+        <span class="text-cyan-400">$this</span><span class="text-pink-400">-&gt;</span><span class="text-lime-400">connection</span> <span class="text-pink-400">=</span> <span class="text-purple-400">new</span> <span class="text-yellow-300">mysqli</span><span class="text-yellow-300">(</span><span class="text-cyan-400">$host</span><span class="text-pink-400">,</span> <span class="text-cyan-400">$user</span><span class="text-pink-400">,</span> <span class="text-cyan-400">$pass</span><span class="text-pink-400">,</span> <span class="text-cyan-400">$name</span><span class="text-yellow-300">)</span><span class="text-pink-400">;</span>
+        <span class="text-purple-400">if</span> <span class="text-yellow-300">(</span><span class="text-cyan-400">$this</span><span class="text-pink-400">-&gt;</span><span class="text-lime-400">connection</span><span class="text-pink-400">-&gt;</span><span class="text-lime-400">connect_error</span><span class="text-yellow-300">)</span> <span class="text-yellow-300">{</span>
+            <span class="text-purple-400">die</span><span class="text-yellow-300">(</span><span class="text-orange-400">"Connection Failed"</span><span class="text-yellow-300">)</span><span class="text-pink-400">;</span>
+        <span class="text-yellow-300">}</span>
+    <span class="text-yellow-300">}</span>
+<span class="text-yellow-300">}</span>
+<span class="text-cyan-400">$db</span> <span class="text-pink-400">=</span> <span class="text-purple-400">new</span> <span class="text-yellow-300">Database</span><span class="text-yellow-300">(</span><span class="text-orange-400">'localhost'</span><span class="text-pink-400">,</span> <span class="text-orange-400">'root'</span><span class="text-pink-400">,</span> <span class="text-orange-400">''</span><span class="text-pink-400">,</span> <span class="text-orange-400">'my_db'</span><span class="text-yellow-300">)</span><span class="text-pink-400">;</span>
+<span class="text-gray-500">// Now you can pass the $db->connection object around.</span>
+<span class="text-pink-400">?&gt;</span>
+</code></pre>
+        <h3 class="text-2xl mt-4 mb-2">
+          7.2 Composer: The PHP Package Manager
+        </h3>
+        <p>
+          Composer is an essential tool for managing third-party libraries
+          (packages). It handles downloading, updating, and autoloading classes
+          for you.
+        </p>
+
+        <h3 class="text-2xl mt-4 mb-2">7.3 The Bridge to Frameworks: MVC</h3>
+        <p>
+          Most modern PHP frameworks (like Laravel and Symfony) use the
+          **Model-View-Controller (MVC)** design pattern:
+        </p>
+        <ul>
+          <li>
+            <strong>Model:</strong> The data layer. Interacts with your database
+            (e.g., a `User` model that can fetch users).
+          </li>
+          <li>
+            <strong>View:</strong> The presentation layer. The HTML templates
+            that the user sees.
+          </li>
+          <li>
+            <strong>Controller:</strong> The logic layer. It receives requests,
+            uses the Model to get data, and passes that data to the View to be
+            rendered.
+          </li>
+        </ul>
+        <p>
+          Understanding this separation of concerns is the final step before
+          you're ready to learn a framework.
+        </p>
+      </div>
+
+      <!-- Conclusion -->
+      <div class="stage-section bg-green-50 border-green-200 border">
+        <h2 class="text-3xl mb-4 text-green-800">
+          Conclusion and Your Path Forward
+        </h2>
+        <p>
+          Congratulations! You have completed a comprehensive tour of PHP. You
+          have the skills to build complex, secure, and well-structured web
+          applications.
+        </p>
+        <h4 class="text-xl mt-4 mb-1">What to Learn Next:</h4>
+        <ul>
+          <li>
+            <strong>Build a Project:</strong> Put it all together! Build a
+            complete blog or a user registration/login system from scratch using
+            everything you've learned.
+          </li>
+          <li>
+            <strong>Learn a Framework:</strong> With this strong foundation, you
+            are now ready to learn a framework like <strong>Laravel</strong>.
+            Frameworks provide powerful tools and structures that will
+            dramatically accelerate your development.
+          </li>
+        </ul>
+      </div>
+    </div>
+  </body>
+</html>
