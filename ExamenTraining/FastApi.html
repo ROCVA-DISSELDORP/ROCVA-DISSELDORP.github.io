@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Full-Stack Tutorial: FastAPI, React & Tailwind CSS</title>
+    <!-- Include Tailwind CSS via CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Include Alpine.js via CDN for button interactivity -->
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <style>
+        body { font-family: sans-serif; line-height: 1.6; padding: 20px; background-color: #f7fafc; }
+        h1, h2, h3, h4 { margin-bottom: 0.5em; font-weight: 600; }
+        h1 { font-size: 2.25rem; }
+        h2 { font-size: 1.875rem; border-bottom: 1px solid #e2e8f0; padding-bottom: 0.2em; margin-top: 1.5em; }
+        h3 { font-size: 1.5rem; margin-top: 1em; }
+        h4 { font-size: 1.25rem; margin-top: 1em; font-weight: 600; }
+        p { margin-bottom: 1em; }
+        code { background-color: #edf2f7; padding: 0.2em 0.4em; border-radius: 3px; font-family: monospace; color: #4a5568; }
+        pre { background-color: #2d3748; color: #e2e8f0; padding: 1em; border-radius: 5px; overflow-x: auto; margin-bottom: 1em; position: relative; }
+        pre code { background-color: transparent !important; color: inherit !important; padding: 0 !important; border-radius: 0 !important; font-family: monospace; }
+        .stage-section { background-color: #ffffff; padding: 20px; border-radius: 8px; box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06); margin-bottom: 2em; }
+        ul { list-style: disc; margin-left: 20px; margin-bottom: 1em; }
+        .note { background-color: #e6f4ff; border-left: 4px solid #3b82f6; padding: 1em; margin-top: 1em; }
+        pre .copy-button { position: absolute; top: 0.5rem; right: 0.5rem; background-color: #4a5568; color: #e2e8f0; border: none; padding: 0.25rem 0.5rem; font-size: 0.75rem; border-radius: 0.25rem; cursor: pointer; opacity: 0.7; transition: opacity 0.2s ease-in-out, background-color 0.2s ease-in-out; }
+        pre:hover .copy-button { opacity: 1; }
+        pre .copy-button:hover { background-color: #718096; }
+        pre .copy-button.copied { background-color: #48bb78; color: white; }
+    </style>
+</head>
+<body class="bg-gray-100 text-gray-800">
+<div class="container mx-auto max-w-4xl">
+
+    <h1 class="text-4xl font-bold text-center text-green-600 mb-8">
+        Bouw een Moderne Web App met FastAPI en React
+    </h1>
+    <p class="text-lg text-center mb-6">
+        Een complete gids voor het bouwen van een simpele To-Do applicatie met een high-performance Python backend en een dynamische React frontend.
+    </p>
+    <p class="mb-8">
+        <strong>Vereisten:</strong> Basiskennis van Python en JavaScript is handig. Zorg ervoor dat je <a href="https://www.python.org/" target="_blank" class="text-blue-500 hover:underline">Python 3.7+</a> en <a href="https://nodejs.org/" target="_blank" class="text-blue-500 hover:underline">Node.js</a> (inclusief npm) geïnstalleerd hebt.
+    </p>
+
+    <!-- Part 1: Backend Setup met FastAPI -->
+    <div class="stage-section" id="part-1">
+        <h2 class="text-3xl mb-4">Deel 1: De Backend Opzetten met FastAPI</h2>
+        <p>We beginnen met het bouwen van een snelle en robuuste API (Application Programming Interface) met FastAPI. Deze API zal de logica en data voor onze to-do lijst beheren.</p>
+
+        <h3 class="text-2xl mt-4 mb-2">1.1 Projectstructuur</h3>
+        <p>Maak een hoofdmap voor je project en daarin twee submappen:</p>
+        <pre><code class="language-bash">mijn-app/
+├── backend/
+└── frontend/
+</code></pre>
+
+        <h3 class="text-2xl mt-4 mb-2">1.2 Python Virtual Environment en Installaties</h3>
+        <p>Het is een best practice om een virtuele omgeving te gebruiken om projectafhankelijkheden te isoleren.</p>
+        <pre><button class="copy-button" x-data="{}" @click="
+          const codeElement = $event.target.closest('pre').querySelector('code');
+          navigator.clipboard.writeText(codeElement.innerText).then(() => {
+              $event.target.innerText = 'Copied!';
+              $event.target.classList.add('copied');
+              setTimeout(() => { $event.target.innerText = 'Copy'; $event.target.classList.remove('copied'); }, 2000);
+          }).catch(err => console.error('Copy failed', err));
+      ">Copy</button><code class="language-bash"><span class="text-gray-400"># Ga naar de backend map</span>
+cd backend
+
+<span class="text-gray-400"># Maak een virtual environment</span>
+python -m venv venv
+
+<span class="text-gray-400"># Activeer de environment</span>
+<span class="text-gray-400"># Op Windows:</span>
+venv\Scripts\activate
+<span class="text-gray-400"># Op Mac/Linux:</span>
+source venv/bin/activate
+
+<span class="text-gray-400"># Installeer de benodigde packages</span>
+pip install fastapi "uvicorn[standard]"
+</code></pre>
+
+        <h3 class="text-2xl mt-4 mb-2">1.3 De FastAPI Applicatie Maken</h3>
+        <p>Maak een bestand `main.py` in de `backend` map. Hierin definiëren we onze API.</p>
+        <div class="note">
+            <p><strong>CORS (Cross-Origin Resource Sharing):</strong> Omdat onze frontend (op bv. poort 5173) en backend (op poort 8000) op verschillende "origins" draaien, moeten we de backend expliciet toestemming geven om verzoeken van de frontend te accepteren. Hiervoor gebruiken we `CORSMiddleware`.</p>
+        </div>
+        <h4 class="text-xl mt-3 mb-1">`backend/main.py`</h4>
+        <pre><button class="copy-button" x-data="{}" @click="
+          const codeElement = $event.target.closest('pre').querySelector('code');
+          navigator.clipboard.writeText(codeElement.innerText).then(() => {
+              $event.target.innerText = 'Copied!';
+              $event.target.classList.add('copied');
+              setTimeout(() => { $event.target.innerText = 'Copy'; $event.target.classList.remove('copied'); }, 2000);
+          }).catch(err => console.error('Copy failed', err));
+      ">Copy</button><code class="language-python"><span class="text-purple-400">from</span> fastapi <span class="text-purple-400">import</span> FastAPI
+<span class="text-purple-400">from</span> fastapi.middleware.cors <span class="text-purple-400">import</span> CORSMiddleware
+<span class="text-purple-400">from</span> pydantic <span class="text-purple-400">import</span> BaseModel
+<span class="text-purple-400">from</span> typing <span class="text-purple-400">import</span> List
+
+<span class="text-gray-500"># Maak de FastAPI app instance</span>
+app = FastAPI()
+
+<span class="text-gray-500"># CORS Middleware instellen</span>
+origins = [
+    <span class="text-orange-400">"http://localhost:5173"</span>, <span class="text-gray-500"># De poort van onze React frontend</span>
+    <span class="text-orange-400">"http://localhost:3000"</span>, <span class="text-gray-500"># Een andere veelgebruikte poort voor React</span>
+]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=<span class="text-purple-400">True</span>,
+    allow_methods=[<span class="text-orange-400">"*"</span>],
+    allow_headers=[<span class="text-orange-400">"*"</span>],
+)
+
+<span class="text-gray-500"># Pydantic model voor data validatie</span>
+<span class="text-purple-400">class</span> <span class="text-yellow-300">Todo</span>(BaseModel):
+    id: int
+    title: str
+    completed: bool
+
+<span class="text-gray-500"># Simpele in-memory "database"</span>
+todos_db = [
+    Todo(id=<span class="text-teal-300">1</span>, title=<span class="text-orange-400">'Leer FastAPI'</span>, completed=<span class="text-purple-400">True</span>),
+    Todo(id=<span class="text-teal-300">2</span>, title=<span class="text-orange-400">'Bouw een React frontend'</span>, completed=<span class="text-purple-400">False</span>),
+]
+
+<span class="text-gray-500"># API Endpoints (Routes)</span>
+@app.get(<span class="text-orange-400">"/todos"</span>, response_model=List[Todo])
+<span class="text-purple-400">def</span> <span class="text-yellow-300">get_todos</span>():
+    <span class="text-purple-400">return</span> todos_db
+
+@app.post(<span class="text-orange-400">"/todos"</span>, response_model=Todo)
+<span class="text-purple-400">def</span> <span class="text-yellow-300">create_todo</span>(todo: Todo):
+    todos_db.append(todo)
+    <span class="text-purple-400">return</span> todo
+
+@app.get(<span class="text-orange-400">"/"</span>)
+<span class="text-purple-400">def</span> <span class="text-yellow-300">root</span>():
+    <span class="text-purple-400">return</span> {<span class="text-orange-400">"message"</span>: <span class="text-orange-400">"Hello World"</span>}
+</code></pre>
+        
+        <h3 class="text-2xl mt-4 mb-2">1.4 De Backend Draaien en Testen</h3>
+        <p>Start de server met Uvicorn. De `--reload` flag zorgt ervoor dat de server automatisch herstart als je wijzigingen aanbrengt in `main.py`.</p>
+        <pre><button class="copy-button" x-data="{}" @click="
+          const codeElement = $event.target.closest('pre').querySelector('code');
+          navigator.clipboard.writeText(codeElement.innerText).then(() => {
+              $event.target.innerText = 'Copied!';
+              $event.target.classList.add('copied');
+              setTimeout(() => { $event.target.innerText = 'Copy'; $event.target.classList.remove('copied'); }, 2000);
+          }).catch(err => console.error('Copy failed', err));
+      ">Copy</button><code class="language-bash">uvicorn main:app --reload
+</code></pre>
+        <p>Open je browser en ga naar <a href="http://127.0.0.1:8000/docs" target="_blank" class="text-blue-500 hover:underline">http://127.0.0.1:8000/docs</a>. FastAPI genereert automatisch een interactieve documentatiepagina waar je je API-endpoints kunt testen. Probeer de `GET /todos` route uit!</p>
+    </div>
+
+    <!-- Part 2: Frontend Setup met React & Tailwind -->
+    <div class="stage-section" id="part-2">
+        <h2 class="text-3xl mb-4">Deel 2: De Frontend Opzetten met React en Tailwind CSS</h2>
+        <p>Nu de backend draait, bouwen we de gebruikersinterface met React. We gebruiken Vite voor een snelle en moderne ontwikkelervaring.</p>
+
+        <h3 class="text-2xl mt-4 mb-2">2.1 React Project Initialiseren</h3>
+        <p>Open een <strong>nieuwe terminal</strong> (laat de backend draaien in de eerste). Ga naar de root van je project (`mijn-app`) en voer het volgende commando uit:</p>
+        <pre><button class="copy-button" x-data="{}" @click="
+          const codeElement = $event.target.closest('pre').querySelector('code');
+          navigator.clipboard.writeText(codeElement.innerText).then(() => {
+              $event.target.innerText = 'Copied!';
+              $event.target.classList.add('copied');
+              setTimeout(() => { $event.target.innerText = 'Copy'; $event.target.classList.remove('copied'); }, 2000);
+          }).catch(err => console.error('Copy failed', err));
+      ">Copy</button><code class="language-bash"><span class="text-gray-400"># Maak de React app in de 'frontend' map</span>
+npm create vite@latest frontend -- --template react
+
+<span class="text-gray-400"># Navigeer naar de nieuwe map</span>
+cd frontend
+
+<span class="text-gray-400"># Installeer de dependencies</span>
+npm install
+</code></pre>
+        
+        <h3 class="text-2xl mt-4 mb-2">2.2 Tailwind CSS Installeren en Configureren</h3>
+        <p>Volg deze stappen om Tailwind aan je Vite-project toe te voegen.</p>
+        <pre><button class="copy-button" x-data="{}" @click="
+          const codeElement = $event.target.closest('pre').querySelector('code');
+          navigator.clipboard.writeText(codeElement.innerText).then(() => {
+              $event.target.innerText = 'Copied!';
+              $event.target.classList.add('copied');
+              setTimeout(() => { $event.target.innerText = 'Copy'; $event.target.classList.remove('copied'); }, 2000);
+          }).catch(err => console.error('Copy failed', err));
+      ">Copy</button><code class="language-bash"><span class="text-gray-400"># Installeer Tailwind en zijn peer dependencies</span>
+npm install -D tailwindcss postcss autoprefixer
+
+<span class="text-gray-400"># Genereer de configuratiebestanden</span>
+npx tailwindcss init -p
+</code></pre>
+        <p>Dit creëert twee bestanden: `tailwind.config.js` en `postcss.config.js`. Open `tailwind.config.js` en configureer de `content` array om je bestanden te scannen op Tailwind classes:</p>
+        <h4 class="text-xl mt-3 mb-1">`frontend/tailwind.config.js`</h4>
+        <pre><button class="copy-button" x-data="{}" @click="
+          const codeElement = $event.target.closest('pre').querySelector('code');
+          navigator.clipboard.writeText(codeElement.innerText).then(() => {
+              $event.target.innerText = 'Copied!';
+              $event.target.classList.add('copied');
+              setTimeout(() => { $event.target.innerText = 'Copy'; $event.target.classList.remove('copied'); }, 2000);
+          }).catch(err => console.error('Copy failed', err));
+      ">Copy</button><code class="language-javascript"><span class="text-purple-400">export</span> <span class="text-purple-400">default</span> {
+  content: [
+    <span class="text-orange-400">"./index.html"</span>,
+    <span class="text-orange-400">"./src/**/*.{js,ts,jsx,tsx}"</span>, <span class="text-gray-500">// Belangrijke regel!</span>
+  ],
+  theme: {
+    extend: {},
+  },
+  plugins: [],
+}
+</code></pre>
+        <p>Vervang ten slotte de inhoud van `src/index.css` met de Tailwind directives:</p>
+        <h4 class="text-xl mt-3 mb-1">`frontend/src/index.css`</h4>
+        <pre><button class="copy-button" x-data="{}" @click="
+          const codeElement = $event.target.closest('pre').querySelector('code');
+          navigator.clipboard.writeText(codeElement.innerText).then(() => {
+              $event.target.innerText = 'Copied!';
+              $event.target.classList.add('copied');
+              setTimeout(() => { $event.target.innerText = 'Copy'; $event.target.classList.remove('copied'); }, 2000);
+          }).catch(err => console.error('Copy failed', err));
+      ">Copy</button><code class="language-css">@tailwind base;
+@tailwind components;
+@tailwind utilities;
+</code></pre>
+    </div>
+
+    <!-- Part 3: De Applicatie Bouwen -->
+    <div class="stage-section" id="part-3">
+        <h2 class="text-3xl mb-4">Deel 3: De Applicatie Bouwen</h2>
+        <p>Nu alles is ingesteld, gaan we de React component bouwen die met onze API communiceert.</p>
+
+        <h3 class="text-2xl mt-4 mb-2">3.1 De `App` Component Aanpassen</h3>
+        <p>Vervang de volledige inhoud van `frontend/src/App.jsx` met de volgende code. We bouwen de hele applicatie in dit ene bestand voor de eenvoud.</p>
+        <h4 class="text-xl mt-3 mb-1">`frontend/src/App.jsx`</h4>
+        <pre><button class="copy-button" x-data="{}" @click="
+          const codeElement = $event.target.closest('pre').querySelector('code');
+          navigator.clipboard.writeText(codeElement.innerText).then(() => {
+              $event.target.innerText = 'Copied!';
+              $event.target.classList.add('copied');
+              setTimeout(() => { $event.target.innerText = 'Copy'; $event.target.classList.remove('copied'); }, 2000);
+          }).catch(err => console.error('Copy failed', err));
+      ">Copy</button><code class="language-jsx"><span class="text-purple-400">import</span> { useState, useEffect } <span class="text-purple-400">from</span> <span class="text-orange-400">'react'</span>;
+
+<span class="text-purple-400">const</span> API_URL = <span class="text-orange-400">'http://127.0.0.1:8000'</span>;
+
+<span class="text-purple-400">function</span> <span class="text-yellow-300">App</span>() {
+  <span class="text-gray-500">// State voor de lijst van todos en de input voor een nieuwe todo</span>
+  <span class="text-purple-400">const</span> [todos, setTodos] = <span class="text-yellow-300">useState</span>([]);
+  <span class="text-purple-400">const</span> [newTodoTitle, setNewTodoTitle] = <span class="text-yellow-300">useState</span>(<span class="text-orange-400">''</span>);
+
+  <span class="text-gray-500">// useEffect hook om data te fetchen wanneer de component laadt</span>
+  <span class="text-yellow-300">useEffect</span>(() => {
+    <span class="text-purple-400">const</span> <span class="text-yellow-300">fetchTodos</span> = <span class="text-purple-400">async</span> () => {
+      <span class="text-purple-400">const</span> response = <span class="text-purple-400">await</span> <span class="text-yellow-300">fetch</span>(<span class="text-orange-400">`${API_URL}/todos`</span>);
+      <span class="text-purple-400">const</span> data = <span class="text-purple-400">await</span> response.<span class="text-yellow-300">json</span>();
+      <span class="text-yellow-300">setTodos</span>(data);
+    };
+    <span class="text-yellow-300">fetchTodos</span>();
+  }, []); <span class="text-gray-500">// Lege dependency array zorgt ervoor dat dit maar één keer draait</span>
+
+  <span class="text-gray-500">// Functie om een nieuwe todo toe te voegen</span>
+  <span class="text-purple-400">const</span> <span class="text-yellow-300">addTodo</span> = <span class="text-purple-400">async</span> (e) => {
+    e.<span class="text-yellow-300">preventDefault</span>(); <span class="text-gray-500">// Voorkom dat de pagina herlaadt</span>
+    <span class="text-purple-400">if</span> (!newTodoTitle.trim()) <span class="text-purple-400">return</span>;
+
+    <span class="text-purple-400">const</span> newTodo = {
+      id: Date.<span class="text-yellow-300">now</span>(), <span class="text-gray-500">// Simpel uniek ID</span>
+      title: newTodoTitle,
+      completed: <span class="text-purple-400">false</span>,
+    };
+
+    <span class="text-purple-400">await</span> <span class="text-yellow-300">fetch</span>(<span class="text-orange-400">`${API_URL}/todos`</span>, {
+      method: <span class="text-orange-400">'POST'</span>,
+      headers: { <span class="text-orange-400">'Content-Type'</span>: <span class="text-orange-400">'application/json'</span> },
+      body: JSON.<span class="text-yellow-300">stringify</span>(newTodo),
+    });
+    
+    <span class="text-yellow-300">setTodos</span>([...todos, newTodo]);
+    <span class="text-yellow-300">setNewTodoTitle</span>(<span class="text-orange-400">''</span>);
+  };
+  
+  <span class="text-purple-400">return</span> (
+    <span class="text-gray-400">&lt;div</span> <span class="text-lime-400">className</span>=<span class="text-orange-400">"bg-gray-100 min-h-screen flex items-center justify-center"</span><span class="text-gray-400">&gt;</span>
+      <span class="text-gray-400">&lt;div</span> <span class="text-lime-400">className</span>=<span class="text-orange-400">"bg-white p-8 rounded-lg shadow-lg w-full max-w-md"</span><span class="text-gray-400">&gt;</span>
+        <span class="text-gray-400">&lt;h1</span> <span class="text-lime-400">className</span>=<span class="text-orange-400">"text-3xl font-bold mb-6 text-center text-gray-800"</span><span class="text-gray-400">&gt;</span>Mijn To-Do Lijst<span class="text-gray-400">&lt;/h1&gt;</span>
+        
+        <span class="text-gray-400">&lt;form</span> <span class="text-lime-400">onSubmit</span>={<span class="text-cyan-400">addTodo</span>} <span class="text-lime-400">className</span>=<span class="text-orange-400">"flex mb-4"</span><span class="text-gray-400">&gt;</span>
+          <span class="text-gray-400">&lt;input</span>
+            <span class="text-lime-400">type</span>=<span class="text-orange-400">"text"</span>
+            <span class="text-lime-400">className</span>=<span class="text-orange-400">"flex-grow p-2 border border-gray-300 rounded-l-md focus:outline-none focus:ring-2 focus:ring-blue-500"</span>
+            <span class="text-lime-400">placeholder</span>=<span class="text-orange-400">"Voeg een nieuwe taak toe..."</span>
+            <span class="text-lime-400">value</span>={<span class="text-cyan-400">newTodoTitle</span>}
+            <span class="text-lime-400">onChange</span>={<span class="text-yellow-300">(e) =></span> <span class="text-yellow-300">setNewTodoTitle</span>(e.target.value)}
+          <span class="text-gray-400">/&gt;</span>
+          <span class="text-gray-400">&lt;button</span> <span class="text-lime-400">type</span>=<span class="text-orange-400">"submit"</span> <span class="text-lime-400">className</span>=<span class="text-orange-400">"bg-blue-500 text-white px-4 py-2 rounded-r-md hover:bg-blue-600"</span><span class="text-gray-400">&gt;</span>
+            Toevoegen
+          <span class="text-gray-400">&lt;/button&gt;</span>
+        <span class="text-gray-400">&lt;/form&gt;</span>
+        
+        <span class="text-gray-400">&lt;ul&gt;</span>
+          {todos.<span class="text-yellow-300">map</span>(<span class="text-yellow-300">(todo) =></span> (
+            <span class="text-gray-400">&lt;li</span> <span class="text-lime-400">key</span>={<span class="text-cyan-400">todo.id</span>} <span class="text-lime-400">className</span>=<span class="text-orange-400">`flex items-center justify-between p-2 border-b ${todo.completed ? 'text-gray-400 line-through' : 'text-gray-700'}`</span><span class="text-gray-400">&gt;</span>
+              {todo.title}
+            <span class="text-gray-400">&lt;/li&gt;</span>
+          ))}
+        <span class="text-gray-400">&lt;/ul&gt;</span>
+      <span class="text-gray-400">&lt;/div&gt;</span>
+    <span class="text-gray-400">&lt;/div&gt;</span>
+  );
+}
+
+<span class="text-purple-400">export</span> <span class="text-purple-400">default</span> App;
+</code></pre>
+    </div>
+    
+    <!-- Part 4: De Applicatie Draaien -->
+    <div class="stage-section" id="part-4">
+        <h2 class="text-3xl mb-4">Deel 4: De Applicatie Draaien</h2>
+        <p>Je bent er bijna! Zorg ervoor dat beide servers draaien.</p>
+        <ol class="list-decimal ml-6">
+            <li>In je <strong>eerste terminal</strong> (in de `backend` map), zorg ervoor dat de FastAPI server draait: `uvicorn main:app --reload`</li>
+            <li>In je <strong>tweede terminal</strong> (in de `frontend` map), start de React development server: `npm run dev`</li>
+        </ol>
+        <p>Vite zal je een lokale URL geven (meestal `http://localhost:5173`). Open deze in je browser. Je zou nu je To-Do applicatie moeten zien, die de taken laadt van je FastAPI backend. Probeer een nieuwe taak toe te voegen!</p>
+    </div>
+
+    <!-- Part 5: Volgende Stappen -->
+    <div class="stage-section bg-green-50 border-green-200 border" id="part-5">
+        <h2 class="text-3xl mb-4 text-green-800">Conclusie en Volgende Stappen</h2>
+        <p>Gefeliciteerd! Je hebt een volledige full-stack webapplicatie gebouwd met een Python/FastAPI backend en een React/Tailwind frontend. Je hebt geleerd hoe je een API opzet, hoe je een frontend project configureert en hoe je de twee met elkaar laat communiceren.</p>
+        <h4 class="text-xl mt-4 mb-1">Hoe kun je dit uitbreiden?</h4>
+        <ul>
+            <li><strong>Volledige CRUD:</strong> Implementeer de logica voor het <strong>updaten</strong> (voltooien) en <strong>verwijderen</strong> van taken in zowel de backend als de frontend.</li>
+            <li><strong>Databasepersistentie:</strong> Vervang de in-memory `todos_db` lijst met een echte database zoals PostgreSQL of SQLite, met behulp van SQLAlchemy in je FastAPI backend.</li>
+            <li><strong>Componentenstructuur:</strong> Splits de `App.jsx` op in kleinere, herbruikbare componenten (bijv. `TodoList.jsx`, `TodoItem.jsx`, `AddTodoForm.jsx`).</li>
+            <li><strong>Gebruikersauthenticatie:</strong> Voeg een login-systeem toe met behulp van bijvoorbeeld FastAPI's OAuth2-ondersteuning en JWT tokens.</li>
+            <li><strong>Deployment:</strong> Leer hoe je je applicatie kunt deployen naar een service zoals Heroku, Vercel of met Docker.</li>
+        </ul>
+    </div>
+</div>
+</body>
+</html>
