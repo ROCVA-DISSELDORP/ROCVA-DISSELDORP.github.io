@@ -314,46 +314,6 @@ void Update()
                     </details>
 
                     <details class="bg-gray-50 border rounded-lg">
-                        <summary class="font-semibold text-lg cursor-pointer p-4">Fire VRGun</summary>
-                        <div class="p-4 border-t space-y-2">
-                            <p><strong>Add new public variables to VRGun class:</strong></p>
-                            <pre class="bg-gray-800 text-gray-200 p-4 rounded-md overflow-x-auto"><code>public Transform bulletSpawnTransform;
-public GameObject bulletPrefab;
-public ParticleSystem gunFireParticleSystem;
-public AudioSource gunFireAudioSource;
-
-public float fireSpeed = 125.0f;</code></pre>
-
-                            <p><strong>Add new public FireBullet() function to VRGun class:</strong></p>
-                             <pre class="bg-gray-800 text-gray-200 p-4 rounded-md overflow-x-auto"><code>public void FireBullet()
-{
-    Debug.Log("Gun is Fired!!!");
-    
-    // Play effects
-    gunFireParticleSystem.Play();
-    gunFireAudioSource.Play();
-
-    // Spawn bullet
-    GameObject spawnedBullet = Instantiate(bulletPrefab);
-    spawnedBullet.transform.position = bulletSpawnTransform.position;
-    spawnedBullet.transform.rotation = bulletSpawnTransform.rotation;
-
-    // Fire it
-    spawnedBullet.GetComponent<Rigidbody>().velocity = spawnedBullet.transform.forward * fireSpeed;
-    
-    // Destroy it after 5 seconds
-    Destroy(spawnedBullet, 5);
-}</code></pre>
-                            
-                            <p><strong>Setup Gun Firing in Inspector:</strong></p>
-                             <ul class="list-disc list-inside ml-4">
-                                <li>Assign all the new public variables (BulletSpawnTransform, Bullet-Prefab, etc.) by dragging GameObjects from the Hierarchy/Project view.</li>
-                                <li>In VRGun > XR Grab Interactable > Interactable Events > Activated, click '+' and hook up the VRGun.FireBullet() function.</li>
-                             </ul>
-                        </div>
-                    </details>
-
-                    <details class="bg-gray-50 border rounded-lg">
             <summary class="font-semibold text-lg cursor-pointer p-4">Create WindZone</summary>
             <div class="p-4 border-t space-y-4">
                 <div>
@@ -447,7 +407,7 @@ public class PlayerController : MonoBehaviour
 
     void Start()
     {
-        characterController = GetComponent<CharacterController>();
+        characterController = GetComponent&lt;CharacterController&gt;();
         Cursor.lockState = CursorLockMode.Locked;
     }
 
@@ -459,8 +419,8 @@ public class PlayerController : MonoBehaviour
 
     void HandleCameraRotation()
     {
-        float mouseX = Input.GetAxis("Mouse X") * mouseSensitivity * Time.deltaTime;
-        float mouseY = Input.GetAxis("Mouse Y") * mouseSensitivity * Time.deltaTime;
+        float mouseX = Mouse.current.delta.ReadValue().x * mouseSensitivity * Time.deltaTime;
+        float mouseY = Mouse.current.delta.ReadValue().y * mouseSensitivity * Time.deltaTime;
 
         transform.Rotate(Vector3.up * mouseX);
         verticalRotation -= mouseY;
@@ -470,13 +430,13 @@ public class PlayerController : MonoBehaviour
 
     void HandleGunInput()
     {
-        if (Input.GetKeyDown(KeyCode.E)) // Grab or drop the gun
+        if (Keyboard.current.eKey.wasPressedThisFrame) // Grab or drop the gun
         {
             if (!holdingGun) { AttemptToGrabGun(); }
             else { DropGun(); }
         }
 
-        if (holdingGun && Input.GetButtonDown("Fire1")) // Fire the gun
+        if (holdingGun && Mouse.current.leftButton.wasPressedThisFrame) // Fire the gun
         {
             FireGun();
         }
@@ -496,7 +456,7 @@ public class PlayerController : MonoBehaviour
     {
         if (holdingGun)
         {
-            gun.GetComponent<VRGun>().OnRelease();
+            gun.GetComponent&lt;VRGun&gt;().OnRelease();
             gun.transform.SetParent(null);
             gun = null;
             holdingGun = false;
@@ -507,7 +467,7 @@ public class PlayerController : MonoBehaviour
     {
         if (holdingGun)
         {
-            gun.GetComponent<VRGun>().FireBullet();
+            gun.GetComponent&lt;VRGun&gt;().FireBullet();
         }
     }
 }
@@ -1012,6 +972,46 @@ public class Bullet : MonoBehaviour
         </div>
     </div>
 </details>
+
+ <details class="bg-gray-50 border rounded-lg">
+                        <summary class="font-semibold text-lg cursor-pointer p-4">Fire VRGun</summary>
+                        <div class="p-4 border-t space-y-2">
+                            <p><strong>Add new public variables to VRGun class:</strong></p>
+                            <pre class="bg-gray-800 text-gray-200 p-4 rounded-md overflow-x-auto"><code>public Transform bulletSpawnTransform;
+public GameObject bulletPrefab;
+public ParticleSystem gunFireParticleSystem;
+public AudioSource gunFireAudioSource;
+
+public float fireSpeed = 125.0f;</code></pre>
+
+                            <p><strong>Add new public FireBullet() function to VRGun class:</strong></p>
+                             <pre class="bg-gray-800 text-gray-200 p-4 rounded-md overflow-x-auto"><code>public void FireBullet()
+{
+    Debug.Log("Gun is Fired!!!");
+    
+    // Play effects
+    gunFireParticleSystem.Play();
+    gunFireAudioSource.Play();
+
+    // Spawn bullet
+    GameObject spawnedBullet = Instantiate(bulletPrefab);
+    spawnedBullet.transform.position = bulletSpawnTransform.position;
+    spawnedBullet.transform.rotation = bulletSpawnTransform.rotation;
+
+    // Fire it
+    spawnedBullet.GetComponent<Rigidbody>().velocity = spawnedBullet.transform.forward * fireSpeed;
+    
+    // Destroy it after 5 seconds
+    Destroy(spawnedBullet, 5);
+}</code></pre>
+                            
+                            <p><strong>Setup Gun Firing in Inspector:</strong></p>
+                             <ul class="list-disc list-inside ml-4">
+                                <li>Assign all the new public variables (BulletSpawnTransform, Bullet-Prefab, etc.) by dragging GameObjects from the Hierarchy/Project view.</li>
+                                <li>In VRGun > XR Grab Interactable > Interactable Events > Activated, click '+' and hook up the VRGun.FireBullet() function.</li>
+                             </ul>
+                        </div>
+                    </details>
 
 <!-- Fire VRGun & Automatically Destroy Bullets -->
 <details class="bg-gray-50 border rounded-lg">
