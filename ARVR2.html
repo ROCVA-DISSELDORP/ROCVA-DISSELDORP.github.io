@@ -973,46 +973,6 @@ public class Bullet : MonoBehaviour
     </div>
 </details>
 
- <details class="bg-gray-50 border rounded-lg">
-                        <summary class="font-semibold text-lg cursor-pointer p-4">Fire VRGun</summary>
-                        <div class="p-4 border-t space-y-2">
-                            <p><strong>Add new public variables to VRGun class:</strong></p>
-                            <pre class="bg-gray-800 text-gray-200 p-4 rounded-md overflow-x-auto"><code>public Transform bulletSpawnTransform;
-public GameObject bulletPrefab;
-public ParticleSystem gunFireParticleSystem;
-public AudioSource gunFireAudioSource;
-
-public float fireSpeed = 125.0f;</code></pre>
-
-                            <p><strong>Add new public FireBullet() function to VRGun class:</strong></p>
-                             <pre class="bg-gray-800 text-gray-200 p-4 rounded-md overflow-x-auto"><code>public void FireBullet()
-{
-    Debug.Log("Gun is Fired!!!");
-    
-    // Play effects
-    gunFireParticleSystem.Play();
-    gunFireAudioSource.Play();
-
-    // Spawn bullet
-    GameObject spawnedBullet = Instantiate(bulletPrefab);
-    spawnedBullet.transform.position = bulletSpawnTransform.position;
-    spawnedBullet.transform.rotation = bulletSpawnTransform.rotation;
-
-    // Fire it
-    spawnedBullet.GetComponent<Rigidbody>().velocity = spawnedBullet.transform.forward * fireSpeed;
-    
-    // Destroy it after 5 seconds
-    Destroy(spawnedBullet, 5);
-}</code></pre>
-                            
-                            <p><strong>Setup Gun Firing in Inspector:</strong></p>
-                             <ul class="list-disc list-inside ml-4">
-                                <li>Assign all the new public variables (BulletSpawnTransform, Bullet-Prefab, etc.) by dragging GameObjects from the Hierarchy/Project view.</li>
-                                <li>In VRGun > XR Grab Interactable > Interactable Events > Activated, click '+' and hook up the VRGun.FireBullet() function.</li>
-                             </ul>
-                        </div>
-                    </details>
-
 <!-- Fire VRGun & Automatically Destroy Bullets -->
 <details class="bg-gray-50 border rounded-lg">
     <summary class="font-semibold text-lg cursor-pointer p-4">Fire VRGun & Automatically Destroy Bullets</summary>
