@@ -1,23 +1,210 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="nl">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SD'er van de Toekomst</title>
-    <link rel="stylesheet" href="styles.css">
-</head>
-<body>
-    <header>
-        <h1>SD'er van de Toekomst</h1>
-        <p>Klik op een week om de opdrachten te bekijken!</p>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Home - ROCVA DISSELDORP</title>
+    <meta name="description" content="Overzicht van projecten en pagina's." />
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      // Tailwind CDN: zet een subtiele standaard look.
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              brand: {
+                500: "#1d4ed8",
+              },
+            },
+          },
+        },
+      };
+    </script>
+  </head>
+
+  <body class="min-h-screen bg-gradient-to-b from-slate-950 via-slate-950 to-slate-900 text-slate-100">
+    <header class="relative overflow-hidden border-b border-white/10">
+      <div class="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-brand-500/30 via-transparent to-transparent"></div>
+      <div class="relative mx-auto max-w-6xl px-4 py-10">
+        <div class="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
+          <div>
+            <h1 class="text-3xl font-bold tracking-tight sm:text-4xl">SD - DISSELDORP</h1>
+            <p class="mt-2 text-slate-300">Kies een pagina om te starten.</p>
+          </div>
+          <a
+            href="SDToekomst.html"
+            class="inline-flex items-center justify-center gap-2 rounded-xl bg-brand-500 px-4 py-2.5 text-sm font-semibold text-white shadow-sm shadow-brand-500/30 ring-1 ring-white/10 transition hover:bg-brand-400 focus:outline-none focus-visible:ring-2 focus-visible:ring-white"
+          >
+            Naar SD'er van de Toekomst
+          </a>
+        </div>
+      </div>
     </header>
-    <main>
-        <section class="card-container">
-            <a href="./Weken/Week1/week1.html" class="card">Week 1</a>
-            <a href="./Weken/Week2/week2.html" class="card">Week 2</a>
-            <a href="./Weken/Week3/week3.html" class="card">Week 3</a>
-            <a href="./Weken/Week4/week4.html" class="card">Week 4</a>
-        </section>
+
+    <main class="mx-auto max-w-6xl px-4 py-10">
+      <section aria-labelledby="overzicht-title">
+        <h2 id="overzicht-title" class="text-xl font-semibold text-slate-100">Overzicht</h2>
+        <p class="mt-1 text-slate-400">Alle links hieronder staan in de hoofdmap.</p>
+
+        <div class="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          <a
+            href="SDToekomst.html"
+            class="group rounded-2xl border border-white/10 bg-white/5 p-6 transition hover:bg-white/10 focus:outline-none focus-visible:ring-2 focus-visible:ring-white"
+          >
+            <div class="flex items-center justify-between gap-4">
+              <h3 class="text-base font-semibold">SD'er van de Toekomst</h3>
+              <span class="text-sm text-slate-300 group-hover:text-white">Open</span>
+            </div>
+            <p class="mt-3 text-sm text-slate-400">
+              Bekijk weken en opdrachten in één overzicht.
+            </p>
+          </a>
+
+          <a
+            href="ARVR.html"
+            class="group rounded-2xl border border-white/10 bg-white/5 p-6 transition hover:bg-white/10 focus:outline-none focus-visible:ring-2 focus-visible:ring-white"
+          >
+            <div class="flex items-center justify-between gap-4">
+              <h3 class="text-base font-semibold">AR/VR</h3>
+              <span class="text-sm text-slate-300 group-hover:text-white">Open</span>
+            </div>
+            <p class="mt-3 text-sm text-slate-400">Pagina met AR/VR content.</p>
+          </a>
+
+          <a
+            href="ARVR2.html"
+            class="group rounded-2xl border border-white/10 bg-white/5 p-6 transition hover:bg-white/10 focus:outline-none focus-visible:ring-2 focus-visible:ring-white"
+          >
+            <div class="flex items-center justify-between gap-4">
+              <h3 class="text-base font-semibold">AR/VR 2</h3>
+              <span class="text-sm text-slate-300 group-hover:text-white">Open</span>
+            </div>
+            <p class="mt-3 text-sm text-slate-400">Vervolg op de AR/VR-pagina.</p>
+          </a>
+
+          <a
+            href="ARVR2Part2.html"
+            class="group rounded-2xl border border-white/10 bg-white/5 p-6 transition hover:bg-white/10 focus:outline-none focus-visible:ring-2 focus-visible:ring-white"
+          >
+            <div class="flex items-center justify-between gap-4">
+              <h3 class="text-base font-semibold">AR/VR Part 2</h3>
+              <span class="text-sm text-slate-300 group-hover:text-white">Open</span>
+            </div>
+            <p class="mt-3 text-sm text-slate-400">Extra deel van de serie.</p>
+          </a>
+
+          <a
+            href="ARVR-source.html"
+            class="group rounded-2xl border border-white/10 bg-white/5 p-6 transition hover:bg-white/10 focus:outline-none focus-visible:ring-2 focus-visible:ring-white"
+          >
+            <div class="flex items-center justify-between gap-4">
+              <h3 class="text-base font-semibold">AR/VR Source</h3>
+              <span class="text-sm text-slate-300 group-hover:text-white">Open</span>
+            </div>
+            <p class="mt-3 text-sm text-slate-400">Bronmateriaal / extra info.</p>
+          </a>
+
+          <a
+            href="ZonEnZekerheid.html"
+            class="group rounded-2xl border border-white/10 bg-white/5 p-6 transition hover:bg-white/10 focus:outline-none focus-visible:ring-2 focus-visible:ring-white"
+          >
+            <div class="flex items-center justify-between gap-4">
+              <h3 class="text-base font-semibold">Zon en Zekerheid</h3>
+              <span class="text-sm text-slate-300 group-hover:text-white">Open</span>
+            </div>
+            <p class="mt-3 text-sm text-slate-400">Projectpagina over “Zon en Zekerheid”.</p>
+          </a>
+
+          <a
+            href="ZonEnZekerheidTailwind.html"
+            class="group rounded-2xl border border-white/10 bg-white/5 p-6 transition hover:bg-white/10 focus:outline-none focus-visible:ring-2 focus-visible:ring-white"
+          >
+            <div class="flex items-center justify-between gap-4">
+              <h3 class="text-base font-semibold">Zon en Zekerheid (Tailwind)</h3>
+              <span class="text-sm text-slate-300 group-hover:text-white">Open</span>
+            </div>
+            <p class="mt-3 text-sm text-slate-400">Tailwind-versie van hetzelfde thema.</p>
+          </a>
+
+          <a
+            href="VRGame.html"
+            class="group rounded-2xl border border-white/10 bg-white/5 p-6 transition hover:bg-white/10 focus:outline-none focus-visible:ring-2 focus-visible:ring-white"
+          >
+            <div class="flex items-center justify-between gap-4">
+              <h3 class="text-base font-semibold">VR Game</h3>
+              <span class="text-sm text-slate-300 group-hover:text-white">Open</span>
+            </div>
+            <p class="mt-3 text-sm text-slate-400">Pagina van de VR-game.</p>
+          </a>
+
+          <a
+            href="Pong.html"
+            class="group rounded-2xl border border-white/10 bg-white/5 p-6 transition hover:bg-white/10 focus:outline-none focus-visible:ring-2 focus-visible:ring-white"
+          >
+            <div class="flex items-center justify-between gap-4">
+              <h3 class="text-base font-semibold">Pong</h3>
+              <span class="text-sm text-slate-300 group-hover:text-white">Open</span>
+            </div>
+            <p class="mt-3 text-sm text-slate-400">Klassieke Pong-pagina.</p>
+          </a>
+
+          <a
+            href="VueQuiz.html"
+            class="group rounded-2xl border border-white/10 bg-white/5 p-6 transition hover:bg-white/10 focus:outline-none focus-visible:ring-2 focus-visible:ring-white"
+          >
+            <div class="flex items-center justify-between gap-4">
+              <h3 class="text-base font-semibold">Vue Quiz</h3>
+              <span class="text-sm text-slate-300 group-hover:text-white">Open</span>
+            </div>
+            <p class="mt-3 text-sm text-slate-400">Quizpagina met Vue.</p>
+          </a>
+
+          <a
+            href="ToDoProject.html"
+            class="group rounded-2xl border border-white/10 bg-white/5 p-6 transition hover:bg-white/10 focus:outline-none focus-visible:ring-2 focus-visible:ring-white"
+          >
+            <div class="flex items-center justify-between gap-4">
+              <h3 class="text-base font-semibold">ToDo Project</h3>
+              <span class="text-sm text-slate-300 group-hover:text-white">Open</span>
+            </div>
+            <p class="mt-3 text-sm text-slate-400">ToDo-app (projectpagina).</p>
+          </a>
+
+          <a
+            href="ToDoProject2.html"
+            class="group rounded-2xl border border-white/10 bg-white/5 p-6 transition hover:bg-white/10 focus:outline-none focus-visible:ring-2 focus-visible:ring-white"
+          >
+            <div class="flex items-center justify-between gap-4">
+              <h3 class="text-base font-semibold">ToDo Project 2</h3>
+              <span class="text-sm text-slate-300 group-hover:text-white">Open</span>
+            </div>
+            <p class="mt-3 text-sm text-slate-400">Vervolg/variant van de ToDo-app.</p>
+          </a>
+
+          <a
+            href="Laravel.html"
+            class="group rounded-2xl border border-white/10 bg-white/5 p-6 transition hover:bg-white/10 focus:outline-none focus-visible:ring-2 focus-visible:ring-white"
+          >
+            <div class="flex items-center justify-between gap-4">
+              <h3 class="text-base font-semibold">Laravel</h3>
+              <span class="text-sm text-slate-300 group-hover:text-white">Open</span>
+            </div>
+            <p class="mt-3 text-sm text-slate-400">Pagina met Laravel-gerelateerde inhoud.</p>
+          </a>
+        </div>
+      </section>
     </main>
-</body>
+
+    <footer class="border-t border-white/10">
+      <div class="mx-auto max-w-6xl px-4 py-6 text-sm text-slate-400">
+        <p>© <span id="year"></span> ROCVA DISSELDORP. Alle links openen losse pagina's.</p>
+      </div>
+    </footer>
+
+    <script>
+      document.getElementById("year").textContent = new Date().getFullYear();
+    </script>
+  </body>
 </html>
+
