@@ -391,7 +391,7 @@ void Update()
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class PlayerController : MonoBehaviour
+public class VRPlayer : MonoBehaviour
 {
     [Header("Camera Settings")]
     public Transform cameraTransform;
@@ -458,18 +458,20 @@ public class PlayerController : MonoBehaviour
     {
         if (holdingGun)
         {
-            gun.GetComponent&lt;VRGun&gt;().OnRelease();
+            // commented because script does not exist yet
+            //gun.GetComponent&lt;VRGun&gt;().OnRelease();
             gun.transform.SetParent(null);
             gun = null;
             holdingGun = false;
         }
     }
-
+    
     void FireGun()
     {
         if (holdingGun)
         {
-            gun.GetComponent&lt;VRGun&gt;().FireBullet();
+            // commented because script does not exist yet
+            //gun.GetComponent&lt;VRGun&gt;().FireBullet();
         }
     }
 }
