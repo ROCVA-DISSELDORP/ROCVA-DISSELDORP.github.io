@@ -588,14 +588,14 @@ using UnityEngine.SceneManagement;
 public class GameManager : MonoBehaviour
 {
     public VRPlayer player;
-    public RollerCoasterTrain rollerCoasterTrain;
+    public GameObject rollerCoasterTrain;
     public GameObject tutorialCanvas;
-    public GameOverCanvas gameOverCanvas;
+    public GameObject gameOverCanvas;
     public PlayerScoreCanvas playerScoreCanvas;
 
     void Start()
     {
-        gameOverCanvas.gameObject.SetActive(false);
+        gameOverCanvas.SetActive(false);
     }
 
     public void StartRollerCoasterRide()
@@ -611,7 +611,7 @@ public class GameManager : MonoBehaviour
 
     public void GameOver()
     {
-        gameOverCanvas.gameObject.SetActive(true);
+        gameOverCanvas.SetActive(true);
     }
 
     public void IncreasePlayerScore(int amount)
