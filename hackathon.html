@@ -1,0 +1,745 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ROCVA Hackathon - Challenge Handleiding</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+            overflow: hidden;
+        }
+        
+        header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 40px;
+            text-align: center;
+        }
+        
+        header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+        
+        header p {
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+        
+        main {
+            padding: 40px;
+        }
+        
+        .intro-section {
+            background: #f8f9fa;
+            padding: 30px;
+            border-radius: 8px;
+            margin-bottom: 40px;
+            border-left: 5px solid #667eea;
+        }
+        
+        .intro-section h2 {
+            color: #667eea;
+            margin-bottom: 15px;
+            font-size: 1.5em;
+        }
+        
+        .intro-section ul {
+            margin-left: 20px;
+            margin-bottom: 15px;
+        }
+        
+        .intro-section li {
+            margin-bottom: 10px;
+        }
+        
+        .challenge {
+            margin-bottom: 50px;
+            border: 2px solid #667eea;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        
+        .challenge-header {
+            background: #667eea;
+            color: white;
+            padding: 20px;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 1.3em;
+            font-weight: bold;
+        }
+        
+        .challenge-header:hover {
+            background: #764ba2;
+        }
+        
+        .toggle-icon {
+            font-size: 1.5em;
+        }
+        
+        .challenge-content {
+            padding: 30px;
+            display: none;
+        }
+        
+        .challenge-content.active {
+            display: block;
+        }
+        
+        .section-title {
+            color: #764ba2;
+            font-size: 1.3em;
+            margin: 25px 0 15px 0;
+            font-weight: bold;
+            border-bottom: 2px solid #667eea;
+            padding-bottom: 10px;
+        }
+        
+        .user-story {
+            background: #f0f4ff;
+            padding: 15px;
+            margin: 10px 0;
+            border-left: 4px solid #667eea;
+            border-radius: 4px;
+        }
+        
+        .user-story strong {
+            color: #667eea;
+        }
+        
+        .code-block {
+            background: #2d2d2d;
+            color: #f8f8f2;
+            padding: 20px;
+            border-radius: 6px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+            line-height: 1.5;
+        }
+        
+        .file-structure {
+            background: #f9f9f9;
+            padding: 20px;
+            border-radius: 6px;
+            margin: 15px 0;
+            font-family: 'Courier New', monospace;
+            border-left: 4px solid #764ba2;
+        }
+        
+        .file-structure pre {
+            margin: 0;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+        
+        .prompt-box {
+            background: #fff3cd;
+            padding: 20px;
+            border-radius: 6px;
+            margin: 15px 0;
+            border-left: 4px solid #ffc107;
+        }
+        
+        .prompt-box strong {
+            color: #856404;
+        }
+        
+        .api-card {
+            background: #e7f3ff;
+            padding: 20px;
+            margin: 15px 0;
+            border-radius: 6px;
+            border-left: 4px solid #667eea;
+        }
+        
+        .api-card h4 {
+            color: #667eea;
+            margin-bottom: 10px;
+        }
+        
+        .backlog-item {
+            background: #f0f0f0;
+            padding: 12px;
+            margin: 8px 0;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .backlog-item input[type="checkbox"] {
+            margin-right: 15px;
+            cursor: pointer;
+            width: 20px;
+            height: 20px;
+        }
+        
+        .tips-section {
+            background: #d4edda;
+            padding: 30px;
+            border-radius: 8px;
+            margin-top: 40px;
+            border-left: 5px solid #28a745;
+        }
+        
+        .tips-section h2 {
+            color: #28a745;
+            margin-bottom: 15px;
+            font-size: 1.5em;
+        }
+        
+        .tips-section li {
+            margin-bottom: 15px;
+            margin-left: 20px;
+        }
+        
+        .ai-tips {
+            background: #d1ecf1;
+            padding: 20px;
+            border-radius: 6px;
+            margin: 15px 0;
+            border-left: 4px solid #0c5460;
+        }
+        
+        .ai-tips strong {
+            color: #0c5460;
+        }
+        
+        .winning-criteria {
+            background: #f8d7da;
+            padding: 30px;
+            border-radius: 8px;
+            margin: 40px 0;
+            border-left: 5px solid #dc3545;
+        }
+        
+        .winning-criteria h2 {
+            color: #dc3545;
+            margin-bottom: 15px;
+            font-size: 1.5em;
+        }
+        
+        .winning-criteria li {
+            margin-bottom: 10px;
+            margin-left: 20px;
+        }
+        
+        footer {
+            background: #f8f9fa;
+            padding: 20px;
+            text-align: center;
+            color: #666;
+            border-top: 1px solid #ddd;
+        }
+        
+        @media (max-width: 768px) {
+            header h1 {
+                font-size: 1.8em;
+            }
+            
+            main {
+                padding: 20px;
+            }
+            
+            .challenge-header {
+                font-size: 1.1em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🎮 ROCVA Hackathon</h1>
+            <p>Kies je challenge en begin aan je avontuur!</p>
+        </header>
+        
+        <main>
+            <div class="intro-section">
+                <h2>📋 Over deze hackathon</h2>
+                <p>Welkom bij de ROCVA Hackathon! Je hebt twee coole challenges waar je uit kunt kiezen. Kies datgene wat je het meest aanspreekt en ga aan de slag. Gebruik de user stories, backlog en AI prompts om je project te bouwen. Vergeet niet: het gaat erom dat je iets maakt waar je trots op bent en dat je het kunt uitleggen!</p>
+                <p style="margin-top: 15px;"><strong>Belangrijke regels:</strong></p>
+                <ul>
+                    <li>✅ Je mag AI-tools gebruiken (zoals ChatGPT, Claude, GitHub Copilot)</li>
+                    <li>🏆 Winnaar is wie het indrukwekkendste resultaat oplevert EN het kan uitleggen</li>
+                    <li>⏰ Plan je werk goed in met de user stories en backlog</li>
+                    <li>💡 Gebruik de start prompts om AI goed in te zetten</li>
+                </ul>
+            </div>
+            
+            <!-- Challenge 1: Game Development -->
+            <div class="challenge">
+                <div class="challenge-header" onclick="toggleChallenge(0)">
+                    <span>🎮 Challenge 1: Game Development (Unity of THREE.js)</span>
+                    <span class="toggle-icon">▼</span>
+                </div>
+                <div class="challenge-content">
+                    <p>Bouw een coole game! Kies tussen <strong>Unity</strong> of <strong>THREE.js</strong> (WebGL). Ga alleen (of multiplayer, nog beter!) aan de slag en maak iets wat spelersgeluk geeft.</p>
+                    
+                    <div class="section-title">📚 User Stories</div>
+                    <div class="user-story">
+                        <strong>Story 1:</strong> Als speler wil ik de game kunnen starten zodat ik kan spelen
+                    </div>
+                    <div class="user-story">
+                        <strong>Story 2:</strong> Als speler wil ik karakters/objecten zien bewegen zodat het voelt als een echte game
+                    </div>
+                    <div class="user-story">
+                        <strong>Story 3:</strong> Als speler wil ik punten/score verdienen zodat ik zie hoe goed ik speel
+                    </div>
+                    <div class="user-story">
+                        <strong>Story 4:</strong> Als speler wil ik een game-over scherm zien zodat ik weet wanneer het voorbij is
+                    </div>
+                    <div class="user-story">
+                        <strong>Story 5:</strong> Als speler wil ik zo mogelijk tegen vrienden spelen (optional multiplayer <a href="https://github.com/ROCVA-DISSELDORP/ThreeJSMultiplayer">lees meer</a>)
+                    </div>
+                    
+                    <div class="section-title">📁 Bestandstructuur</div>
+                    <div class="file-structure">
+                        <pre>game-project/
+├── index.html                 (hoofdpagina)
+├── css/
+│   └── style.css              (styling)
+├── js/
+│   ├── main.js                (gameloop en initialisatie)
+│   ├── player.js              (spelerlogica)
+│   ├── enemy.js               (vijandlogica)
+│   ├── collision.js           (botsing detectie)
+│   └── ui.js                  (score, UI updates)
+├── assets/
+│   ├── models/                (3D modellen voor THREE.js)
+│   ├── textures/              (afbeeldingen)
+│   └── sounds/                (geluidseffecten)
+└── package.json               (dependencies)</pre>
+                    </div>
+                    
+                    <div class="section-title">🔧 Pseudocode - Game Loop</div>
+                    <div class="code-block">function gameLoop() {
+    // Input verwerken (toetsenbord, muis, controller)
+    handlePlayerInput()
+    
+    // Update game state
+    updatePlayerPosition()
+    updateEnemies()
+    updateProjectiles()
+    
+    // Detecteer botsingen
+    checkCollisions()
+    
+    // Update score/UI
+    updateUI()
+    
+    // Render alles
+    render()
+    
+    // Request volgende frame
+    requestAnimationFrame(gameLoop)
+}</div>
+                    
+                    <div class="section-title">🤖 Start Prompts voor AI</div>
+                    <div class="prompt-box">
+                        <strong>Prompt 1 - Basis Game Loop:</strong><br>
+                        "Geef me een basis game loop in JavaScript met THREE.js. De loop moet een kubus laten roteren en checken op toetsenbord input."
+                    </div>
+                    <div class="prompt-box">
+                        <strong>Prompt 2 - Collision Detection:</strong><br>
+                        "Hoe check ik collision detection tussen twee 3D objecten in THREE.js? Geef een eenvoudig voorbeeld."
+                    </div>
+                    <div class="prompt-box">
+                        <strong>Prompt 3 - UI/Score:</strong><br>
+                        "Maak een score systeem in mijn game die met HTML/CSS wordt weergegeven. Update de score als ik iets raak."
+                    </div>
+                    
+                    <div class="section-title">✅ Mini Backlog - Startup Taken</div>
+                    <div class="backlog-item">
+                        <input type="checkbox"> Maak HTML pagina met canvas element
+                    </div>
+                    <div class="backlog-item">
+                        <input type="checkbox"> Installeer THREE.js (via npm of CDN)
+                    </div>
+                    <div class="backlog-item">
+                        <input type="checkbox"> Maak basis scene met camera en renderer
+                    </div>
+                    <div class="backlog-item">
+                        <input type="checkbox"> Voeg een 3D object toe (kubus, bol, etc)
+                    </div>
+                    <div class="backlog-item">
+                        <input type="checkbox"> Maak game loop die object laat roteren
+                    </div>
+                    <div class="backlog-item">
+                        <input type="checkbox"> Voeg toetsenbord controls toe
+                    </div>
+                    <div class="backlog-item">
+                        <input type="checkbox"> Voeg tweede object toe (vijand/obstakels)
+                    </div>
+                    <div class="backlog-item">
+                        <input type="checkbox"> Implementeer botsing detectie
+                    </div>
+                    <div class="backlog-item">
+                        <input type="checkbox"> Voeg score systeem toe
+                    </div>
+                    <div class="backlog-item">
+                        <input type="checkbox"> Voeg game-over mechanic toe
+                    </div>
+                    <div class="backlog-item">
+                        <input type="checkbox"> Verfraaing: texturen, licht, particles
+                    </div>
+                    
+                    <div class="section-title">💡 Game Idee Voorbeelden</div>
+                    <ul style="margin-left: 20px;">
+                        <li><strong>Space Shooter:</strong> Beweeg een ruimteschip en schiet op vijanden</li>
+                        <li><strong>3D Maze:</strong> Navigeer door een labyrint, verzamel items</li>
+                        <li><strong>Block Puzzle:</strong> Vul het scherm met blokken (Tetris-style)</li>
+                        <li><strong>Flappy Bird 3D:</strong> Vermijd obstakels in 3D</li>
+                        <li><strong>Racing Game:</strong> Rij door een baan en beat andere racers</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <!-- Challenge 2: Web Application -->
+            <div class="challenge">
+                <div class="challenge-header" onclick="toggleChallenge(1)">
+                    <span>🌐 Challenge 2: Web Applicatie met API</span>
+                    <span class="toggle-icon">▼</span>
+                </div>
+                <div class="challenge-content">
+                    <p>Bouw een web applicatie met een <strong>frontend framework</strong> (React, Vue, Svelte, etc) en gebruik een coole API. Maak iets nuttig, creatiefs of gewoon heel vet!</p>
+                    
+                    <div class="section-title">🔗 Beschikbare APIs</div>
+                    <div class="api-card">
+                        <h4>🎮 Gaming APIs</h4>
+                        <ul style="margin-left: 20px;">
+                            <li><strong>Pokémon API:</strong> Informatie over Pokémon, moves, evoluties</li>
+                            <li><strong>Pokémon TCG API:</strong> Trading card game data</li>
+                            <li><strong>Halo API:</strong> Halo game statistics en informatie</li>
+                            <li><strong>Scryfall (Magic the Gathering):</strong> Magic kaarten data</li>
+                            <li><strong>League of Legends (Riot):</strong> Champion info, statistics</li>
+                        </ul>
+                    </div>
+                    <div class="api-card">
+                        <h4>⚔️ Strategy Games APIs</h4>
+                        <ul style="margin-left: 20px;">
+                            <li><strong>Clash Royale API:</strong> Kaart data, tournament info</li>
+                            <li><strong>Clash of Clans API:</strong> Clan data, speler stats</li>
+                        </ul>
+                    </div>
+                    <div class="api-card">
+                        <h4>🎬 Entertainment APIs</h4>
+                        <ul style="margin-left: 20px;">
+                            <li><strong>Harry Potter API:</strong> Boeken, karakters, spells</li>
+                            <li><strong>Minecraft API:</strong> Game informatie</li>
+                            <li><strong>Rick and Morty API:</strong> Afleveringen, karakters</li>
+                            <li><strong>Zelda API:</strong> Game items, locations</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="section-title">📚 User Stories</div>
+                    <div class="user-story">
+                        <strong>Story 1:</strong> Als gebruiker wil ik de pagina openen zodat ik data kan zien
+                    </div>
+                    <div class="user-story">
+                        <strong>Story 2:</strong> Als gebruiker wil ik zoeken naar items zodat ik specifieke data vindt
+                    </div>
+                    <div class="user-story">
+                        <strong>Story 3:</strong> Als gebruiker wil ik details zien van items zodat ik meer informatie krijg
+                    </div>
+                    <div class="user-story">
+                        <strong>Story 4:</strong> Als gebruiker wil ik mijn favorieten opslaan zodat ik ze later terug kan vinden
+                    </div>
+                    <div class="user-story">
+                        <strong>Story 5:</strong> Als gebruiker wil ik mijn data kunnen filteren zodat ik gemakkelijker kan navigeren
+                    </div>
+                    
+                    <div class="section-title">📁 Bestandstructuur</div>
+                    <div class="file-structure">
+                        <pre>api-app/
+├── public/
+│   └── index.html
+├── src/
+│   ├── App.jsx                (Hoofd component)
+│   ├── components/
+│   │   ├── SearchBar.jsx      (Zoekfunctie)
+│   │   ├── ItemList.jsx       (Lijst weergave)
+│   │   ├── ItemDetail.jsx     (Detail pagina)
+│   │   └── Favorites.jsx      (Favorieten)
+│   ├── services/
+│   │   └── api.js             (API calls)
+│   ├── styles/
+│   │   └── App.css            (Tailwind of CSS)
+│   └── main.jsx
+├── package.json
+└── vite.config.js</pre>
+                    </div>
+                    
+                    <div class="section-title">🔧 Pseudocode - Data Fetching</div>
+                    <div class="code-block">// API service
+async function fetchFromAPI(endpoint) {
+    try {
+        const response = await fetch(`${API_BASE_URL}/${endpoint}`)
+        if (!response.ok) throw new Error('API error')
+        return await response.json()
+    } catch (error) {
+        console.error('Fetch error:', error)
+        return null
+    }
+}
+
+// Component logica
+function App() {
+    const [items, setItems] = useState([])
+    const [loading, setLoading] = useState(false)
+    
+    const searchItems = async (query) => {
+        setLoading(true)
+        const data = await fetchFromAPI(`search?q=${query}`)
+        setItems(data)
+        setLoading(false)
+    }
+    
+    return (
+        &lt;div&gt;
+            &lt;SearchBar onSearch={searchItems} /&gt;
+            {loading && &lt;p&gt;Laden...&lt;/p&gt;}
+            &lt;ItemList items={items} /&gt;
+        &lt;/div&gt;
+    )
+}</div>
+                    
+                    <div class="section-title">🤖 Start Prompts voor AI</div>
+                    <div class="prompt-box">
+                        <strong>Prompt 1 - Project Setup:</strong><br>
+                        "Maak een nieuwe React app met Vite en Tailwind CSS. Voeg een component toe die data van een API fetched en weergeeft."
+                    </div>
+                    <div class="prompt-box">
+                        <strong>Prompt 2 - API Integration:</strong><br>
+                        "Hoe fetch ik data van [API naam]? Geef een voorbeeld van hoe ik een GET request doe en de data in een component weergeef."
+                    </div>
+                    <div class="prompt-box">
+                        <strong>Prompt 3 - Search Function:</strong><br>
+                        "Maak een zoekveld waar gebruikers kunnen zoeken in [API]. Filter de resultaten terwijl ze typen."
+                    </div>
+                    <div class="prompt-box">
+                        <strong>Prompt 4 - LocalStorage (Favorieten):</strong><br>
+                        "Hoe sla ik favoriete items op in localStorage? Geef een voorbeeld van hoe ik items kan opslaan en ophalen."
+                    </div>
+                    
+                    <div class="section-title">✅ Mini Backlog - Startup Taken</div>
+                    <div class="backlog-item">
+                        <input type="checkbox"> Kies een frontend framework (React/Vue/Svelte)
+                    </div>
+                    <div class="backlog-item">
+                        <input type="checkbox"> Maak project aan (Vite of Create React App)
+                    </div>
+                    <div class="backlog-item">
+                        <input type="checkbox"> Installeer Tailwind CSS
+                    </div>
+                    <div class="backlog-item">
+                        <input type="checkbox"> Test de API in Postman of browser console
+                    </div>
+                    <div class="backlog-item">
+                        <input type="checkbox"> Maak een service file voor API calls
+                    </div>
+                    <div class="backlog-item">
+                        <input type="checkbox"> Maak eerste component voor data display
+                    </div>
+                    <div class="backlog-item">
+                        <input type="checkbox"> Voeg search/filter functionaliteit toe
+                    </div>
+                    <div class="backlog-item">
+                        <input type="checkbox"> Maak detail pagina voor items
+                    </div>
+                    <div class="backlog-item">
+                        <input type="checkbox"> Voeg loading state toe
+                    </div>
+                    <div class="backlog-item">
+                        <input type="checkbox"> Implementeer error handling
+                    </div>
+                    <div class="backlog-item">
+                        <input type="checkbox"> Voeg favorieten/bookmarks toe
+                    </div>
+                    <div class="backlog-item">
+                        <input type="checkbox"> Style alles mooi met Tailwind
+                    </div>
+                    
+                    <div class="section-title">💡 Applicatie Ideeën per API</div>
+                    
+                    <div style="background: #f0f4ff; padding: 20px; margin: 15px 0; border-radius: 6px;">
+                        <h4 style="color: #667eea; margin-bottom: 10px;">📱 Pokémon Encyclopedia</h4>
+                        <p>Zoeken naar Pokémon, zie stats, moves en evoluties. Sla je favorieten op. Bonus: maak een team samensteller!</p>
+                    </div>
+                    
+                    <div style="background: #f0f4ff; padding: 20px; margin: 15px 0; border-radius: 6px;">
+                        <h4 style="color: #667eea; margin-bottom: 10px;">🎬 Harry Potter Wiki</h4>
+                        <p>Zoeken naar karakters, boeken en spells. Filter op type (goed/slecht). Maak een quiz over Harry Potter!</p>
+                    </div>
+                    
+                    <div style="background: #f0f4ff; padding: 20px; margin: 15px 0; border-radius: 6px;">
+                        <h4 style="color: #667eea; margin-bottom: 10px;">🎮 League of Legends Champion Guide</h4>
+                        <p>Zoeken naar champions, zie abilities en stats. Maak een build recommender tool.</p>
+                    </div>
+                    
+                    <div style="background: #f0f4ff; padding: 20px; margin: 15px 0; border-radius: 6px;">
+                        <h4 style="color: #667eea; margin-bottom: 10px;">🃏 Magic the Gathering Card Browser</h4>
+                        <p>Zoeken naar kaarten, filter op mana cost, type en rarity. Bouw een deck builder!</p>
+                    </div>
+                    
+                    <div style="background: #f0f4ff; padding: 20px; margin: 15px 0; border-radius: 6px;">
+                        <h4 style="color: #667eea; margin-bottom: 10px;">📺 Rick and Morty Episode Guide</h4>
+                        <p>Browse afleveringen, zie karakters per aflevering. Maak een watchlist of rating systeem.</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Tips Section -->
+            <div class="tips-section">
+                <h2>💡 Handige Tips voor Studenten</h2>
+                
+                <h3 style="color: #28a745; margin-top: 25px; margin-bottom: 15px;">🎯 Structuur en Planning</h3>
+                <ul>
+                    <li><strong>Begin klein:</strong> Zorg dat de basis werkt voordat je fancy features toevoegt</li>
+                    <li><strong>Gebruik de backlog:</strong> Werk de taken stap voor stap af, check ze af</li>
+                    <li><strong>Test regelmatig:</strong> Zorg dat je code na elke wijziging nog werkt</li>
+                    <li><strong>Git commits:</strong> Commit je werk regelmatig met duidelijke berichten</li>
+                </ul>
+                
+                <h3 style="color: #28a745; margin-top: 25px; margin-bottom: 15px;">🤖 AI Slim Gebruiken</h3>
+                <div class="ai-tips">
+                    <strong>✅ Zo vraag je goed aan AI:</strong>
+                    <ul style="margin-left: 20px; margin-top: 10px;">
+                        <li>"Hoe maak ik een zoekveld in React dat realtime filtert?"</li>
+                        <li>"Geef me een voorbeeld van hoe ik data van [API] fetch"</li>
+                        <li>"Hier is mijn code: [CODE]. Waarom werkt dit niet?"</li>
+                        <li>"Hoe kan ik deze functie verbeteren/optimaliseren?"</li>
+                    </ul>
+                </div>
+                
+                <div class="ai-tips">
+                    <strong>❌ Zo vraag je niet aan AI:</strong>
+                    <ul style="margin-left: 20px; margin-top: 10px;">
+                        <li>"Maak mijn hele app voor me" (dan leer je niets!)</li>
+                        <li>"Dit werkt niet" (AI kan niet helpen zonder meer info)</li>
+                        <li>AI gebruiken zonder de code zelf te begrijpen</li>
+                    </ul>
+                </div>
+                
+                <h3 style="color: #28a745; margin-top: 25px; margin-bottom: 15px;">📚 HTML/Tailwind Tutorials Genereren</h3>
+                <div class="ai-tips" style="background: #d4edda; border-left: 4px solid #28a745;">
+                    <strong>Super handige prompt voor Tailwind layouts:</strong>
+                    <div style="margin-top: 10px; font-style: italic; color: #28a745;">
+                        "Maak een responsive layout met Tailwind CSS voor een [beschrijf jouw idea]. Zorg dat het mooi eruit ziet op telefoon, tablet en desktop. Gebruik alleen Tailwind classes, geen custom CSS."
+                    </div>
+                </div>
+                
+                <div class="ai-tips" style="background: #d4edda; border-left: 4px solid #28a745;">
+                    <strong>Prompt voor HTML5 semantic code:</strong>
+                    <div style="margin-top: 10px; font-style: italic; color: #28a745;">
+                        "Schrijf semantische HTML5 voor een [beschrijf pagina]. Gebruik header, nav, main, section, article, footer tags. Maak het optimaal voor SEO."
+                    </div>
+                </div>
+                
+                <div class="ai-tips" style="background: #d4edda; border-left: 4px solid #28a745;">
+                    <strong>Prompt voor animaties:</strong>
+                    <div style="margin-top: 10px; font-style: italic; color: #28a745;">
+                        "Maak een animatie met Tailwind CSS voor [beschrijf wat je wil animeren]. Zorg dat het smooth en performant is. Gebruik Tailwind's animation classes."
+                    </div>
+                </div>
+                
+                <h3 style="color: #28a745; margin-top: 25px; margin-bottom: 15px;">🔍 Debugging Tips</h3>
+                <ul>
+                    <li><strong>Console Log:</strong> Gebruik console.log() om je code stap voor stap te debuggen</li>
+                    <li><strong>Browser DevTools:</strong> Leer de F12 developer tools kennen (Elements, Console, Network tabs)</li>
+                    <li><strong>Error messages lezen:</strong> Lees error messages goed, ze vertellen je wat er mis is!</li>
+                    <li><strong>Stapje teruggaan:</strong> Als iets breekt, ga terug naar de vorige versie en werk langzamer</li>
+                </ul>
+                
+                <h3 style="color: #28a745; margin-top: 25px; margin-bottom: 15px;">🎨 Design Tips</h3>
+                <ul>
+                    <li><strong>Tailwind Classes:</strong> Leer de basics: grid, flexbox, padding, margin, colors</li>
+                    <li><strong>Whitespace:</strong> Goed gebruik van ruimte maakt design beter leesbaar</li>
+                    <li><strong>Consistent Kleuren:</strong> Kies 2-3 hoofdkleuren en hou je daaraan vast</li>
+                    <li><strong>Responsive:</strong> Test je app op telefoon, tablet EN desktop</li>
+                </ul>
+            </div>
+            
+            <!-- Winning Criteria -->
+            <div class="winning-criteria">
+                <h2>🏆 Hoe Win Je Deze Hackathon?</h2>
+                <p style="margin-bottom: 20px;">De winnaar is niet wie het meeste code schrijft, maar wie het BESTE resultaat levert EN het kan uitleggen!</p>
+                <ul>
+                    <li><strong>Werkende app:</strong> Je project moet daadwerkelijk functioneren zonder crashes</li>
+                    <li><strong>Afgewerkt design:</strong> Het ziet er professioneel en mooi uit</li>
+                    <li><strong>User experience:</strong> De app is makkelijk te gebruiken en voelt responsief</li>
+                    <li><strong>Originele idee/twist:</strong> Je hebt iets unieks of creatiefs gemaakt</li>
+                    <li><strong>Code kwaliteit:</strong> Je code is schoon, begrijpelijk en goed georganiseerd</li>
+                    <li><strong>Je kunt uitleggen wat je hebt gedaan:</strong> Je begrijpt je eigen code en kunt het demonstreren</li>
+                    <li><strong>Extra features (bonus):</strong> Bonus punten voor features buiten de basiseisen</li>
+                </ul>
+            </div>
+            
+            <!-- Final Tips -->
+            <div style="background: #e7f3ff; padding: 30px; border-radius: 8px; margin-top: 40px; text-align: center;">
+                <h2 style="color: #667eea; margin-bottom: 20px;">🚀 Je bent klaar!</h2>
+                <p style="font-size: 1.1em; margin-bottom: 15px;">Kies je challenge, volg de backlog, en ga aan het werk. Veel sterkte! 💪</p>
+                <p style="color: #666; font-size: 0.95em;">Vragen? Stuur je docent een DM of vraag om hulp in het klassengroep!</p>
+            </div>
+        </main>
+        
+        <footer>
+            <p>&copy; 2024 ROCVA Hackathon | Veel succes met je project!</p>
+        </footer>
+    </div>
+    
+    <script>
+        function toggleChallenge(index) {
+            const challenges = document.querySelectorAll('.challenge-content');
+            const headers = document.querySelectorAll('.challenge-header');
+            
+            challenges[index].classList.toggle('active');
+            
+            // Rotate icon
+            const icon = headers[index].querySelector('.toggle-icon');
+            if (challenges[index].classList.contains('active')) {
+                icon.style.transform = 'rotate(0deg)';
+            } else {
+                icon.style.transform = 'rotate(180deg)';
+            }
+        }
+        
+        // Checkbox functionality
+        document.querySelectorAll('.backlog-item input[type="checkbox"]').forEach(checkbox => {
+            checkbox.addEventListener('change', function() {
+                if (this.checked) {
+                    this.parentElement.style.opacity = '0.6';
+                    this.parentElement.style.textDecoration = 'line-through';
+                } else {
+                    this.parentElement.style.opacity = '1';
+                    this.parentElement.style.textDecoration = 'none';
+                }
+            });
+        });
+    </script>
+</body>
+</html>
