@@ -431,8 +431,8 @@ for (let i=0;i<22;i++) {
 const _mills = [];
 function makeWindmill(x,z) {
   const g = new THREE.Group();
-  g.add(Object.assign(new THREE.Mesh(new THREE.CylinderGeometry(.7,1.1,9,8), new THREE.MeshLambertMaterial({color:0xeeeeee})),
-    { position: new THREE.Vector3(0,4.5,0) }));
+  const tower = new THREE.Mesh(new THREE.CylinderGeometry(.7,1.1,9,8), new THREE.MeshLambertMaterial({color:0xeeeeee}));
+  tower.position.set(0,4.5,0); g.add(tower);
   const pivot = new THREE.Group();
   pivot.position.set(0,8.8,.8);
   for (let b=0;b<4;b++) {
@@ -450,15 +450,15 @@ _mills.push(makeWindmill(-85,35), makeWindmill(95,-50), makeWindmill(-20,140));
 // Decorative houses
 function makeHouse(x,z,col) {
   const g = new THREE.Group();
-  g.add(Object.assign(new THREE.Mesh(new THREE.BoxGeometry(5,4,5), new THREE.MeshLambertMaterial({color:col})),
-    { position: new THREE.Vector3(0,2,0) }));
-  g.add(Object.assign(new THREE.Mesh(new THREE.ConeGeometry(3.8,3,4), new THREE.MeshLambertMaterial({color:0xcc3333})),
-    { position: new THREE.Vector3(0,5.5,0), rotation: new THREE.Euler(0, Math.PI/4, 0) }));
+  const walls = new THREE.Mesh(new THREE.BoxGeometry(5,4,5), new THREE.MeshLambertMaterial({color:col}));
+  walls.position.set(0,2,0); g.add(walls);
+  const roof = new THREE.Mesh(new THREE.ConeGeometry(3.8,3,4), new THREE.MeshLambertMaterial({color:0xcc3333}));
+  roof.position.set(0,5.5,0); roof.rotation.y = Math.PI/4; g.add(roof);
   g.position.set(x,-1,z);
   g.castShadow = true;
   scene.add(g);
 }
-[[90,130,0xf5deb3],[−60,−35,0xfff0cc],[145,50,0xe8d5b0]].forEach(([x,z,c]) => makeHouse(x,z,c));
+[[90,130,0xf5deb3],[-60,-35,0xfff0cc],[145,50,0xe8d5b0]].forEach(([x,z,c]) => makeHouse(x,z,c));
 
 // ═══════════════════════════════════════════════════════════════
 //  ITEM BOXES  &  BOOST PADS
