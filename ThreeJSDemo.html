@@ -801,8 +801,8 @@ class Kart {
     if (this.lightn>0)   this.lightn -= dt;
 
     const lightning = this.lightn > 0;
-    const maxSpd = this.boosting ? 0.0045*this.boostPow : (lightning ? 0.0014 : 0.0032);
-    const acc=.00009, fric=.91, turn=.032;
+    const maxSpd = this.boosting ? 0.36*this.boostPow : (lightning ? 0.06 : 0.22);
+    const acc=0.006, fric=.91, turn=.032;
 
     if (!this.stunned) {
       if (inp.fwd)   this.speed += acc;
@@ -811,7 +811,7 @@ class Kart {
       if (inp.right) this.angVel += turn * (this.drifting?1.5:1);
 
       // Drift
-      if (inp.drift && Math.abs(this.speed)>.001) {
+      if (inp.drift && Math.abs(this.speed)>.05) {
         if (!this.drifting) { this.drifting=true; this.driftDir=inp.left?-1:inp.right?1:0; sfx('drift'); }
         this.driftTimer += dt;
         if (this.driftTimer>.45) this.boostMeter = Math.min(1, this.boostMeter+dt*.28);
@@ -823,7 +823,7 @@ class Kart {
       if (inp.useBoost && this.boostMeter>.2 && !this.boosting) { this.boost(1.5,2); this.boostMeter=0; }
     }
 
-    this.speed    = Math.max(-.0009, Math.min(maxSpd, this.speed));
+    this.speed    = Math.max(-.06, Math.min(maxSpd, this.speed));
     this.speed   *= fric;
     this.angVel  *= .84;
     this.angle   += this.angVel;
@@ -837,12 +837,12 @@ class Kart {
     const lat   = fwd.dot(rgt);
 
     const prevT = this.t;
-    this.t     += this.speed*proj / TRACK_L;
+    this.t     += this.speed*proj*dt*60 / TRACK_L;
 
     if (this.drifting)
-      this.latOff += this.driftDir*this.speed*12;
+      this.latOff += this.driftDir*this.speed*1.2*dt*60;
     else
-      this.latOff += this.speed*lat*8;
+      this.latOff += this.speed*lat*0.8*dt*60;
     this.latOff *= .91;
     this.latOff  = Math.max(-TRACK_W*.42, Math.min(TRACK_W*.42, this.latOff));
 
@@ -906,7 +906,7 @@ class AIKart extends Kart {
     };
 
     // Rubber band
-    if (karts[0].progress() - this.progress() > .6) this.speed += .00006;
+    if (karts[0].progress() - this.progress() > .6) this.speed += .004;
 
     this._itemTmr -= dt;
     if (this.item && this._itemTmr<=0) { this.useItem(karts); this._itemTmr=3+Math.random()*5; }
@@ -952,7 +952,7 @@ const camPos   = new THREE.Vector3(0,6,14);
 const camLook  = new THREE.Vector3();
 
 function updateCamera() {
-  const t   = Math.max(0, player.speed/0.0036);
+  const t   = Math.max(0, player.speed/0.22);
   camera.fov = 63 + t*22;
   camera.updateProjectionMatrix();
 
@@ -983,14 +983,14 @@ function updateHUD() {
   document.getElementById('posnum').textContent = pos;
   document.getElementById('possuf').textContent = sfxArr[pos-1]||'th';
 
-  const kmh = Math.round(Math.abs(player.speed)/0.0032*240);
+  const kmh = Math.round(Math.abs(player.speed)/0.22*200);
   document.getElementById('kmh').textContent = kmh;
 
   document.getElementById('boostfill').style.width = (player.boostMeter*100)+'%';
   document.getElementById('boostfill').style.background =
     player.boosting ? 'linear-gradient(90deg,#00ff88,#00ffff)' : 'linear-gradient(90deg,#ff6600,#ffcc00)';
 
-  setEngine(Math.abs(player.speed), 0.0036);
+  setEngine(Math.abs(player.speed), 0.22);
   drawMinimap();
 }
 
@@ -1161,6 +1161,11 @@ function animate(now) {
 }
 
 requestAnimationFrame(animate);
+
+// Auto-focus so keyboard input works immediately without clicking
+const _cv = document.getElementById('c');
+_cv.setAttribute('tabindex','0');
+_cv.focus();
 </script>
 </body>
 </html>
