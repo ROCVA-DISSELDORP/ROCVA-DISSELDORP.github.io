@@ -1,0 +1,1189 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Didactische werkvormen Software Development</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    html { scroll-behavior: smooth; }
+  </style>
+</head>
+<body class="bg-slate-50 text-slate-800">
+  <div class="min-h-screen">
+    <!-- Header -->
+    <header class="bg-gradient-to-r from-sky-700 via-cyan-700 to-teal-700 text-white shadow-lg">
+      <div class="max-w-7xl mx-auto px-6 py-10">
+        <div class="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-6">
+          <div>
+            <p class="uppercase tracking-[0.25em] text-sm text-cyan-100 font-semibold">
+              Software Development opleiding
+            </p>
+            <h1 class="text-4xl lg:text-5xl font-extrabold mt-2">
+              Didactische werkvormen & praktische trucjes
+            </h1>
+            <p class="mt-4 max-w-3xl text-cyan-50 text-lg leading-relaxed">
+              Een overzicht van werkvormen die samenwerking, eigenaarschap, technische diepgang
+              en rust in de klas versterken. Gericht op programmeeronderwijs, projectonderwijs
+              en begeleiding in heterogene groepen.
+            </p>
+          </div>
+
+          <div class="bg-white/10 border border-white/20 rounded-2xl p-5 backdrop-blur-sm max-w-md">
+            <h2 class="font-bold text-lg">Kernuitgangspunten</h2>
+            <ul class="mt-3 space-y-2 text-sm text-cyan-50">
+              <li>• Rust en focus in de klas blijven primair.</li>
+              <li>• Werkvormen moeten een duidelijke didactische meerwaarde hebben.</li>
+              <li>• Mixen van groepen alleen als het de lesinhoud versterkt.</li>
+              <li>• Studenten leren niet alleen programmeren, maar ook uitleggen, samenwerken en reflecteren.</li>
+              <li>• AI kan ondersteunend zijn in het onderwijs, maar sommige werkvormen zijn juist bewust zonder AI om het denkproces te trainen.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- Navigation -->
+    <nav class="sticky top-0 z-20 bg-white/90 backdrop-blur border-b border-slate-200">
+      <div class="max-w-7xl mx-auto px-6 py-3">
+        <div class="flex flex-wrap gap-2 text-sm">
+          <a href="#overzicht" class="px-4 py-2 rounded-full bg-slate-100 hover:bg-slate-200 transition">Overzicht</a>
+          <a href="#basis-werkvormen" class="px-4 py-2 rounded-full bg-slate-100 hover:bg-slate-200 transition">Basiswerkvormen</a>
+          <a href="#aanvullende-werkvormen" class="px-4 py-2 rounded-full bg-slate-100 hover:bg-slate-200 transition">Aanvullende werkvormen</a>
+          <a href="#randvoorwaarden" class="px-4 py-2 rounded-full bg-slate-100 hover:bg-slate-200 transition">Randvoorwaarden</a>
+          <a href="#praktische-trucs" class="px-4 py-2 rounded-full bg-slate-100 hover:bg-slate-200 transition">Praktische trucs</a>
+          <a href="#implementatie" class="px-4 py-2 rounded-full bg-slate-100 hover:bg-slate-200 transition">Implementatie</a>
+        </div>
+      </div>
+    </nav>
+
+    <main class="max-w-7xl mx-auto px-6 py-10 space-y-16">
+
+      <!-- Overzicht -->
+      <section id="overzicht">
+        <div class="flex items-center gap-3 mb-6">
+          <div class="w-12 h-12 rounded-2xl bg-sky-100 flex items-center justify-center text-2xl">🧭</div>
+          <div>
+            <h2 class="text-3xl font-bold">Overzicht van de aanpak</h2>
+            <p class="text-slate-600 mt-1">
+              Deze pagina bundelt ideeën die passen bij programmeeronderwijs met veel praktijk,
+              verschillen in niveau en behoefte aan structuur.
+            </p>
+          </div>
+        </div>
+
+        <div class="grid lg:grid-cols-3 gap-6">
+          <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-6">
+            <h3 class="text-xl font-bold text-sky-800">Doelen</h3>
+            <ul class="mt-4 space-y-3 text-slate-700">
+              <li>• Meer sociale verbinding in de klas</li>
+              <li>• Actief leren door uitleggen en samenwerken</li>
+              <li>• Betere begeleiding bij niveauverschillen</li>
+              <li>• Meer eigenaarschap over leerproces en codekwaliteit</li>
+              <li>• Balans tussen individuele vaardigheid en teamwork</li>
+            </ul>
+          </div>
+
+          <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-6">
+            <h3 class="text-xl font-bold text-emerald-800">Wat willen we stimuleren?</h3>
+            <ul class="mt-4 space-y-3 text-slate-700">
+              <li>• Studenten die elkaar leren kennen en vertrouwen</li>
+              <li>• Studenten die code hardop kunnen toelichten</li>
+              <li>• Studenten die hulp durven vragen én geven</li>
+              <li>• Studenten die voorspellen, redeneren en reflecteren</li>
+              <li>• Studenten die zowel zelfstandig als in teamverband functioneren</li>
+            </ul>
+          </div>
+
+          <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-6">
+            <h3 class="text-xl font-bold text-amber-800">Belangrijke ontwerpprincipes</h3>
+            <ul class="mt-4 space-y-3 text-slate-700">
+              <li>• Werkvormen zijn ondersteunend aan de lesdoelen, niet andersom</li>
+              <li>• Niet elke les hoeft gemixt of interactief te zijn</li>
+              <li>• Volle PVI’s en rust in de klas blijven leidend</li>
+              <li>• Werkvormen moeten praktisch uitvoerbaar zijn voor docent én student</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <!-- Basiswerkvormen -->
+      <section id="basis-werkvormen">
+        <div class="flex items-center gap-3 mb-6">
+          <div class="w-12 h-12 rounded-2xl bg-cyan-100 flex items-center justify-center text-2xl">💡</div>
+          <div>
+            <h2 class="text-3xl font-bold">Basiswerkvormen</h2>
+            <p class="text-slate-600 mt-1">
+              Werkvormen die direct aansluiten op code review, samenwerken, instructie en projectonderwijs.
+            </p>
+          </div>
+        </div>
+
+        <div class="space-y-8">
+
+          <!-- 1 -->
+          <article class="bg-white rounded-3xl shadow-sm border border-slate-200 overflow-hidden">
+            <div class="bg-sky-700 text-white px-6 py-5">
+              <h3 class="text-2xl font-bold">1. Wekelijkse random code review-koppels</h3>
+              <p class="text-sky-100 mt-1">
+                Studenten worden elke week willekeurig gekoppeld om elkaars code te reviewen.
+              </p>
+            </div>
+            <div class="p-6 grid lg:grid-cols-4 gap-6">
+              <div class="lg:col-span-2">
+                <h4 class="font-bold text-slate-900">Hoe werkt het?</h4>
+                <p class="mt-2 text-slate-700 leading-relaxed">
+                  Via een digitale tool worden studenten automatisch aan een andere klasgenoot gekoppeld.
+                  Ze lopen samen de code door aan de hand van een korte review-checklist. De docent kan
+                  het gesprek of de review digitaal laten aftekenen.
+                </p>
+                <div class="mt-5">
+                  <h4 class="font-bold text-slate-900">Didactische meerwaarde</h4>
+                  <ul class="mt-2 space-y-2 text-slate-700">
+                    <li>• Bevordert sociale connectie: studenten leren iedereen kennen.</li>
+                    <li>• Versterkt vaktaal: studenten moeten code kunnen uitleggen aan een ander.</li>
+                    <li>• Ook sterkere studenten moeten leren hun keuzes begrijpelijk te verwoorden.</li>
+                    <li>• Vergroot aandacht voor codekwaliteit, leesbaarheid en ontwerpkeuzes.</li>
+                  </ul>
+                </div>
+              </div>
+              <div>
+                <h4 class="font-bold text-slate-900">Wanneer inzetten?</h4>
+                <ul class="mt-2 space-y-2 text-slate-700">
+                  <li>• Einde van een programmeerles</li>
+                  <li>• Sprintopleveringen</li>
+                  <li>• Formatieve feedbackmomenten</li>
+                  <li>• Aftekenen van tussenproducten</li>
+                </ul>
+              </div>
+              <div>
+                <h4 class="font-bold text-slate-900">Praktische tips</h4>
+                <ul class="mt-2 space-y-2 text-slate-700">
+                  <li>• Werk met een vaste reviewkaart.</li>
+                  <li>• Laat studenten minimaal 1 compliment en 1 verbeterpunt formuleren.</li>
+                  <li>• Houd de review kort en ritmisch: 8–10 minuten.</li>
+                  <li>• Laat de docent het proces aftekenen, niet alleen de inhoud.</li>
+                </ul>
+              </div>
+            </div>
+          </article>
+
+          <!-- 2 -->
+          <article class="bg-white rounded-3xl shadow-sm border border-slate-200 overflow-hidden">
+            <div class="bg-emerald-700 text-white px-6 py-5">
+              <h3 class="text-2xl font-bold">2. Klassen los roosteren en doelgericht mixen</h3>
+              <p class="text-emerald-100 mt-1">
+                Werken in verschillende ruimtes, met de mogelijkheid om groepen te mixen als dat didactisch meerwaarde heeft.
+              </p>
+            </div>
+            <div class="p-6 grid lg:grid-cols-4 gap-6">
+              <div class="lg:col-span-2">
+                <h4 class="font-bold text-slate-900">Hoe werkt het?</h4>
+                <p class="mt-2 text-slate-700 leading-relaxed">
+                  Klassen of subgroepen kunnen los van elkaar worden ingeroosterd, zodat er meer rust,
+                  ruimte en differentiatie mogelijk is. Mixen gebeurt alleen als daar een duidelijke
+                  reden voor is: bijvoorbeeld peer learning, code review, verlengde instructie of
+                  groepsdoorbrekende samenwerking.
+                </p>
+                <div class="mt-5">
+                  <h4 class="font-bold text-slate-900">Didactische meerwaarde</h4>
+                  <ul class="mt-2 space-y-2 text-slate-700">
+                    <li>• Meer flexibiliteit in begeleiding en groepsgrootte.</li>
+                    <li>• Mogelijkheid om op niveau of ondersteuningsbehoefte te werken.</li>
+                    <li>• Betere voorwaarden voor rust en focus bij volle PVI’s.</li>
+                    <li>• Mixmomenten kunnen bewust worden ingezet voor samenwerking of inspiratie.</li>
+                  </ul>
+                </div>
+              </div>
+              <div>
+                <h4 class="font-bold text-slate-900">Belangrijke voorwaarde</h4>
+                <p class="mt-2 text-slate-700">
+                  Mixen is geen doel op zich. Het gebeurt alleen als het iets toevoegt aan die specifieke les.
+                  Rust in de klas en een goed lopend leerproces blijven leidend.
+                </p>
+              </div>
+              <div>
+                <h4 class="font-bold text-slate-900">Goede toepassingen</h4>
+                <ul class="mt-2 space-y-2 text-slate-700">
+                  <li>• Peer review met andere groep</li>
+                  <li>• Korte expertgroepen of hulpgroepen</li>
+                  <li>• Verlengde instructie in kleine setting</li>
+                  <li>• Demo-/presentatiemomenten</li>
+                </ul>
+              </div>
+            </div>
+          </article>
+
+          <!-- 3 -->
+          <article class="bg-white rounded-3xl shadow-sm border border-slate-200 overflow-hidden">
+            <div class="bg-violet-700 text-white px-6 py-5">
+              <h3 class="text-2xl font-bold">3. Random hulp-tool / hulplijn-systeem</h3>
+              <p class="text-violet-100 mt-1">
+                Studenten kunnen zichtbaar hulp vragen aan iemand die beschikbaar is om mee te denken.
+              </p>
+            </div>
+            <div class="p-6 grid lg:grid-cols-4 gap-6">
+              <div class="lg:col-span-2">
+                <h4 class="font-bold text-slate-900">Hoe werkt het?</h4>
+                <p class="mt-2 text-slate-700 leading-relaxed">
+                  Studenten geven zichtbaar aan of ze hulp nodig hebben, beschikbaar zijn voor hulp
+                  of juist gefocust willen doorwerken. Dat kan digitaal of fysiek. Een digitale variant
+                  kan willekeurig een beschikbare helper koppelen aan een student met een vraag. Een fysieke
+                  variant kan werken met statuskaarten, pionnen of een dobbelsteen die de voortgang representeert.
+                </p>
+                <div class="mt-5">
+                  <h4 class="font-bold text-slate-900">Didactische meerwaarde</h4>
+                  <ul class="mt-2 space-y-2 text-slate-700">
+                    <li>• Verlaagt de drempel om hulp te vragen.</li>
+                    <li>• Maakt gebruik van de expertise in de groep.</li>
+                    <li>• Ontlast de docent bij eenvoudige of veelvoorkomende vragen.</li>
+                    <li>• Stimuleert uitlegvaardigheid en verantwoordelijkheidsgevoel.</li>
+                  </ul>
+                </div>
+              </div>
+              <div>
+                <h4 class="font-bold text-slate-900">Mogelijke vormen</h4>
+                <ul class="mt-2 space-y-2 text-slate-700">
+                  <li>• Digitaal: hulp nodig / beschikbaar / focus</li>
+                  <li>• Digitaal: random helper-koppeling</li>
+                  <li>• Fysiek: dobbelsteen of blokje op tafel</li>
+                  <li>• Fysiek: rood / geel / groen kaartje</li>
+                </ul>
+              </div>
+              <div>
+                <h4 class="font-bold text-slate-900">Aandachtspunt</h4>
+                <p class="mt-2 text-slate-700">
+                  Hulp is niet hetzelfde als voordoen. Maak duidelijk dat helpers vooral vragen stellen,
+                  meedenken en richting geven in plaats van het probleem overnemen.
+                </p>
+              </div>
+            </div>
+          </article>
+
+          <!-- 4 -->
+          <article class="bg-white rounded-3xl shadow-sm border border-slate-200 overflow-hidden">
+            <div class="bg-amber-600 text-white px-6 py-5">
+              <h3 class="text-2xl font-bold">4. Pair programming: typen en denken verdelen</h3>
+              <p class="text-amber-100 mt-1">
+                Eén student typt, de ander bewaakt de denklijn, controleert en denkt vooruit.
+              </p>
+            </div>
+            <div class="p-6 grid lg:grid-cols-4 gap-6">
+              <div class="lg:col-span-2">
+                <h4 class="font-bold text-slate-900">Hoe werkt het?</h4>
+                <p class="mt-2 text-slate-700 leading-relaxed">
+                  Studenten werken in duo’s met duidelijke rollen: de <strong>driver</strong> typt
+                  en voert uit, de <strong>navigator</strong> denkt mee, stelt vragen, bewaakt de logica
+                  en houdt overzicht. Rollen worden regelmatig gewisseld.
+                </p>
+                <div class="mt-5">
+                  <h4 class="font-bold text-slate-900">Didactische meerwaarde</h4>
+                  <ul class="mt-2 space-y-2 text-slate-700">
+                    <li>• Studenten verwoorden continu hun denkproces.</li>
+                    <li>• Fouten worden sneller gesignaleerd.</li>
+                    <li>• Minder vastlopen in stilte.</li>
+                    <li>• Goed inzetbaar bij uitdagende opdrachten of nieuwe concepten.</li>
+                  </ul>
+                </div>
+              </div>
+              <div>
+                <h4 class="font-bold text-slate-900">Succesfactoren</h4>
+                <ul class="mt-2 space-y-2 text-slate-700">
+                  <li>• Rollen expliciet maken</li>
+                  <li>• Regelmatig wisselen</li>
+                  <li>• Korte tijdsblokken gebruiken</li>
+                  <li>• Heldere opdracht met concreet tussenproduct</li>
+                </ul>
+              </div>
+              <div>
+                <h4 class="font-bold text-slate-900">Wanneer geschikt?</h4>
+                <ul class="mt-2 space-y-2 text-slate-700">
+                  <li>• Lastige algoritmische opdrachten</li>
+                  <li>• Debuggen</li>
+                  <li>• Nieuwe syntax of frameworks</li>
+                  <li>• Verlengde instructie</li>
+                </ul>
+              </div>
+            </div>
+          </article>
+
+          <!-- 5 -->
+          <article class="bg-white rounded-3xl shadow-sm border border-slate-200 overflow-hidden">
+            <div class="bg-rose-700 text-white px-6 py-5">
+              <h3 class="text-2xl font-bold">5. Live programming en demo’s met voorbereiding</h3>
+              <p class="text-rose-100 mt-1">
+                Live code voordoen kan krachtig zijn, mits tempo, voorbereiding en interactie goed zijn.
+              </p>
+            </div>
+            <div class="p-6 grid lg:grid-cols-4 gap-6">
+              <div class="lg:col-span-2">
+                <h4 class="font-bold text-slate-900">Hoe werkt het?</h4>
+                <p class="mt-2 text-slate-700 leading-relaxed">
+                  De docent programmeert live of demonstreert een oplossingsroute, maar doet dit met
+                  een duidelijke didactische opbouw. Snippets, tussenstappen en voorbeeldcode liggen klaar,
+                  zodat de aandacht niet verloren gaat aan zoeken, typen of technische ruis.
+                </p>
+                <div class="mt-5">
+                  <h4 class="font-bold text-slate-900">Didactische meerwaarde</h4>
+                  <ul class="mt-2 space-y-2 text-slate-700">
+                    <li>• Studenten zien het denkproces achter code.</li>
+                    <li>• Geschikt om debugging, keuzes en fouten expliciet te modelleren.</li>
+                    <li>• Werkt goed in kleinere groepen of bij verlengde instructie.</li>
+                  </ul>
+                </div>
+              </div>
+              <div>
+                <h4 class="font-bold text-slate-900">Praktische tips</h4>
+                <ul class="mt-2 space-y-2 text-slate-700">
+                  <li>• Zet snippets klaar om tempo te houden.</li>
+                  <li>• Bepaal vooraf waar je stopt om vragen te stellen.</li>
+                  <li>• Laat studenten voorspellen wat code gaat doen.</li>
+                  <li>• Houd demo’s compact en doelgericht.</li>
+                </ul>
+              </div>
+              <div>
+                <h4 class="font-bold text-slate-900">Risico’s</h4>
+                <ul class="mt-2 space-y-2 text-slate-700">
+                  <li>• Te veel zenden</li>
+                  <li>• Tempo te hoog</li>
+                  <li>• Studenten kijken passief mee</li>
+                  <li>• Verlies van aandacht bij lange codeblokken</li>
+                </ul>
+              </div>
+            </div>
+          </article>
+
+          <!-- 6 -->
+          <article class="bg-white rounded-3xl shadow-sm border border-slate-200 overflow-hidden">
+            <div class="bg-cyan-700 text-white px-6 py-5">
+              <h3 class="text-2xl font-bold">6. Interactieve slides: tekenen, voorspellen en bespreken</h3>
+              <p class="text-cyan-100 mt-1">
+                Gebruik slides niet alleen om te tonen, maar om denkstappen zichtbaar te maken.
+              </p>
+            </div>
+            <div class="p-6 grid lg:grid-cols-4 gap-6">
+              <div class="lg:col-span-2">
+                <h4 class="font-bold text-slate-900">Hoe werkt het?</h4>
+                <p class="mt-2 text-slate-700 leading-relaxed">
+                  Werk met slides waarop je kunt tekenen, schrijven en annoteren. Voeg code snippets toe
+                  en laat studenten eerst voorspellen wat de output is, waar een fout zit of welke stap logisch volgt.
+                  Geef pas daarna het antwoord of de demonstratie.
+                </p>
+                <div class="mt-5">
+                  <h4 class="font-bold text-slate-900">Didactische meerwaarde</h4>
+                  <ul class="mt-2 space-y-2 text-slate-700">
+                    <li>• Activeert voorkennis en denkwerk vóórdat het antwoord komt.</li>
+                    <li>• Vergroot betrokkenheid tijdens uitleg.</li>
+                    <li>• Maakt abstracte programmalogica visueel.</li>
+                    <li>• Past goed bij loops, functies, variabelen en datastructuren.</li>
+                  </ul>
+                </div>
+              </div>
+              <div>
+                <h4 class="font-bold text-slate-900">Vraagvormen voor op slides</h4>
+                <ul class="mt-2 space-y-2 text-slate-700">
+                  <li>• Wat is de output?</li>
+                  <li>• Waar gaat dit mis?</li>
+                  <li>• Welke waarde heeft deze variabele?</li>
+                  <li>• Welke oplossing is leesbaarder en waarom?</li>
+                </ul>
+              </div>
+              <div>
+                <h4 class="font-bold text-slate-900">Didactische tip</h4>
+                <p class="mt-2 text-slate-700">
+                  Bouw bewust denkpauzes in: eerst individueel nadenken, dan kort bespreken met buur,
+                  daarna klassikaal ophalen.
+                </p>
+              </div>
+            </div>
+          </article>
+
+          <!-- 7 -->
+          <article class="bg-white rounded-3xl shadow-sm border border-slate-200 overflow-hidden">
+            <div class="bg-teal-700 text-white px-6 py-5">
+              <h3 class="text-2xl font-bold">7. Individuele component + groepscomponent met Scrum</h3>
+              <p class="text-teal-100 mt-1">
+                Combineer persoonlijke vaardigheidsopbouw met samenwerken in een projectcontext.
+              </p>
+            </div>
+            <div class="p-6 grid lg:grid-cols-4 gap-6">
+              <div class="lg:col-span-2">
+                <h4 class="font-bold text-slate-900">Hoe werkt het?</h4>
+                <p class="mt-2 text-slate-700 leading-relaxed">
+                  Studenten leveren individuele component-opdrachten of huiswerkopdrachten in om
+                  basisvaardigheden zelfstandig aan te tonen. Daarnaast werken ze in groepsverband aan
+                  een project volgens Scrum, inclusief sprint planning, review en retrospective.
+                </p>
+                <div class="mt-5">
+                  <h4 class="font-bold text-slate-900">Didactische meerwaarde</h4>
+                  <ul class="mt-2 space-y-2 text-slate-700">
+                    <li>• Borgt individuele programmeervaardigheid.</li>
+                    <li>• Voorkomt dat studenten zich volledig kunnen verstoppen in groepswerk.</li>
+                    <li>• Laat studenten oefenen met samenwerken, plannen, reviewen en reflecteren.</li>
+                    <li>• Sluit goed aan op beroepspraktijk en agile werken.</li>
+                  </ul>
+                </div>
+              </div>
+              <div>
+                <h4 class="font-bold text-slate-900">Goede verdeling</h4>
+                <ul class="mt-2 space-y-2 text-slate-700">
+                  <li>• Individueel: syntax, componenten, algoritmes</li>
+                  <li>• Groep: integratie, user stories, sprintdoelen, demo</li>
+                </ul>
+              </div>
+              <div>
+                <h4 class="font-bold text-slate-900">Belangrijk aandachtspunt</h4>
+                <p class="mt-2 text-slate-700">
+                  Maak expliciet welk deel individueel beoordeeld wordt en welk deel groepsmatig,
+                  zodat de verantwoordelijkheid helder blijft.
+                </p>
+              </div>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <!-- Aanvullende werkvormen -->
+      <section id="aanvullende-werkvormen">
+        <div class="flex items-center gap-3 mb-6">
+          <div class="w-12 h-12 rounded-2xl bg-violet-100 flex items-center justify-center text-2xl">🧪</div>
+          <div>
+            <h2 class="text-3xl font-bold">Aanvullende werkvormen</h2>
+            <p class="text-slate-600 mt-1">
+              Werkvormen gericht op debuggen, ontwerpen, testen, uitleggen, structureren en reflecteren.
+            </p>
+          </div>
+        </div>
+
+        <div class="space-y-8">
+
+          <!-- 8 -->
+          <article class="bg-white rounded-3xl shadow-sm border border-slate-200 overflow-hidden">
+            <div class="bg-indigo-700 text-white px-6 py-5">
+              <h3 class="text-2xl font-bold">8. Debug-estafette</h3>
+              <p class="text-indigo-100 mt-1">
+                Studenten lossen bugs in rondes op en bouwen voort op het denkwerk van een ander groepje.
+              </p>
+            </div>
+            <div class="p-6 grid lg:grid-cols-4 gap-6">
+              <div class="lg:col-span-2">
+                <h4 class="font-bold">Hoe werkt het?</h4>
+                <p class="mt-2 text-slate-700">
+                  Studenten krijgen een stuk code met bugs en werken in duo’s of kleine groepjes. Ze mogen per ronde
+                  maar één bug oplossen, één hypothese testen of één analyse toevoegen. Daarna schuift de opdracht door
+                  naar een volgend groepje, dat verdergaat op basis van de vorige bevindingen.
+                </p>
+                <div class="mt-5">
+                  <h4 class="font-bold">Didactische meerwaarde</h4>
+                  <ul class="mt-2 space-y-2 text-slate-700">
+                    <li>• Leert studenten systematisch debuggen in plaats van willekeurig proberen.</li>
+                    <li>• Laat zien dat er meerdere routes zijn naar een oplossing.</li>
+                    <li>• Versterkt hardop redeneren over bugs, hypotheses en teststappen.</li>
+                    <li>• Maakt het debugproces zichtbaar, niet alleen het eindresultaat.</li>
+                  </ul>
+                </div>
+              </div>
+              <div>
+                <h4 class="font-bold">Wanneer inzetten?</h4>
+                <ul class="mt-2 space-y-2 text-slate-700">
+                  <li>• Debuglessen</li>
+                  <li>• Herhalingslessen</li>
+                  <li>• Voorbereiding op praktijkopdrachten</li>
+                </ul>
+              </div>
+              <div>
+                <h4 class="font-bold">Tip</h4>
+                <p class="mt-2 text-slate-700">
+                  Laat elk groepje noteren: “Wat dachten we?”, “Wat hebben we getest?” en “Wat was de uitkomst?”.
+                </p>
+              </div>
+            </div>
+          </article>
+
+          <!-- 9 -->
+          <article class="bg-white rounded-3xl shadow-sm border border-slate-200 overflow-hidden">
+            <div class="bg-fuchsia-700 text-white px-6 py-5">
+              <h3 class="text-2xl font-bold">9. Expertgroepen / jigsaw op techniek</h3>
+              <p class="text-fuchsia-100 mt-1">
+                Studenten verdiepen zich eerst in één deelonderwerp en leggen dat daarna uit in gemixte groepen.
+              </p>
+            </div>
+            <div class="p-6 grid lg:grid-cols-4 gap-6">
+              <div class="lg:col-span-2">
+                <h4 class="font-bold">Hoe werkt het?</h4>
+                <p class="mt-2 text-slate-700">
+                  Een onderwerp wordt opgeknipt in deelonderwerpen, bijvoorbeeld routing, API-calls, validatie,
+                  foutafhandeling of component state. Eerst werkt iedere expertgroep één onderdeel uit. Daarna worden
+                  nieuwe groepen gevormd waarin elke student zijn expertise overdraagt.
+                </p>
+                <div class="mt-5">
+                  <h4 class="font-bold">Didactische meerwaarde</h4>
+                  <ul class="mt-2 space-y-2 text-slate-700">
+                    <li>• Studenten worden verantwoordelijk voor een stukje kennis.</li>
+                    <li>• Iedereen moet uitleggen én luisteren.</li>
+                    <li>• Werkt goed bij grotere onderwerpen die uit meerdere technische onderdelen bestaan.</li>
+                  </ul>
+                </div>
+              </div>
+              <div>
+                <h4 class="font-bold">Geschikt voor</h4>
+                <ul class="mt-2 space-y-2 text-slate-700">
+                  <li>• Webdevelopment stacks</li>
+                  <li>• Security basics</li>
+                  <li>• Git workflows</li>
+                  <li>• Testing/documentatie</li>
+                </ul>
+              </div>
+              <div>
+                <h4 class="font-bold">Aandachtspunt</h4>
+                <p class="mt-2 text-slate-700">
+                  Kies compacte, afgebakende deelonderwerpen. De uitleg moet binnen één les haalbaar blijven.
+                </p>
+              </div>
+            </div>
+          </article>
+
+          <!-- 10 -->
+          <article class="bg-white rounded-3xl shadow-sm border border-slate-200 overflow-hidden">
+            <div class="bg-rose-700 text-white px-6 py-5">
+              <h3 class="text-2xl font-bold">10. Bug bounty (zonder AI)</h3>
+              <p class="text-rose-100 mt-1">
+                Studenten zoeken actief naar bugs, edge cases en onduidelijkheden in code van anderen.
+              </p>
+            </div>
+            <div class="p-6 grid lg:grid-cols-4 gap-6">
+              <div class="lg:col-span-2">
+                <h4 class="font-bold">Hoe werkt het?</h4>
+                <p class="mt-2 text-slate-700">
+                  Studenten leveren code of een mini-opdracht op. Andere studenten krijgen vervolgens de taak om bugs,
+                  kwetsbare plekken, edge cases of onduidelijke code te vinden. Het doel is verbeteren, testen en kritisch
+                  leren kijken. Deze werkvorm gebeurt bewust zonder AI, zodat het analyseren, testen en redeneren bij de student ligt.
+                </p>
+                <div class="mt-5">
+                  <h4 class="font-bold">Didactische meerwaarde</h4>
+                  <ul class="mt-2 space-y-2 text-slate-700">
+                    <li>• Code lezen wordt een actieve leeractiviteit.</li>
+                    <li>• Studenten leren dat kwaliteit meer is dan “het werkt op mijn laptop”.</li>
+                    <li>• Versterkt aandacht voor edge cases, validatie en foutafhandeling.</li>
+                    <li>• Bevordert kritisch kijken naar andermans én eigen code.</li>
+                  </ul>
+                </div>
+              </div>
+              <div>
+                <h4 class="font-bold">Spelregels</h4>
+                <ul class="mt-2 space-y-2 text-slate-700">
+                  <li>• Focus op verbeteren, niet afbranden.</li>
+                  <li>• Laat studenten bevindingen onderbouwen.</li>
+                  <li>• Beloon ook goede testcases of scherpe observaties.</li>
+                </ul>
+              </div>
+              <div>
+                <h4 class="font-bold">Geschikt voor</h4>
+                <ul class="mt-2 space-y-2 text-slate-700">
+                  <li>• Testen</li>
+                  <li>• Reviewlessen</li>
+                  <li>• Validatie</li>
+                  <li>• Refactoring / kwaliteitsdenken</li>
+                </ul>
+              </div>
+            </div>
+          </article>
+
+          <!-- 11 -->
+          <article class="bg-white rounded-3xl shadow-sm border border-slate-200 overflow-hidden">
+            <div class="bg-amber-700 text-white px-6 py-5">
+              <h3 class="text-2xl font-bold">11. Refactor challenge</h3>
+              <p class="text-amber-100 mt-1">
+                Studenten verbeteren werkende maar rommelige code zonder de functionaliteit te veranderen.
+              </p>
+            </div>
+            <div class="p-6 grid lg:grid-cols-4 gap-6">
+              <div class="lg:col-span-2">
+                <h4 class="font-bold">Hoe werkt het?</h4>
+                <p class="mt-2 text-slate-700">
+                  Studenten krijgen code die functioneel klopt, maar lastig leesbaar of onderhoudbaar is.
+                  Hun taak is om die code netter, duidelijker en beter gestructureerd te maken zonder het gedrag te veranderen.
+                </p>
+                <div class="mt-5">
+                  <h4 class="font-bold">Didactische meerwaarde</h4>
+                  <ul class="mt-2 space-y-2 text-slate-700">
+                    <li>• Maakt zichtbaar dat werkende code niet automatisch goede code is.</li>
+                    <li>• Oefent met naamgeving, structuur, duplicatie en leesbaarheid.</li>
+                    <li>• Sterk voor studenten die technisch al verder zijn en extra uitdaging nodig hebben.</li>
+                  </ul>
+                </div>
+              </div>
+              <div>
+                <h4 class="font-bold">Focuspunten</h4>
+                <ul class="mt-2 space-y-2 text-slate-700">
+                  <li>• Naamgeving verbeteren</li>
+                  <li>• Duplicatie verwijderen</li>
+                  <li>• Functies opsplitsen</li>
+                  <li>• Componentstructuur verbeteren</li>
+                </ul>
+              </div>
+              <div>
+                <h4 class="font-bold">Tip</h4>
+                <p class="mt-2 text-slate-700">
+                  Laat studenten achteraf uitleggen welke refactor-keuzes zij hebben gemaakt en waarom.
+                </p>
+              </div>
+            </div>
+          </article>
+
+          <!-- 12 -->
+          <article class="bg-white rounded-3xl shadow-sm border border-slate-200 overflow-hidden">
+            <div class="bg-emerald-700 text-white px-6 py-5">
+              <h3 class="text-2xl font-bold">12. Hulphoek / hulpkliniek</h3>
+              <p class="text-emerald-100 mt-1">
+                Een algemene plek of moment waar studenten terechtkunnen voor extra uitleg of meedenken tijdens het werken.
+              </p>
+            </div>
+            <div class="p-6 grid lg:grid-cols-4 gap-6">
+              <div class="lg:col-span-2">
+                <h4 class="font-bold">Hoe werkt het?</h4>
+                <p class="mt-2 text-slate-700">
+                  Tijdens werk- of projecttijd is er een vaste hulphoek in de klas of een docentmoment waar studenten kunnen aanschuiven.
+                  Niet voor één specifieke fout of onderwerp, maar juist als algemene plek voor vastlopers, denkvragen, keuzes in aanpak,
+                  of hulp bij structureren. Studenten kiezen zelf of ze daar gebruik van maken.
+                </p>
+                <div class="mt-5">
+                  <h4 class="font-bold">Didactische meerwaarde</h4>
+                  <ul class="mt-2 space-y-2 text-slate-700">
+                    <li>• Studenten kunnen laagdrempelig extra begeleiding krijgen zonder de hele klas stil te zetten.</li>
+                    <li>• Helpt bij differentiatie: niet iedereen heeft op hetzelfde moment dezelfde instructie nodig.</li>
+                    <li>• Werkt goed tijdens projectonderwijs en zelfstandig werken.</li>
+                  </ul>
+                </div>
+              </div>
+              <div>
+                <h4 class="font-bold">Geschikt voor</h4>
+                <ul class="mt-2 space-y-2 text-slate-700">
+                  <li>• Projecturen</li>
+                  <li>• Zelfstandig programmeerwerk</li>
+                  <li>• Verlengde instructie</li>
+                </ul>
+              </div>
+              <div>
+                <h4 class="font-bold">Aandachtspunt</h4>
+                <p class="mt-2 text-slate-700">
+                  Houd de hulphoek compact en duidelijk. De rest van de klas moet in rust kunnen doorwerken.
+                </p>
+              </div>
+            </div>
+          </article>
+
+          <!-- 13 -->
+          <article class="bg-white rounded-3xl shadow-sm border border-slate-200 overflow-hidden">
+            <div class="bg-cyan-700 text-white px-6 py-5">
+              <h3 class="text-2xl font-bold">13. Code-carrousel</h3>
+              <p class="text-cyan-100 mt-1">
+                Studenten rouleren langs meerdere code- of denkstations met verschillende opdrachten.
+              </p>
+            </div>
+            <div class="p-6 grid lg:grid-cols-4 gap-6">
+              <div class="lg:col-span-2">
+                <h4 class="font-bold">Hoe werkt het?</h4>
+                <p class="mt-2 text-slate-700">
+                  In de klas staan meerdere stations of opdrachten klaar. Studenten werken in kleine groepjes en schuiven
+                  na een korte tijd door naar een volgend station. Per station doen ze iets anders, zoals output voorspellen,
+                  bugs zoeken, code reviewen, testen bedenken of een kleine uitbreiding ontwerpen.
+                </p>
+                <div class="mt-5">
+                  <h4 class="font-bold">Didactische meerwaarde</h4>
+                  <ul class="mt-2 space-y-2 text-slate-700">
+                    <li>• Veel afwisseling en actieve verwerking.</li>
+                    <li>• Combineert meerdere leerdoelen in één les.</li>
+                    <li>• Houdt energie en tempo in de klas.</li>
+                  </ul>
+                </div>
+              </div>
+              <div>
+                <h4 class="font-bold">Geschikt voor</h4>
+                <ul class="mt-2 space-y-2 text-slate-700">
+                  <li>• Herhalingslessen</li>
+                  <li>• Toetsvoorbereiding</li>
+                  <li>• Themaweken over debugging, clean code of testen</li>
+                </ul>
+              </div>
+              <div>
+                <h4 class="font-bold">Tip</h4>
+                <p class="mt-2 text-slate-700">
+                  Geef per station één duidelijke opdracht en een vaste tijdsduur, bijvoorbeeld 8 minuten.
+                </p>
+              </div>
+            </div>
+          </article>
+
+          <!-- 14 -->
+          <article class="bg-white rounded-3xl shadow-sm border border-slate-200 overflow-hidden">
+            <div class="bg-rose-800 text-white px-6 py-5">
+              <h3 class="text-2xl font-bold">14. Maak de fout van de docent</h3>
+              <p class="text-rose-100 mt-1">
+                De docent laat bewust foutieve of misleidende code zien, waarna studenten de fout moeten ontdekken en uitleggen.
+              </p>
+            </div>
+            <div class="p-6 grid lg:grid-cols-4 gap-6">
+              <div class="lg:col-span-2">
+                <h4 class="font-bold">Hoe werkt het?</h4>
+                <p class="mt-2 text-slate-700">
+                  De docent toont bewust code met een veelvoorkomende fout, een verkeerde aanname of een typische misconceptie.
+                  Studenten analyseren wat er misgaat, waarom dat gebeurt, hoe je het oplost en hoe je het had kunnen voorkomen.
+                </p>
+                <div class="mt-5">
+                  <h4 class="font-bold">Didactische meerwaarde</h4>
+                  <ul class="mt-2 space-y-2 text-slate-700">
+                    <li>• Fouten worden expliciet leerzaam en bespreekbaar.</li>
+                    <li>• Je kunt precies die fouten kiezen die vaak in de klas voorkomen.</li>
+                    <li>• Studenten onthouden typische valkuilen vaak beter als ze ze eerst zelf hebben opgespoord.</li>
+                  </ul>
+                </div>
+              </div>
+              <div>
+                <h4 class="font-bold">Geschikt voor</h4>
+                <ul class="mt-2 space-y-2 text-slate-700">
+                  <li>• Scope / variabelen</li>
+                  <li>• null / undefined</li>
+                  <li>• array indexing</li>
+                  <li>• async fouten</li>
+                </ul>
+              </div>
+              <div>
+                <h4 class="font-bold">Didactische tip</h4>
+                <p class="mt-2 text-slate-700">
+                  Laat studenten eerst individueel opschrijven wat er misgaat voordat je klassikaal bespreekt.
+                </p>
+              </div>
+            </div>
+          </article>
+
+          <!-- 15 -->
+          <article class="bg-white rounded-3xl shadow-sm border border-slate-200 overflow-hidden">
+            <div class="bg-sky-800 text-white px-6 py-5">
+              <h3 class="text-2xl font-bold">15. Van user story naar technische aanpak (refinement oefenen, zonder AI)</h3>
+              <p class="text-sky-100 mt-1">
+                Studenten vertalen een user story naar technische keuzes, afhankelijkheden, edge cases en testideeën.
+              </p>
+            </div>
+            <div class="p-6 grid lg:grid-cols-4 gap-6">
+              <div class="lg:col-span-2">
+                <h4 class="font-bold">Hoe werkt het?</h4>
+                <p class="mt-2 text-slate-700">
+                  Studenten krijgen een user story of featurevraag en werken niet meteen in code, maar eerst in refinement-vorm uit:
+                  wat zijn de functionele eisen, welke componenten of endpoints zijn nodig, welke data speelt een rol, welke edge cases
+                  moeten worden meegenomen en hoe zou je dit kunnen testen. Deze werkvorm gebeurt bewust zonder AI, zodat analyse en
+                  technische vertaalslag echt door studenten zelf worden gedaan.
+                </p>
+                <div class="mt-5">
+                  <h4 class="font-bold">Didactische meerwaarde</h4>
+                  <ul class="mt-2 space-y-2 text-slate-700">
+                    <li>• Studenten leren eerst ontwerpen en analyseren voordat ze gaan bouwen.</li>
+                    <li>• Versterkt de koppeling tussen requirements en technische keuzes.</li>
+                    <li>• Oefent refinement, afbakening en samen nadenken over complexiteit.</li>
+                  </ul>
+                </div>
+              </div>
+              <div>
+                <h4 class="font-bold">Vragen die erbij passen</h4>
+                <ul class="mt-2 space-y-2 text-slate-700">
+                  <li>• Wat moet deze feature precies doen?</li>
+                  <li>• Welke data is nodig?</li>
+                  <li>• Welke onderdelen moeten samenwerken?</li>
+                  <li>• Wat kan er misgaan?</li>
+                </ul>
+              </div>
+              <div>
+                <h4 class="font-bold">Geschikt voor</h4>
+                <ul class="mt-2 space-y-2 text-slate-700">
+                  <li>• Scrumprojecten</li>
+                  <li>• Sprintvoorbereiding</li>
+                  <li>• Full-stack projecten</li>
+                </ul>
+              </div>
+            </div>
+          </article>
+
+          <!-- 16 -->
+          <article class="bg-white rounded-3xl shadow-sm border border-slate-200 overflow-hidden">
+            <div class="bg-violet-700 text-white px-6 py-5">
+              <h3 class="text-2xl font-bold">16. Peer teaching mini-uitleg</h3>
+              <p class="text-violet-100 mt-1">
+                Studenten geven elkaar korte uitleg over een klein concept of techniek.
+              </p>
+            </div>
+            <div class="p-6 grid lg:grid-cols-4 gap-6">
+              <div class="lg:col-span-2">
+                <h4 class="font-bold">Hoe werkt het?</h4>
+                <p class="mt-2 text-slate-700">
+                  In tweetallen of kleine groepjes krijgt iedere student een klein concept om in 2–3 minuten uit te leggen,
+                  bijvoorbeeld <em>map vs forEach</em>, <em>GET vs POST</em> of <em>props vs state</em>.
+                </p>
+                <div class="mt-5">
+                  <h4 class="font-bold">Didactische meerwaarde</h4>
+                  <ul class="mt-2 space-y-2 text-slate-700">
+                    <li>• Uitleggen dwingt tot verwerken en structureren.</li>
+                    <li>• Je merkt snel wie een concept echt begrijpt.</li>
+                    <li>• Studenten horen uitleg soms makkelijker van medestudenten.</li>
+                  </ul>
+                </div>
+              </div>
+              <div>
+                <h4 class="font-bold">Geschikt voor</h4>
+                <ul class="mt-2 space-y-2 text-slate-700">
+                  <li>• Begrippen leren</li>
+                  <li>• Herhalen voor toets of project</li>
+                  <li>• Start van een les</li>
+                </ul>
+              </div>
+              <div>
+                <h4 class="font-bold">Tip</h4>
+                <p class="mt-2 text-slate-700">
+                  Laat de luisteraar na afloop één controlevraag stellen om diepgang af te dwingen.
+                </p>
+              </div>
+            </div>
+          </article>
+
+          <!-- 17 -->
+          <article class="bg-white rounded-3xl shadow-sm border border-slate-200 overflow-hidden">
+            <div class="bg-orange-700 text-white px-6 py-5">
+              <h3 class="text-2xl font-bold">17. Testcase-battle</h3>
+              <p class="text-orange-100 mt-1">
+                Studenten bedenken zo veel mogelijk sterke testcases voor een functie, component of applicatie.
+              </p>
+            </div>
+            <div class="p-6 grid lg:grid-cols-4 gap-6">
+              <div class="lg:col-span-2">
+                <h4 class="font-bold">Hoe werkt het?</h4>
+                <p class="mt-2 text-slate-700">
+                  Studenten krijgen een functie, scherm of feature en moeten niet meteen de code verbeteren,
+                  maar eerst slimme testcases bedenken: normale invoer, lege invoer, extreme waarden, foutieve input
+                  en onverwachte combinaties.
+                </p>
+                <div class="mt-5">
+                  <h4 class="font-bold">Didactische meerwaarde</h4>
+                  <ul class="mt-2 space-y-2 text-slate-700">
+                    <li>• Versterkt kwaliteitsdenken en testbewustzijn.</li>
+                    <li>• Laat studenten verder kijken dan het happy path.</li>
+                    <li>• Sluit goed aan op professioneel software denken.</li>
+                  </ul>
+                </div>
+              </div>
+              <div>
+                <h4 class="font-bold">Geschikt voor</h4>
+                <ul class="mt-2 space-y-2 text-slate-700">
+                  <li>• Testen</li>
+                  <li>• Validatie</li>
+                  <li>• Robuust programmeren</li>
+                  <li>• Requirements begrijpen</li>
+                </ul>
+              </div>
+              <div>
+                <h4 class="font-bold">Leuke variant</h4>
+                <p class="mt-2 text-slate-700">
+                  Laat groepjes elkaars testcases aanvullen en bespreken welke cases echt waardevol zijn.
+                </p>
+              </div>
+            </div>
+          </article>
+
+          <!-- 18 -->
+          <article class="bg-white rounded-3xl shadow-sm border border-slate-200 overflow-hidden">
+            <div class="bg-slate-700 text-white px-6 py-5">
+              <h3 class="text-2xl font-bold">18. Stille start + gezamenlijke check</h3>
+              <p class="text-slate-200 mt-1">
+                De les start met een korte individuele denk- of programmeeropdracht, gevolgd door een gezamenlijke bespreking.
+              </p>
+            </div>
+            <div class="p-6 grid lg:grid-cols-4 gap-6">
+              <div class="lg:col-span-2">
+                <h4 class="font-bold">Hoe werkt het?</h4>
+                <p class="mt-2 text-slate-700">
+                  Studenten beginnen de les met 5–10 minuten individueel werken aan een kleine opdracht, vraag of code-analyse.
+                  Daarna volgt een korte gezamenlijke check of bespreking.
+                </p>
+                <div class="mt-5">
+                  <h4 class="font-bold">Didactische meerwaarde</h4>
+                  <ul class="mt-2 space-y-2 text-slate-700">
+                    <li>• Zorgt voor focus aan het begin van de les.</li>
+                    <li>• Activeert voorkennis en haalt iedereen de les in.</li>
+                    <li>• Geeft ook stillere studenten eerst ruimte om zelf te denken.</li>
+                  </ul>
+                </div>
+              </div>
+              <div>
+                <h4 class="font-bold">Geschikt voor</h4>
+                <ul class="mt-2 space-y-2 text-slate-700">
+                  <li>• Lesopeners</li>
+                  <li>• Formatieve checks</li>
+                  <li>• Herhaling van vorige les</li>
+                </ul>
+              </div>
+              <div>
+                <h4 class="font-bold">Tip</h4>
+                <p class="mt-2 text-slate-700">
+                  Gebruik één kleine vraag of codefragment, zodat de start kort en ritmisch blijft.
+                </p>
+              </div>
+            </div>
+          </article>
+
+          <!-- 19 -->
+          <article class="bg-white rounded-3xl shadow-sm border border-slate-200 overflow-hidden">
+            <div class="bg-teal-800 text-white px-6 py-5">
+              <h3 class="text-2xl font-bold">19. Architecture wall / systeemtekenen</h3>
+              <p class="text-teal-100 mt-1">
+                Studenten visualiseren eerst hoe een systeem, feature of informatiestroom in elkaar zit voordat ze gaan bouwen.
+              </p>
+            </div>
+            <div class="p-6 grid lg:grid-cols-4 gap-6">
+              <div class="lg:col-span-2">
+                <h4 class="font-bold">Hoe werkt het?</h4>
+                <p class="mt-2 text-slate-700">
+                  Studenten schetsen eerst visueel hoe een oplossing of systeem werkt: componenten, databronnen,
+                  API-stromen, validatiestappen, user flow of de samenwerking tussen frontend en backend.
+                </p>
+                <div class="mt-5">
+                  <h4 class="font-bold">Didactische meerwaarde</h4>
+                  <ul class="mt-2 space-y-2 text-slate-700">
+                    <li>• Maakt abstracte softwarestructuur concreet.</li>
+                    <li>• Helpt studenten hun oplossing te ordenen voordat ze code schrijven.</li>
+                    <li>• Versterkt het gesprek over ontwerpkeuzes en afhankelijkheden.</li>
+                  </ul>
+                </div>
+              </div>
+              <div>
+                <h4 class="font-bold">Geschikt voor</h4>
+                <ul class="mt-2 space-y-2 text-slate-700">
+                  <li>• Webapps</li>
+                  <li>• API-koppelingen</li>
+                  <li>• Databases</li>
+                  <li>• Sprintvoorbereiding</li>
+                </ul>
+              </div>
+              <div>
+                <h4 class="font-bold">Praktische vorm</h4>
+                <p class="mt-2 text-slate-700">
+                  Laat studenten op whiteboard, flap-over of digitaal schetsen en hun ontwerp daarna kort toelichten.
+                </p>
+              </div>
+            </div>
+          </article>
+
+          <!-- 20 -->
+          <article class="bg-white rounded-3xl shadow-sm border border-slate-200 overflow-hidden">
+            <div class="bg-lime-700 text-white px-6 py-5">
+              <h3 class="text-2xl font-bold">20. Retro op leerproces in plaats van alleen project</h3>
+              <p class="text-lime-100 mt-1">
+                Reflecteer niet alleen op het project, maar ook op hoe studenten leren programmeren en samenwerken.
+              </p>
+            </div>
+            <div class="p-6 grid lg:grid-cols-4 gap-6">
+              <div class="lg:col-span-2">
+                <h4 class="font-bold">Hoe werkt het?</h4>
+                <p class="mt-2 text-slate-700">
+                  Naast een sprint retrospective over het project reflecteren studenten ook op hun leerproces:
+                  waar liepen ze technisch op vast, welke uitleg of werkvorm hielp, waar hebben ze nog te veel hulp bij nodig
+                  en wat willen ze de komende week anders aanpakken?
+                </p>
+                <div class="mt-5">
+                  <h4 class="font-bold">Didactische meerwaarde</h4>
+                  <ul class="mt-2 space-y-2 text-slate-700">
+                    <li>• Versterkt eigenaarschap over leren.</li>
+                    <li>• Geeft de docent input over wat wel en niet werkt in de les.</li>
+                    <li>• Helpt studenten bewuster keuzes maken in hun leerstrategie.</li>
+                  </ul>
+                </div>
+              </div>
+              <div>
+                <h4 class="font-bold">Vragen die passen</h4>
+                <ul class="mt-2 space-y-2 text-slate-700">
+                  <li>• Waar liep je technisch op vast?</li>
+                  <li>• Welke uitleg hielp echt?</li>
+                  <li>• Wat wil je anders aanpakken?</li>
+                </ul>
+              </div>
+              <div>
+                <h4 class="font-bold">Geschikt voor</h4>
+                <ul class="mt-2 space-y-2 text-slate-700">
+                  <li>• Einde sprint</li>
+                  <li>• Einde projectweek</li>
+                  <li>• Tussentijdse formatieve reflectie</li>
+                </ul>
+              </div>
+            </div>
+          </article>
+
+        </div>
+      </section>
+
+      <!-- Randvoorwaarden -->
+      <section id="randvoorwaarden">
+        <div class="flex items-center gap-3 mb-6">
+          <div class="w-12 h-12 rounded-2xl bg-amber-100 flex items-center justify-center text-2xl">🧱</div>
+          <div>
+            <h2 class="text-3xl font-bold">Randvoorwaarden voor succes</h2>
+            <p class="text-slate-600 mt-1">
+              Deze werkvormen werken het best als de didactische basis goed staat.
+            </p>
+          </div>
+        </div>
+
+        <div class="grid lg:grid-cols-2 gap-6">
+          <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-6">
+            <h3 class="text-xl font-bold mb-4">Wat de docent nodig heeft</h3>
+            <ul class="space-y-3 text-slate-700">
+              <li>• Heldere lesdoelen: waarom zetten we deze werkvorm nu in?</li>
+              <li>• Korte, concrete instructies voor studenten.</li>
+              <li>• Voorbereide materialen: snippets, checklists, voorbeeldvragen, statuskaarten of reviewformats.</li>
+              <li>• Bewuste keuze wanneer je klassikaal werkt en wanneer in duo’s of kleine groepen.</li>
+              <li>• Ruimte om te observeren en formatief feedback te geven.</li>
+            </ul>
+          </div>
+
+          <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-6">
+            <h3 class="text-xl font-bold mb-4">Wat studenten nodig hebben</h3>
+            <ul class="space-y-3 text-slate-700">
+              <li>• Duidelijkheid over rollen en verwachtingen.</li>
+              <li>• Veiligheid om vragen te stellen en fouten te maken.</li>
+              <li>• Inzicht in wat goede hulp, goede feedback en goede samenwerking is.</li>
+              <li>• Structuur in reviewen, testen, uitleggen en reflecteren.</li>
+              <li>• Ritme: niet elke werkvorm elke les, maar wel herkenbare routines.</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <!-- Praktische trucs -->
+      <section id="praktische-trucs">
+        <div class="flex items-center gap-3 mb-6">
+          <div class="w-12 h-12 rounded-2xl bg-emerald-100 flex items-center justify-center text-2xl">🛠️</div>
+          <div>
+            <h2 class="text-3xl font-bold">Praktische trucs voor in de les</h2>
+            <p class="text-slate-600 mt-1">
+              Kleine ingrepen die veel effect kunnen hebben op aandacht, ritme en betrokkenheid.
+            </p>
+          </div>
+        </div>
+
+        <div class="grid lg:grid-cols-3 gap-6">
+          <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-6">
+            <h3 class="font-bold text-lg">Voorspel eerst, leg daarna uit</h3>
+            <p class="mt-3 text-slate-700">
+              Laat studenten eerst nadenken over de output van code, een bug of de volgende stap.
+              Dit maakt uitleg actiever en voorkomt passief consumeren.
+            </p>
+          </div>
+
+          <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-6">
+            <h3 class="font-bold text-lg">Werk met mini-checklists</h3>
+            <p class="mt-3 text-slate-700">
+              Voor code reviews, pair programming, bug bounty en scrum-overleggen helpt een korte checklist om
+              focus te houden en kwaliteit zichtbaar te maken.
+            </p>
+          </div>
+
+          <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-6">
+            <h3 class="font-bold text-lg">Maak hulp zichtbaar</h3>
+            <p class="mt-3 text-slate-700">
+              Gebruik een simpele status: <strong>ik werk door</strong>, <strong>ik kan helpen</strong>,
+              <strong>ik heb hulp nodig</strong>. Zo ontstaat minder ruis en gerichtere ondersteuning.
+            </p>
+          </div>
+
+          <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-6">
+            <h3 class="font-bold text-lg">Knip live uitleg in blokken</h3>
+            <p class="mt-3 text-slate-700">
+              Bouw live coding op in kleine stappen. Wissel demonstreren af met korte vragen,
+              voorspellingen of een check-in.
+            </p>
+          </div>
+
+          <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-6">
+            <h3 class="font-bold text-lg">Laat sterke studenten ook uitleggen</h3>
+            <p class="mt-3 text-slate-700">
+              Hulp geven is geen beloning maar een leeractiviteit. Uitleggen maakt begrip vaak dieper
+              en scherper.
+            </p>
+          </div>
+
+          <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-6">
+            <h3 class="font-bold text-lg">Niet alles hoeft altijd samen</h3>
+            <p class="mt-3 text-slate-700">
+              Houd balans tussen individueel werken, samenwerken en klassikale instructie. Kies de vorm
+              die het beste past bij het leerdoel van dat moment.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Implementatie -->
+      <section id="implementatie">
+        <div class="flex items-center gap-3 mb-6">
+          <div class="w-12 h-12 rounded-2xl bg-violet-100 flex items-center justify-center text-2xl">🚀</div>
+          <div>
+            <h2 class="text-3xl font-bold">Voorstel: klein starten, slim opbouwen</h2>
+            <p class="text-slate-600 mt-1">
+              Niet alles tegelijk invoeren, maar stapsgewijs testen wat werkt voor team, klas en rooster.
+            </p>
+          </div>
+        </div>
+
+        <div class="bg-white rounded-3xl shadow-sm border border-slate-200 p-8">
+          <div class="grid lg:grid-cols-3 gap-6">
+            <div class="rounded-2xl bg-slate-50 border border-slate-200 p-5">
+              <p class="text-sm font-semibold uppercase tracking-wide text-sky-700">Fase 1</p>
+              <h3 class="text-xl font-bold mt-2">Direct inzetbaar</h3>
+              <ul class="mt-4 space-y-2 text-slate-700">
+                <li>• Random code review-koppels</li>
+                <li>• Pair programming</li>
+                <li>• Stille start + gezamenlijke check</li>
+                <li>• Interactieve slides met voorspelvragen</li>
+              </ul>
+            </div>
+
+            <div class="rounded-2xl bg-slate-50 border border-slate-200 p-5">
+              <p class="text-sm font-semibold uppercase tracking-wide text-emerald-700">Fase 2</p>
+              <h3 class="text-xl font-bold mt-2">Structuur versterken</h3>
+              <ul class="mt-4 space-y-2 text-slate-700">
+                <li>• Hulpstatus-systeem / hulphoek</li>
+                <li>• Bug bounty of testcase-battle</li>
+                <li>• Refactor challenge</li>
+                <li>• Peer teaching mini-uitleg</li>
+              </ul>
+            </div>
+
+            <div class="rounded-2xl bg-slate-50 border border-slate-200 p-5">
+              <p class="text-sm font-semibold uppercase tracking-wide text-violet-700">Fase 3</p>
+              <h3 class="text-xl font-bold mt-2">Verdiepen en verbreden</h3>
+              <ul class="mt-4 space-y-2 text-slate-700">
+                <li>• Expertgroepen</li>
+                <li>• Code-carrousel</li>
+                <li>• Debug-estafette</li>
+                <li>• Refinement oefenen en architecture wall</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="mt-8 rounded-2xl bg-sky-50 border border-sky-200 p-6">
+            <h3 class="text-xl font-bold text-sky-900">Samenvattend</h3>
+            <p class="mt-3 text-slate-700 leading-relaxed">
+              De rode draad in deze werkvormen is dat studenten niet alleen leren <em>code schrijven</em>,
+              maar ook leren <em>denken, uitleggen, testen, ontwerpen, samenwerken en reflecteren</em>.
+              Juist in een software development opleiding is dat waardevol, omdat de beroepspraktijk
+              ook vraagt om communicatie, feedback, refinement, kwaliteit en gezamenlijk probleemoplossen.
+            </p>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="border-t border-slate-200 bg-white mt-16">
+      <div class="max-w-7xl mx-auto px-6 py-8 text-sm text-slate-500 flex flex-col lg:flex-row gap-3 lg:items-center lg:justify-between">
+        <p>Didactische werkvormen voor Software Development</p>
+        <p>Inspiratie- en discussiedocument voor team en opleiding</p>
+      </div>
+    </footer>
+  </div>
+</body>
+</html>
