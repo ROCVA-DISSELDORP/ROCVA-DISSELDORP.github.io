@@ -1,0 +1,586 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#1B1440">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<title>30 Seconds — AI &amp; Software Development</title>
+<style>
+:root{
+  --indigo:#1B1440;
+  --indigo-lift:#2A2065;
+  --paper:#FDF6E9;
+  --ink:#171235;
+  --amber:#F2B705;
+  --coral:#EF4B3C;
+  --lav:#9089C9;
+
+  --radius:22px;
+  --pad:clamp(14px,4vw,22px);
+
+  --sans:system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+  --mono:ui-monospace,SFMono-Regular,"SF Mono",Menlo,Consolas,monospace;
+}
+
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%}
+body{
+  background:
+    radial-gradient(120% 80% at 50% -10%, var(--indigo-lift) 0%, var(--indigo) 55%),
+    var(--indigo);
+  color:var(--paper);
+  font-family:var(--sans);
+  -webkit-font-smoothing:antialiased;
+  overscroll-behavior:none;
+}
+
+/* ---------- shell ---------- */
+.app{
+  height:100dvh;
+  display:flex;
+  flex-direction:column;
+  gap:var(--pad);
+  padding:calc(env(safe-area-inset-top) + var(--pad)) var(--pad)
+          calc(env(safe-area-inset-bottom) + var(--pad));
+  max-width:520px;
+  margin:0 auto;
+}
+
+/* ---------- header ---------- */
+header{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+  flex:0 0 auto;
+}
+.wordmark{
+  font-size:13px;
+  font-weight:700;
+  letter-spacing:.14em;
+  text-transform:uppercase;
+  color:var(--lav);
+  line-height:1.35;
+}
+.wordmark b{display:block;color:var(--paper);letter-spacing:.06em}
+.counter{
+  font-family:var(--mono);
+  font-size:13px;
+  color:var(--lav);
+  white-space:nowrap;
+  font-variant-numeric:tabular-nums;
+}
+
+/* ---------- card stage ---------- */
+.stage{
+  flex:1 1 auto;
+  min-height:0;
+  perspective:1400px;
+}
+.card{
+  position:relative;
+  width:100%;
+  height:100%;
+  transform-style:preserve-3d;
+  transition:transform .55s cubic-bezier(.2,.75,.25,1);
+  cursor:pointer;
+  touch-action:manipulation;
+  -webkit-tap-highlight-color:transparent;
+}
+.card.flipped{transform:rotateY(180deg)}
+
+.face{
+  position:absolute;
+  inset:0;
+  border-radius:var(--radius);
+  backface-visibility:hidden;
+  -webkit-backface-visibility:hidden;
+  overflow:hidden;
+  display:flex;
+  flex-direction:column;
+  box-shadow:0 18px 40px rgba(0,0,0,.38);
+  user-select:none;
+  -webkit-user-select:none;
+}
+
+/* --- back face = the start button --- */
+.face-back{
+  background:var(--amber);
+  color:var(--ink);
+  align-items:center;
+  justify-content:center;
+  text-align:center;
+  gap:10px;
+  padding:24px;
+}
+.face-back::after{ /* stitched border, echoes a physical card */
+  content:"";
+  position:absolute;
+  inset:10px;
+  border:2px dashed rgba(23,18,53,.28);
+  border-radius:calc(var(--radius) - 8px);
+  pointer-events:none;
+}
+.start-word{
+  font-size:clamp(40px,13vw,64px);
+  font-weight:900;
+  letter-spacing:-.03em;
+  line-height:.95;
+}
+.start-sub{
+  font-size:14px;
+  font-weight:600;
+  letter-spacing:.05em;
+  color:rgba(23,18,53,.62);
+  max-width:22ch;
+}
+.card:active .face-back{transform:scale(.985)}
+.face-back{transition:transform .12s ease}
+
+/* --- front face = the words --- */
+.face-front{
+  background:var(--paper);
+  color:var(--ink);
+  transform:rotateY(180deg);
+  padding:clamp(16px,4.5vw,26px);
+  justify-content:center;
+}
+.words{
+  display:flex;
+  flex-direction:column;
+  justify-content:space-evenly;
+  height:100%;
+  gap:2px;
+}
+.word{
+  font-size:clamp(21px,6.4vw,34px);
+  font-weight:800;
+  letter-spacing:-.02em;
+  line-height:1.1;
+  padding:clamp(8px,2vw,14px) 2px;
+  border-bottom:1px solid rgba(23,18,53,.12);
+  overflow-wrap:anywhere;
+}
+.word:last-child{border-bottom:0}
+
+/* --- the ring: the card's own edge is the clock --- */
+.ring{
+  position:absolute;
+  inset:0;
+  width:100%;
+  height:100%;
+  pointer-events:none;
+}
+.ring rect{
+  fill:none;
+  stroke-width:8;
+  stroke-linecap:butt;
+}
+.ring .track{stroke:rgba(23,18,53,.09)}
+.ring .lead{
+  stroke:var(--amber);
+  transition:stroke .3s ease;
+}
+.card.urgent .ring .lead{stroke:var(--coral)}
+
+/* --- time's up overlay --- */
+.timeup{
+  position:absolute;
+  inset:0;
+  background:var(--coral);
+  color:var(--paper);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:clamp(44px,15vw,72px);
+  font-weight:900;
+  letter-spacing:-.03em;
+  opacity:0;
+  pointer-events:none;
+  transition:opacity .18s ease;
+}
+.card.done .timeup{opacity:1}
+
+/* ---------- footer ---------- */
+footer{
+  flex:0 0 auto;
+  display:flex;
+  align-items:flex-end;
+  justify-content:space-between;
+  gap:16px;
+}
+.clock{
+  font-family:var(--mono);
+  font-size:clamp(54px,17vw,76px);
+  font-weight:700;
+  line-height:.85;
+  letter-spacing:-.04em;
+  font-variant-numeric:tabular-nums;
+  color:var(--paper);
+  transition:color .3s ease;
+}
+.clock.urgent{color:var(--coral)}
+.clock small{
+  font-size:15px;
+  font-weight:600;
+  letter-spacing:.1em;
+  color:var(--lav);
+  display:block;
+  margin-top:10px;
+  font-family:var(--sans);
+  text-transform:uppercase;
+}
+.controls{display:flex;gap:8px}
+.btn{
+  appearance:none;
+  border:1.5px solid rgba(144,137,201,.45);
+  background:transparent;
+  color:var(--lav);
+  font-family:var(--sans);
+  font-size:14px;
+  font-weight:700;
+  letter-spacing:.02em;
+  border-radius:999px;
+  padding:0 18px;
+  min-height:48px;
+  cursor:pointer;
+  touch-action:manipulation;
+  -webkit-tap-highlight-color:transparent;
+  transition:background .15s ease,color .15s ease,border-color .15s ease;
+}
+.btn:hover{background:rgba(144,137,201,.12)}
+.btn:active{background:rgba(144,137,201,.22)}
+.btn.stop{border-color:var(--coral);color:var(--coral)}
+.btn[hidden]{display:none}
+
+:focus-visible{outline:3px solid var(--amber);outline-offset:3px}
+.card:focus-visible{outline-offset:6px;border-radius:var(--radius)}
+
+@media (prefers-reduced-motion:reduce){
+  .card{transition:none}
+  .face-back{transition:none}
+}
+@media (min-height:760px){
+  .stage{max-height:62vh}
+}
+</style>
+</head>
+<body>
+
+<div class="app">
+  <header>
+    <div class="wordmark">30 seconds<b>AI &amp; Development</b></div>
+    <div class="counter" id="counter">Kaart 0 / 0</div>
+  </header>
+
+  <div class="stage">
+    <div class="card" id="card" role="button" tabindex="0" aria-label="Start de beurt en draai een kaart om">
+      <div class="face face-back">
+        <div class="start-word">START</div>
+        <div class="start-sub" id="startSub">Tik op de kaart. Je hebt 30 seconden voor 5 woorden.</div>
+      </div>
+
+      <div class="face face-front">
+        <div class="words" id="words" aria-live="polite"></div>
+        <svg class="ring" id="ring" viewBox="0 0 100 100" aria-hidden="true">
+          <rect class="track" id="track" x="5" y="5" width="90" height="90" rx="14"/>
+          <rect class="lead"  id="lead"  x="5" y="5" width="90" height="90" rx="14"/>
+        </svg>
+        <div class="timeup">TIJD!</div>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    <div>
+      <div class="clock" id="clock">30</div>
+      <small class="clock-label" id="clockLabel">seconden</small>
+    </div>
+    <div class="controls">
+      <button class="btn stop" id="stopBtn" hidden>Stop</button>
+      <button class="btn" id="resetBtn">Nieuw spel</button>
+    </div>
+  </footer>
+</div>
+
+<script>
+(function(){
+"use strict";
+
+/* ---------------------------------------------------------
+   De kaarten — 40 kaarten, 5 woorden per kaart
+   --------------------------------------------------------- */
+const DECK = [
+  ["ChatGPT","Chatbot","Prompt","Antwoord","Vraag stellen"],
+  ["AI","Robot","Computer","Slim","Verzinnen"],
+  ["Huiswerk","Samenvatting","Uitleggen","Voorbeeld","Spieken"],
+  ["Vertalen","Tekst schrijven","Plaatje maken","Idee bedenken","Rijmpje maken"],
+  ["Fout antwoord","Nepnieuws","Controleren","Kritisch zijn","Zelf nadenken"],
+  ["Privacy","Wachtwoord","Account","Inloggen","Uitloggen"],
+  ["Website","Webshop","Homepage","Link","Menu"],
+  ["Knop","Plaatje","Kleur","Lettertype","Achtergrond"],
+  ["HTML","Tag","Titel","Alinea","Lijstje"],
+  ["CSS","Opmaak","Rand","Ruimte","Midden zetten"],
+  ["JavaScript","Variabele","Functie","Loop","If-statement"],
+  ["Klikken","Tellen","Optellen","Getal","Naam"],
+  ["Bug","Error","Foutmelding","Typefout","Crash"],
+  ["Zoeken","Oplossen","Testen","Opnieuw proberen","Werkt niet"],
+  ["Laptop","Toetsenbord","Muis","Scherm","Oplader"],
+  ["Browser","Google","YouTube","Tabblad","Zoekbalk"],
+  ["VS Code","Map","Bestand","Opslaan","Openen"],
+  ["GitHub","Versie","Uploaden","Downloaden","Back-up"],
+  ["Samenwerken","Klasgenoot","Docent","Hulp vragen","Uitleg geven"],
+  ["Opdracht","Deadline","Inleveren","Cijfer","Feedback"],
+  ["Presentatie","Portfolio","Stage","Sollicitatie","Cv"],
+  ["Ontwerp","Schets","Logo","Icoon","Kleurenschema"],
+  ["Mobiel","Tablet","App","Download","Update"],
+  ["Database","Gegevens","Tabel","Rij","Sorteren"],
+  ["Formulier","Invullen","Verzenden","E-mailadres","Verplicht veld"],
+  ["Game","Speler","Score","Level","Timer"],
+  ["Internet","Wifi","Server","Laden","Traag"],
+  ["Bestandsnaam","Kopiëren","Plakken","Verwijderen","Ongedaan maken"],
+  ["Code","Regel code","Commentaar","Netjes","Inspringen"],
+  ["Pauze","Koptelefoon","Concentreren","Motivatie","Doorzetten"],
+  ["Typen","Sneltoets","Ctrl + S","Enter","Backspace"],
+  ["Emoji","Chat","Bericht","Discord","Teams"],
+  ["Video","Tutorial","Stap voor stap","Handleiding","Voorbeeldcode"],
+  ["Slim vragen","Duidelijk zijn","Kort en bondig","Herhalen","Opnieuw vragen"],
+  ["Vertrouwen","Eerlijk","Eigen werk","Bronvermelding","Regels"],
+  ["Toekomst","Beroep","Baan","Salaris","Werkgever"],
+  ["Team","Planning","Taakverdeling","Afspraak","Overleg"],
+  ["Idee","Plan maken","Afmaken","Trots zijn","Presenteren"],
+  ["Startscherm","Laadbalk","Pop-up","Melding","Reclame"],
+  ["Fout maken","Leren","Oefenen","Beter worden","Geduld"]
+];
+
+const DURATION = 30; // seconden
+
+/* ---------------------------------------------------------
+   Elementen
+   --------------------------------------------------------- */
+const card       = document.getElementById("card");
+const wordsEl    = document.getElementById("words");
+const clockEl    = document.getElementById("clock");
+const clockLabel = document.getElementById("clockLabel");
+const counterEl  = document.getElementById("counter");
+const startSub   = document.getElementById("startSub");
+const stopBtn    = document.getElementById("stopBtn");
+const resetBtn   = document.getElementById("resetBtn");
+const lead       = document.getElementById("lead");
+const track      = document.getElementById("track");
+const ring       = document.getElementById("ring");
+
+let order = [];
+let drawn = 0;
+let state = "idle";           // idle | playing | done
+let rafId = null;
+let endsAt = 0;
+let wakeLock = null;
+let perimeter = 0;
+
+/* ---------------------------------------------------------
+   Deck
+   --------------------------------------------------------- */
+function shuffle(){
+  order = DECK.map((_, i) => i);
+  for (let i = order.length - 1; i > 0; i--){
+    const j = Math.floor(Math.random() * (i + 1));
+    [order[i], order[j]] = [order[j], order[i]];
+  }
+  drawn = 0;
+}
+
+function updateCounter(){
+  counterEl.textContent = "Kaart " + drawn + " / " + DECK.length;
+}
+
+/* ---------------------------------------------------------
+   Ring rond de kaart
+   --------------------------------------------------------- */
+function measureRing(){
+  const box = card.getBoundingClientRect();
+  const w = Math.max(40, Math.round(box.width));
+  const h = Math.max(40, Math.round(box.height));
+  const inset = 5;
+
+  ring.setAttribute("viewBox", "0 0 " + w + " " + h);
+  [track, lead].forEach(r => {
+    r.setAttribute("x", inset);
+    r.setAttribute("y", inset);
+    r.setAttribute("width",  w - inset * 2);
+    r.setAttribute("height", h - inset * 2);
+    r.setAttribute("rx", 18);
+  });
+
+  perimeter = lead.getTotalLength();
+  lead.style.strokeDasharray = perimeter;
+
+  setRing(state === "playing" ? Math.max(0, (endsAt - performance.now()) / (DURATION * 1000)) : 1);
+}
+function setRing(fraction){          // 1 = vol, 0 = leeg
+  lead.style.strokeDashoffset = perimeter * (1 - fraction);
+}
+
+/* ---------------------------------------------------------
+   Geluid + trilling
+   --------------------------------------------------------- */
+let audioCtx = null;
+function beep(freq, dur, delay){
+  try{
+    if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    if (audioCtx.state === "suspended") audioCtx.resume();
+    const t = audioCtx.currentTime + (delay || 0);
+    const osc = audioCtx.createOscillator();
+    const gain = audioCtx.createGain();
+    osc.type = "square";
+    osc.frequency.value = freq;
+    gain.gain.setValueAtTime(0.0001, t);
+    gain.gain.exponentialRampToValueAtTime(0.22, t + 0.01);
+    gain.gain.exponentialRampToValueAtTime(0.0001, t + dur);
+    osc.connect(gain).connect(audioCtx.destination);
+    osc.start(t);
+    osc.stop(t + dur + 0.05);
+  }catch(e){/* geluid is optioneel */}
+}
+function buzz(pattern){
+  if (navigator.vibrate) { try { navigator.vibrate(pattern); } catch(e){} }
+}
+
+/* ---------------------------------------------------------
+   Scherm aan houden tijdens het spelen
+   --------------------------------------------------------- */
+async function keepAwake(){
+  try{
+    if ("wakeLock" in navigator && !wakeLock){
+      wakeLock = await navigator.wakeLock.request("screen");
+      wakeLock.addEventListener("release", () => { wakeLock = null; });
+    }
+  }catch(e){/* niet ondersteund, geen probleem */}
+}
+
+/* ---------------------------------------------------------
+   Spelverloop
+   --------------------------------------------------------- */
+function start(){
+  if (state !== "idle") return;
+
+  if (drawn >= order.length) shuffle();
+  const cardWords = DECK[order[drawn]];
+  drawn++;
+
+  wordsEl.innerHTML = "";
+  cardWords.forEach(w => {
+    const div = document.createElement("div");
+    div.className = "word";
+    div.textContent = w;
+    wordsEl.appendChild(div);
+  });
+
+  updateCounter();
+  state = "playing";
+  card.classList.add("flipped");
+  card.classList.remove("urgent","done");
+  card.setAttribute("aria-label", "Kaart met 5 woorden, de tijd loopt");
+  stopBtn.hidden = false;
+  clockLabel.textContent = "seconden";
+  keepAwake();
+  beep(880, 0.09);
+  buzz(25);
+
+  endsAt = performance.now() + DURATION * 1000;
+  setRing(1);
+  clockEl.textContent = DURATION;
+  rafId = requestAnimationFrame(tick);
+}
+
+let lastShown = DURATION;
+function tick(now){
+  const left = Math.max(0, (endsAt - now) / 1000);
+  setRing(left / DURATION);
+
+  const shown = Math.ceil(left);
+  if (shown !== lastShown){
+    lastShown = shown;
+    clockEl.textContent = shown;
+    if (shown <= 5 && shown > 0){
+      card.classList.add("urgent");
+      clockEl.classList.add("urgent");
+      beep(660, 0.06);
+    }
+  }
+
+  if (left <= 0){ finish(); return; }
+  rafId = requestAnimationFrame(tick);
+}
+
+function finish(){
+  cancelAnimationFrame(rafId);
+  state = "done";
+  clockEl.textContent = "0";
+  setRing(0);
+  card.classList.add("done");
+  stopBtn.hidden = true;
+  clockLabel.textContent = "tijd om";
+  beep(392, 0.5);
+  beep(294, 0.6, 0.18);
+  buzz([120, 70, 220]);
+  setTimeout(reveal, 1400);
+}
+
+function reveal(){                 // terug naar de startkaart
+  card.classList.remove("flipped","done","urgent");
+  clockEl.classList.remove("urgent");
+  card.setAttribute("aria-label", "Start de beurt en draai een kaart om");
+  clockEl.textContent = DURATION;
+  clockLabel.textContent = "seconden";
+  lastShown = DURATION;
+  startSub.textContent = drawn >= order.length
+    ? "Alle kaarten gehad. Tik voor een nieuwe ronde."
+    : "Tik op de kaart. Je hebt 30 seconden voor 5 woorden.";
+  state = "idle";
+}
+
+function stop(){
+  if (state !== "playing") return;
+  cancelAnimationFrame(rafId);
+  state = "done";
+  stopBtn.hidden = true;
+  reveal();
+}
+
+function newGame(){
+  cancelAnimationFrame(rafId);
+  stopBtn.hidden = true;
+  shuffle();
+  updateCounter();
+  reveal();
+}
+
+/* ---------------------------------------------------------
+   Bediening
+   --------------------------------------------------------- */
+card.addEventListener("click", () => { if (state === "idle") start(); });
+card.addEventListener("keydown", e => {
+  if (e.key === " " || e.key === "Enter"){ e.preventDefault(); if (state === "idle") start(); }
+});
+stopBtn.addEventListener("click", e => { e.stopPropagation(); stop(); });
+resetBtn.addEventListener("click", e => { e.stopPropagation(); newGame(); });
+
+document.addEventListener("visibilitychange", () => {
+  if (document.visibilityState === "visible" && state === "playing") keepAwake();
+});
+window.addEventListener("resize", measureRing);
+window.addEventListener("orientationchange", () => setTimeout(measureRing, 250));
+if (window.ResizeObserver) new ResizeObserver(measureRing).observe(card);
+
+/* ---------------------------------------------------------
+   Start
+   --------------------------------------------------------- */
+measureRing();
+shuffle();
+updateCounter();
+})();
+</script>
+</body>
+</html>
