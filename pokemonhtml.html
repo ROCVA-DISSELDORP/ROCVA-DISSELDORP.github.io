@@ -194,6 +194,11 @@ code.inline {
   margin-top: 10px;
   flex-wrap: wrap;
 }
+.shortcut-hint {
+  align-self: center;
+  color: #64748b;
+  font-size: .8rem;
+}
 button {
   border: 0;
   border-radius: 6px;
@@ -376,6 +381,7 @@ button:disabled { opacity: .45; cursor: not-allowed; }
       <button id="checkBtn">✓ Check opdracht</button>
       <button id="nextBtn" disabled>Volgende →</button>
       <button id="resetBtn">Herstel stap</button>
+      <span class="shortcut-hint">Tip: controleer je code met <strong>Ctrl + Enter</strong></span>
     </div>
     <div id="feedback"></div>
     <details class="ai-trainer" aria-labelledby="aiTitle">
