@@ -103,15 +103,65 @@ code.inline {
   width: 100%;
   height: 52vh;
   min-height: 350px;
-  resize: vertical;
-  background: #1e1e1e;
-  color: #e7e7e7;
+  resize: none;
+  background: transparent;
+  color: transparent;
   border: 0;
-  border-radius: 8px;
+  border-radius: 0;
   padding: 16px;
   font: 14px/1.55 Consolas, Monaco, monospace;
   outline: none;
   tab-size: 2;
+  caret-color: #ffffff;
+  position: absolute;
+  inset: 0;
+  overflow: auto;
+  white-space: pre;
+  z-index: 2;
+}
+.editor-wrap {
+  display: flex;
+  height: 52vh;
+  min-height: 350px;
+  resize: vertical;
+  overflow: hidden;
+  background: #1e1e1e;
+  border-radius: 8px;
+}
+.line-numbers {
+  flex: 0 0 45px;
+  padding: 16px 10px 16px 0;
+  background: #252526;
+  color: #858585;
+  font: 14px/1.55 Consolas, Monaco, monospace;
+  text-align: right;
+  user-select: none;
+  overflow: hidden;
+  white-space: pre;
+}
+.code-area {
+  position: relative;
+  min-width: 0;
+  flex: 1;
+  overflow: hidden;
+}
+.syntax-highlight {
+  position: absolute;
+  inset: 0;
+  margin: 0;
+  padding: 16px;
+  overflow: hidden;
+  color: #e7e7e7;
+  font: 14px/1.55 Consolas, Monaco, monospace;
+  white-space: pre;
+  pointer-events: none;
+  tab-size: 2;
+}
+.syntax-comment { color: #6a9955; }
+.syntax-tag { color: #569cd6; }
+.syntax-string { color: #ce9178; }
+.syntax-number { color: #b5cea8; }
+.syntax-selector { color: #dcdcaa; }
 }
 .controls {
   display: flex;
@@ -212,7 +262,13 @@ button:disabled { opacity: .45; cursor: not-allowed; }
     <div class="task"><strong>Opdracht:</strong><br><span id="task"></span></div>
 
     <div style="margin-top:14px;">
-      <textarea id="editor" class="editor" spellcheck="false"></textarea>
+      <div class="editor-wrap">
+        <div id="lineNumbers" class="line-numbers" aria-hidden="true"></div>
+        <div class="code-area">
+          <pre id="syntaxHighlight" class="syntax-highlight" aria-hidden="true"></pre>
+          <textarea id="editor" class="editor" spellcheck="false"></textarea>
+        </div>
+      </div>
     </div>
 
     <div class="controls">
