@@ -70,10 +70,8 @@ main {
 }
 h1, h2, h3 { margin-top: 0; }
 details > summary { cursor: pointer; font-weight: bold; }
-.lesson-info { margin: 8px 0 10px; }
-.lesson-info > summary { padding: 8px 10px; background: #f8fafc; border: 1px solid var(--border); border-radius: 6px; color: #475569; }
-.lesson-info[open] > summary { border-radius: 6px 6px 0 0; }
-.lesson-info .explanation, .lesson-info .task, .lesson-info .learning-goal { margin-top: 8px; margin-bottom: 0; }
+.lesson-info { margin: 10px 0; font-size: .86rem; }
+.lesson-info .explanation, .lesson-info .task, .lesson-info .learning-goal { margin: 7px 0 0; padding: 9px 10px; }
 .badge {
   display: inline-block;
   background: #e5e7eb;
@@ -303,7 +301,7 @@ button:disabled { opacity: .45; cursor: not-allowed; }
 
 <div class="app">
   <aside>
-    <details class="course-nav" open>
+    <details class="course-nav">
       <summary>Cursusnavigatie</summary>
       <h2>Pokémon Trainer Page</h2>
       <p class="tip">Bouw stap voor stap je eigen Pokémon-pagina.</p>
@@ -314,13 +312,6 @@ button:disabled { opacity: .45; cursor: not-allowed; }
   <main>
     <span id="phaseBadge" class="badge html">HTML</span>
     <h1 id="lessonTitle"></h1>
-    <details class="lesson-info">
-      <summary>Uitleg, opdracht en leerdoel</summary>
-      <div id="explanation" class="explanation"></div>
-      <div class="task"><strong>Opdracht:</strong><br><span id="task"></span></div>
-      <div class="learning-goal"><strong>Leerdoel:</strong> <span id="learningGoal"></span></div>
-    </details>
-
     <div style="margin-top:14px;">
       <div class="editor-wrap">
         <div id="lineNumbers" class="line-numbers" aria-hidden="true"></div>
@@ -329,6 +320,12 @@ button:disabled { opacity: .45; cursor: not-allowed; }
           <textarea id="editor" class="editor" spellcheck="false"></textarea>
         </div>
       </div>
+    </div>
+
+    <div class="lesson-info">
+      <div id="explanation" class="explanation"></div>
+      <div class="task"><strong>Opdracht:</strong><br><span id="task"></span></div>
+      <div class="learning-goal"><strong>Leerdoel:</strong> <span id="learningGoal"></span></div>
     </div>
 
     <div class="controls">
