@@ -54,6 +54,20 @@ header {
   min-height: calc(100vh - 65px);
   transition: grid-template-columns .2s ease;
 }
+.course-picker {
+  min-height: calc(100vh - 65px);
+  padding: 40px clamp(20px, 6vw, 90px);
+  background: #f3f4f6;
+}
+.course-picker[hidden], .app[hidden] { display: none; }
+.course-picker h1 { margin-bottom: 8px; }
+.course-picker-intro { color: #64748b; max-width: 680px; margin-bottom: 24px; }
+.course-options { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; max-width: 1120px; }
+.course-card { text-align: left; min-height: 220px; padding: 20px; border: 1px solid #cbd5e1; border-radius: 8px; background: white; color: #202124; box-shadow: 0 3px 10px rgba(15,23,42,.06); }
+.course-card:hover, .course-card:focus-visible { border-color: #2563eb; box-shadow: 0 5px 16px rgba(37,99,235,.16); }
+.course-card h2 { margin: 10px 0 8px; font-size: 1.2rem; }
+.course-card p { color: #475569; line-height: 1.5; font-weight: normal; }
+.course-card .badge { margin-bottom: 4px; }
 aside {
   background: #fff;
   border-right: 1px solid var(--border);
@@ -324,22 +338,30 @@ button:disabled { opacity: .45; cursor: not-allowed; }
   .app { display:block; }
   aside { border-right:0; border-bottom:1px solid var(--border); }
   .editor, .editor-wrap { min-height:300px; height:52vh; }
+  .course-options { grid-template-columns: 1fr; }
 }
 </style>
 </head>
 <body>
 <header>
   <div class="logo">⚡ PokéCode <button id="sidebarToggle" class="sidebar-toggle" type="button" title="Zijbalk inklappen">☰</button></div>
+  <button id="coursePickerButton" class="sidebar-toggle" type="button">Andere opdracht</button>
   <div class="progress-wrap">
     <div class="progress-text" id="progressText">Opdracht 1</div>
     <div class="progress"><div id="progressBar"></div></div>
   </div>
 </header>
 
-<div class="app">
+<section id="coursePicker" class="course-picker" aria-labelledby="coursePickerTitle" hidden>
+  <h1 id="coursePickerTitle">Kies een HTML/CSS-opdracht</h1>
+  <p class="course-picker-intro">Kies een thema en bouw stap voor stap een eigen webpagina. Je voortgang wordt per cursus apart opgeslagen.</p>
+  <div id="courseOptions" class="course-options"></div>
+</section>
+
+<div class="app" id="appShell" hidden>
   <aside>
     <div class="course-nav">
-      <h2>Pokémon Trainer Page</h2>
+      <h2 id="courseTitle">Pokémon Trainer Page</h2>
       <p class="tip">Bouw stap voor stap je eigen Pokémon-pagina.</p>
       <ul id="stepList"></ul>
     </div>
@@ -414,7 +436,7 @@ button:disabled { opacity: .45; cursor: not-allowed; }
 </div>
 
 <script>
-const steps = [
+const pokemonSteps = [
 /* ==================== HTML ==================== */
 {
  phase:"HTML", title:"Maak een HTML-document",
@@ -792,9 +814,42 @@ const learningGoals = [
   "CSS-regels combineren om de pagina af te werken en informatie duidelijk te presenteren."
 ];
 
-steps.forEach((step, index) => {
+pokemonSteps.forEach((step, index) => {
   step.learningGoal = learningGoals[index];
 });
+
+const spaceSteps = [
+  { phase:"HTML", title:"Start de ruimtestation-pagina", learningGoal:"Begrijpen hoe een HTML-document de basis vormt voor een webpagina.", explanation:"Je start met de vaste basis van een HTML-document.", task:"Zet <!DOCTYPE html> als eerste regel en voeg html, head en body toe.", starter:"<!-- Bouw hier de basis van je ruimtestation -->", check:c => /^\s*<!doctype html>[\s\S]*<html[\s\S]*<head[\s\S]*<body[\s\S]*<\/body>[\s\S]*<\/html>/i.test(c), hint:"Controleer de volgorde: doctype, html, head en body." },
+  { phase:"HTML", title:"Geef het station een naam", learningGoal:"Leren hoe title en koppen de structuur en herkenbaarheid van een pagina bepalen.", explanation:"Een duidelijke titel helpt bezoekers en browsers begrijpen waar je pagina over gaat.", task:"Gebruik de titel Orbit Station en zet in de body een h1 met Mission Control.", starter:"<!DOCTYPE html>\n<html>\n  <head><!-- Voeg title toe --></head>\n  <body><!-- Voeg h1 toe --></body>\n</html>", check:c => /<title>\s*Orbit Station\s*<\/title>/i.test(c) && /<h1>\s*Mission Control\s*<\/h1>/i.test(c), hint:"Zoek naar title in head en h1 in body." },
+  { phase:"HTML", title:"Maak een status-paneel", learningGoal:"Begrijpen hoe section en p inhoud logisch groeperen.", explanation:"Een section groepeert informatie die bij elkaar hoort.", task:"Maak een section met class status en voeg de tekst Systemen: online toe in een p.", starter:"<!DOCTYPE html>\n<html><head><title>Orbit Station</title></head><body>\n<h1>Mission Control</h1>\n<!-- Voeg status section toe -->\n</body></html>", check:c => /<section[^>]*class=["']status["'][^>]*>[\s\S]*<p>\s*Systemen: online\s*<\/p>[\s\S]*<\/section>/i.test(c), hint:"Gebruik section class status met daarin een p." },
+  { phase:"HTML", title:"Voeg bemanning toe", learningGoal:"Leren hoe ul en li herhaalbare informatie overzichtelijk tonen.", explanation:"Een lijst is handig voor meerdere bemanningsleden.", task:"Voeg een ul toe met de li-items Nova, Ravi en Sam.", starter:"<!DOCTYPE html>\n<html><head><title>Orbit Station</title></head><body>\n<h1>Mission Control</h1><section class=\"status\"><p>Systemen: online</p></section>\n<!-- Voeg crew-lijst toe -->\n</body></html>", check:c => /<ul>[\s\S]*<li>\s*Nova\s*<\/li>[\s\S]*<li>\s*Ravi\s*<\/li>[\s\S]*<li>\s*Sam\s*<\/li>[\s\S]*<\/ul>/i.test(c), hint:"Maak één ul met drie li-elementen." },
+  { phase:"CSS", title:"Geef de ruimte sfeer", learningGoal:"Leren hoe CSS-selectors en achtergrondkleuren het uiterlijk bepalen.", explanation:"CSS maakt van een gewone pagina een herkenbaar ruimtestation.", task:"Maak in style.css een body-regel met background-color: #101827 en color: white.", starter:"<!DOCTYPE html>\n<html><head><title>Orbit Station</title></head><body>\n<h1>Mission Control</h1><section class=\"status\"><p>Systemen: online</p></section><ul><li>Nova</li><li>Ravi</li><li>Sam</li></ul>\n</body></html>", check:c => /body\s*\{[\s\S]*background-color\s*:\s*#101827[\s\S]*color\s*:\s*white[\s\S]*\}/i.test(c), hint:"Selecteer body en voeg beide eigenschappen toe in style.css." },
+  { phase:"CSS", title:"Bouw een dashboard-kaart", learningGoal:"Oefenen met class-selectors, padding, border en border-radius.", explanation:"Met een class geef je alleen het status-paneel een eigen kaartstijl.", task:"Geef .status een padding van 16px, een border van 1px solid #38bdf8 en ronde hoeken van 8px.", starter:"<!DOCTYPE html>\n<html><head><title>Orbit Station</title></head><body><h1>Mission Control</h1><section class=\"status\"><p>Systemen: online</p></section><ul><li>Nova</li><li>Ravi</li><li>Sam</li></ul></body></html>", check:c => /\.status\s*\{[\s\S]*padding\s*:\s*16px[\s\S]*border\s*:\s*1px\s+solid\s+#38bdf8[\s\S]*border-radius\s*:\s*8px[\s\S]*\}/i.test(c), hint:"Gebruik .status als selector en voeg de drie gevraagde eigenschappen toe." },
+  { phase:"CSS", title:"Zet het dashboard netjes", learningGoal:"Leren hoe max-width, margin en text-align samen een layout verbeteren.", explanation:"Een dashboard wordt leesbaarder als de inhoud niet te breed wordt.", task:"Geef .status max-width: 520px, margin: 0 auto en text-align: center.", starter:"<!DOCTYPE html>\n<html><head><title>Orbit Station</title></head><body><h1>Mission Control</h1><section class=\"status\"><p>Systemen: online</p></section><ul><li>Nova</li><li>Ravi</li><li>Sam</li></ul></body></html>", check:c => /\.status\s*\{[\s\S]*max-width\s*:\s*520px[\s\S]*margin\s*:\s*0\s+auto[\s\S]*text-align\s*:\s*center[\s\S]*\}/i.test(c), hint:"Controleer de eigenschappen binnen .status." },
+  { phase:"CSS", title:"Maak de crew-lijst af", learningGoal:"CSS-regels combineren om een duidelijke en verzorgde pagina te maken.", explanation:"De laatste stap combineert lijst- en footer-opmaak.", task:"Verwijder de bolletjes met ul { list-style: none; } en centreer de h1 met text-align: center.", starter:"<!DOCTYPE html>\n<html><head><title>Orbit Station</title></head><body><h1>Mission Control</h1><section class=\"status\"><p>Systemen: online</p></section><ul><li>Nova</li><li>Ravi</li><li>Sam</li></ul></body></html>", check:c => /ul\s*\{[\s\S]*list-style\s*:\s*none[\s\S]*\}/i.test(c) && /h1\s*\{[\s\S]*text-align\s*:\s*center[\s\S]*\}/i.test(c), hint:"Maak twee CSS-regels: één voor ul en één voor h1." }
+];
+
+const cafeSteps = [
+  { phase:"HTML", title:"Start het café-menu", learningGoal:"Begrijpen hoe de basisstructuur van HTML een pagina opbouwt.", explanation:"Je bouwt een digitale menukaart voor een gezellig café.", task:"Maak een HTML-document met title Pixel Café en een h1 met Vandaag bij Pixel Café.", starter:"<!-- Start je cafépagina -->", check:c => /^\s*<!doctype html>[\s\S]*<title>\s*Pixel Café\s*<\/title>[\s\S]*<h1>\s*Vandaag bij Pixel Café\s*<\/h1>/i.test(c), hint:"Gebruik doctype, html, head, title, body en h1." },
+  { phase:"HTML", title:"Voeg een welkom toe", learningGoal:"Leren hoe paragrafen en classes tekst betekenisvol maken.", explanation:"Een korte introductie maakt duidelijk wat bezoekers kunnen bestellen.", task:"Voeg een p met Welkom! Kies je favoriete drankje. en geef deze p de class intro.", starter:"<!DOCTYPE html>\n<html><head><title>Pixel Café</title></head><body><h1>Vandaag bij Pixel Café</h1><!-- Voeg intro toe --></body></html>", check:c => /<p[^>]*class=["']intro["'][^>]*>\s*Welkom! Kies je favoriete drankje\.\s*<\/p>/i.test(c), hint:"Gebruik class intro op de paragraaf." },
+  { phase:"HTML", title:"Maak drie menu-kaarten", learningGoal:"Oefenen met herhaling en semantische structuur met article-elementen.", explanation:"Elk menu-item krijgt een eigen article, zodat de inhoud duidelijk gescheiden is.", task:"Maak drie articles met class menu-item: Espresso, Matcha Latte en Choco Cookie.", starter:"<!DOCTYPE html>\n<html><head><title>Pixel Café</title></head><body><h1>Vandaag bij Pixel Café</h1><p class=\"intro\">Welkom! Kies je favoriete drankje.</p><!-- Voeg drie articles toe --></body></html>", check:c => (c.match(/<article[^>]*class=["']menu-item["']/gi) || []).length >= 3 && /Espresso/i.test(c) && /Matcha Latte/i.test(c) && /Choco Cookie/i.test(c), hint:"Gebruik drie articles met dezelfde class menu-item." },
+  { phase:"HTML", title:"Voeg prijzen en een link toe", learningGoal:"Leren hoe inhoud met small en a-elementen extra betekenis krijgt.", explanation:"Een bezoeker wil snel de prijs zien en meer kunnen lezen.", task:"Zet bij elk menu-item een prijs in small en voeg een link toe met de tekst Bekijk allergenen.", starter:"<!DOCTYPE html>\n<html><head><title>Pixel Café</title></head><body><h1>Vandaag bij Pixel Café</h1><p class=\"intro\">Welkom! Kies je favoriete drankje.</p><article class=\"menu-item\"><h2>Espresso</h2></article><article class=\"menu-item\"><h2>Matcha Latte</h2></article><article class=\"menu-item\"><h2>Choco Cookie</h2></article><!-- Voeg prijzen en link toe --></body></html>", check:c => (c.match(/<small[\s>]/gi) || []).length >= 3 && (c.match(/Bekijk allergenen/gi) || []).length >= 1, hint:"Voeg small-elementen toe en minstens één link met de gevraagde tekst." },
+  { phase:"CSS", title:"Kies een café-stijl", learningGoal:"Leren hoe CSS-kleur, lettertype en ruimte de uitstraling bepalen.", explanation:"Een warme kleur en goede leesbaarheid passen bij een café.", task:"Geef body background-color: #fff7ed, color: #3f2d20, font-family: Arial, sans-serif en padding: 24px.", starter:"<!DOCTYPE html>\n<html><head><title>Pixel Café</title></head><body><h1>Vandaag bij Pixel Café</h1><p class=\"intro\">Welkom! Kies je favoriete drankje.</p><article class=\"menu-item\"><h2>Espresso</h2><small>€ 2,50</small></article><article class=\"menu-item\"><h2>Matcha Latte</h2><small>€ 4,50</small></article><article class=\"menu-item\"><h2>Choco Cookie</h2><small>€ 3,00</small></article></body></html>", check:c => /body\s*\{[\s\S]*background-color\s*:\s*#fff7ed[\s\S]*color\s*:\s*#3f2d20[\s\S]*font-family\s*:\s*Arial\s*,\s*sans-serif[\s\S]*padding\s*:\s*24px[\s\S]*\}/i.test(c), hint:"Zet de vier eigenschappen samen in de body-regel." },
+  { phase:"CSS", title:"Maak menu-kaarten", learningGoal:"Oefenen met class-selectors, display, padding, border en afgeronde hoeken.", explanation:"De menu-items worden losse kaarten die bezoekers snel kunnen scannen.", task:"Geef .menu-item een witte achtergrond, padding: 16px, border: 1px solid #fed7aa en border-radius: 10px.", starter:"<!DOCTYPE html>\n<html><head><title>Pixel Café</title></head><body><h1>Vandaag bij Pixel Café</h1><article class=\"menu-item\"><h2>Espresso</h2><small>€ 2,50</small></article><article class=\"menu-item\"><h2>Matcha Latte</h2><small>€ 4,50</small></article><article class=\"menu-item\"><h2>Choco Cookie</h2><small>€ 3,00</small></article></body></html>", check:c => /\.menu-item\s*\{[\s\S]*background(?:-color)?\s*:\s*white[\s\S]*padding\s*:\s*16px[\s\S]*border\s*:\s*1px\s+solid\s+#fed7aa[\s\S]*border-radius\s*:\s*10px[\s\S]*\}/i.test(c), hint:"Gebruik .menu-item en controleer alle vier de eigenschappen." },
+  { phase:"CSS", title:"Maak een nette indeling", learningGoal:"Leren hoe grid, gap en max-width meerdere onderdelen overzichtelijk plaatsen.", explanation:"Met CSS Grid komen de café-kaarten netjes naast elkaar op brede schermen.", task:"Geef .menu een display: grid, grid-template-columns: repeat(3, 1fr), gap: 16px en max-width: 900px.", starter:"<!DOCTYPE html>\n<html><head><title>Pixel Café</title></head><body><h1>Vandaag bij Pixel Café</h1><div class=\"menu\"><article class=\"menu-item\"><h2>Espresso</h2></article><article class=\"menu-item\"><h2>Matcha Latte</h2></article><article class=\"menu-item\"><h2>Choco Cookie</h2></article></div></body></html>", check:c => /\.menu\s*\{[\s\S]*display\s*:\s*grid[\s\S]*grid-template-columns\s*:\s*repeat\(\s*3\s*,\s*1fr\s*\)[\s\S]*gap\s*:\s*16px[\s\S]*max-width\s*:\s*900px[\s\S]*\}/i.test(c), hint:"Maak een .menu-regel met grid en de drie kolommen." },
+  { phase:"CSS", title:"Maak het café af", learningGoal:"CSS-regels combineren en een hover-effect toepassen voor een verzorgde eindpagina.", explanation:"Een duidelijke titel en subtiel hover-effect maken de pagina af.", task:"Centreer h1 en maak .menu-item:hover een iets donkerdere achtergrond met #ffedd5.", starter:"<!DOCTYPE html>\n<html><head><title>Pixel Café</title></head><body><h1>Vandaag bij Pixel Café</h1><div class=\"menu\"><article class=\"menu-item\"><h2>Espresso</h2></article></div></body></html>", check:c => /h1\s*\{[\s\S]*text-align\s*:\s*center[\s\S]*\}/i.test(c) && /\.menu-item:hover\s*\{[\s\S]*background(?:-color)?\s*:\s*#ffedd5[\s\S]*\}/i.test(c), hint:"Maak een h1-regel en een .menu-item:hover-regel." }
+];
+
+const courses = [
+  { id:"pokemon", title:"Pokémon Trainer Page", label:"Bestaande cursus", description:"Leer HTML en CSS door stap voor stap een eigen Pokémon-team te bouwen.", difficulty:"Basis + herhaling", steps:pokemonSteps },
+  { id:"space", title:"Orbit Station", label:"Uitdagender thema", description:"Bouw een dashboard voor een ruimtestation met status-paneel en crew-lijst.", difficulty:"MBO 4 · niveau 2", steps:spaceSteps },
+  { id:"cafe", title:"Pixel Café", label:"Uitdagender project", description:"Maak een digitale menukaart met kaarten, CSS Grid en hover-effecten.", difficulty:"MBO 4 · niveau 2", steps:cafeSteps }
+];
+
+const hasSelectedCourse = Boolean(localStorage.getItem("pokecode-course"));
+let selectedCourseId = localStorage.getItem("pokecode-course") || "pokemon";
+let activeCourse = courses.find(course => course.id === selectedCourseId) || courses[0];
+let steps = activeCourse.steps;
 
 const editor = document.getElementById("editor");
 const cssEditor = document.getElementById("cssEditor");
@@ -819,11 +874,16 @@ const aiApiKey = document.getElementById("aiApiKey");
 const aiModel = document.getElementById("aiModel");
 const app = document.querySelector(".app");
 const sidebarToggle = document.getElementById("sidebarToggle");
+const coursePickerButton = document.getElementById("coursePickerButton");
+const coursePicker = document.getElementById("coursePicker");
+const courseOptions = document.getElementById("courseOptions");
+const appShell = document.getElementById("appShell");
 let aiConversation = [];
 let activeFile = localStorage.getItem("pokecode-active-file") || "html";
-let current = Number(localStorage.getItem("pokecode-step") || 0);
+const courseStorageKey = name => `pokecode-${selectedCourseId}-${name}`;
+let current = Number(localStorage.getItem(courseStorageKey("step")) || 0);
 if (current < 0 || current >= steps.length) current = 0;
-let completed = JSON.parse(localStorage.getItem("pokecode-completed") || "[]");
+let completed = JSON.parse(localStorage.getItem(courseStorageKey("completed")) || "[]");
 aiApiKey.value = localStorage.getItem("pokecode-gemini-key") || "";
 aiModel.value = localStorage.getItem("pokecode-ai-model") || "gemini-2.0-flash";
 aiStatus.textContent = aiApiKey.value ? "key opgeslagen in browser" : "API-key nodig";
@@ -836,6 +896,38 @@ sidebarToggle.addEventListener("click", () => {
   localStorage.setItem("pokecode-sidebar-collapsed", collapsed);
   sidebarToggle.title = collapsed ? "Zijbalk openen" : "Zijbalk inklappen";
 });
+coursePickerButton.addEventListener("click", () => {
+  appShell.hidden = true;
+  coursePicker.hidden = false;
+});
+
+function renderCoursePicker() {
+  courseOptions.innerHTML = "";
+  courses.forEach(course => {
+    const card = document.createElement("button");
+    card.type = "button";
+    card.className = "course-card";
+    card.innerHTML = `<span class="badge ${course.id === "pokemon" ? "html" : "css"}">${course.label}</span><h2>${escapeHtml(course.title)}</h2><p>${escapeHtml(course.description)}</p><strong>${escapeHtml(course.difficulty)}</strong>`;
+    card.addEventListener("click", () => selectCourse(course.id));
+    courseOptions.appendChild(card);
+  });
+}
+
+function selectCourse(courseId) {
+  const course = courses.find(item => item.id === courseId) || courses[0];
+  selectedCourseId = course.id;
+  activeCourse = course;
+  steps = course.steps;
+  current = Number(localStorage.getItem(`pokecode-${course.id}-step`) || 0);
+  if (current < 0 || current >= steps.length) current = 0;
+  completed = JSON.parse(localStorage.getItem(`pokecode-${course.id}-completed`) || "[]");
+  localStorage.setItem("pokecode-course", course.id);
+  coursePicker.hidden = true;
+  appShell.hidden = false;
+  document.getElementById("courseTitle").textContent = course.title;
+  renderList();
+  loadStep(current);
+}
 
 function escapeHtml(value) {
   return value.replace(/[&<>"']/g, character => ({
@@ -1115,6 +1207,7 @@ function renderList() {
 function loadStep(i, preserve=false) {
   current = i;
   const s = steps[current];
+  document.getElementById("courseTitle").textContent = activeCourse.title;
   document.getElementById("phaseBadge").textContent = s.phase;
   document.getElementById("phaseBadge").className = "badge " + (s.phase==="HTML" ? "html" : "css");
   document.getElementById("lessonTitle").textContent = s.title;
@@ -1125,17 +1218,17 @@ function loadStep(i, preserve=false) {
   setCssFileMode(separateCss);
   if (!preserve) {
     if (separateCss) {
-      const savedSource = localStorage.getItem("pokecode-html-" + current) || localStorage.getItem("pokecode-code-" + current) || s.starter;
+      const savedSource = localStorage.getItem(courseStorageKey("html-" + current)) || localStorage.getItem(courseStorageKey("code-" + current)) || s.starter;
       const split = splitCodeForFiles(savedSource);
       editor.value = formatCode(split.html);
-      cssEditor.value = formatCss(localStorage.getItem("pokecode-css-" + current) || split.css);
-      localStorage.setItem("pokecode-html-" + current, editor.value);
-      localStorage.setItem("pokecode-css-" + current, cssEditor.value);
+      cssEditor.value = formatCss(localStorage.getItem(courseStorageKey("css-" + current)) || split.css);
+      localStorage.setItem(courseStorageKey("html-" + current), editor.value);
+      localStorage.setItem(courseStorageKey("css-" + current), cssEditor.value);
     } else {
-      const saved = localStorage.getItem("pokecode-code-" + current);
+      const saved = localStorage.getItem(courseStorageKey("code-" + current));
       editor.value = formatCode(saved !== null ? saved : s.starter);
       cssEditor.value = "";
-      localStorage.setItem("pokecode-code-" + current, editor.value);
+      localStorage.setItem(courseStorageKey("code-" + current), editor.value);
     }
   }
   feedback.className = "";
@@ -1144,7 +1237,7 @@ function loadStep(i, preserve=false) {
   nextBtn.disabled = !completed.includes(current);
   document.getElementById("progressText").textContent = `Opdracht ${current+1} van ${steps.length} · ${s.phase}`;
   document.getElementById("progressBar").style.width = ((current+1)/steps.length*100) + "%";
-  localStorage.setItem("pokecode-step", current);
+  localStorage.setItem(courseStorageKey("step"), current);
   renderList();
   resetAiChat();
   updateCodeView();
@@ -1173,13 +1266,13 @@ editor.addEventListener("scroll", updateCodeView);
 cssEditor.addEventListener("scroll", updateCodeView);
 
 editor.addEventListener("input", () => {
-  localStorage.setItem(steps[current].phase === "CSS" ? "pokecode-html-" + current : "pokecode-code-" + current, editor.value);
+  localStorage.setItem(steps[current].phase === "CSS" ? courseStorageKey("html-" + current) : courseStorageKey("code-" + current), editor.value);
   updateCodeView();
   updatePreview();
 });
 
 cssEditor.addEventListener("input", () => {
-  localStorage.setItem("pokecode-css-" + current, cssEditor.value);
+  localStorage.setItem(courseStorageKey("css-" + current), cssEditor.value);
   updateCodeView();
   updatePreview();
 });
@@ -1212,7 +1305,7 @@ function checkCurrent() {
   if (ok) {
     if (!completed.includes(current)) completed.push(current);
     completed.sort((a,b)=>a-b);
-    localStorage.setItem("pokecode-completed", JSON.stringify(completed));
+    localStorage.setItem(courseStorageKey("completed"), JSON.stringify(completed));
     feedback.className = "success";
     feedback.style.display = "block";
     feedback.innerHTML = "🎉 <strong>Goed gedaan!</strong> Deze opdracht is gelukt. Je kunt nu verder.";
@@ -1244,12 +1337,12 @@ document.getElementById("resetBtn").onclick = () => {
   if (steps[current].phase === "CSS") {
     editor.value = formatCode(split.html);
     cssEditor.value = formatCss(split.css);
-    localStorage.setItem("pokecode-html-" + current, editor.value);
-    localStorage.setItem("pokecode-css-" + current, cssEditor.value);
+    localStorage.setItem(courseStorageKey("html-" + current), editor.value);
+    localStorage.setItem(courseStorageKey("css-" + current), cssEditor.value);
   } else {
     editor.value = formatCode(steps[current].starter);
     cssEditor.value = "";
-    localStorage.setItem("pokecode-code-" + current, editor.value);
+    localStorage.setItem(courseStorageKey("code-" + current), editor.value);
   }
   feedback.className = "";
   feedback.style.display = "none";
@@ -1257,8 +1350,17 @@ document.getElementById("resetBtn").onclick = () => {
   updatePreview();
 };
 
-renderList();
-loadStep(current);
+renderCoursePicker();
+if (hasSelectedCourse) {
+  coursePicker.hidden = true;
+  appShell.hidden = false;
+  document.getElementById("courseTitle").textContent = activeCourse.title;
+  renderList();
+  loadStep(current);
+} else {
+  coursePicker.hidden = false;
+  appShell.hidden = true;
+}
 </script>
 </body>
 </html>
