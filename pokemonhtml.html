@@ -50,25 +50,30 @@ header {
 }
 .app {
   display: grid;
-  grid-template-columns: 330px minmax(350px, 1fr) minmax(350px, 1fr);
+  grid-template-columns: 245px minmax(430px, 1.1fr) minmax(430px, 1fr);
   min-height: calc(100vh - 65px);
 }
 aside {
   background: #fff;
   border-right: 1px solid var(--border);
-  padding: 18px;
+  padding: 14px;
   overflow-y: auto;
 }
 main {
-  padding: 18px;
+  padding: 14px;
   min-width: 0;
 }
 .preview-panel {
   background: #fff;
   border-left: 1px solid var(--border);
-  padding: 18px;
+  padding: 14px;
 }
 h1, h2, h3 { margin-top: 0; }
+details > summary { cursor: pointer; font-weight: bold; }
+.lesson-info { margin: 8px 0 10px; }
+.lesson-info > summary { padding: 8px 10px; background: #f8fafc; border: 1px solid var(--border); border-radius: 6px; color: #475569; }
+.lesson-info[open] > summary { border-radius: 6px 6px 0 0; }
+.lesson-info .explanation, .lesson-info .task, .lesson-info .learning-goal { margin-top: 8px; margin-bottom: 0; }
 .badge {
   display: inline-block;
   background: #e5e7eb;
@@ -101,8 +106,8 @@ code.inline {
 }
 .editor {
   width: 100%;
-  height: 52vh;
-  min-height: 350px;
+  height: 60vh;
+  min-height: 420px;
   resize: none;
   background: transparent;
   color: transparent;
@@ -121,8 +126,8 @@ code.inline {
 }
 .editor-wrap {
   display: flex;
-  height: 52vh;
-  min-height: 350px;
+  height: 60vh;
+  min-height: 420px;
   resize: vertical;
   overflow: hidden;
   background: #1e1e1e;
@@ -188,12 +193,14 @@ button:disabled { opacity: .45; cursor: not-allowed; }
 .success { display:block !important; background:#dcfce7; color:#14532d; }
 .error { display:block !important; background:#fee2e2; color:#7f1d1d; }
 .ai-trainer {
-  margin-top: 18px;
+  margin-top: 12px;
   border: 1px solid #cbd5e1;
   border-radius: 8px;
   background: #f8fafc;
   overflow: hidden;
 }
+.ai-trainer > summary { list-style: none; }
+.ai-trainer > summary::-webkit-details-marker { display: none; }
 .ai-header {
   padding: 12px 14px;
   background: #1f2937;
@@ -206,7 +213,7 @@ button:disabled { opacity: .45; cursor: not-allowed; }
 .ai-header strong { font-size: 1rem; }
 .ai-status { font-size: .75rem; color: #cbd5e1; }
 .ai-messages {
-  height: 220px;
+  height: 190px;
   overflow-y: auto;
   padding: 12px;
   display: flex;
@@ -238,8 +245,8 @@ button:disabled { opacity: .45; cursor: not-allowed; }
 }
 #preview {
   width: 100%;
-  height: calc(100vh - 125px);
-  min-height: 500px;
+  height: calc(100vh - 105px);
+  min-height: 560px;
   border: 1px solid var(--border);
   border-radius: 8px;
   background: white;
@@ -268,15 +275,20 @@ button:disabled { opacity: .45; cursor: not-allowed; }
   color:#6b7280;
   line-height:1.45;
 }
-@media (max-width: 1050px) {
-  .app { grid-template-columns: 280px 1fr; }
+@media (min-width: 901px) and (max-width: 1100px) {
+  .app { grid-template-columns: 210px minmax(340px, 1fr) minmax(340px, 1fr); }
+  .preview-panel { border-left: 1px solid var(--border); border-top: 0; }
+  #preview { height: calc(100vh - 105px); min-height: 430px; }
+}
+@media (max-width: 900px) {
+  .app { grid-template-columns: 240px 1fr; }
   .preview-panel { grid-column: 1 / -1; border-left:0; border-top:1px solid var(--border); }
   #preview { height:500px; }
 }
 @media (max-width: 700px) {
   .app { display:block; }
   aside { border-right:0; border-bottom:1px solid var(--border); }
-  .editor { min-height:300px; }
+  .editor, .editor-wrap { min-height:300px; height:52vh; }
 }
 </style>
 </head>
@@ -291,18 +303,23 @@ button:disabled { opacity: .45; cursor: not-allowed; }
 
 <div class="app">
   <aside>
-    <div class="phase-title">Cursus</div>
-    <h2>Pokémon Trainer Page</h2>
-    <p class="tip">Bouw stap voor stap je eigen Pokémon-pagina. Eerst HTML, daarna CSS.</p>
-    <ul id="stepList"></ul>
+    <details class="course-nav" open>
+      <summary>Cursusnavigatie</summary>
+      <h2>Pokémon Trainer Page</h2>
+      <p class="tip">Bouw stap voor stap je eigen Pokémon-pagina.</p>
+      <ul id="stepList"></ul>
+    </details>
   </aside>
 
   <main>
     <span id="phaseBadge" class="badge html">HTML</span>
     <h1 id="lessonTitle"></h1>
-    <div id="explanation" class="explanation"></div>
-    <div class="task"><strong>Opdracht:</strong><br><span id="task"></span></div>
-    <div class="learning-goal"><strong>Leerdoel:</strong> <span id="learningGoal"></span></div>
+    <details class="lesson-info">
+      <summary>Uitleg, opdracht en leerdoel</summary>
+      <div id="explanation" class="explanation"></div>
+      <div class="task"><strong>Opdracht:</strong><br><span id="task"></span></div>
+      <div class="learning-goal"><strong>Leerdoel:</strong> <span id="learningGoal"></span></div>
+    </details>
 
     <div style="margin-top:14px;">
       <div class="editor-wrap">
@@ -320,11 +337,11 @@ button:disabled { opacity: .45; cursor: not-allowed; }
       <button id="resetBtn">Herstel stap</button>
     </div>
     <div id="feedback"></div>
-    <section class="ai-trainer" aria-labelledby="aiTitle">
-      <div class="ai-header">
+    <details class="ai-trainer" aria-labelledby="aiTitle">
+      <summary class="ai-header">
         <strong id="aiTitle">AI Trainer · teach-modus</strong>
         <span id="aiStatus" class="ai-status">lokale AI niet gecontroleerd</span>
-      </div>
+      </summary>
       <div id="aiMessages" class="ai-messages" aria-live="polite">
         <div class="ai-message assistant">Ik geef uitleg en denkvragen over deze opdracht. Ik schrijf geen oplossing voor je. Stel bijvoorbeeld: “Welk HTML-concept moet ik eerst begrijpen?”</div>
       </div>
@@ -337,7 +354,7 @@ button:disabled { opacity: .45; cursor: not-allowed; }
         <label>Gemini-model <input id="aiModel" value="gemini-2.0-flash" spellcheck="false"></label>
         <div>Gebruik een gratis key via <strong>Google AI Studio</strong>. De key wordt alleen in deze browser opgeslagen.</div>
       </div>
-    </section>
+    </details>
   </main>
 
   <section class="preview-panel">
