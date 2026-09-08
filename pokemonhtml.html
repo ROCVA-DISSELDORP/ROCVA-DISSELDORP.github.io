@@ -162,7 +162,6 @@ code.inline {
 .syntax-string { color: #ce9178; }
 .syntax-number { color: #b5cea8; }
 .syntax-selector { color: #dcdcaa; }
-}
 .controls {
   display: flex;
   gap: 8px;
@@ -625,12 +624,57 @@ const steps = [
 
 const editor = document.getElementById("editor");
 const preview = document.getElementById("preview");
+const lineNumbers = document.getElementById("lineNumbers");
+const syntaxHighlight = document.getElementById("syntaxHighlight");
 const feedback = document.getElementById("feedback");
 const nextBtn = document.getElementById("nextBtn");
 const checkBtn = document.getElementById("checkBtn");
 let current = Number(localStorage.getItem("pokecode-step") || 0);
 if (current < 0 || current >= steps.length) current = 0;
 let completed = JSON.parse(localStorage.getItem("pokecode-completed") || "[]");
+
+function escapeHtml(value) {
+  return value.replace(/[&<>"']/g, character => ({
+    "&": "&amp;",
+    "<": "&lt;",
+    ">": "&gt;",
+    '"': "&quot;",
+    "'": "&#39;"
+  }[character]));
+}
+
+function highlightCode(code) {
+  const tokenPattern = new RegExp(`<!--[\\s\\S]*?-->|\\/\\*[\\s\\S]*?\\*\\/|<\\/?[A-Za-z][^>]*>|"(?:\\\\.|[^"])*"|'(?:\\\\.|[^'])*'`, "g");
+  let result = "";
+  let lastIndex = 0;
+  let match;
+
+  while ((match = tokenPattern.exec(code)) !== null) {
+    result += escapeHtml(code.slice(lastIndex, match.index));
+    const token = escapeHtml(match[0]);
+    if (match[0].startsWith("<!--") || match[0].startsWith("/*")) {
+      result += `<span class="syntax-comment">${token}</span>`;
+    } else if (match[0].startsWith("<")) {
+      result += `<span class="syntax-tag">${token}</span>`;
+    } else {
+      result += `<span class="syntax-string">${token}</span>`;
+    }
+    lastIndex = match.index + match[0].length;
+  }
+
+  result += escapeHtml(code.slice(lastIndex));
+  return result || " ";
+}
+
+function updateCodeView() {
+  const code = editor.value;
+  const lineCount = Math.max(1, code.split("\n").length);
+  lineNumbers.textContent = Array.from({ length: lineCount }, (_, index) => index + 1).join("\n");
+  syntaxHighlight.innerHTML = highlightCode(code);
+  syntaxHighlight.scrollTop = editor.scrollTop;
+  syntaxHighlight.scrollLeft = editor.scrollLeft;
+  lineNumbers.scrollTop = editor.scrollTop;
+}
 
 function renderList() {
   const list = document.getElementById("stepList");
@@ -673,6 +717,7 @@ function loadStep(i, preserve=false) {
   document.getElementById("progressBar").style.width = ((current+1)/steps.length*100) + "%";
   localStorage.setItem("pokecode-step", current);
   renderList();
+  updateCodeView();
   updatePreview();
 }
 
@@ -682,20 +727,29 @@ function updatePreview() {
 }
 
 editor.addEventListener('keydown', (event) => {
+  if (event.key === 'Enter' && event.ctrlKey) {
+    event.preventDefault();
+    if (checkCurrent() && current < steps.length - 1) nextBtn.click();
+    return;
+  }
   if (event.key === 'Tab') {
     event.preventDefault();
     const start = editor.selectionStart;
     const end = editor.selectionEnd;
     editor.setRangeText('  ', start, end, 'end');
+    updateCodeView();
   }
 });
 
+editor.addEventListener("scroll", updateCodeView);
+
 editor.addEventListener("input", () => {
   localStorage.setItem("pokecode-code-" + current, editor.value);
+  updateCodeView();
   updatePreview();
 });
 
-checkBtn.onclick = () => {
+function checkCurrent() {
   const s = steps[current];
   let ok = false;
   try { ok = s.check(editor.value); } catch(e) { ok = false; }
@@ -708,12 +762,16 @@ checkBtn.onclick = () => {
     feedback.innerHTML = "🎉 <strong>Goed gedaan!</strong> Deze opdracht is gelukt. Je kunt nu verder.";
     nextBtn.disabled = false;
     renderList();
+    return true;
   } else {
     feedback.className = "error";
     feedback.style.display = "block";
     feedback.innerHTML = "Nog niet helemaal. <strong>Tip:</strong> " + s.hint;
+    return false;
   }
-};
+}
+
+checkBtn.onclick = checkCurrent;
 
 nextBtn.onclick = () => {
   if (current < steps.length - 1) loadStep(current + 1);
@@ -730,6 +788,7 @@ document.getElementById("resetBtn").onclick = () => {
   localStorage.setItem("pokecode-code-" + current, editor.value);
   feedback.className = "";
   feedback.style.display = "none";
+  updateCodeView();
   updatePreview();
 };
 
