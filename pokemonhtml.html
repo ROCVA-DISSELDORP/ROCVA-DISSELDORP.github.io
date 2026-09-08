@@ -1,0 +1,684 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PokéCode — Leer HTML & CSS</title>
+<style>
+:root {
+  --red: #d62828;
+  --dark: #202124;
+  --panel: #ffffff;
+  --bg: #f3f4f6;
+  --green: #16803c;
+  --yellow: #ffcc00;
+  --border: #d1d5db;
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: var(--bg);
+  color: var(--dark);
+}
+header {
+  background: var(--red);
+  color: white;
+  padding: 14px 22px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+.logo { font-size: 1.35rem; font-weight: bold; }
+.progress-wrap { flex: 1; max-width: 430px; }
+.progress-text { font-size: .8rem; margin-bottom: 5px; }
+.progress {
+  height: 9px;
+  background: rgba(255,255,255,.3);
+  border-radius: 10px;
+  overflow: hidden;
+}
+.progress > div {
+  height: 100%;
+  width: 0;
+  background: var(--yellow);
+  transition: width .25s;
+}
+.app {
+  display: grid;
+  grid-template-columns: 330px minmax(350px, 1fr) minmax(350px, 1fr);
+  min-height: calc(100vh - 65px);
+}
+aside {
+  background: #fff;
+  border-right: 1px solid var(--border);
+  padding: 18px;
+  overflow-y: auto;
+}
+main {
+  padding: 18px;
+  min-width: 0;
+}
+.preview-panel {
+  background: #fff;
+  border-left: 1px solid var(--border);
+  padding: 18px;
+}
+h1, h2, h3 { margin-top: 0; }
+.badge {
+  display: inline-block;
+  background: #e5e7eb;
+  border-radius: 999px;
+  padding: 4px 9px;
+  font-size: .75rem;
+  font-weight: bold;
+}
+.badge.html { background: #ffe0e0; color: #a71919; }
+.badge.css { background: #dcecff; color: #1556a8; }
+#lessonTitle { margin: 9px 0 7px; font-size: 1.45rem; }
+.explanation {
+  background: #f8fafc;
+  border-left: 4px solid var(--red);
+  padding: 12px;
+  margin: 12px 0;
+  line-height: 1.5;
+}
+code.inline {
+  background: #e5e7eb;
+  padding: 2px 5px;
+  border-radius: 4px;
+}
+.task {
+  background: #fff7d6;
+  border: 1px solid #ead47a;
+  border-radius: 8px;
+  padding: 12px;
+  line-height: 1.5;
+}
+.editor {
+  width: 100%;
+  height: 52vh;
+  min-height: 350px;
+  resize: vertical;
+  background: #1e1e1e;
+  color: #e7e7e7;
+  border: 0;
+  border-radius: 8px;
+  padding: 16px;
+  font: 14px/1.55 Consolas, Monaco, monospace;
+  outline: none;
+  tab-size: 2;
+}
+.controls {
+  display: flex;
+  gap: 8px;
+  margin-top: 10px;
+  flex-wrap: wrap;
+}
+button {
+  border: 0;
+  border-radius: 6px;
+  padding: 10px 14px;
+  cursor: pointer;
+  font-weight: bold;
+}
+#checkBtn { background: var(--green); color: white; }
+#nextBtn { background: var(--red); color: white; }
+#resetBtn { background: #e5e7eb; color: #222; }
+button:disabled { opacity: .45; cursor: not-allowed; }
+#feedback {
+  margin-top: 10px;
+  padding: 11px;
+  border-radius: 7px;
+  display: none;
+}
+.success { display:block !important; background:#dcfce7; color:#14532d; }
+.error { display:block !important; background:#fee2e2; color:#7f1d1d; }
+.preview-label {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 9px;
+}
+#preview {
+  width: 100%;
+  height: calc(100vh - 125px);
+  min-height: 500px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: white;
+}
+#stepList { list-style:none; padding:0; margin:16px 0; }
+#stepList li {
+  padding: 8px 9px;
+  border-radius: 6px;
+  margin-bottom: 3px;
+  font-size: .86rem;
+  cursor: pointer;
+}
+#stepList li.current { background:#fee2e2; font-weight:bold; }
+#stepList li.done { color:var(--green); }
+#stepList li.locked { color:#9ca3af; cursor:default; }
+.phase-title {
+  font-size:.72rem;
+  text-transform:uppercase;
+  letter-spacing:.08em;
+  color:#6b7280;
+  margin:18px 0 7px;
+  font-weight:bold;
+}
+.tip {
+  font-size:.82rem;
+  color:#6b7280;
+  line-height:1.45;
+}
+@media (max-width: 1050px) {
+  .app { grid-template-columns: 280px 1fr; }
+  .preview-panel { grid-column: 1 / -1; border-left:0; border-top:1px solid var(--border); }
+  #preview { height:500px; }
+}
+@media (max-width: 700px) {
+  .app { display:block; }
+  aside { border-right:0; border-bottom:1px solid var(--border); }
+  .editor { min-height:300px; }
+}
+</style>
+</head>
+<body>
+<header>
+  <div class="logo">⚡ PokéCode</div>
+  <div class="progress-wrap">
+    <div class="progress-text" id="progressText">Opdracht 1</div>
+    <div class="progress"><div id="progressBar"></div></div>
+  </div>
+</header>
+
+<div class="app">
+  <aside>
+    <div class="phase-title">Cursus</div>
+    <h2>Pokémon Trainer Page</h2>
+    <p class="tip">Bouw stap voor stap je eigen Pokémon-pagina. Eerst HTML, daarna CSS.</p>
+    <ul id="stepList"></ul>
+  </aside>
+
+  <main>
+    <span id="phaseBadge" class="badge html">HTML</span>
+    <h1 id="lessonTitle"></h1>
+    <div id="explanation" class="explanation"></div>
+    <div class="task"><strong>Opdracht:</strong><br><span id="task"></span></div>
+
+    <div style="margin-top:14px;">
+      <textarea id="editor" class="editor" spellcheck="false"></textarea>
+    </div>
+
+    <div class="controls">
+      <button id="checkBtn">✓ Check opdracht</button>
+      <button id="nextBtn" disabled>Volgende →</button>
+      <button id="resetBtn">Herstel stap</button>
+    </div>
+    <div id="feedback"></div>
+  </main>
+
+  <section class="preview-panel">
+    <div class="preview-label">
+      <strong>Live preview</strong>
+      <span class="badge" id="previewStatus">live</span>
+    </div>
+    <iframe id="preview" title="Live preview"></iframe>
+  </section>
+</div>
+
+<script>
+const steps = [
+/* ==================== HTML ==================== */
+{
+ phase:"HTML", title:"Maak een HTML-document",
+ explanation:"Een HTML-pagina bestaat uit HTML-code. Met <code class='inline'>&lt;!DOCTYPE html&gt;</code> vertel je de browser dat je moderne HTML gebruikt.",
+ task:"Zet <code class='inline'>&lt;!DOCTYPE html&gt;</code> als eerste regel.",
+ starter:"<!-- Zet hier je code -->",
+ check: c => /^\s*<!doctype\s+html>/i.test(c),
+ hint:"De eerste regel moet precies beginnen met <!DOCTYPE html>."
+},
+{
+ phase:"HTML", title:"Het html-element",
+ explanation:"Het element <code class='inline'>&lt;html&gt;</code> is de container voor je hele pagina. Alles wat bij je pagina hoort komt hierin.",
+ task:"Zet een opening- en sluitende <code class='inline'>&lt;html&gt;</code>-tag om je document.",
+ starter:"<!DOCTYPE html>\n<!-- Zet hier je html-element -->",
+ check: c => /<html(?:\s[^>]*)?>[\s\S]*<\x2Fhtml>/i.test(c),
+ hint:"Gebruik <html> ... </html>."
+},
+{
+ phase:"HTML", title:"De head",
+ explanation:"In <code class='inline'>&lt;head&gt;</code> zet je informatie over de pagina die meestal niet direct zichtbaar is.",
+ task:"Voeg binnen <code class='inline'>&lt;html&gt;</code> een <code class='inline'>&lt;head&gt;</code> toe.",
+ starter:"<!DOCTYPE html>\n<html>\n  <!-- Voeg head toe -->\n</html>",
+ check: c => /<head(?:\s[^>]*)?>[\s\S]*<\x2Fhead>/i.test(c),
+ hint:"Plaats <head> en </head> binnen html."
+},
+{
+ phase:"HTML", title:"De titel van je pagina",
+ explanation:"Met <code class='inline'>&lt;title&gt;</code> geef je de browser een titel. Deze zie je bijvoorbeeld in het tabblad van je browser.",
+ task:"Zet in de head de titel <strong>PokéCode</strong>.",
+ starter:"<!DOCTYPE html>\n<html>\n  <head>\n    <!-- Zet hier de title -->\n  </head>\n</html>",
+ check: c => /<title>\s*PokéCode\s*<\x2Ftitle>/i.test(c),
+ hint:"Gebruik <title>PokéCode</title>."
+},
+{
+ phase:"HTML", title:"De body",
+ explanation:"De <code class='inline'>&lt;body&gt;</code> bevat de inhoud die de bezoeker ziet: tekst, afbeeldingen, knoppen, lijsten enzovoort.",
+ task:"Voeg een <code class='inline'>&lt;body&gt;</code> toe onder de head.",
+ starter:"<!DOCTYPE html>\n<html>\n  <head>\n    <title>PokéCode</title>\n  </head>\n  <!-- Voeg body toe -->\n</html>",
+ check: c => /<body(?:\s[^>]*)?>[\s\S]*<\x2Fbody>/i.test(c),
+ hint:"Gebruik <body> ... </body> binnen html."
+},
+{
+ phase:"HTML", title:"Je eerste kop",
+ explanation:"Met <code class='inline'>&lt;h1&gt;</code> maak je de belangrijkste kop van een pagina. Een pagina heeft meestal één duidelijke h1.",
+ task:"Zet in de body een h1 met de tekst <strong>Mijn Pokémon Team</strong>.",
+ starter:"<!DOCTYPE html>\n<html>\n  <head>\n    <title>PokéCode</title>\n  </head>\n  <body>\n    <!-- Voeg h1 toe -->\n  </body>\n</html>",
+ check: c => /<h1>\s*Mijn Pokémon Team\s*<\x2Fh1>/i.test(c),
+ hint:"Schrijf <h1>Mijn Pokémon Team</h1>."
+},
+{
+ phase:"HTML", title:"Een alinea",
+ explanation:"Een <code class='inline'>&lt;p&gt;</code> is een paragraaf. Gebruik p voor gewone tekst die uit één of meer zinnen bestaat.",
+ task:"Voeg onder de h1 deze tekst toe: <strong>Welkom, trainer!</strong>",
+ starter:"<!DOCTYPE html>\n<html>\n  <head>\n    <title>PokéCode</title>\n  </head>\n  <body>\n    <h1>Mijn Pokémon Team</h1>\n    <!-- Voeg p toe -->\n  </body>\n</html>",
+ check: c => /<p>\s*Welkom, trainer!\s*<\x2Fp>/i.test(c),
+ hint:"Gebruik <p>Welkom, trainer!</p>."
+},
+{
+ phase:"HTML", title:"Een subkop",
+ explanation:"Met <code class='inline'>&lt;h2&gt;</code> maak je een tweede niveau kop. Koppen geven structuur aan je pagina.",
+ task:"Voeg onder de alinea een h2 toe met de tekst <strong>Mijn favoriete Pokémon</strong>.",
+ starter:"<!DOCTYPE html>\n<html>\n  <head>\n    <title>PokéCode</title>\n  </head>\n  <body>\n    <h1>Mijn Pokémon Team</h1>\n    <p>Welkom, trainer!</p>\n    <!-- Voeg h2 toe -->\n  </body>\n</html>",
+ check: c => /<h2>\s*Mijn favoriete Pokémon\s*<\x2Fh2>/i.test(c),
+ hint:"Gebruik een h2 met de gevraagde tekst."
+},
+{
+ phase:"HTML", title:"Een afbeelding",
+ explanation:"Met <code class='inline'>&lt;img&gt;</code> toon je een afbeelding. <code class='inline'>src</code> vertelt de browser waar de afbeelding staat en <code class='inline'>alt</code> beschrijft de afbeelding.",
+ task:"Voeg een afbeelding van Pikachu toe met deze URL als src: <code class='inline'>https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/25.png</code> en gebruik <strong>Pikachu</strong> als alt-tekst.",
+ starter:"<!DOCTYPE html>\n<html>\n  <head>\n    <title>PokéCode</title>\n  </head>\n  <body>\n    <h1>Mijn Pokémon Team</h1>\n    <p>Welkom, trainer!</p>\n    <h2>Mijn favoriete Pokémon</h2>\n    <!-- Voeg img toe -->\n  </body>\n</html>",
+ check: c => /<img[^>]+src=["']https:\x2F\x2Fraw\.githubusercontent\.com\x2FPokeAPI\x2Fsprites\x2Fmaster\x2Fsprites\x2Fpokemon\x2F25\.png["'][^>]+alt=["']Pikachu["'][^>]*>/i.test(c) || /<img[^>]+alt=["']Pikachu["'][^>]+src=["']https:\x2F\x2Fraw\.githubusercontent\.com\x2FPokeAPI\x2Fsprites\x2Fmaster\x2Fsprites\x2Fpokemon\x2F25\.png["'][^>]*>/i.test(c),
+ hint:"Gebruik img met zowel src als alt."
+},
+{
+ phase:"HTML", title:"Een link",
+ explanation:"Een <code class='inline'>&lt;a&gt;</code> is een link. Met het attribuut <code class='inline'>href</code> bepaal je waar de link naartoe gaat.",
+ task:"Voeg onder de afbeelding een link toe met de tekst <strong>Bekijk Pokédex</strong> en href <code class='inline'>https://pokeapi.co/</code>.",
+ starter:"<!DOCTYPE html>\n<html>\n  <head>\n    <title>PokéCode</title>\n  </head>\n  <body>\n    <h1>Mijn Pokémon Team</h1>\n    <p>Welkom, trainer!</p>\n    <h2>Mijn favoriete Pokémon</h2>\n    <img src=\"https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/25.png\" alt=\"Pikachu\">\n    <!-- Voeg a toe -->\n  </body>\n</html>",
+ check: c => /<a[^>]+href=["']https:\x2F\x2Fpokeapi\.co\x2F["'][^>]*>\s*Bekijk Pokédex\s*<\x2Fa>/i.test(c) || /<a[^>]*>\s*Bekijk Pokédex\s*<\x2Fa>/i.test(c) && /href=["']https:\x2F\x2Fpokeapi\.co\x2F/i.test(c),
+ hint:"Een link ziet eruit als <a href=\"...\">tekst</a>."
+},
+{
+ phase:"HTML", title:"Een ongeordende lijst",
+ explanation:"Met <code class='inline'>&lt;ul&gt;</code> maak je een ongeordende lijst. Een lijst bestaat vervolgens uit één of meer <code class='inline'>&lt;li&gt;</code>-elementen.",
+ task:"Maak onder de link een lege <code class='inline'>&lt;ul&gt;</code>.",
+ starter:"<!DOCTYPE html>\n<html>\n  <head>\n    <title>PokéCode</title>\n  </head>\n  <body>\n    <h1>Mijn Pokémon Team</h1>\n    <p>Welkom, trainer!</p>\n    <h2>Mijn favoriete Pokémon</h2>\n    <img src=\"https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/25.png\" alt=\"Pikachu\">\n    <a href=\"https://pokeapi.co/\">Bekijk Pokédex</a>\n    <!-- Voeg ul toe -->\n  </body>\n</html>",
+ check: c => /<ul(?:\s[^>]*)?>\s*<\x2Ful>/i.test(c),
+ hint:"Gebruik <ul></ul>."
+},
+{
+ phase:"HTML", title:"Een lijst-item",
+ explanation:"Met <code class='inline'>&lt;li&gt;</code> voeg je één item toe aan een lijst.",
+ task:"Zet in de ul één li met de tekst <strong>Pikachu</strong>.",
+ starter:"<!DOCTYPE html>\n<html>\n  <head>\n    <title>PokéCode</title>\n  </head>\n  <body>\n    <h1>Mijn Pokémon Team</h1>\n    <p>Welkom, trainer!</p>\n    <h2>Mijn favoriete Pokémon</h2>\n    <img src=\"https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/25.png\" alt=\"Pikachu\">\n    <a href=\"https://pokeapi.co/\">Bekijk Pokédex</a>\n    <ul>\n      <!-- Voeg li toe -->\n    </ul>\n  </body>\n</html>",
+ check: c => /<li>\s*Pikachu\s*<\x2Fli>/i.test(c),
+ hint:"Gebruik <li>Pikachu</li> binnen de ul."
+},
+{
+ phase:"HTML", title:"Nog twee Pokémon",
+ explanation:"Je kunt meerdere li-elementen in dezelfde ul zetten. HTML-elementen kunnen dus meerdere keren voorkomen.",
+ task:"Voeg <strong>Bulbasaur</strong> en <strong>Charmander</strong> toe als twee extra li-elementen.",
+ starter:"<!DOCTYPE html>\n<html>\n  <head>\n    <title>PokéCode</title>\n  </head>\n  <body>\n    <h1>Mijn Pokémon Team</h1>\n    <p>Welkom, trainer!</p>\n    <h2>Mijn favoriete Pokémon</h2>\n    <img src=\"https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/25.png\" alt=\"Pikachu\">\n    <a href=\"https://pokeapi.co/\">Bekijk Pokédex</a>\n    <ul>\n      <li>Pikachu</li>\n      <!-- Voeg twee li's toe -->\n    </ul>\n  </body>\n</html>",
+ check: c => /<li>\s*Pikachu\s*<\x2Fli>/i.test(c) && /<li>\s*Bulbasaur\s*<\x2Fli>/i.test(c) && /<li>\s*Charmander\s*<\x2Fli>/i.test(c),
+ hint:"Je hebt drie li's nodig: Pikachu, Bulbasaur en Charmander."
+},
+{
+ phase:"HTML", title:"Een div",
+ explanation:"Een <code class='inline'>&lt;div&gt;</code> is een algemene container. Je gebruikt hem vaak om onderdelen van een pagina bij elkaar te zetten.",
+ task:"Zet de h2, afbeelding en link in één div.",
+ starter:"<!DOCTYPE html>\n<html>\n  <head>\n    <title>PokéCode</title>\n  </head>\n  <body>\n    <h1>Mijn Pokémon Team</h1>\n    <p>Welkom, trainer!</p>\n    <!-- Zet h2, img en a in een div -->\n    <h2>Mijn favoriete Pokémon</h2>\n    <img src=\"https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/25.png\" alt=\"Pikachu\">\n    <a href=\"https://pokeapi.co/\">Bekijk Pokédex</a>\n    <ul>\n      <li>Pikachu</li>\n      <li>Bulbasaur</li>\n      <li>Charmander</li>\n    </ul>\n  </body>\n</html>",
+ check: c => { const d=c.match(/<div(?:\s[^>]*)?>[\s\S]*?<\x2Fdiv>/i); return !!d && /<h2/i.test(d[0]) && /<img/i.test(d[0]) && /<a/i.test(d[0]); },
+ hint:"Maak één <div> ... </div> en plaats h2, img en a daarin."
+},
+{
+ phase:"HTML", title:"Een class",
+ explanation:"Met het attribuut <code class='inline'>class</code> geef je een element een naam. Later kun je met CSS alle elementen met die class tegelijk opmaken.",
+ task:"Geef de div de class <strong>favorite</strong>.",
+ starter:"<!DOCTYPE html>\n<html>\n  <head>\n    <title>PokéCode</title>\n  </head>\n  <body>\n    <h1>Mijn Pokémon Team</h1>\n    <p>Welkom, trainer!</p>\n    <div>\n      <h2>Mijn favoriete Pokémon</h2>\n      <img src=\"https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/25.png\" alt=\"Pikachu\">\n      <a href=\"https://pokeapi.co/\">Bekijk Pokédex</a>\n    </div>\n    <ul>\n      <li>Pikachu</li><li>Bulbasaur</li><li>Charmander</li>\n    </ul>\n  </body>\n</html>",
+ check: c => /<div[^>]*class=["']favorite["']/i.test(c),
+ hint:"Gebruik class=\"favorite\" op de div."
+},
+{
+ phase:"HTML", title:"Een tweede sectie",
+ explanation:"Een pagina kan uit meerdere onderdelen bestaan. Gebruik opnieuw een div om een nieuw onderdeel te groeperen.",
+ task:"Maak onder de bestaande content een div met de class <strong>team</strong>.",
+ starter:"<!DOCTYPE html>\n<html>\n  <head><title>PokéCode</title></head>\n  <body>\n    <h1>Mijn Pokémon Team</h1>\n    <p>Welkom, trainer!</p>\n    <div class=\"favorite\">\n      <h2>Mijn favoriete Pokémon</h2>\n      <img src=\"https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/25.png\" alt=\"Pikachu\">\n      <a href=\"https://pokeapi.co/\">Bekijk Pokédex</a>\n    </div>\n    <ul><li>Pikachu</li><li>Bulbasaur</li><li>Charmander</li></ul>\n    <!-- Maak hier de team div -->\n  </body>\n</html>",
+ check: c => /<div[^>]*class=["']team["'][^>]*>\s*<\x2Fdiv>/i.test(c),
+ hint:"Maak <div class=\"team\"></div>."
+},
+{
+ phase:"HTML", title:"Een knop",
+ explanation:"Met <code class='inline'>&lt;button&gt;</code> maak je een knop. Voor nu hoeft de knop nog niets te doen.",
+ task:"Zet in de team-div een knop met de tekst <strong>Vang Pokémon</strong>.",
+ starter:"<!DOCTYPE html>\n<html>\n  <head><title>PokéCode</title></head>\n  <body>\n    <h1>Mijn Pokémon Team</h1>\n    <p>Welkom, trainer!</p>\n    <div class=\"favorite\"><h2>Mijn favoriete Pokémon</h2><img src=\"https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/25.png\" alt=\"Pikachu\"><a href=\"https://pokeapi.co/\">Bekijk Pokédex</a></div>\n    <ul><li>Pikachu</li><li>Bulbasaur</li><li>Charmander</li></ul>\n    <div class=\"team\">\n      <!-- Voeg button toe -->\n    </div>\n  </body>\n</html>",
+ check: c => /<div[^>]*class=["']team["'][^>]*>[\s\S]*<button[^>]*>\s*Vang Pokémon\s*<\x2Fbutton>[\s\S]*<\x2Fdiv>/i.test(c),
+ hint:"Gebruik <button>Vang Pokémon</button> binnen de team-div."
+},
+{
+ phase:"HTML", title:"HTML klaar!",
+ explanation:"Goed gedaan. Je hebt nu de belangrijkste HTML-bouwstenen gebruikt: documentstructuur, koppen, tekst, afbeeldingen, links, lijsten, containers, classes en een knop.",
+ task:"Maak je HTML af met een footer onderaan met de tekst <strong>Gotta code 'em all!</strong>.",
+ starter:"<!DOCTYPE html>\n<html>\n  <head><title>PokéCode</title></head>\n  <body>\n    <h1>Mijn Pokémon Team</h1>\n    <p>Welkom, trainer!</p>\n    <div class=\"favorite\"><h2>Mijn favoriete Pokémon</h2><img src=\"https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/25.png\" alt=\"Pikachu\"><a href=\"https://pokeapi.co/\">Bekijk Pokédex</a></div>\n    <ul><li>Pikachu</li><li>Bulbasaur</li><li>Charmander</li></ul>\n    <div class=\"team\"><button>Vang Pokémon</button></div>\n    <!-- Voeg footer toe -->\n  </body>\n</html>",
+ check: c => /<footer(?:\s[^>]*)?>\s*Gotta code 'em all!\s*<\x2Ffooter>/i.test(c),
+ hint:"Gebruik <footer>Gotta code 'em all!</footer>."
+},
+
+/* ==================== CSS ==================== */
+{
+ phase:"CSS", title:"Je eerste CSS",
+ explanation:"CSS bepaalt hoe HTML eruitziet. Je kunt CSS in een <code class='inline'>&lt;style&gt;</code>-element in de head zetten.",
+ task:"Voeg in de head een <code class='inline'>&lt;style&gt;</code>-element toe.",
+ starter:"<!DOCTYPE html>\n<html>\n  <head>\n    <title>PokéCode</title>\n    <!-- Voeg style toe -->\n  </head>\n  <body>\n    <h1>Mijn Pokémon Team</h1>\n    <p>Welkom, trainer!</p>\n    <div class=\"favorite\"><h2>Mijn favoriete Pokémon</h2><img src=\"https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/25.png\" alt=\"Pikachu\"><a href=\"https://pokeapi.co/\">Bekijk Pokédex</a></div>\n    <ul><li>Pikachu</li><li>Bulbasaur</li><li>Charmander</li></ul>\n    <div class=\"team\"><button>Vang Pokémon</button></div>\n    <footer>Gotta code 'em all!</footer>\n  </body>\n</html>",
+ check: c => /<style(?:\s[^>]*)?>[\s\S]*<\x2Fstyle>/i.test(c),
+ hint:"Zet <style> ... </style> in de head."
+},
+{
+ phase:"CSS", title:"Een CSS-regel",
+ explanation:"Een CSS-regel bestaat uit een selector en een blok met eigenschappen. Met <code class='inline'>body</code> selecteer je de body van je pagina.",
+ task:"Maak in style een lege regel voor <strong>body</strong>: <code class='inline'>body { }</code>.",
+ starter:"<!DOCTYPE html>\n<html>\n  <head><title>PokéCode</title><style>\n    <!-- Maak hier body { } -->\n  </style></head>\n  <body>\n    <h1>Mijn Pokémon Team</h1><p>Welkom, trainer!</p>\n    <div class=\"favorite\"><h2>Mijn favoriete Pokémon</h2><img src=\"https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/25.png\" alt=\"Pikachu\"><a href=\"https://pokeapi.co/\">Bekijk Pokédex</a></div>\n    <ul><li>Pikachu</li><li>Bulbasaur</li><li>Charmander</li></ul><div class=\"team\"><button>Vang Pokémon</button></div><footer>Gotta code 'em all!</footer>\n  </body>\n</html>",
+ check: c => /body\s*\{[\s\S]*?\}/i.test(c),
+ hint:"Schrijf body { } in je style-element."
+},
+{
+ phase:"CSS", title:"De achtergrondkleur",
+ explanation:"<code class='inline'>background-color</code> verandert de achtergrondkleur. CSS-eigenschappen staan tussen de accolades.",
+ task:"Geef de body de achtergrondkleur <strong>#f3f4f6</strong>.",
+ starter:"<!DOCTYPE html>\n<html><head><title>PokéCode</title><style>\nbody {\n  /* Voeg background-color toe */\n}\n</style></head><body>\n<h1>Mijn Pokémon Team</h1><p>Welkom, trainer!</p><div class=\"favorite\"><h2>Mijn favoriete Pokémon</h2><img src=\"https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/25.png\" alt=\"Pikachu\"><a href=\"https://pokeapi.co/\">Bekijk Pokédex</a></div><ul><li>Pikachu</li><li>Bulbasaur</li><li>Charmander</li></ul><div class=\"team\"><button>Vang Pokémon</button></div><footer>Gotta code 'em all!</footer>\n</body></html>",
+ check: c => /body\s*\{[\s\S]*?background-color\s*:\s*#f3f4f6\s*;?[\s\S]*?\}/i.test(c),
+ hint:"Gebruik background-color: #f3f4f6;"
+},
+{
+ phase:"CSS", title:"De tekstkleur",
+ explanation:"Met <code class='inline'>color</code> verander je de kleur van tekst.",
+ task:"Geef de body de tekstkleur <strong>#202124</strong>.",
+ starter:"<!DOCTYPE html>\n<html><head><title>PokéCode</title><style>\nbody { background-color: #f3f4f6;\n  /* Voeg color toe */\n}\n</style></head><body>\n<h1>Mijn Pokémon Team</h1><p>Welkom, trainer!</p><div class=\"favorite\"><h2>Mijn favoriete Pokémon</h2><img src=\"https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/25.png\" alt=\"Pikachu\"><a href=\"https://pokeapi.co/\">Bekijk Pokédex</a></div><ul><li>Pikachu</li><li>Bulbasaur</li><li>Charmander</li></ul><div class=\"team\"><button>Vang Pokémon</button></div><footer>Gotta code 'em all!</footer>\n</body></html>",
+ check: c => /body\s*\{[\s\S]*?color\s*:\s*#202124\s*;?[\s\S]*?\}/i.test(c),
+ hint:"Gebruik color: #202124;"
+},
+{
+ phase:"CSS", title:"Het lettertype",
+ explanation:"<code class='inline'>font-family</code> bepaalt welk lettertype de browser gebruikt.",
+ task:"Geef de body het lettertype <strong>Arial, sans-serif</strong>.",
+ starter:"<!DOCTYPE html>\n<html><head><title>PokéCode</title><style>body { background-color:#f3f4f6; color:#202124; /* Voeg font-family toe */ }</style></head><body><h1>Mijn Pokémon Team</h1><p>Welkom, trainer!</p><div class=\"favorite\"><h2>Mijn favoriete Pokémon</h2><img src=\"https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/25.png\" alt=\"Pikachu\"><a href=\"https://pokeapi.co/\">Bekijk Pokédex</a></div><ul><li>Pikachu</li><li>Bulbasaur</li><li>Charmander</li></ul><div class=\"team\"><button>Vang Pokémon</button></div><footer>Gotta code 'em all!</footer></body></html>",
+ check: c => /body\s*\{[\s\S]*?font-family\s*:\s*Arial\s*,\s*sans-serif\s*;?[\s\S]*?\}/i.test(c),
+ hint:"Gebruik font-family: Arial, sans-serif;"
+},
+{
+ phase:"CSS", title:"Ruimte aan de binnenkant",
+ explanation:"<code class='inline'>padding</code> geeft ruimte tussen de rand van een element en de inhoud.",
+ task:"Geef de body <strong>20px</strong> padding.",
+ starter:"<!DOCTYPE html>\n<html><head><title>PokéCode</title><style>body { background-color:#f3f4f6; color:#202124; font-family:Arial,sans-serif; /* Voeg padding toe */ }</style></head><body><h1>Mijn Pokémon Team</h1><p>Welkom, trainer!</p><div class=\"favorite\"><h2>Mijn favoriete Pokémon</h2><img src=\"https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/25.png\" alt=\"Pikachu\"><a href=\"https://pokeapi.co/\">Bekijk Pokédex</a></div><ul><li>Pikachu</li><li>Bulbasaur</li><li>Charmander</li></ul><div class=\"team\"><button>Vang Pokémon</button></div><footer>Gotta code 'em all!</footer></body></html>",
+ check: c => /body\s*\{[\s\S]*?padding\s*:\s*20px\s*;?[\s\S]*?\}/i.test(c),
+ hint:"Gebruik padding: 20px;"
+},
+{
+ phase:"CSS", title:"De favoriete Pokémon als kaart",
+ explanation:"Je kunt een class als selector gebruiken met een punt: <code class='inline'>.favorite</code>. Daarmee selecteer je de div met class favorite.",
+ task:"Geef <strong>.favorite</strong> een witte achtergrond: <strong>white</strong>.",
+ starter:"<!DOCTYPE html>\n<html><head><title>PokéCode</title><style>body { background-color:#f3f4f6; color:#202124; font-family:Arial,sans-serif; padding:20px; }\n/* Maak .favorite */\n</style></head><body><h1>Mijn Pokémon Team</h1><p>Welkom, trainer!</p><div class=\"favorite\"><h2>Mijn favoriete Pokémon</h2><img src=\"https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/25.png\" alt=\"Pikachu\"><a href=\"https://pokeapi.co/\">Bekijk Pokédex</a></div><ul><li>Pikachu</li><li>Bulbasaur</li><li>Charmander</li></ul><div class=\"team\"><button>Vang Pokémon</button></div><footer>Gotta code 'em all!</footer></body></html>",
+ check: c => /\.favorite\s*\{[\s\S]*?background(?:-color)?\s*:\s*white\s*;?[\s\S]*?\}/i.test(c),
+ hint:"Gebruik .favorite { background: white; } of background-color: white;"
+},
+{
+ phase:"CSS", title:"Een rand",
+ explanation:"Met <code class='inline'>border</code> geef je een element een zichtbare rand. De waarde kan bijvoorbeeld zijn: <code class='inline'>1px solid #ddd</code>.",
+ task:"Geef .favorite een rand van <strong>1px solid #d1d5db</strong>.",
+ starter:"<!DOCTYPE html>\n<html><head><title>PokéCode</title><style>body { background-color:#f3f4f6; color:#202124; font-family:Arial,sans-serif; padding:20px; } .favorite { background:white; /* Voeg border toe */ }</style></head><body><h1>Mijn Pokémon Team</h1><p>Welkom, trainer!</p><div class=\"favorite\"><h2>Mijn favoriete Pokémon</h2><img src=\"https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/25.png\" alt=\"Pikachu\"><a href=\"https://pokeapi.co/\">Bekijk Pokédex</a></div><ul><li>Pikachu</li><li>Bulbasaur</li><li>Charmander</li></ul><div class=\"team\"><button>Vang Pokémon</button></div><footer>Gotta code 'em all!</footer></body></html>",
+ check: c => /\.favorite\s*\{[\s\S]*?border\s*:\s*1px\s+solid\s+#d1d5db\s*;?[\s\S]*?\}/i.test(c),
+ hint:"Gebruik border: 1px solid #d1d5db;"
+},
+{
+ phase:"CSS", title:"Ronde hoeken",
+ explanation:"<code class='inline'>border-radius</code> maakt de hoeken van een element rond.",
+ task:"Geef .favorite een border-radius van <strong>10px</strong>.",
+ starter:"<!DOCTYPE html>\n<html><head><title>PokéCode</title><style>body { background-color:#f3f4f6; color:#202124; font-family:Arial,sans-serif; padding:20px; } .favorite { background:white; border:1px solid #d1d5db; /* Voeg border-radius toe */ }</style></head><body><h1>Mijn Pokémon Team</h1><p>Welkom, trainer!</p><div class=\"favorite\"><h2>Mijn favoriete Pokémon</h2><img src=\"https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/25.png\" alt=\"Pikachu\"><a href=\"https://pokeapi.co/\">Bekijk Pokédex</a></div><ul><li>Pikachu</li><li>Bulbasaur</li><li>Charmander</li></ul><div class=\"team\"><button>Vang Pokémon</button></div><footer>Gotta code 'em all!</footer></body></html>",
+ check: c => /\.favorite\s*\{[\s\S]*?border-radius\s*:\s*10px\s*;?[\s\S]*?\}/i.test(c),
+ hint:"Gebruik border-radius: 10px;"
+},
+{
+ phase:"CSS", title:"Binnenruimte voor de kaart",
+ explanation:"De kaart heeft nu een rand. Met padding geef je de inhoud wat ademruimte.",
+ task:"Geef .favorite <strong>20px</strong> padding.",
+ starter:"<!DOCTYPE html>\n<html><head><title>PokéCode</title><style>body { background-color:#f3f4f6; color:#202124; font-family:Arial,sans-serif; padding:20px; } .favorite { background:white; border:1px solid #d1d5db; border-radius:10px; /* Voeg padding toe */ }</style></head><body><h1>Mijn Pokémon Team</h1><p>Welkom, trainer!</p><div class=\"favorite\"><h2>Mijn favoriete Pokémon</h2><img src=\"https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/25.png\" alt=\"Pikachu\"><a href=\"https://pokeapi.co/\">Bekijk Pokédex</a></div><ul><li>Pikachu</li><li>Bulbasaur</li><li>Charmander</li></ul><div class=\"team\"><button>Vang Pokémon</button></div><footer>Gotta code 'em all!</footer></body></html>",
+ check: c => /\.favorite\s*\{[\s\S]*?padding\s*:\s*20px\s*;?[\s\S]*?\}/i.test(c),
+ hint:"Gebruik padding: 20px;"
+},
+{
+ phase:"CSS", title:"De kaart centreren",
+ explanation:"<code class='inline'>max-width</code> voorkomt dat een element onbeperkt breed wordt. Met <code class='inline'>margin: 0 auto</code> kun je een blok horizontaal centreren.",
+ task:"Geef .favorite een max-width van <strong>500px</strong>.",
+ starter:"<!DOCTYPE html>\n<html><head><title>PokéCode</title><style>body { background-color:#f3f4f6; color:#202124; font-family:Arial,sans-serif; padding:20px; } .favorite { background:white; border:1px solid #d1d5db; border-radius:10px; padding:20px; /* Voeg max-width toe */ }</style></head><body><h1>Mijn Pokémon Team</h1><p>Welkom, trainer!</p><div class=\"favorite\"><h2>Mijn favoriete Pokémon</h2><img src=\"https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/25.png\" alt=\"Pikachu\"><a href=\"https://pokeapi.co/\">Bekijk Pokédex</a></div><ul><li>Pikachu</li><li>Bulbasaur</li><li>Charmander</li></ul><div class=\"team\"><button>Vang Pokémon</button></div><footer>Gotta code 'em all!</footer></body></html>",
+ check: c => /\.favorite\s*\{[\s\S]*?max-width\s*:\s*500px\s*;?[\s\S]*?\}/i.test(c),
+ hint:"Gebruik max-width: 500px;"
+},
+{
+ phase:"CSS", title:"Horizontaal centreren",
+ explanation:"<code class='inline'>margin: 0 auto</code> geeft boven/onder 0 marge en verdeelt de overgebleven ruimte links en rechts automatisch.",
+ task:"Geef .favorite <strong>margin: 0 auto</strong>.",
+ starter:"<!DOCTYPE html>\n<html><head><title>PokéCode</title><style>body { background-color:#f3f4f6; color:#202124; font-family:Arial,sans-serif; padding:20px; } .favorite { background:white; border:1px solid #d1d5db; border-radius:10px; padding:20px; max-width:500px; /* Voeg margin toe */ }</style></head><body><h1>Mijn Pokémon Team</h1><p>Welkom, trainer!</p><div class=\"favorite\"><h2>Mijn favoriete Pokémon</h2><img src=\"https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/25.png\" alt=\"Pikachu\"><a href=\"https://pokeapi.co/\">Bekijk Pokédex</a></div><ul><li>Pikachu</li><li>Bulbasaur</li><li>Charmander</li></ul><div class=\"team\"><button>Vang Pokémon</button></div><footer>Gotta code 'em all!</footer></body></html>",
+ check: c => /\.favorite\s*\{[\s\S]*?margin\s*:\s*0\s+auto\s*;?[\s\S]*?\}/i.test(c),
+ hint:"Gebruik margin: 0 auto;"
+},
+{
+ phase:"CSS", title:"De h1 groter maken",
+ explanation:"<code class='inline'>font-size</code> bepaalt de grootte van tekst.",
+ task:"Maak de h1 <strong>32px</strong> groot.",
+ starter:"<!DOCTYPE html>\n<html><head><title>PokéCode</title><style>body { background-color:#f3f4f6; color:#202124; font-family:Arial,sans-serif; padding:20px; } .favorite { background:white; border:1px solid #d1d5db; border-radius:10px; padding:20px; max-width:500px; margin:0 auto; } /* Maak h1 */</style></head><body><h1>Mijn Pokémon Team</h1><p>Welkom, trainer!</p><div class=\"favorite\"><h2>Mijn favoriete Pokémon</h2><img src=\"https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/25.png\" alt=\"Pikachu\"><a href=\"https://pokeapi.co/\">Bekijk Pokédex</a></div><ul><li>Pikachu</li><li>Bulbasaur</li><li>Charmander</li></ul><div class=\"team\"><button>Vang Pokémon</button></div><footer>Gotta code 'em all!</footer></body></html>",
+ check: c => /h1\s*\{[\s\S]*?font-size\s*:\s*32px\s*;?[\s\S]*?\}/i.test(c),
+ hint:"Maak h1 { font-size: 32px; }"
+},
+{
+ phase:"CSS", title:"De knop stylen",
+ explanation:"Je kunt een elementnaam ook rechtstreeks selecteren. Met <code class='inline'>button</code> selecteer je alle knoppen.",
+ task:"Geef de button een rode achtergrond: <strong>#d62828</strong>.",
+ starter:"<!DOCTYPE html>\n<html><head><title>PokéCode</title><style>body { background-color:#f3f4f6; color:#202124; font-family:Arial,sans-serif; padding:20px; } .favorite { background:white; border:1px solid #d1d5db; border-radius:10px; padding:20px; max-width:500px; margin:0 auto; } h1 { font-size:32px; } /* Style button */</style></head><body><h1>Mijn Pokémon Team</h1><p>Welkom, trainer!</p><div class=\"favorite\"><h2>Mijn favoriete Pokémon</h2><img src=\"https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/25.png\" alt=\"Pikachu\"><a href=\"https://pokeapi.co/\">Bekijk Pokédex</a></div><ul><li>Pikachu</li><li>Bulbasaur</li><li>Charmander</li></ul><div class=\"team\"><button>Vang Pokémon</button></div><footer>Gotta code 'em all!</footer></body></html>",
+ check: c => /button\s*\{[\s\S]*?background(?:-color)?\s*:\s*#d62828\s*;?[\s\S]*?\}/i.test(c),
+ hint:"Gebruik button { background-color: #d62828; }"
+},
+{
+ phase:"CSS", title:"Witte knoptekst",
+ explanation:"Met <code class='inline'>color</code> kun je ook de tekstkleur van een knop veranderen.",
+ task:"Geef de button witte tekst.",
+ starter:"<!DOCTYPE html>\n<html><head><title>PokéCode</title><style>body { background-color:#f3f4f6; color:#202124; font-family:Arial,sans-serif; padding:20px; } .favorite { background:white; border:1px solid #d1d5db; border-radius:10px; padding:20px; max-width:500px; margin:0 auto; } h1 { font-size:32px; } button { background-color:#d62828; /* Voeg color toe */ }</style></head><body><h1>Mijn Pokémon Team</h1><p>Welkom, trainer!</p><div class=\"favorite\"><h2>Mijn favoriete Pokémon</h2><img src=\"https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/25.png\" alt=\"Pikachu\"><a href=\"https://pokeapi.co/\">Bekijk Pokédex</a></div><ul><li>Pikachu</li><li>Bulbasaur</li><li>Charmander</li></ul><div class=\"team\"><button>Vang Pokémon</button></div><footer>Gotta code 'em all!</footer></body></html>",
+ check: c => /button\s*\{[\s\S]*?color\s*:\s*(white|#fff(?:fff)?)\s*;?[\s\S]*?\}/i.test(c),
+ hint:"Gebruik color: white;"
+},
+{
+ phase:"CSS", title:"Knopruimte",
+ explanation:"Een knop wordt prettiger om te gebruiken als er ruimte rond de tekst zit. Daarvoor gebruiken we padding.",
+ task:"Geef de button <strong>10px 16px</strong> padding.",
+ starter:"<!DOCTYPE html>\n<html><head><title>PokéCode</title><style>body { background-color:#f3f4f6; color:#202124; font-family:Arial,sans-serif; padding:20px; } .favorite { background:white; border:1px solid #d1d5db; border-radius:10px; padding:20px; max-width:500px; margin:0 auto; } h1 { font-size:32px; } button { background-color:#d62828; color:white; /* Voeg padding toe */ }</style></head><body><h1>Mijn Pokémon Team</h1><p>Welkom, trainer!</p><div class=\"favorite\"><h2>Mijn favoriete Pokémon</h2><img src=\"https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/25.png\" alt=\"Pikachu\"><a href=\"https://pokeapi.co/\">Bekijk Pokédex</a></div><ul><li>Pikachu</li><li>Bulbasaur</li><li>Charmander</li></ul><div class=\"team\"><button>Vang Pokémon</button></div><footer>Gotta code 'em all!</footer></body></html>",
+ check: c => /button\s*\{[\s\S]*?padding\s*:\s*10px\s+16px\s*;?[\s\S]*?\}/i.test(c),
+ hint:"Gebruik padding: 10px 16px;"
+},
+{
+ phase:"CSS", title:"Ronde knop",
+ explanation:"Ook een knop kan ronde hoeken krijgen met border-radius.",
+ task:"Geef de button een border-radius van <strong>6px</strong>.",
+ starter:"<!DOCTYPE html>\n<html><head><title>PokéCode</title><style>body { background-color:#f3f4f6; color:#202124; font-family:Arial,sans-serif; padding:20px; } .favorite { background:white; border:1px solid #d1d5db; border-radius:10px; padding:20px; max-width:500px; margin:0 auto; } h1 { font-size:32px; } button { background-color:#d62828; color:white; padding:10px 16px; /* Voeg border-radius toe */ }</style></head><body><h1>Mijn Pokémon Team</h1><p>Welkom, trainer!</p><div class=\"favorite\"><h2>Mijn favoriete Pokémon</h2><img src=\"https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/25.png\" alt=\"Pikachu\"><a href=\"https://pokeapi.co/\">Bekijk Pokédex</a></div><ul><li>Pikachu</li><li>Bulbasaur</li><li>Charmander</li></ul><div class=\"team\"><button>Vang Pokémon</button></div><footer>Gotta code 'em all!</footer></body></html>",
+ check: c => /button\s*\{[\s\S]*?border-radius\s*:\s*6px\s*;?[\s\S]*?\}/i.test(c),
+ hint:"Gebruik border-radius: 6px;"
+},
+{
+ phase:"CSS", title:"Tekst centreren",
+ explanation:"Met <code class='inline'>text-align</code> kun je tekst binnen een element uitlijnen.",
+ task:"Centreer de tekst van .favorite met <strong>text-align: center</strong>.",
+ starter:"<!DOCTYPE html>\n<html><head><title>PokéCode</title><style>body { background-color:#f3f4f6; color:#202124; font-family:Arial,sans-serif; padding:20px; } .favorite { background:white; border:1px solid #d1d5db; border-radius:10px; padding:20px; max-width:500px; margin:0 auto; /* Voeg text-align toe */ } h1 { font-size:32px; } button { background-color:#d62828; color:white; padding:10px 16px; border-radius:6px; }</style></head><body><h1>Mijn Pokémon Team</h1><p>Welkom, trainer!</p><div class=\"favorite\"><h2>Mijn favoriete Pokémon</h2><img src=\"https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/25.png\" alt=\"Pikachu\"><a href=\"https://pokeapi.co/\">Bekijk Pokédex</a></div><ul><li>Pikachu</li><li>Bulbasaur</li><li>Charmander</li></ul><div class=\"team\"><button>Vang Pokémon</button></div><footer>Gotta code 'em all!</footer></body></html>",
+ check: c => /\.favorite\s*\{[\s\S]*?text-align\s*:\s*center\s*;?[\s\S]*?\}/i.test(c),
+ hint:"Gebruik text-align: center;"
+},
+{
+ phase:"CSS", title:"Afstand tussen elementen",
+ explanation:"<code class='inline'>margin-bottom</code> geeft ruimte onder een element. Zo kun je onderdelen van je pagina uit elkaar zetten.",
+ task:"Geef de h1 een margin-bottom van <strong>10px</strong>.",
+ starter:"<!DOCTYPE html>\n<html><head><title>PokéCode</title><style>body { background-color:#f3f4f6; color:#202124; font-family:Arial,sans-serif; padding:20px; } .favorite { background:white; border:1px solid #d1d5db; border-radius:10px; padding:20px; max-width:500px; margin:0 auto; text-align:center; } h1 { font-size:32px; /* Voeg margin-bottom toe */ } button { background-color:#d62828; color:white; padding:10px 16px; border-radius:6px; }</style></head><body><h1>Mijn Pokémon Team</h1><p>Welkom, trainer!</p><div class=\"favorite\"><h2>Mijn favoriete Pokémon</h2><img src=\"https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/25.png\" alt=\"Pikachu\"><a href=\"https://pokeapi.co/\">Bekijk Pokédex</a></div><ul><li>Pikachu</li><li>Bulbasaur</li><li>Charmander</li></ul><div class=\"team\"><button>Vang Pokémon</button></div><footer>Gotta code 'em all!</footer></body></html>",
+ check: c => /h1\s*\{[\s\S]*?margin-bottom\s*:\s*10px\s*;?[\s\S]*?\}/i.test(c),
+ hint:"Gebruik margin-bottom: 10px;"
+},
+{
+ phase:"CSS", title:"Afbeelding kleiner maken",
+ explanation:"Met <code class='inline'>width</code> bepaal je de breedte van een element.",
+ task:"Geef de afbeelding een breedte van <strong>120px</strong>.",
+ starter:"<!DOCTYPE html>\n<html><head><title>PokéCode</title><style>body { background-color:#f3f4f6; color:#202124; font-family:Arial,sans-serif; padding:20px; } .favorite { background:white; border:1px solid #d1d5db; border-radius:10px; padding:20px; max-width:500px; margin:0 auto; text-align:center; } h1 { font-size:32px; margin-bottom:10px; } button { background-color:#d62828; color:white; padding:10px 16px; border-radius:6px; } /* Style img */</style></head><body><h1>Mijn Pokémon Team</h1><p>Welkom, trainer!</p><div class=\"favorite\"><h2>Mijn favoriete Pokémon</h2><img src=\"https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/25.png\" alt=\"Pikachu\"><a href=\"https://pokeapi.co/\">Bekijk Pokédex</a></div><ul><li>Pikachu</li><li>Bulbasaur</li><li>Charmander</li></ul><div class=\"team\"><button>Vang Pokémon</button></div><footer>Gotta code 'em all!</footer></body></html>",
+ check: c => /img\s*\{[\s\S]*?width\s*:\s*120px\s*;?[\s\S]*?\}/i.test(c),
+ hint:"Maak img { width: 120px; }"
+},
+{
+ phase:"CSS", title:"Hover-effect",
+ explanation:"Met <code class='inline'>:hover</code> kun je een stijl toepassen wanneer de muis boven een element staat.",
+ task:"Maak voor de button een <strong>:hover</strong>-regel met een donkerdere achtergrond: <strong>#a71919</strong>.",
+ starter:"<!DOCTYPE html>\n<html><head><title>PokéCode</title><style>body { background-color:#f3f4f6; color:#202124; font-family:Arial,sans-serif; padding:20px; } .favorite { background:white; border:1px solid #d1d5db; border-radius:10px; padding:20px; max-width:500px; margin:0 auto; text-align:center; } h1 { font-size:32px; margin-bottom:10px; } button { background-color:#d62828; color:white; padding:10px 16px; border-radius:6px; } img { width:120px; } /* Maak button:hover */</style></head><body><h1>Mijn Pokémon Team</h1><p>Welkom, trainer!</p><div class=\"favorite\"><h2>Mijn favoriete Pokémon</h2><img src=\"https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/25.png\" alt=\"Pikachu\"><a href=\"https://pokeapi.co/\">Bekijk Pokédex</a></div><ul><li>Pikachu</li><li>Bulbasaur</li><li>Charmander</li></ul><div class=\"team\"><button>Vang Pokémon</button></div><footer>Gotta code 'em all!</footer></body></html>",
+ check: c => /button:hover\s*\{[\s\S]*?background(?:-color)?\s*:\s*#a71919\s*;?[\s\S]*?\}/i.test(c),
+ hint:"Gebruik button:hover { background-color: #a71919; }"
+},
+{
+ phase:"CSS", title:"De lijst netjes maken",
+ explanation:"Met <code class='inline'>list-style</code> kun je de standaard bolletjes van een lijst aanpassen.",
+ task:"Verwijder de bolletjes van de ul met <strong>list-style: none</strong>.",
+ starter:"<!DOCTYPE html>\n<html><head><title>PokéCode</title><style>body { background-color:#f3f4f6; color:#202124; font-family:Arial,sans-serif; padding:20px; } .favorite { background:white; border:1px solid #d1d5db; border-radius:10px; padding:20px; max-width:500px; margin:0 auto; text-align:center; } h1 { font-size:32px; margin-bottom:10px; } button { background-color:#d62828; color:white; padding:10px 16px; border-radius:6px; } img { width:120px; } button:hover { background-color:#a71919; } /* Style ul */</style></head><body><h1>Mijn Pokémon Team</h1><p>Welkom, trainer!</p><div class=\"favorite\"><h2>Mijn favoriete Pokémon</h2><img src=\"https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/25.png\" alt=\"Pikachu\"><a href=\"https://pokeapi.co/\">Bekijk Pokédex</a></div><ul><li>Pikachu</li><li>Bulbasaur</li><li>Charmander</li></ul><div class=\"team\"><button>Vang Pokémon</button></div><footer>Gotta code 'em all!</footer></body></html>",
+ check: c => /ul\s*\{[\s\S]*?list-style\s*:\s*none\s*;?[\s\S]*?\}/i.test(c),
+ hint:"Gebruik ul { list-style: none; }"
+},
+{
+ phase:"CSS", title:"De Pokémon-pagina afmaken",
+ explanation:"Je hebt nu genoeg CSS geleerd om de basis van een echte pagina te bouwen. Kleine CSS-regels combineren geeft een groot verschil.",
+ task:"Geef de footer een grijze tekstkleur <strong>#6b7280</strong> en centreer de tekst.",
+ starter:"<!DOCTYPE html>\n<html><head><title>PokéCode</title><style>body { background-color:#f3f4f6; color:#202124; font-family:Arial,sans-serif; padding:20px; } .favorite { background:white; border:1px solid #d1d5db; border-radius:10px; padding:20px; max-width:500px; margin:0 auto; text-align:center; } h1 { font-size:32px; margin-bottom:10px; } button { background-color:#d62828; color:white; padding:10px 16px; border-radius:6px; } img { width:120px; } button:hover { background-color:#a71919; } ul { list-style:none; } /* Style footer */</style></head><body><h1>Mijn Pokémon Team</h1><p>Welkom, trainer!</p><div class=\"favorite\"><h2>Mijn favoriete Pokémon</h2><img src=\"https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/25.png\" alt=\"Pikachu\"><a href=\"https://pokeapi.co/\">Bekijk Pokédex</a></div><ul><li>Pikachu</li><li>Bulbasaur</li><li>Charmander</li></ul><div class=\"team\"><button>Vang Pokémon</button></div><footer>Gotta code 'em all!</footer></body></html>",
+ check: c => /footer\s*\{[\s\S]*?color\s*:\s*#6b7280\s*;?[\s\S]*?text-align\s*:\s*center\s*;?[\s\S]*?\}/i.test(c),
+ hint:"Maak footer { color: #6b7280; text-align: center; }"
+}
+];
+
+const editor = document.getElementById("editor");
+const preview = document.getElementById("preview");
+const feedback = document.getElementById("feedback");
+const nextBtn = document.getElementById("nextBtn");
+const checkBtn = document.getElementById("checkBtn");
+let current = Number(localStorage.getItem("pokecode-step") || 0);
+if (current < 0 || current >= steps.length) current = 0;
+let completed = JSON.parse(localStorage.getItem("pokecode-completed") || "[]");
+
+function renderList() {
+  const list = document.getElementById("stepList");
+  list.innerHTML = "";
+  let lastPhase = "";
+  steps.forEach((s,i) => {
+    if (s.phase !== lastPhase) {
+      const p = document.createElement("li");
+      p.className = "phase-title";
+      p.style.cursor = "default";
+      p.textContent = s.phase;
+      list.appendChild(p);
+      lastPhase = s.phase;
+    }
+    const li = document.createElement("li");
+    li.textContent = (completed.includes(i) ? "✓ " : "") + (i+1) + ". " + s.title;
+    li.className = i === current ? "current" : (completed.includes(i) ? "done" : (i > current ? "locked" : ""));
+    if (i <= current) li.onclick = () => loadStep(i);
+    list.appendChild(li);
+  });
+}
+
+function loadStep(i, preserve=false) {
+  current = i;
+  const s = steps[current];
+  document.getElementById("phaseBadge").textContent = s.phase;
+  document.getElementById("phaseBadge").className = "badge " + (s.phase==="HTML" ? "html" : "css");
+  document.getElementById("lessonTitle").textContent = s.title;
+  document.getElementById("explanation").innerHTML = s.explanation;
+  document.getElementById("task").innerHTML = s.task;
+  if (!preserve) {
+    const saved = localStorage.getItem("pokecode-code-" + current);
+    editor.value = saved !== null ? saved : s.starter;
+  }
+  feedback.className = "";
+  feedback.style.display = "none";
+  feedback.textContent = "";
+  nextBtn.disabled = !completed.includes(current);
+  document.getElementById("progressText").textContent = `Opdracht ${current+1} van ${steps.length} · ${s.phase}`;
+  document.getElementById("progressBar").style.width = ((current+1)/steps.length*100) + "%";
+  localStorage.setItem("pokecode-step", current);
+  renderList();
+  updatePreview();
+}
+
+function updatePreview() {
+  let code = editor.value;
+  preview.srcdoc = code;
+}
+
+editor.addEventListener('keydown', (event) => {
+  if (event.key === 'Tab') {
+    event.preventDefault();
+    const start = editor.selectionStart;
+    const end = editor.selectionEnd;
+    editor.setRangeText('  ', start, end, 'end');
+  }
+});
+
+editor.addEventListener("input", () => {
+  localStorage.setItem("pokecode-code-" + current, editor.value);
+  updatePreview();
+});
+
+checkBtn.onclick = () => {
+  const s = steps[current];
+  let ok = false;
+  try { ok = s.check(editor.value); } catch(e) { ok = false; }
+  if (ok) {
+    if (!completed.includes(current)) completed.push(current);
+    completed.sort((a,b)=>a-b);
+    localStorage.setItem("pokecode-completed", JSON.stringify(completed));
+    feedback.className = "success";
+    feedback.style.display = "block";
+    feedback.innerHTML = "🎉 <strong>Goed gedaan!</strong> Deze opdracht is gelukt. Je kunt nu verder.";
+    nextBtn.disabled = false;
+    renderList();
+  } else {
+    feedback.className = "error";
+    feedback.style.display = "block";
+    feedback.innerHTML = "Nog niet helemaal. <strong>Tip:</strong> " + s.hint;
+  }
+};
+
+nextBtn.onclick = () => {
+  if (current < steps.length - 1) loadStep(current + 1);
+  else {
+    feedback.className = "success";
+    feedback.style.display = "block";
+    feedback.innerHTML = "🏆 <strong>Cursus voltooid!</strong> Je hebt stap voor stap een Pokémon-pagina gebouwd met HTML en CSS.";
+    nextBtn.disabled = true;
+  }
+};
+
+document.getElementById("resetBtn").onclick = () => {
+  editor.value = steps[current].starter;
+  localStorage.setItem("pokecode-code-" + current, editor.value);
+  feedback.className = "";
+  feedback.style.display = "none";
+  updatePreview();
+};
+
+renderList();
+loadStep(current);
+</script>
+</body>
+</html>
