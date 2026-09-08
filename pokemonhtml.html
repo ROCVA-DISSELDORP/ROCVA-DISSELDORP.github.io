@@ -362,7 +362,7 @@ button:disabled { opacity: .45; cursor: not-allowed; }
   <aside>
     <div class="course-nav">
       <h2 id="courseTitle">Pokémon Trainer Page</h2>
-      <p class="tip">Bouw stap voor stap je eigen Pokémon-pagina.</p>
+      <p id="courseDescription" class="tip">Bouw stap voor stap je eigen webpagina.</p>
       <ul id="stepList"></ul>
     </div>
   </aside>
@@ -884,6 +884,15 @@ const courseStorageKey = name => `pokecode-${selectedCourseId}-${name}`;
 let current = Number(localStorage.getItem(courseStorageKey("step")) || 0);
 if (current < 0 || current >= steps.length) current = 0;
 let completed = JSON.parse(localStorage.getItem(courseStorageKey("completed")) || "[]");
+if (selectedCourseId === "pokemon" && !localStorage.getItem(courseStorageKey("step"))) {
+  const oldStep = localStorage.getItem("pokecode-step");
+  const oldCompleted = localStorage.getItem("pokecode-completed");
+  if (oldStep !== null) localStorage.setItem(courseStorageKey("step"), oldStep);
+  if (oldCompleted !== null) {
+    completed = JSON.parse(oldCompleted);
+    localStorage.setItem(courseStorageKey("completed"), oldCompleted);
+  }
+}
 aiApiKey.value = localStorage.getItem("pokecode-gemini-key") || "";
 aiModel.value = localStorage.getItem("pokecode-ai-model") || "gemini-2.0-flash";
 aiStatus.textContent = aiApiKey.value ? "key opgeslagen in browser" : "API-key nodig";
@@ -925,6 +934,7 @@ function selectCourse(courseId) {
   coursePicker.hidden = true;
   appShell.hidden = false;
   document.getElementById("courseTitle").textContent = course.title;
+  document.getElementById("courseDescription").textContent = course.description;
   renderList();
   loadStep(current);
 }
@@ -1208,6 +1218,7 @@ function loadStep(i, preserve=false) {
   current = i;
   const s = steps[current];
   document.getElementById("courseTitle").textContent = activeCourse.title;
+  document.getElementById("courseDescription").textContent = activeCourse.description;
   document.getElementById("phaseBadge").textContent = s.phase;
   document.getElementById("phaseBadge").className = "badge " + (s.phase==="HTML" ? "html" : "css");
   document.getElementById("lessonTitle").textContent = s.title;
@@ -1355,6 +1366,7 @@ if (hasSelectedCourse) {
   coursePicker.hidden = true;
   appShell.hidden = false;
   document.getElementById("courseTitle").textContent = activeCourse.title;
+  document.getElementById("courseDescription").textContent = activeCourse.description;
   renderList();
   loadStep(current);
 } else {
