@@ -87,7 +87,6 @@ main {
   padding: 14px;
 }
 h1, h2, h3 { margin-top: 0; }
-details > summary { cursor: pointer; font-weight: bold; }
 .lesson-info { margin: 10px 0; font-size: .86rem; }
 .lesson-info .explanation, .lesson-info .task, .lesson-info .learning-goal { margin: 7px 0 0; padding: 9px 10px; }
 .badge {
@@ -250,6 +249,13 @@ button:disabled { opacity: .45; cursor: not-allowed; }
   line-height: 1.45;
   font-size: .88rem;
 }
+.ai-message h1, .ai-message h2, .ai-message h3 { margin: 0 0 6px; font-size: 1rem; }
+.ai-message p { margin: 0 0 7px; }
+.ai-message p:last-child { margin-bottom: 0; }
+.ai-message ul { margin: 4px 0 7px 20px; padding: 0; }
+.ai-message code { background: #e2e8f0; padding: 1px 4px; border-radius: 3px; font-family: Consolas, Monaco, monospace; font-size: .86em; }
+.ai-message pre { margin: 7px 0 0; padding: 9px; overflow-x: auto; background: #1e293b; color: #e2e8f0; border-radius: 5px; }
+.ai-message pre code { padding: 0; background: transparent; color: inherit; }
 .ai-message.assistant { align-self: flex-start; background: white; border: 1px solid #e2e8f0; }
 .ai-message.user { align-self: flex-end; background: #dbeafe; color: #1e3a8a; }
 .ai-form { display: flex; gap: 8px; padding: 10px; border-top: 1px solid #cbd5e1; }
@@ -327,12 +333,11 @@ button:disabled { opacity: .45; cursor: not-allowed; }
 
 <div class="app">
   <aside>
-    <details class="course-nav">
-      <summary>Cursusnavigatie</summary>
+    <div class="course-nav">
       <h2>Pokémon Trainer Page</h2>
       <p class="tip">Bouw stap voor stap je eigen Pokémon-pagina.</p>
       <ul id="stepList"></ul>
-    </details>
+    </div>
   </aside>
 
   <main>
@@ -818,6 +823,7 @@ aiStatus.textContent = aiApiKey.value ? "key opgeslagen in browser" : "API-key n
 if (localStorage.getItem("pokecode-sidebar-collapsed") === "true") {
   app.classList.add("sidebar-collapsed");
 }
+sidebarToggle.title = app.classList.contains("sidebar-collapsed") ? "Zijbalk openen" : "Zijbalk inklappen";
 sidebarToggle.addEventListener("click", () => {
   const collapsed = app.classList.toggle("sidebar-collapsed");
   localStorage.setItem("pokecode-sidebar-collapsed", collapsed);
@@ -957,10 +963,42 @@ function updatePreview() {
   preview.srcdoc = code;
 }
 
+function formatInlineMarkdown(text) {
+  return text
+    .replace(/`([^`]+)`/g, "<code>$1</code>")
+    .replace(/\*\*([^*]+)\*\*/g, "<strong>$1</strong>")
+    .replace(/__([^_]+)__/g, "<strong>$1</strong>")
+    .replace(/\*([^*]+)\*/g, "<em>$1</em>")
+    .replace(/_([^_]+)_/g, "<em>$1</em>");
+}
+
+function markdownToHtml(markdown) {
+  const escaped = escapeHtml(markdown).replace(/\r\n?/g, "\n");
+  const blocks = [];
+  const withoutCode = escaped.replace(/```(?:[A-Za-z0-9_-]+)?\n?([\s\S]*?)```/g, (_, code) => {
+    blocks.push(`<pre><code>${code.trim()}</code></pre>`);
+    return `\n@@CODE_BLOCK_${blocks.length - 1}@@\n`;
+  });
+
+  const html = withoutCode.split("\n").reduce((result, line) => {
+    const trimmed = line.trim();
+    if (!trimmed) return result + "";
+    if (/^###\s+/.test(trimmed)) return result + `<h3>${formatInlineMarkdown(trimmed.slice(4))}</h3>`;
+    if (/^##\s+/.test(trimmed)) return result + `<h2>${formatInlineMarkdown(trimmed.slice(3))}</h2>`;
+    if (/^#\s+/.test(trimmed)) return result + `<h1>${formatInlineMarkdown(trimmed.slice(2))}</h1>`;
+    if (/^[-*]\s+/.test(trimmed)) return result + `<ul><li>${formatInlineMarkdown(trimmed.slice(2))}</li></ul>`;
+    const codeBlock = trimmed.match(/^@@CODE_BLOCK_(\d+)@@$/);
+    if (codeBlock) return result + blocks[Number(codeBlock[1])];
+    return result + `<p>${formatInlineMarkdown(trimmed)}</p>`;
+  }, "");
+
+  return html.replace(/<\/ul><ul>/g, "");
+}
+
 function addAiMessage(role, text) {
   const message = document.createElement("div");
   message.className = "ai-message " + role;
-  message.textContent = text;
+  message.innerHTML = role === "assistant" ? markdownToHtml(text) : escapeHtml(text);
   aiMessages.appendChild(message);
   aiMessages.scrollTop = aiMessages.scrollHeight;
 }
