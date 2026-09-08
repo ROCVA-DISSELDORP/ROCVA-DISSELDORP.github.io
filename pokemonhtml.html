@@ -374,9 +374,9 @@ button:disabled { opacity: .45; cursor: not-allowed; }
     </div>
     <input id="customCourseApiKey" class="custom-course-key" type="password" placeholder="Gemini API-key (eenmalig invullen indien nodig)" spellcheck="false">
     <select id="customCourseLevel" class="custom-course-level" aria-label="Niveau van de eigen cursus">
-      <option value="basis">Basis: veel startercode, ongeveer 1-3 regels zelf schrijven</option>
-      <option value="gemiddeld" selected>Gemiddeld: gedeeltelijke startercode, ongeveer 4-8 regels zelf schrijven</option>
-      <option value="uitdagend">Uitdagend: weinig startercode, ongeveer 8-15 regels zelf schrijven</option>
+      <option value="basis">Basis: ongeveer 1-3 regels zelf schrijven per stap</option>
+      <option value="gemiddeld" selected>Gemiddeld: ongeveer 4-8 regels zelf schrijven per stap</option>
+      <option value="uitdagend">Uitdagend: ongeveer 8-15 regels zelf schrijven per stap</option>
     </select>
     <div id="customCourseStatus" aria-live="polite"></div>
   </form>
@@ -884,7 +884,13 @@ const customCourseStorageKey = "pokecode-custom-courses";
 function hydrateCustomCourse(course) {
   course.steps = course.steps.map(step => ({
     ...step,
-    check: code => (step.requirements || []).every(requirement => code.toLowerCase().includes(requirement.toLowerCase()))
+    studentLines: Number(step.studentLines) || 1,
+    check: code => {
+      const nonEmptyLines = code.split("\n").filter(line => line.trim()).length;
+      const starterLines = String(step.starter || "").split("\n").filter(line => line.trim()).length;
+      const requiredLines = Math.max(1, Number(step.studentLines) || 1);
+      return nonEmptyLines >= starterLines + requiredLines && (step.requirements || []).every(requirement => code.toLowerCase().includes(requirement.toLowerCase()));
+    }
   }));
   return course;
 }
@@ -1041,9 +1047,11 @@ async function readWebsiteText(url) {
 function parseGeneratedCourse(text, url, level) {
   const generated = JSON.parse(text.replace(/^```json\s*/i, "").replace(/```$/i, "").trim());
   if (!generated.title || !Array.isArray(generated.steps) || generated.steps.length < 5 || generated.steps.length > 10) throw new Error("De AI gaf geen geldige cursus terug.");
+  const levelRange = { basis: [1, 3], gemiddeld: [4, 8], uitdagend: [8, 15] }[level] || [4, 8];
   const steps = generated.steps.map(step => {
     if (!step.phase || !["HTML", "CSS"].includes(step.phase) || !step.title || !step.starter || !Array.isArray(step.requirements)) throw new Error("Een stap mist verplichte gegevens.");
-    return { phase: step.phase, title: String(step.title).slice(0, 90), learningGoal: String(step.learningGoal || "Een HTML- of CSS-concept begrijpen.").slice(0, 240), explanation: String(step.explanation || "Leer dit concept stap voor stap.").slice(0, 500), task: String(step.task || "Voer de opdracht uit.").slice(0, 500), starter: String(step.starter).slice(0, 12000), requirements: step.requirements.map(String).slice(0, 8), hint: String(step.hint || "Kijk naar het leerdoel en controleer je structuur.").slice(0, 300) };
+    const studentLines = Math.max(levelRange[0], Math.min(levelRange[1], Number(step.studentLines) || levelRange[0]));
+    return { phase: step.phase, title: String(step.title).slice(0, 90), learningGoal: String(step.learningGoal || "Een HTML- of CSS-concept begrijpen.").slice(0, 240), explanation: String(step.explanation || "Leer dit concept stap voor stap.").slice(0, 500), task: String(step.task || "Voer de opdracht uit.").slice(0, 500), starter: String(step.starter).slice(0, 12000), studentLines, requirements: step.requirements.map(String).slice(0, 8), hint: String(step.hint || "Kijk naar het leerdoel en controleer je structuur.").slice(0, 300) };
   });
   if (!steps.some(step => step.phase === "HTML") || !steps.some(step => step.phase === "CSS")) throw new Error("De cursus moet HTML- en CSS-stappen bevatten.");
   const levelLabels = { basis: "Basis", gemiddeld: "Gemiddeld", uitdagend: "Uitdagend" };
@@ -1056,11 +1064,11 @@ async function generateCustomCourse(url) {
   const websiteText = await readWebsiteText(url);
   const pageContext = websiteText ? `Leesbare tekst van de website:\n${websiteText}` : `De website kon niet automatisch worden gelezen. Gebruik deze URL als thematische aanwijzing: ${url}`;
   const levelInstructions = {
-    basis: "NIVEAU BASIS: geef per stap bijna complete startercode. Laat de student ongeveer 1 tot 3 regels zelf schrijven. Gebruik kleine, afgebakende opdrachten en maximaal ongeveer 25 regels startercode.",
-    gemiddeld: "NIVEAU GEMIDDELD: geef gedeeltelijke startercode met duidelijke lege plekken. Laat de student ongeveer 4 tot 8 regels zelf schrijven. Gebruik maximaal ongeveer 18 regels startercode per stap.",
-    uitdagend: "NIVEAU UITDAGEND: geef alleen de noodzakelijke structuur als startercode. Laat de student ongeveer 8 tot 15 regels zelf schrijven. Gebruik maximaal ongeveer 10 regels startercode per stap. Blijf wel geschikt voor periode 1 MBO 4."
-  }[customCourseLevel.value] || "NIVEAU GEMIDDELD: laat de student ongeveer 4 tot 8 regels zelf schrijven.";
-  const prompt = `Maak een korte HTML/CSS-cursus voor periode 1 van een Nederlandse MBO 4-opleiding Software Developer.\n\nDe student bouwt een eenvoudige versie van deze website: ${url}\n${pageContext}\n\n${levelInstructions}\n\nREGELS:\n- Gebruik uitsluitend HTML en CSS. Geen JavaScript, frameworks, databases of backend.\n- Maak 6 tot 10 oplopende stappen: eerst HTML, daarna CSS.\n- Gebruik eenvoudige concepten zoals doctype, html, head, title, body, h1, p, section, article, ul, li, a, class, kleuren, font, padding, border, margin, grid of hover.\n- De hoeveelheid startercode en de hoeveelheid werk voor de student moeten passen bij het gekozen niveau. Zet geen complete eindoplossing in startercode.\n- Elke stap moet een duidelijke starter bevatten. CSS-starters bevatten HTML zonder inline style; CSS wordt apart bewerkt in style.css.\n- requirements bevat 1 tot 8 letterlijke kleine tekstfragmenten die in de ingevulde HTML plus CSS moeten staan om de stap te controleren.\n- Geef alleen geldige JSON terug, zonder markdown.\n\nJSON-formaat:\n{"title":"...","description":"...","steps":[{"phase":"HTML","title":"...","learningGoal":"...","explanation":"...","task":"...","starter":"...","requirements":["..."],"hint":"..."}]}`;
+    basis: "NIVEAU BASIS: geef alleen de minimale noodzakelijke structuur als startercode, zonder de oplossing voor de stap cadeau te geven. De student schrijft per stap 1 tot 3 nieuwe regels code. Zet studentLines op een getal van 1 tot 3.",
+    gemiddeld: "NIVEAU GEMIDDELD: geef alleen de minimale noodzakelijke structuur als startercode, zonder de oplossing voor de stap cadeau te geven. De student schrijft per stap 4 tot 8 nieuwe regels code. Zet studentLines op een getal van 4 tot 8.",
+    uitdagend: "NIVEAU UITDAGEND: geef alleen een zeer kleine basisstructuur als startercode, zonder de oplossing voor de stap cadeau te geven. De student schrijft per stap 8 tot 15 nieuwe regels code. Zet studentLines op een getal van 8 tot 15. Blijf geschikt voor periode 1 MBO 4."
+  }[customCourseLevel.value] || "NIVEAU GEMIDDELD: laat de student per stap 4 tot 8 nieuwe regels code schrijven en geef geen oplossing cadeau.";
+  const prompt = `Maak een korte HTML/CSS-cursus voor periode 1 van een Nederlandse MBO 4-opleiding Software Developer.\n\nDe student bouwt een eenvoudige versie van deze website: ${url}\n${pageContext}\n\n${levelInstructions}\n\nREGELS:\n- Gebruik uitsluitend HTML en CSS. Geen JavaScript, frameworks, databases of backend.\n- Maak 6 tot 10 oplopende stappen: eerst HTML, daarna CSS.\n- Gebruik eenvoudige concepten zoals doctype, html, head, title, body, h1, p, section, article, ul, li, a, class, kleuren, font, padding, border, margin, grid of hover.\n- Geef nooit veel of complete code cadeau. starter mag alleen minimale noodzakelijke context bevatten; de student moet de opdracht zelf uitschrijven.\n- studentLines is het minimumaantal nieuwe, niet-lege regels dat de student in deze stap zelf moet toevoegen voordat de stap goed is.\n- Elke stap moet een duidelijke starter bevatten. CSS-starters bevatten HTML zonder inline style; CSS wordt apart bewerkt in style.css.\n- requirements bevat 1 tot 8 letterlijke kleine tekstfragmenten die in de ingevulde HTML plus CSS moeten staan om de stap te controleren.\n- Geef alleen geldige JSON terug, zonder markdown.\n\nJSON-formaat:\n{"title":"...","description":"...","steps":[{"phase":"HTML","title":"...","learningGoal":"...","explanation":"...","task":"...","starter":"...","studentLines":4,"requirements":["..."],"hint":"..."}]}`;
   const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(aiModel.value.trim() || "gemini-2.0-flash")}:generateContent?key=${encodeURIComponent(apiKey)}`, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ contents: [{ role: "user", parts: [{ text: prompt }] }], generationConfig: { temperature: 0.2, responseMimeType: "application/json" } }) });
   if (!response.ok) throw new Error("Gemini kon de cursus niet maken.");
   const data = await response.json();
@@ -1343,7 +1351,7 @@ function loadStep(i, preserve=false) {
   document.getElementById("phaseBadge").className = "badge " + (s.phase==="HTML" ? "html" : "css");
   document.getElementById("lessonTitle").textContent = s.title;
   document.getElementById("explanation").innerHTML = s.explanation;
-  document.getElementById("task").innerHTML = s.task;
+  document.getElementById("task").innerHTML = s.task + (s.studentLines ? `<br><small>Schrijf in deze stap ongeveer ${s.studentLines} regels code zelf.</small>` : "");
   document.getElementById("learningGoal").textContent = s.learningGoal;
   const separateCss = s.phase === "CSS";
   setCssFileMode(separateCss);
