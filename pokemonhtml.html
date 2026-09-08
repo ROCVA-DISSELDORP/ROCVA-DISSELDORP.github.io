@@ -820,6 +820,7 @@ const aiModel = document.getElementById("aiModel");
 const app = document.querySelector(".app");
 const sidebarToggle = document.getElementById("sidebarToggle");
 let aiConversation = [];
+let activeFile = localStorage.getItem("pokecode-active-file") || "html";
 let current = Number(localStorage.getItem("pokecode-step") || 0);
 if (current < 0 || current >= steps.length) current = 0;
 let completed = JSON.parse(localStorage.getItem("pokecode-completed") || "[]");
@@ -945,8 +946,9 @@ function setCssFileMode(enabled) {
   cssFilePanel.classList.toggle("file-panel-hidden", !enabled);
   cssFileTab.classList.toggle("file-panel-hidden", !enabled);
   if (enabled) {
-    showFilePanel("html");
+    showFilePanel(activeFile);
   } else {
+    activeFile = "html";
     htmlFilePanel.classList.remove("file-panel-hidden");
     htmlFileTab.classList.add("active");
   }
@@ -954,6 +956,8 @@ function setCssFileMode(enabled) {
 
 function showFilePanel(panel) {
   const showCss = panel === "css";
+  activeFile = showCss ? "css" : "html";
+  localStorage.setItem("pokecode-active-file", activeFile);
   htmlFilePanel.classList.toggle("file-panel-hidden", showCss);
   cssFilePanel.classList.toggle("file-panel-hidden", !showCss);
   htmlFileTab.classList.toggle("active", !showCss);
