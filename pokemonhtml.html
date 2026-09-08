@@ -52,13 +52,31 @@ header {
   display: grid;
   grid-template-columns: 245px minmax(430px, 1.1fr) minmax(430px, 1fr);
   min-height: calc(100vh - 65px);
+  transition: grid-template-columns .2s ease;
 }
 aside {
   background: #fff;
   border-right: 1px solid var(--border);
   padding: 14px;
   overflow-y: auto;
+  transition: padding .2s ease, border .2s ease;
 }
+.app.sidebar-collapsed {
+  grid-template-columns: 0 minmax(430px, 1.1fr) minmax(430px, 1fr);
+}
+.app.sidebar-collapsed aside {
+  padding-left: 0;
+  padding-right: 0;
+  border-right: 0;
+  overflow: hidden;
+}
+.sidebar-toggle {
+  background: rgba(255,255,255,.16);
+  color: white;
+  padding: 7px 10px;
+  font-size: 1rem;
+}
+.sidebar-toggle:hover { background: rgba(255,255,255,.28); }
 main {
   padding: 14px;
   min-width: 0;
@@ -165,6 +183,12 @@ code.inline {
 .syntax-string { color: #ce9178; }
 .syntax-number { color: #b5cea8; }
 .syntax-selector { color: #dcdcaa; }
+.syntax-property { color: #9cdcfe; }
+.file-tabs { display: flex; gap: 4px; margin: 14px 0 6px; }
+.file-tab { background: #e5e7eb; color: #334155; padding: 7px 10px; font-size: .8rem; }
+.file-tab.active { background: #1e1e1e; color: white; }
+.file-panel-hidden { display: none; }
+.css-editor-wrap { margin-top: 0 !important; }
 .controls {
   display: flex;
   gap: 8px;
@@ -275,11 +299,13 @@ button:disabled { opacity: .45; cursor: not-allowed; }
 }
 @media (min-width: 901px) and (max-width: 1100px) {
   .app { grid-template-columns: 210px minmax(340px, 1fr) minmax(340px, 1fr); }
+  .app.sidebar-collapsed { grid-template-columns: 0 minmax(340px, 1fr) minmax(340px, 1fr); }
   .preview-panel { border-left: 1px solid var(--border); border-top: 0; }
   #preview { height: calc(100vh - 105px); min-height: 430px; }
 }
 @media (max-width: 900px) {
   .app { grid-template-columns: 240px 1fr; }
+  .app.sidebar-collapsed { grid-template-columns: 0 1fr; }
   .preview-panel { grid-column: 1 / -1; border-left:0; border-top:1px solid var(--border); }
   #preview { height:500px; }
 }
@@ -292,7 +318,7 @@ button:disabled { opacity: .45; cursor: not-allowed; }
 </head>
 <body>
 <header>
-  <div class="logo">⚡ PokéCode</div>
+  <div class="logo">⚡ PokéCode <button id="sidebarToggle" class="sidebar-toggle" type="button" title="Zijbalk inklappen">☰</button></div>
   <div class="progress-wrap">
     <div class="progress-text" id="progressText">Opdracht 1</div>
     <div class="progress"><div id="progressBar"></div></div>
@@ -312,12 +338,25 @@ button:disabled { opacity: .45; cursor: not-allowed; }
   <main>
     <span id="phaseBadge" class="badge html">HTML</span>
     <h1 id="lessonTitle"></h1>
-    <div style="margin-top:14px;">
+    <div class="file-tabs">
+      <button id="htmlFileTab" class="file-tab active" type="button">index.html</button>
+      <button id="cssFileTab" class="file-tab file-panel-hidden" type="button">style.css</button>
+    </div>
+    <div id="htmlFilePanel" style="margin-top:0;">
       <div class="editor-wrap">
         <div id="lineNumbers" class="line-numbers" aria-hidden="true"></div>
         <div class="code-area">
           <pre id="syntaxHighlight" class="syntax-highlight" aria-hidden="true"></pre>
           <textarea id="editor" class="editor" spellcheck="false"></textarea>
+        </div>
+      </div>
+    </div>
+    <div id="cssFilePanel" class="file-panel-hidden css-editor-wrap">
+      <div class="editor-wrap">
+        <div id="cssLineNumbers" class="line-numbers" aria-hidden="true"></div>
+        <div class="code-area">
+          <pre id="cssSyntaxHighlight" class="syntax-highlight" aria-hidden="true"></pre>
+          <textarea id="cssEditor" class="editor" spellcheck="false"></textarea>
         </div>
       </div>
     </div>
@@ -747,9 +786,16 @@ steps.forEach((step, index) => {
 });
 
 const editor = document.getElementById("editor");
+const cssEditor = document.getElementById("cssEditor");
 const preview = document.getElementById("preview");
 const lineNumbers = document.getElementById("lineNumbers");
 const syntaxHighlight = document.getElementById("syntaxHighlight");
+const cssLineNumbers = document.getElementById("cssLineNumbers");
+const cssSyntaxHighlight = document.getElementById("cssSyntaxHighlight");
+const htmlFilePanel = document.getElementById("htmlFilePanel");
+const cssFilePanel = document.getElementById("cssFilePanel");
+const htmlFileTab = document.getElementById("htmlFileTab");
+const cssFileTab = document.getElementById("cssFileTab");
 const feedback = document.getElementById("feedback");
 const nextBtn = document.getElementById("nextBtn");
 const checkBtn = document.getElementById("checkBtn");
@@ -760,6 +806,8 @@ const aiSendBtn = document.getElementById("aiSendBtn");
 const aiStatus = document.getElementById("aiStatus");
 const aiApiKey = document.getElementById("aiApiKey");
 const aiModel = document.getElementById("aiModel");
+const app = document.querySelector(".app");
+const sidebarToggle = document.getElementById("sidebarToggle");
 let aiConversation = [];
 let current = Number(localStorage.getItem("pokecode-step") || 0);
 if (current < 0 || current >= steps.length) current = 0;
@@ -767,6 +815,14 @@ let completed = JSON.parse(localStorage.getItem("pokecode-completed") || "[]");
 aiApiKey.value = localStorage.getItem("pokecode-gemini-key") || "";
 aiModel.value = localStorage.getItem("pokecode-ai-model") || "gemini-2.0-flash";
 aiStatus.textContent = aiApiKey.value ? "key opgeslagen in browser" : "API-key nodig";
+if (localStorage.getItem("pokecode-sidebar-collapsed") === "true") {
+  app.classList.add("sidebar-collapsed");
+}
+sidebarToggle.addEventListener("click", () => {
+  const collapsed = app.classList.toggle("sidebar-collapsed");
+  localStorage.setItem("pokecode-sidebar-collapsed", collapsed);
+  sidebarToggle.title = collapsed ? "Zijbalk openen" : "Zijbalk inklappen";
+});
 
 function escapeHtml(value) {
   return value.replace(/[&<>"']/g, character => ({
@@ -822,7 +878,7 @@ function highlightCode(code) {
   let match;
 
   while ((match = tokenPattern.exec(code)) !== null) {
-    result += escapeHtml(code.slice(lastIndex, match.index));
+    result += highlightCssText(code.slice(lastIndex, match.index));
     const token = escapeHtml(match[0]);
     if (match[0].startsWith("<!--") || match[0].startsWith("/*")) {
       result += `<span class="syntax-comment">${token}</span>`;
@@ -834,18 +890,71 @@ function highlightCode(code) {
     lastIndex = match.index + match[0].length;
   }
 
-  result += escapeHtml(code.slice(lastIndex));
+  result += highlightCssText(code.slice(lastIndex));
   return result || " ";
 }
 
+function highlightCssText(text) {
+  let highlighted = escapeHtml(text);
+  highlighted = highlighted.replace(/(^|[}\n])(\s*[^{}\n]+?)(?=\s*\{)/g, "$1<span class=\"syntax-selector\">$2</span>");
+  return highlighted.replace(/\b([a-z-]+)(?=\s*:)/gi, "<span class=\"syntax-property\">$1</span>");
+}
+
 function updateCodeView() {
-  const code = editor.value;
+  updateSingleCodeView(editor, lineNumbers, syntaxHighlight);
+  updateSingleCodeView(cssEditor, cssLineNumbers, cssSyntaxHighlight);
+}
+
+function updateSingleCodeView(sourceEditor, numbers, highlight) {
+  const code = sourceEditor.value;
   const lineCount = Math.max(1, code.split("\n").length);
-  lineNumbers.textContent = Array.from({ length: lineCount }, (_, index) => index + 1).join("\n");
-  syntaxHighlight.innerHTML = highlightCode(code);
-  syntaxHighlight.scrollTop = editor.scrollTop;
-  syntaxHighlight.scrollLeft = editor.scrollLeft;
-  lineNumbers.scrollTop = editor.scrollTop;
+  numbers.textContent = Array.from({ length: lineCount }, (_, index) => index + 1).join("\n");
+  highlight.innerHTML = highlightCode(code);
+  highlight.scrollTop = sourceEditor.scrollTop;
+  highlight.scrollLeft = sourceEditor.scrollLeft;
+  numbers.scrollTop = sourceEditor.scrollTop;
+}
+
+function splitCodeForFiles(code) {
+  const styleMatch = code.match(/<style[^>]*>([\s\S]*?)<\/style>/i);
+  if (!styleMatch) return { html: code, css: "" };
+  return {
+    html: code.replace(styleMatch[0], "").replace(/\n{3,}/g, "\n\n"),
+    css: formatCss(styleMatch[1])
+  };
+}
+
+function currentCodeForCheck() {
+  if (steps[current].phase !== "CSS") return editor.value;
+  return editor.value + "\n<style>\n" + cssEditor.value + "\n</style>";
+}
+
+function setCssFileMode(enabled) {
+  cssFilePanel.classList.toggle("file-panel-hidden", !enabled);
+  cssFileTab.classList.toggle("file-panel-hidden", !enabled);
+  if (enabled) {
+    showFilePanel("html");
+  } else {
+    htmlFilePanel.classList.remove("file-panel-hidden");
+    htmlFileTab.classList.add("active");
+  }
+}
+
+function showFilePanel(panel) {
+  const showCss = panel === "css";
+  htmlFilePanel.classList.toggle("file-panel-hidden", showCss);
+  cssFilePanel.classList.toggle("file-panel-hidden", !showCss);
+  htmlFileTab.classList.toggle("active", !showCss);
+  cssFileTab.classList.toggle("active", showCss);
+}
+
+function updatePreview() {
+  let code = editor.value;
+  if (steps[current].phase === "CSS" && cssEditor.value.trim()) {
+    const styleTag = `<style>\n${cssEditor.value}\n</style>`;
+    code = /<\/head>/i.test(code) ? code.replace(/<\/head>/i, styleTag + "\n</head>") : styleTag + "\n" + code;
+  }
+  preview.srcdoc = code;
 }
 
 function addAiMessage(role, text) {
@@ -882,7 +991,11 @@ Uitleg: ${step.explanation.replace(/<[^>]*>/g, "")}
 Opdracht: ${step.task.replace(/<[^>]*>/g, "")}
 
 INGEVULDE CODE VAN DE STUDENT:
-${editor.value}`;
+index.html:
+${editor.value}
+
+style.css:
+${steps[current].phase === "CSS" ? cssEditor.value : "(niet van toepassing bij deze HTML-opdracht)"}`;
 }
 
 async function askAi(question) {
@@ -960,10 +1073,22 @@ function loadStep(i, preserve=false) {
   document.getElementById("explanation").innerHTML = s.explanation;
   document.getElementById("task").innerHTML = s.task;
   document.getElementById("learningGoal").textContent = s.learningGoal;
+  const separateCss = s.phase === "CSS";
+  setCssFileMode(separateCss);
   if (!preserve) {
-    const saved = localStorage.getItem("pokecode-code-" + current);
-    editor.value = formatCode(saved !== null ? saved : s.starter);
-    localStorage.setItem("pokecode-code-" + current, editor.value);
+    if (separateCss) {
+      const savedSource = localStorage.getItem("pokecode-html-" + current) || localStorage.getItem("pokecode-code-" + current) || s.starter;
+      const split = splitCodeForFiles(savedSource);
+      editor.value = formatCode(split.html);
+      cssEditor.value = formatCss(localStorage.getItem("pokecode-css-" + current) || split.css);
+      localStorage.setItem("pokecode-html-" + current, editor.value);
+      localStorage.setItem("pokecode-css-" + current, cssEditor.value);
+    } else {
+      const saved = localStorage.getItem("pokecode-code-" + current);
+      editor.value = formatCode(saved !== null ? saved : s.starter);
+      cssEditor.value = "";
+      localStorage.setItem("pokecode-code-" + current, editor.value);
+    }
   }
   feedback.className = "";
   feedback.style.display = "none";
@@ -978,12 +1103,7 @@ function loadStep(i, preserve=false) {
   updatePreview();
 }
 
-function updatePreview() {
-  let code = editor.value;
-  preview.srcdoc = code;
-}
-
-editor.addEventListener('keydown', (event) => {
+function handleEditorKeydown(event, sourceEditor) {
   if (event.key === 'Enter' && event.ctrlKey) {
     event.preventDefault();
     if (checkCurrent() && current < steps.length - 1) nextBtn.click();
@@ -991,17 +1111,27 @@ editor.addEventListener('keydown', (event) => {
   }
   if (event.key === 'Tab') {
     event.preventDefault();
-    const start = editor.selectionStart;
-    const end = editor.selectionEnd;
-    editor.setRangeText('  ', start, end, 'end');
+    const start = sourceEditor.selectionStart;
+    const end = sourceEditor.selectionEnd;
+    sourceEditor.setRangeText('  ', start, end, 'end');
     updateCodeView();
   }
-});
+}
+
+editor.addEventListener('keydown', event => handleEditorKeydown(event, editor));
+cssEditor.addEventListener('keydown', event => handleEditorKeydown(event, cssEditor));
 
 editor.addEventListener("scroll", updateCodeView);
+cssEditor.addEventListener("scroll", updateCodeView);
 
 editor.addEventListener("input", () => {
-  localStorage.setItem("pokecode-code-" + current, editor.value);
+  localStorage.setItem(steps[current].phase === "CSS" ? "pokecode-html-" + current : "pokecode-code-" + current, editor.value);
+  updateCodeView();
+  updatePreview();
+});
+
+cssEditor.addEventListener("input", () => {
+  localStorage.setItem("pokecode-css-" + current, cssEditor.value);
   updateCodeView();
   updatePreview();
 });
@@ -1016,6 +1146,9 @@ aiModel.addEventListener("change", () => {
   localStorage.setItem("pokecode-ai-model", aiModel.value);
 });
 
+htmlFileTab.addEventListener("click", () => showFilePanel("html"));
+cssFileTab.addEventListener("click", () => showFilePanel("css"));
+
 aiForm.addEventListener("submit", event => {
   event.preventDefault();
   const question = aiInput.value.trim();
@@ -1027,7 +1160,7 @@ aiForm.addEventListener("submit", event => {
 function checkCurrent() {
   const s = steps[current];
   let ok = false;
-  try { ok = s.check(editor.value); } catch(e) { ok = false; }
+  try { ok = s.check(currentCodeForCheck()); } catch(e) { ok = false; }
   if (ok) {
     if (!completed.includes(current)) completed.push(current);
     completed.sort((a,b)=>a-b);
@@ -1059,8 +1192,17 @@ nextBtn.onclick = () => {
 };
 
 document.getElementById("resetBtn").onclick = () => {
-  editor.value = formatCode(steps[current].starter);
-  localStorage.setItem("pokecode-code-" + current, editor.value);
+  const split = splitCodeForFiles(steps[current].starter);
+  if (steps[current].phase === "CSS") {
+    editor.value = formatCode(split.html);
+    cssEditor.value = formatCss(split.css);
+    localStorage.setItem("pokecode-html-" + current, editor.value);
+    localStorage.setItem("pokecode-css-" + current, cssEditor.value);
+  } else {
+    editor.value = formatCode(steps[current].starter);
+    cssEditor.value = "";
+    localStorage.setItem("pokecode-code-" + current, editor.value);
+  }
   feedback.className = "";
   feedback.style.display = "none";
   updateCodeView();
