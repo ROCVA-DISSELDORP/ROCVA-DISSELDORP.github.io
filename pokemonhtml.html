@@ -187,6 +187,49 @@ button:disabled { opacity: .45; cursor: not-allowed; }
 }
 .success { display:block !important; background:#dcfce7; color:#14532d; }
 .error { display:block !important; background:#fee2e2; color:#7f1d1d; }
+.ai-trainer {
+  margin-top: 18px;
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+  background: #f8fafc;
+  overflow: hidden;
+}
+.ai-header {
+  padding: 12px 14px;
+  background: #1f2937;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+.ai-header strong { font-size: 1rem; }
+.ai-status { font-size: .75rem; color: #cbd5e1; }
+.ai-messages {
+  height: 220px;
+  overflow-y: auto;
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+}
+.ai-message {
+  max-width: 92%;
+  padding: 9px 11px;
+  border-radius: 7px;
+  white-space: pre-wrap;
+  line-height: 1.45;
+  font-size: .88rem;
+}
+.ai-message.assistant { align-self: flex-start; background: white; border: 1px solid #e2e8f0; }
+.ai-message.user { align-self: flex-end; background: #dbeafe; color: #1e3a8a; }
+.ai-form { display: flex; gap: 8px; padding: 10px; border-top: 1px solid #cbd5e1; }
+.ai-form input { min-width: 0; flex: 1; border: 1px solid #cbd5e1; border-radius: 6px; padding: 10px; font: inherit; }
+#aiSendBtn { background: #2563eb; color: white; }
+.ai-settings { padding: 0 12px 10px; color: #64748b; font-size: .75rem; }
+.ai-settings label { display: flex; align-items: center; gap: 7px; }
+.ai-settings input { width: 220px; max-width: 100%; padding: 4px 6px; border: 1px solid #cbd5e1; border-radius: 4px; }
+.learning-goal { margin: 12px 0; padding: 10px 12px; background: #e0f2fe; border-left: 4px solid #0284c7; line-height: 1.45; }
 .preview-label {
   display: flex;
   justify-content: space-between;
@@ -259,6 +302,7 @@ button:disabled { opacity: .45; cursor: not-allowed; }
     <h1 id="lessonTitle"></h1>
     <div id="explanation" class="explanation"></div>
     <div class="task"><strong>Opdracht:</strong><br><span id="task"></span></div>
+    <div class="learning-goal"><strong>Leerdoel:</strong> <span id="learningGoal"></span></div>
 
     <div style="margin-top:14px;">
       <div class="editor-wrap">
@@ -276,6 +320,24 @@ button:disabled { opacity: .45; cursor: not-allowed; }
       <button id="resetBtn">Herstel stap</button>
     </div>
     <div id="feedback"></div>
+    <section class="ai-trainer" aria-labelledby="aiTitle">
+      <div class="ai-header">
+        <strong id="aiTitle">AI Trainer · teach-modus</strong>
+        <span id="aiStatus" class="ai-status">lokale AI niet gecontroleerd</span>
+      </div>
+      <div id="aiMessages" class="ai-messages" aria-live="polite">
+        <div class="ai-message assistant">Ik geef uitleg en denkvragen over deze opdracht. Ik schrijf geen oplossing voor je. Stel bijvoorbeeld: “Welk HTML-concept moet ik eerst begrijpen?”</div>
+      </div>
+      <form id="aiForm" class="ai-form">
+        <input id="aiInput" type="text" placeholder="Stel een vraag over deze opdracht..." autocomplete="off">
+        <button id="aiSendBtn" type="submit">Vraag</button>
+      </form>
+      <div class="ai-settings">
+        <label>Gemini API-key <input id="aiApiKey" type="password" placeholder="Plak je gratis key" spellcheck="false"></label>
+        <label>Gemini-model <input id="aiModel" value="gemini-2.0-flash" spellcheck="false"></label>
+        <div>Gebruik een gratis key via <strong>Google AI Studio</strong>. De key wordt alleen in deze browser opgeslagen.</div>
+      </div>
+    </section>
   </main>
 
   <section class="preview-panel">
@@ -622,6 +684,54 @@ const steps = [
 }
 ];
 
+const learningGoals = [
+  "Begrijpen dat een HTML-document met een doctype als modern HTML-document wordt herkend.",
+  "Begrijpen dat het html-element de volledige pagina omhult.",
+  "Leren dat de head metadata en instellingen van een pagina bevat.",
+  "Leren hoe je met title de naam van een browser-tabblad instelt.",
+  "Begrijpen dat de body alle zichtbare pagina-inhoud bevat.",
+  "Leren hoe je een belangrijkste kop met h1 maakt.",
+  "Leren hoe je gewone tekst in een paragraaf met p zet.",
+  "Begrijpen hoe h2 een tweede niveau in de koppenstructuur maakt.",
+  "Leren hoe img met src en alt een afbeelding toegankelijk toont.",
+  "Leren hoe a en href een link naar een andere pagina maken.",
+  "Begrijpen hoe ul een ongeordende lijst groepeert.",
+  "Leren hoe li één item in een lijst voorstelt.",
+  "Oefenen met meerdere li-elementen binnen dezelfde lijst.",
+  "Begrijpen hoe div inhoud logisch groepeert.",
+  "Leren hoe class een element een herbruikbare naam geeft.",
+  "Oefenen met het groeperen van een nieuw onderdeel van een pagina.",
+  "Leren hoe button een interactieve knop maakt.",
+  "HTML-bouwstenen combineren tot een complete pagina-structuur.",
+  "Begrijpen dat CSS de presentatie van HTML bepaalt en style CSS kan bevatten.",
+  "Begrijpen hoe een selector en declaration block samen een CSS-regel vormen.",
+  "Leren hoe background-color de achtergrond van een element verandert.",
+  "Leren hoe color de tekstkleur van een element verandert.",
+  "Leren hoe font-family het lettertype bepaalt.",
+  "Begrijpen hoe padding binnenruimte rond inhoud maakt.",
+  "Leren hoe je met een class-selector een kaart kunt stylen.",
+  "Leren hoe border een zichtbare rand toevoegt.",
+  "Leren hoe border-radius afgeronde hoeken maakt.",
+  "Oefenen met padding om inhoud binnen een kaart ruimte te geven.",
+  "Begrijpen hoe max-width de maximale breedte van een element beperkt.",
+  "Leren hoe margin auto een blok horizontaal kan centreren.",
+  "Leren hoe font-size de tekstgrootte verandert.",
+  "Leren hoe je een elementnaam als button als CSS-selector gebruikt.",
+  "Begrijpen dat color ook de tekstkleur van een knop kan bepalen.",
+  "Oefenen met meerdere padding-waarden voor boven/onder en links/rechts.",
+  "Leren hoe border-radius ook een knop vorm geeft.",
+  "Leren hoe text-align tekst binnen een element uitlijnt.",
+  "Begrijpen hoe margin-bottom ruimte onder een element maakt.",
+  "Leren hoe width de breedte van een afbeelding bepaalt.",
+  "Leren hoe :hover een stijl activeert bij aanwijzen met de muis.",
+  "Leren hoe list-style de standaard opmaak van een lijst aanpast.",
+  "CSS-regels combineren om de pagina af te werken en informatie duidelijk te presenteren."
+];
+
+steps.forEach((step, index) => {
+  step.learningGoal = learningGoals[index];
+});
+
 const editor = document.getElementById("editor");
 const preview = document.getElementById("preview");
 const lineNumbers = document.getElementById("lineNumbers");
@@ -629,9 +739,20 @@ const syntaxHighlight = document.getElementById("syntaxHighlight");
 const feedback = document.getElementById("feedback");
 const nextBtn = document.getElementById("nextBtn");
 const checkBtn = document.getElementById("checkBtn");
+const aiMessages = document.getElementById("aiMessages");
+const aiForm = document.getElementById("aiForm");
+const aiInput = document.getElementById("aiInput");
+const aiSendBtn = document.getElementById("aiSendBtn");
+const aiStatus = document.getElementById("aiStatus");
+const aiApiKey = document.getElementById("aiApiKey");
+const aiModel = document.getElementById("aiModel");
+let aiConversation = [];
 let current = Number(localStorage.getItem("pokecode-step") || 0);
 if (current < 0 || current >= steps.length) current = 0;
 let completed = JSON.parse(localStorage.getItem("pokecode-completed") || "[]");
+aiApiKey.value = localStorage.getItem("pokecode-gemini-key") || "";
+aiModel.value = localStorage.getItem("pokecode-ai-model") || "gemini-2.0-flash";
+aiStatus.textContent = aiApiKey.value ? "key opgeslagen in browser" : "API-key nodig";
 
 function escapeHtml(value) {
   return value.replace(/[&<>"']/g, character => ({
@@ -641,6 +762,43 @@ function escapeHtml(value) {
     '"': "&quot;",
     "'": "&#39;"
   }[character]));
+}
+
+function formatCss(css) {
+  const lines = css.trim()
+    .replace(/\s*\{\s*/g, " {\n")
+    .replace(/\s*;\s*/g, ";\n")
+    .replace(/\s*\}\s*/g, "\n}\n")
+    .split("\n")
+    .map(line => line.trim())
+    .filter(Boolean);
+  let depth = 0;
+  return lines.map(line => {
+    if (line.startsWith("}")) depth = Math.max(0, depth - 1);
+    const formattedLine = "  ".repeat(depth) + line;
+    if (line.endsWith("{")) depth += 1;
+    return formattedLine;
+  }).join("\n");
+}
+
+function formatCode(code) {
+  let formatted = code.trim().replace(/>\s*</g, ">\n<");
+  formatted = formatted.replace(/(<style[^>]*>)([\s\S]*?)(<\/style>)/gi, (_, opening, css, closing) => {
+    return opening + "\n" + formatCss(css) + "\n" + closing;
+  });
+
+  const voidTags = /^(area|base|br|col|embed|hr|img|input|link|meta|param|source|track|wbr)$/i;
+  let depth = 0;
+  return formatted.split("\n").map(line => {
+    const trimmed = line.trim();
+    if (!trimmed) return "";
+    if (/^<\//.test(trimmed)) depth = Math.max(0, depth - 1);
+    const output = "  ".repeat(depth) + trimmed;
+    const tagMatch = trimmed.match(/^<([A-Za-z][\w-]*)\b[^>]*>/);
+    const hasClosingTag = /<\/[^>]+>\s*$/.test(trimmed);
+    if (tagMatch && !voidTags.test(tagMatch[1]) && !hasClosingTag && !trimmed.startsWith("<!--")) depth += 1;
+    return output;
+  }).filter(Boolean).join("\n");
 }
 
 function highlightCode(code) {
@@ -676,6 +834,88 @@ function updateCodeView() {
   lineNumbers.scrollTop = editor.scrollTop;
 }
 
+function addAiMessage(role, text) {
+  const message = document.createElement("div");
+  message.className = "ai-message " + role;
+  message.textContent = text;
+  aiMessages.appendChild(message);
+  aiMessages.scrollTop = aiMessages.scrollHeight;
+}
+
+function resetAiChat() {
+  aiConversation = [];
+  aiMessages.innerHTML = "";
+  addAiMessage("assistant", "Ik geef uitleg en denkvragen over deze opdracht. Ik schrijf geen oplossing voor je. Stel bijvoorbeeld: ‘Welk concept moet ik eerst begrijpen?’");
+}
+
+function getAiContext() {
+  const step = steps[current];
+  return `Je bent de AI Trainer van PokéCode. Je werkt uitsluitend in teach-modus.
+
+VASTE REGELS:
+- Geef alleen conceptuele uitleg, kleine denkvragen en aanwijzingen.
+- Schrijf geen complete oplossing, geen kant-en-klare code en geen exacte code-regel die de opdracht oplost.
+- Corrigeer de studentcode niet letterlijk en herschrijf geen code.
+- Leg uit wat de student moet herkennen of onderzoeken in de eigen code.
+- Geef maximaal drie korte stappen en stel daarna één controlevraag.
+- Antwoord in eenvoudig Nederlands op MBO-niveau.
+
+HUIDIGE OPDRACHT:
+Fase: ${step.phase}
+Titel: ${step.title}
+Leerdoel: ${step.learningGoal}
+Uitleg: ${step.explanation.replace(/<[^>]*>/g, "")}
+Opdracht: ${step.task.replace(/<[^>]*>/g, "")}
+
+INGEVULDE CODE VAN DE STUDENT:
+${editor.value}`;
+}
+
+async function askAi(question) {
+  const apiKey = aiApiKey.value.trim();
+  const model = aiModel.value.trim() || "gemini-2.0-flash";
+  if (!apiKey) {
+    aiStatus.textContent = "API-key nodig";
+    addAiMessage("assistant", "Vul eerst een gratis Gemini API-key in. Je kunt die maken in Google AI Studio; de key blijft alleen in deze browser.");
+    return;
+  }
+  aiSendBtn.disabled = true;
+  aiInput.disabled = true;
+  aiStatus.textContent = "AI denkt mee...";
+  addAiMessage("user", question);
+  aiConversation.push({ role: "user", content: question });
+
+  try {
+    const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(model)}:generateContent?key=${encodeURIComponent(apiKey)}`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        systemInstruction: { parts: [{ text: getAiContext() }] },
+        contents: aiConversation.slice(-8).map(message => ({
+          role: message.role === "assistant" ? "model" : "user",
+          parts: [{ text: message.content }]
+        })),
+        generationConfig: { temperature: 0.3 }
+      })
+    });
+    if (!response.ok) throw new Error("Gemini reageerde niet goed.");
+    const data = await response.json();
+    const answer = data.candidates?.[0]?.content?.parts?.[0]?.text?.trim();
+    if (!answer) throw new Error("De AI gaf geen antwoord.");
+    aiConversation.push({ role: "assistant", content: answer });
+    addAiMessage("assistant", answer);
+    aiStatus.textContent = "verbonden met Gemini";
+  } catch (error) {
+    aiConversation.pop();
+    aiStatus.textContent = "verbinding mislukt";
+    addAiMessage("assistant", "Gemini kon niet antwoorden. Controleer of de API-key klopt, of kies een beschikbaar Gemini-model.");
+  } finally {
+    aiSendBtn.disabled = false;
+    aiInput.disabled = false;
+    aiInput.focus();
+  }
+}
+
 function renderList() {
   const list = document.getElementById("stepList");
   list.innerHTML = "";
@@ -705,9 +945,11 @@ function loadStep(i, preserve=false) {
   document.getElementById("lessonTitle").textContent = s.title;
   document.getElementById("explanation").innerHTML = s.explanation;
   document.getElementById("task").innerHTML = s.task;
+  document.getElementById("learningGoal").textContent = s.learningGoal;
   if (!preserve) {
     const saved = localStorage.getItem("pokecode-code-" + current);
-    editor.value = saved !== null ? saved : s.starter;
+    editor.value = formatCode(saved !== null ? saved : s.starter);
+    localStorage.setItem("pokecode-code-" + current, editor.value);
   }
   feedback.className = "";
   feedback.style.display = "none";
@@ -717,6 +959,7 @@ function loadStep(i, preserve=false) {
   document.getElementById("progressBar").style.width = ((current+1)/steps.length*100) + "%";
   localStorage.setItem("pokecode-step", current);
   renderList();
+  resetAiChat();
   updateCodeView();
   updatePreview();
 }
@@ -747,6 +990,24 @@ editor.addEventListener("input", () => {
   localStorage.setItem("pokecode-code-" + current, editor.value);
   updateCodeView();
   updatePreview();
+});
+
+aiApiKey.addEventListener("change", () => {
+  localStorage.setItem("pokecode-gemini-key", aiApiKey.value.trim());
+  aiStatus.textContent = aiApiKey.value.trim() ? "key opgeslagen in browser" : "API-key nodig";
+});
+
+aiModel.addEventListener("change", () => {
+  aiModel.value = aiModel.value.trim() || "gemini-2.0-flash";
+  localStorage.setItem("pokecode-ai-model", aiModel.value);
+});
+
+aiForm.addEventListener("submit", event => {
+  event.preventDefault();
+  const question = aiInput.value.trim();
+  if (!question || aiSendBtn.disabled) return;
+  aiInput.value = "";
+  askAi(question);
 });
 
 function checkCurrent() {
@@ -784,7 +1045,7 @@ nextBtn.onclick = () => {
 };
 
 document.getElementById("resetBtn").onclick = () => {
-  editor.value = steps[current].starter;
+  editor.value = formatCode(steps[current].starter);
   localStorage.setItem("pokecode-code-" + current, editor.value);
   feedback.className = "";
   feedback.style.display = "none";
