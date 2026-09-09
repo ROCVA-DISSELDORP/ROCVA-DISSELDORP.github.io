@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>PokéCode — Leer HTML & CSS</title>
+<title>CodeStart — Leer HTML & CSS</title>
 <style>
 :root {
   --red: #d62828;
@@ -63,11 +63,15 @@ header {
 .course-picker h1 { margin-bottom: 8px; }
 .course-picker-intro { color: #64748b; max-width: 680px; margin-bottom: 24px; }
 .course-options { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; max-width: 1120px; }
-.course-card { text-align: left; min-height: 220px; padding: 20px; border: 1px solid #cbd5e1; border-radius: 8px; background: white; color: #202124; box-shadow: 0 3px 10px rgba(15,23,42,.06); }
-.course-card:hover, .course-card:focus-visible { border-color: #2563eb; box-shadow: 0 5px 16px rgba(37,99,235,.16); }
+.course-card { min-height: 220px; padding: 20px; border: 1px solid #cbd5e1; border-radius: 8px; background: white; color: #202124; box-shadow: 0 3px 10px rgba(15,23,42,.06); }
+.course-card:hover { border-color: #2563eb; box-shadow: 0 5px 16px rgba(37,99,235,.16); }
 .course-card h2 { margin: 10px 0 8px; font-size: 1.2rem; }
 .course-card p { color: #475569; line-height: 1.5; font-weight: normal; }
 .course-card .badge { margin-bottom: 4px; }
+.course-card-actions { display: flex; gap: 8px; margin-top: 16px; }
+.course-open-button { background: #2563eb; color: white; }
+.course-delete-button { background: #fee2e2; color: #991b1b; }
+.main-menu-button { width: 100%; margin-bottom: 14px; background: #e5e7eb; color: #1f2937; text-align: left; }
 .custom-course-form { max-width: 1120px; margin: 0 0 26px; padding: 16px; background: white; border: 1px solid #cbd5e1; border-radius: 8px; }
 .custom-course-form h2 { margin-bottom: 6px; font-size: 1.1rem; }
 .custom-course-form p { color: #64748b; margin: 0 0 12px; }
@@ -354,7 +358,7 @@ button:disabled { opacity: .45; cursor: not-allowed; }
 </head>
 <body>
 <header>
-  <div class="logo">⚡ PokéCode <button id="sidebarToggle" class="sidebar-toggle" type="button" title="Zijbalk inklappen">☰</button></div>
+  <div class="logo">CodeStart <button id="sidebarToggle" class="sidebar-toggle" type="button" title="Zijbalk inklappen">☰</button></div>
   <button id="coursePickerButton" class="sidebar-toggle" type="button">Andere opdracht</button>
   <div class="progress-wrap">
     <div class="progress-text" id="progressText">Opdracht 1</div>
@@ -386,6 +390,7 @@ button:disabled { opacity: .45; cursor: not-allowed; }
 <div class="app" id="appShell" hidden>
   <aside>
     <div class="course-nav">
+      <button id="sidebarMainMenuButton" class="main-menu-button" type="button">← Terug naar hoofdmenu</button>
       <h2 id="courseTitle">Pokémon Trainer Page</h2>
       <p id="courseDescription" class="tip">Bouw stap voor stap je eigen webpagina.</p>
       <ul id="stepList"></ul>
@@ -924,6 +929,7 @@ const aiModel = document.getElementById("aiModel");
 const app = document.querySelector(".app");
 const sidebarToggle = document.getElementById("sidebarToggle");
 const coursePickerButton = document.getElementById("coursePickerButton");
+const sidebarMainMenuButton = document.getElementById("sidebarMainMenuButton");
 const coursePicker = document.getElementById("coursePicker");
 const courseOptions = document.getElementById("courseOptions");
 const appShell = document.getElementById("appShell");
@@ -955,21 +961,38 @@ sidebarToggle.addEventListener("click", () => {
   localStorage.setItem("pokecode-sidebar-collapsed", collapsed);
   sidebarToggle.title = collapsed ? "Zijbalk openen" : "Zijbalk inklappen";
 });
-coursePickerButton.addEventListener("click", () => {
+function showCoursePicker() {
   appShell.hidden = true;
   coursePicker.hidden = false;
-});
+}
+
+coursePickerButton.addEventListener("click", showCoursePicker);
+sidebarMainMenuButton.addEventListener("click", showCoursePicker);
 
 function renderCoursePicker() {
   courseOptions.innerHTML = "";
   courses.forEach(course => {
-    const card = document.createElement("button");
-    card.type = "button";
+    const card = document.createElement("article");
     card.className = "course-card";
-    card.innerHTML = `<span class="badge ${course.id === "pokemon" ? "html" : "css"}">${course.label}</span><h2>${escapeHtml(course.title)}</h2><p>${escapeHtml(course.description)}</p><strong>${escapeHtml(course.difficulty)}</strong>`;
-    card.addEventListener("click", () => selectCourse(course.id));
+    const isCustomCourse = course.id.startsWith("custom-");
+    card.innerHTML = `<span class="badge ${course.id === "pokemon" ? "html" : "css"}">${course.label}</span><h2>${escapeHtml(course.title)}</h2><p>${escapeHtml(course.description)}</p><strong>${escapeHtml(course.difficulty)}</strong><div class="course-card-actions"><button class="course-open-button" type="button">Open cursus</button>${isCustomCourse ? '<button class="course-delete-button" type="button">Verwijderen</button>' : ""}</div>`;
+    card.querySelector(".course-open-button").addEventListener("click", () => selectCourse(course.id));
+    if (isCustomCourse) {
+      card.querySelector(".course-delete-button").addEventListener("click", () => deleteCustomCourse(course.id, course.title));
+    }
     courseOptions.appendChild(card);
   });
+}
+
+function deleteCustomCourse(courseId, title) {
+  if (!confirm(`Weet je zeker dat je de cursus “${title}” wilt verwijderen? Ook alle voortgang en ingevulde code worden verwijderd.`)) return;
+  courses = courses.filter(course => course.id !== courseId);
+  const savedCourses = courses.filter(course => course.id.startsWith("custom-"));
+  localStorage.setItem(customCourseStorageKey, JSON.stringify(savedCourses));
+  Object.keys(localStorage).filter(key => key.startsWith(`pokecode-${courseId}-`)).forEach(key => localStorage.removeItem(key));
+  if (selectedCourseId === courseId) localStorage.removeItem("pokecode-course");
+  renderCoursePicker();
+  customCourseStatus.textContent = `De cursus “${title}” is verwijderd.`;
 }
 
 customCourseForm.addEventListener("submit", async event => {
