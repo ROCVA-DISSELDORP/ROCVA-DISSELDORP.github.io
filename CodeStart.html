@@ -1048,15 +1048,28 @@ function escapeHtml(value) {
   }[character]));
 }
 
-async function readWebsiteText(url) {
+function simplifyWebsiteHtml(content) {
+  const parsed = new DOMParser().parseFromString(content, "text/html");
+  parsed.querySelectorAll("script, style, noscript, svg, iframe, canvas, video, audio, form, button, input, nav[aria-hidden='true']").forEach(element => element.remove());
+  parsed.querySelectorAll("*").forEach(element => {
+    [...element.attributes].forEach(attribute => {
+      if (!['class', 'id', 'href', 'src', 'alt'].includes(attribute.name.toLowerCase())) element.removeAttribute(attribute.name);
+    });
+    if (element.classList.length > 3) element.className = [...element.classList].slice(0, 3).join(" ");
+  });
+  const body = parsed.body || parsed.documentElement;
+  return body.innerHTML.replace(/\s+/g, " ").trim().slice(0, 16000);
+}
+
+async function readWebsiteStructure(url) {
   const sources = [url, "https://r.jina.ai/http://" + url.replace(/^https?:\/\//i, "")];
   for (const source of sources) {
     try {
       const response = await fetch(source);
       if (!response.ok) continue;
       const content = await response.text();
-      const plainText = content.replace(/<script[\s\S]*?<\/script>/gi, "").replace(/<style[\s\S]*?<\/style>/gi, "").replace(/<[^>]+>/g, " ").replace(/\s+/g, " ").trim();
-      if (plainText.length > 80) return plainText.slice(0, 12000);
+      const structure = simplifyWebsiteHtml(content);
+      if (structure.length > 80) return structure;
     } catch (error) {
       continue;
     }
@@ -1080,9 +1093,9 @@ async function generateCustomCourse(url) {
   if (!apiKey) throw new Error("Vul eerst je Gemini API-key in bij de AI Trainer.");
   const studentLines = Math.max(1, Math.min(20, Number(customCourseLines.value) || 4));
   customCourseLines.value = studentLines;
-  const websiteText = await readWebsiteText(url);
-  const pageContext = websiteText ? `Leesbare tekst van de website:\n${websiteText}` : `De website kon niet automatisch worden gelezen. Gebruik deze URL als thematische aanwijzing: ${url}`;
-  const prompt = `Maak een HTML/CSS-cursus voor periode 1 van een Nederlandse MBO 4-opleiding Software Developer.\n\nDe student bouwt een eenvoudige versie van deze website: ${url}\n${pageContext}\n\nWERKOMVANG PER STAP:\n- De student moet per stap ongeveer ${studentLines} nieuwe, niet-lege regels code zelf schrijven.\n- Zet studentLines bij IEDERE stap precies op ${studentLines}.\n- Geef alleen minimale noodzakelijke context als startercode; geef geen oplossing of grote stukken code cadeau.\n\nREGELS:\n- Bepaal zelf hoeveel stappen de website nodig heeft op basis van de complexiteit: minimaal 6, maximaal 24. Een simpele pagina heeft minder stappen, een uitgebreide pagina heeft meer stappen.\n- Maak altijd eerst HTML-stappen en daarna CSS-stappen.\n- Gebruik uitsluitend HTML en CSS. Geen JavaScript, frameworks, databases of backend.\n- Gebruik eenvoudige concepten zoals doctype, html, head, title, body, h1, p, section, article, ul, li, a, class, kleuren, font, padding, border, margin, grid of hover.\n- requirements bevat 1 tot 8 letterlijke kleine tekstfragmenten die in de ingevulde HTML plus CSS moeten staan om de stap te controleren.\n- Geef alleen geldige JSON terug, zonder markdown.\n\nJSON-formaat:\n{"title":"...","description":"...","steps":[{"phase":"HTML","title":"...","learningGoal":"...","explanation":"...","task":"...","starter":"...","studentLines":${studentLines},"requirements":["..."],"hint":"..."}]}`;
+  const websiteStructure = await readWebsiteStructure(url);
+  const pageContext = websiteStructure ? `VERSIMPELDE HTML-STRUCTUUR VAN DE VOORBEELDWEBSITE:\n${websiteStructure}` : `De website kon niet automatisch worden gelezen. Gebruik deze URL als thematische aanwijzing: ${url}`;
+  const prompt = `Maak een HTML/CSS-cursus voor periode 1 van een Nederlandse MBO 4-opleiding Software Developer.\n\nDe student bouwt een eenvoudige, eigen versie van deze website: ${url}\n${pageContext}\n\nGEBRUIK VAN HET VOORBEELD:\n- Gebruik de versimpelde HTML-structuur om te bepalen welke onderdelen de student bouwt, zoals header, secties, kaarten, lijsten, afbeeldingen of footer.\n- Bouw alleen een eenvoudige leerzame versie met HTML en CSS; kopieer geen teksten, merknaam, afbeeldingen, uitgebreide layout of broncode letterlijk.\n- Laat de stappen de belangrijkste zichtbare structuur van de voorbeeldwebsite geleidelijk opbouwen.\n\nWERKOMVANG PER STAP:\n- De student moet per stap ongeveer ${studentLines} nieuwe, niet-lege regels code zelf schrijven.\n- Zet studentLines bij IEDERE stap precies op ${studentLines}.\n- Geef alleen minimale noodzakelijke context als startercode; geef geen oplossing of grote stukken code cadeau.\n\nREGELS:\n- Bepaal zelf hoeveel stappen de website nodig heeft op basis van de complexiteit: minimaal 6, maximaal 24. Een simpele pagina heeft minder stappen, een uitgebreide pagina heeft meer stappen.\n- Maak altijd eerst HTML-stappen en daarna CSS-stappen.\n- Gebruik uitsluitend HTML en CSS. Geen JavaScript, frameworks, databases of backend.\n- Gebruik eenvoudige concepten zoals doctype, html, head, title, body, h1, p, section, article, ul, li, a, class, kleuren, font, padding, border, margin, grid of hover.\n- requirements bevat 1 tot 8 letterlijke kleine tekstfragmenten die in de ingevulde HTML plus CSS moeten staan om de stap te controleren.\n- Geef alleen geldige JSON terug, zonder markdown.\n\nJSON-formaat:\n{"title":"...","description":"...","steps":[{"phase":"HTML","title":"...","learningGoal":"...","explanation":"...","task":"...","starter":"...","studentLines":${studentLines},"requirements":["..."],"hint":"..."}]}`;
   const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(aiModel.value.trim() || "gemini-2.0-flash")}:generateContent?key=${encodeURIComponent(apiKey)}`, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ contents: [{ role: "user", parts: [{ text: prompt }] }], generationConfig: { temperature: 0.2, responseMimeType: "application/json" } }) });
   if (!response.ok) throw new Error("Gemini kon de cursus niet maken.");
   const data = await response.json();
