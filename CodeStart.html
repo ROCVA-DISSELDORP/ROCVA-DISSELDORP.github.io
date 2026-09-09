@@ -1356,6 +1356,16 @@ function renderList() {
   });
 }
 
+function previousCustomFile(fileType, stepIndex) {
+  for (let index = stepIndex - 1; index >= 0; index -= 1) {
+    const key = fileType === "css" ? courseStorageKey("css-" + index) : courseStorageKey("html-" + index);
+    const legacyHtmlKey = courseStorageKey("code-" + index);
+    const saved = localStorage.getItem(key) || (fileType === "html" ? localStorage.getItem(legacyHtmlKey) : null);
+    if (saved !== null) return saved;
+  }
+  return null;
+}
+
 function loadStep(i, preserve=false) {
   current = i;
   const s = steps[current];
@@ -1368,18 +1378,19 @@ function loadStep(i, preserve=false) {
   document.getElementById("task").innerHTML = s.task + (s.studentLines ? `<br><small>Schrijf in deze stap ongeveer ${s.studentLines} regels code zelf.</small>` : "");
   document.getElementById("learningGoal").textContent = s.learningGoal;
   const separateCss = s.phase === "CSS";
+  const isCustomCourse = activeCourse.id.startsWith("custom-");
   setCssFileMode(separateCss);
   if (!preserve) {
     if (separateCss) {
-      const savedSource = localStorage.getItem(courseStorageKey("html-" + current)) || localStorage.getItem(courseStorageKey("code-" + current)) || s.starter;
+      const savedSource = localStorage.getItem(courseStorageKey("html-" + current)) || localStorage.getItem(courseStorageKey("code-" + current)) || (isCustomCourse && previousCustomFile("html", current)) || s.starter;
       const split = splitCodeForFiles(savedSource);
       editor.value = formatCode(split.html);
-      cssEditor.value = formatCss(localStorage.getItem(courseStorageKey("css-" + current)) || split.css);
+      cssEditor.value = formatCss(localStorage.getItem(courseStorageKey("css-" + current)) || (isCustomCourse && previousCustomFile("css", current)) || split.css);
       localStorage.setItem(courseStorageKey("html-" + current), editor.value);
       localStorage.setItem(courseStorageKey("css-" + current), cssEditor.value);
     } else {
       const saved = localStorage.getItem(courseStorageKey("code-" + current));
-      editor.value = formatCode(saved !== null ? saved : s.starter);
+      editor.value = formatCode(saved !== null ? saved : (isCustomCourse && previousCustomFile("html", current)) || s.starter);
       cssEditor.value = "";
       localStorage.setItem(courseStorageKey("code-" + current), editor.value);
     }
