@@ -883,6 +883,48 @@ const generateCourseBtn = document.getElementById("generateCourseBtn");
 const customCourseStatus = document.getElementById("customCourseStatus");
 const customCourseStorageKey = "pokecode-custom-courses";
 
+function matchesHtmlStructure(code, checklist) {
+  const html = new DOMParser().parseFromString(code, "text/html");
+  const instructionText = (checklist || []).join(" ").toLowerCase();
+
+  if ((instructionText.includes("link") || instructionText.includes("href") || instructionText.includes("<a")) && !html.querySelector("a[href]")) return false;
+  if ((instructionText.includes("afbeelding") || instructionText.includes("img") || instructionText.includes("alt=")) && !html.querySelector("img[alt]")) return false;
+  if ((instructionText.includes("lijst") || instructionText.includes("li-element")) && !html.querySelector("li")) return false;
+
+  return true;
+}
+
+function matchesAssertions(code, assertions) {
+  if (!Array.isArray(assertions) || assertions.length === 0) return true;
+  const html = new DOMParser().parseFromString(code, "text/html");
+  const css = [...html.querySelectorAll("style")].map(style => style.textContent).join("\n");
+
+  return assertions.every(assertion => {
+    try {
+      const elements = [...html.querySelectorAll(assertion.selector)];
+      if (assertion.type === "element") return elements.length > 0;
+      if (assertion.type === "text") return elements.some(element => element.textContent.replace(/\s+/g, " ").trim().includes(assertion.value));
+      if (assertion.type === "attribute") return elements.some(element => element.getAttribute(assertion.attribute) === assertion.value);
+      if (assertion.type === "css") {
+        const selector = assertion.selector.replace(/[.*+?^${}()|[\]\\]/g, "\\$&").replace(/\s+/g, "\\s+");
+        const property = assertion.property.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+        const value = assertion.value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&").replace(/\s+/g, "\\s+");
+        return new RegExp(`${selector}\\s*\\{[\\s\\S]*?${property}\\s*:\\s*${value}\\s*;?[\\s\\S]*?\\}`, "i").test(css);
+      }
+      return false;
+    } catch (error) {
+      return false;
+    }
+  });
+}
+
+function isValidAssertion(assertion) {
+  if (!assertion || !["element", "text", "attribute", "css"].includes(assertion.type) || typeof assertion.selector !== "string" || typeof assertion.value !== "string") return false;
+  if (assertion.type === "attribute") return typeof assertion.attribute === "string" && assertion.attribute.length > 0;
+  if (assertion.type === "css") return typeof assertion.property === "string" && assertion.property.length > 0;
+  return true;
+}
+
 function hydrateCustomCourse(course) {
   course.steps = course.steps.map(step => ({
     ...step,
@@ -891,7 +933,7 @@ function hydrateCustomCourse(course) {
       const nonEmptyLines = code.split("\n").filter(line => line.trim()).length;
       const starterLines = String(step.starter || "").split("\n").filter(line => line.trim()).length;
       const requiredLines = Math.max(1, Number(step.studentLines) || 1);
-      return nonEmptyLines >= starterLines + requiredLines && (step.requirements || []).every(requirement => code.toLowerCase().includes(requirement.toLowerCase()));
+      return nonEmptyLines >= starterLines + requiredLines && matchesHtmlStructure(code, step.checklist) && matchesAssertions(code, step.assertions) && (step.requirements || []).every(requirement => code.toLowerCase().includes(requirement.toLowerCase()));
     }
   }));
   return course;
@@ -1081,8 +1123,10 @@ function parseGeneratedCourse(text, url, studentLines) {
   const generated = JSON.parse(text.replace(/^```json\s*/i, "").replace(/```$/i, "").trim());
   if (!generated.title || !Array.isArray(generated.steps) || generated.steps.length < 6 || generated.steps.length > 24) throw new Error("De AI moet 6 tot 24 stappen maken, afhankelijk van de complexiteit van de website.");
   const steps = generated.steps.map(step => {
-    if (!step.phase || !["HTML", "CSS"].includes(step.phase) || !step.title || !step.starter || !Array.isArray(step.checklist) || step.checklist.length === 0 || !Array.isArray(step.requirements)) throw new Error("Elke stap moet een starter, checklist en controle-eisen hebben.");
-    return { phase: step.phase, title: String(step.title).slice(0, 90), learningGoal: String(step.learningGoal || "Een HTML- of CSS-concept begrijpen.").slice(0, 240), explanation: String(step.explanation || "Leer dit concept stap voor stap.").slice(0, 500), task: String(step.task || "Volg de checklist hieronder.").slice(0, 500), checklist: step.checklist.map(String).filter(Boolean).slice(0, 8), starter: String(step.starter).slice(0, 12000), studentLines, requirements: step.requirements.map(String).slice(0, 8), hint: String(step.hint || "Kijk naar de checklist en controleer je structuur.").slice(0, 300) };
+    if (!step.phase || !["HTML", "CSS"].includes(step.phase) || !step.title || !step.starter || !Array.isArray(step.checklist) || step.checklist.length === 0 || !Array.isArray(step.assertions) || step.assertions.length === 0 || !Array.isArray(step.requirements)) throw new Error("Elke stap moet een starter, checklist en structurele controle-eisen hebben.");
+    const assertions = step.assertions.filter(isValidAssertion).slice(0, 8);
+    if (assertions.length === 0) throw new Error("De structurele controles van een stap zijn ongeldig.");
+    return { phase: step.phase, title: String(step.title).slice(0, 90), learningGoal: String(step.learningGoal || "Een HTML- of CSS-concept begrijpen.").slice(0, 240), explanation: String(step.explanation || "Leer dit concept stap voor stap.").slice(0, 500), task: String(step.task || "Volg de checklist hieronder.").slice(0, 500), checklist: step.checklist.map(String).filter(Boolean).slice(0, 8), starter: String(step.starter).slice(0, 12000), studentLines, assertions, requirements: step.requirements.map(String).slice(0, 8), hint: String(step.hint || "Kijk naar de checklist en controleer je structuur.").slice(0, 300) };
   });
   if (!steps.some(step => step.phase === "HTML") || !steps.some(step => step.phase === "CSS")) throw new Error("De cursus moet HTML- en CSS-stappen bevatten.");
   return { id: "custom-" + Date.now(), title: String(generated.title).slice(0, 80), label: "Eigen cursus", description: String(generated.description || "Een HTML/CSS-cursus gebaseerd op " + url).slice(0, 220), difficulty: `${studentLines} regels per stap · AI-cursus HTML/CSS`, studentLines, sourceUrl: url, steps };
@@ -1096,7 +1140,7 @@ async function generateCustomCourse(url) {
   const websiteStructure = await readWebsiteStructure(url);
   const pageContext = websiteStructure ? `VERSIMPELDE HTML-STRUCTUUR VAN DE VOORBEELDWEBSITE:\n${websiteStructure}` : `De website kon niet automatisch worden gelezen. Gebruik deze URL als thematische aanwijzing: ${url}`;
   const prompt = `Maak een HTML/CSS-cursus voor periode 1 van een Nederlandse MBO 4-opleiding Software Developer.\n\nDe student bouwt een eenvoudige, eigen versie van deze website: ${url}\n${pageContext}\n\nGEBRUIK VAN HET VOORBEELD:\n- Gebruik de versimpelde HTML-structuur om te bepalen welke onderdelen de student bouwt, zoals header, secties, kaarten, lijsten, afbeeldingen of footer.\n- Bouw alleen een eenvoudige leerzame versie met HTML en CSS; kopieer geen teksten, merknaam, afbeeldingen, uitgebreide layout of broncode letterlijk.\n- Laat de stappen de belangrijkste zichtbare structuur van de voorbeeldwebsite geleidelijk opbouwen.\n\nWERKOMVANG PER STAP:\n- De student moet per stap ongeveer ${studentLines} nieuwe, niet-lege regels code zelf schrijven.\n- Zet studentLines bij IEDERE stap precies op ${studentLines}.\n- Geef alleen minimale noodzakelijke context als startercode; geef geen oplossing of grote stukken code cadeau.\n\nZICHTBARE OPDRACHTTEKST (VERPLICHT):\n- task moet altijd precies en uitvoerbaar zeggen wat de student moet doen, niet vaag zoals “maak een kaart”.\n- Benoem elk toe te voegen of aan te passen HTML-element, de exacte tekstinhoud en de plek in de pagina.\n- Benoem bij attributen altijd de naam én waarde, bijvoorbeeld class="kaart", href="..." of alt="...".\n- Benoem bij CSS altijd de selector, eigenschap én exacte waarde, bijvoorbeeld .kaart met padding: 16px.\n- Als er meerdere regels nodig zijn, maak task een korte genummerde lijst met iedere concrete wijziging apart.\n- Vermeld alleen instructies die binnen deze stap uitgevoerd moeten worden.\n- hint herhaalt beknopt het belangrijkste element, attribuut of CSS-eigenschap, maar geeft geen volledige oplossing.\n\nREGELS:\n- Bepaal zelf hoeveel stappen de website nodig heeft op basis van de complexiteit: minimaal 6, maximaal 24. Een simpele pagina heeft minder stappen, een uitgebreide pagina heeft meer stappen.\n- Maak altijd eerst HTML-stappen en daarna CSS-stappen.\n- Gebruik uitsluitend HTML en CSS. Geen JavaScript, frameworks, databases of backend.\n- Gebruik eenvoudige concepten zoals doctype, html, head, title, body, h1, p, section, article, ul, li, a, class, kleuren, font, padding, border, margin, grid of hover.\n- requirements bevat 1 tot 8 letterlijke kleine tekstfragmenten die in de ingevulde HTML plus CSS moeten staan om de stap te controleren. requirements moeten direct aansluiten op iedere concrete eis in task.\n- Geef alleen geldige JSON terug, zonder markdown.\n\nJSON-formaat:\n{"title":"...","description":"...","steps":[{"phase":"HTML","title":"...","learningGoal":"...","explanation":"...","task":"1. Voeg ... toe in ...\\n2. Geef ... het attribuut ...","starter":"...","studentLines":${studentLines},"requirements":["..."],"hint":"..."}]}`;
-  const checklistInstructions = `\n\nCHECKLIST VOOR ELKE STAP (ALTIJD VERPLICHT, ONAFHANKELIJK VAN AANTAL REGELS):\n- Voeg bij elke stap het veld checklist toe met 1 tot 8 concrete eisen.\n- Iedere checklist-regel beschrijft precies één actie die de student moet uitvoeren.\n- Benoem bij HTML altijd het element, de exacte locatie en waar nodig de tekstinhoud.\n- Benoem bij attributen altijd de naam en exacte waarde, bijvoorbeeld class=\"kaart\", href=\"...\" of alt=\"...\".\n- Benoem bij CSS altijd selector, eigenschap en exacte waarde, bijvoorbeeld .kaart met padding: 16px.\n- Gebruik geen vage eisen zoals “maak het mooi” of “maak een kaart”.\n- Geef instructies in woorden, niet als volledige kant-en-klare code.\n- requirements moet elke checklist-eis kunnen controleren.\n\nPas het JSON-formaat aan: iedere step heeft ook \"checklist\":[\"Concrete eis 1\",\"Concrete eis 2\"].`;
+  const checklistInstructions = `\n\nCHECKLIST EN CONTROLES VOOR ELKE STAP (ALTIJD VERPLICHT):\n- Voeg bij elke stap het veld checklist toe met 1 tot 8 concrete eisen.\n- Iedere checklist-regel beschrijft precies één actie die de student moet uitvoeren.\n- Benoem bij HTML altijd het element, de exacte locatie en waar nodig de tekstinhoud.\n- Benoem bij attributen altijd de naam en exacte waarde, bijvoorbeeld class=\"kaart\", href=\"...\" of alt=\"...\".\n- Benoem bij CSS altijd selector, eigenschap en exacte waarde, bijvoorbeeld .kaart met padding: 16px.\n- Gebruik geen vage eisen zoals “maak het mooi” of “maak een kaart”.\n- Geef instructies in woorden, niet als volledige kant-en-klare code.\n- Voeg bij elke stap ook assertions toe. Eén assertion controleert één checklist-eis structureel, niet met losse tekst.\n- Toegestane assertion types: element, text, attribute en css.\n- Voorbeeld link: {\"type\":\"element\",\"selector\":\"li a[href]\",\"value\":\"\"}.\n- Voorbeeld tekst: {\"type\":\"text\",\"selector\":\"h1\",\"value\":\"Welkom\"}.\n- Voorbeeld attribuut: {\"type\":\"attribute\",\"selector\":\"img\",\"attribute\":\"alt\",\"value\":\"Banner\"}.\n- Voorbeeld CSS: {\"type\":\"css\",\"selector\":\".kaart\",\"property\":\"padding\",\"value\":\"16px\"}.\n- requirements blijft als extra eenvoudige tekstcheck, maar assertions zijn leidend voor HTML- en CSS-structuur.\n\nPas het JSON-formaat aan: iedere step heeft \"checklist\":[\"Concrete eis 1\"] en \"assertions\":[{\"type\":\"element\",\"selector\":\"...\",\"value\":\"\"}].`;
   const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(aiModel.value.trim() || "gemini-2.0-flash")}:generateContent?key=${encodeURIComponent(apiKey)}`, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ contents: [{ role: "user", parts: [{ text: prompt + checklistInstructions }] }], generationConfig: { temperature: 0.2, responseMimeType: "application/json" } }) });
   if (!response.ok) throw new Error("Gemini kon de cursus niet maken.");
   const data = await response.json();
