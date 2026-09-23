@@ -1,0 +1,1158 @@
+<!doctype html>
+<html lang="nl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="description" content="Interactief werkschema voor het Canva AI-websiteproject: klantgesprek, ontwerp en bouwen in één pagina, met voortgang die lokaal in de browser wordt opgeslagen.">
+<title>Van Klant Tot Site</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@600;700;800&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+<style>
+  :root{
+    --bg:#F3F1FC;
+    --surface:#FFFFFF;
+    --surface-2:#EFEBFC;
+    --ink:#1C1533;
+    --ink-soft:#5B5279;
+    --ink-faint:#948CB0;
+    --border:#DED6F5;
+    --accent:#FF5A8A;
+    --accent-ink:#FFFFFF;
+    --accent-soft:#FFE1EC;
+    --done:#12946B;
+    --done-soft:#D9F3E7;
+    --focus:#5B4FE8;
+
+    /* phase identity colors — decorative, kept separate from the semantic --done green */
+    --p-start:#8B5CF6;
+    --p-intake:#2F7BF6;
+    --p-concept:#F5A400;
+    --p-build:#EC4899;
+    --p-feedback:#0EA5A6;
+    --p-pitch:#FB6B45;
+    --p-final:#22C55E;
+    color-scheme: light;
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --bg:#0E0B1E;
+      --surface:#171331;
+      --surface-2:#1D1940;
+      --ink:#EFEBFF;
+      --ink-soft:#B1A8D9;
+      --ink-faint:#756B9C;
+      --border:#332B5C;
+      --accent:#FF80AC;
+      --accent-ink:#210A17;
+      --accent-soft:#3A1D34;
+      --done:#4EDDA6;
+      --done-soft:#123527;
+      --focus:#8B9BFF;
+      color-scheme: dark;
+    }
+  }
+  :root[data-theme="dark"]{
+    --bg:#0E0B1E;
+    --surface:#171331;
+    --surface-2:#1D1940;
+    --ink:#EFEBFF;
+    --ink-soft:#B1A8D9;
+    --ink-faint:#756B9C;
+    --border:#332B5C;
+    --accent:#FF80AC;
+    --accent-ink:#210A17;
+    --accent-soft:#3A1D34;
+    --done:#4EDDA6;
+    --done-soft:#123527;
+    --focus:#8B9BFF;
+    color-scheme: dark;
+  }
+
+  #fase0{ --phase-color:var(--p-start); }
+  #fase1{ --phase-color:var(--p-intake); }
+  #fase2{ --phase-color:var(--p-concept); }
+  #fase3{ --phase-color:var(--p-build); }
+  #fase4{ --phase-color:var(--p-feedback); }
+  #fase5{ --phase-color:var(--p-pitch); }
+  #eindcheck{ --phase-color:var(--p-final); }
+
+  *{ box-sizing:border-box; }
+  html,body{ overflow-x:hidden; }
+  body{
+    background:var(--bg);
+    color:var(--ink);
+    font-family:"IBM Plex Sans",system-ui,sans-serif;
+    line-height:1.5;
+  }
+  .wrap{
+    max-width:880px;
+    margin:0 auto;
+    padding-inline:16px;
+    padding-block:0 48px;
+  }
+  h1,h2,h3{
+    font-family:"Big Shoulders Display","Arial Narrow",sans-serif;
+    letter-spacing:.01em;
+    text-wrap:balance;
+    margin:0;
+    color:var(--ink);
+  }
+  .mono{ font-family:"IBM Plex Mono",ui-monospace,monospace; }
+  a{ color:var(--focus); }
+  button{ font-family:inherit; }
+  :focus-visible{ outline:2px solid var(--focus); outline-offset:2px; }
+
+  /* ---------- sticky top bar ---------- */
+  .topbar{
+    position:sticky;
+    top:env(safe-area-inset-top,0px);
+    z-index:20;
+    background:color-mix(in srgb, var(--bg) 88%, transparent);
+    backdrop-filter:blur(8px);
+    border-bottom:1px solid var(--border);
+  }
+  .topbar-inner{
+    max-width:880px;
+    margin:0 auto;
+    padding:10px 16px;
+    display:flex;
+    flex-direction:column;
+    gap:8px;
+  }
+  .topbar-row{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:12px;
+  }
+  .brand{
+    font-family:"Big Shoulders Display",sans-serif;
+    font-weight:800;
+    font-size:20px;
+    letter-spacing:.02em;
+    white-space:nowrap;
+    background:linear-gradient(90deg, var(--p-start), var(--p-intake) 35%, var(--p-feedback) 65%, var(--p-pitch));
+    -webkit-background-clip:text;
+    background-clip:text;
+    color:var(--ink);
+    -webkit-text-fill-color:transparent;
+  }
+  .progress-shell{
+    flex:1;
+    display:flex;
+    align-items:center;
+    gap:10px;
+    min-width:0;
+  }
+  .progress-track{
+    flex:1;
+    height:10px;
+    border-radius:999px;
+    background:var(--surface-2);
+    border:1px solid var(--border);
+    overflow:hidden;
+  }
+  .progress-fill{
+    height:100%;
+    background:linear-gradient(90deg, var(--p-start), var(--p-intake), var(--p-concept), var(--p-build), var(--p-feedback), var(--p-pitch), var(--p-final));
+    width:0%;
+    transition:width .3s ease;
+    box-shadow:0 0 10px color-mix(in srgb, var(--p-build) 55%, transparent);
+  }
+  .progress-pct{
+    font-family:"IBM Plex Mono",monospace;
+    font-weight:600;
+    font-size:13px;
+    font-variant-numeric:tabular-nums;
+    min-width:38px;
+    text-align:right;
+  }
+  .reset-btn{
+    border:1px solid var(--border);
+    background:var(--surface);
+    color:var(--ink-soft);
+    font-size:12px;
+    font-weight:600;
+    padding:6px 10px;
+    border-radius:8px;
+    cursor:pointer;
+    white-space:nowrap;
+  }
+  .reset-btn:hover{ border-color:var(--accent); color:var(--accent); }
+  .reset-btn.confirm{ background:var(--accent); color:var(--accent-ink); border-color:var(--accent); }
+  .navpills{
+    display:flex;
+    flex-wrap:wrap;
+    gap:6px;
+  }
+  .navpill{
+    font-family:"IBM Plex Mono",monospace;
+    font-size:11px;
+    font-weight:600;
+    text-decoration:none;
+    color:var(--ink-soft);
+    background:var(--surface);
+    border:1px solid var(--border);
+    border-radius:999px;
+    padding:4px 9px;
+    display:inline-flex;
+    align-items:center;
+    gap:5px;
+    white-space:nowrap;
+  }
+  .navpill{
+    border-color:color-mix(in srgb, var(--phase-color, var(--border)) 45%, var(--border));
+    color:var(--phase-color, var(--ink-soft));
+    background:color-mix(in srgb, var(--phase-color, var(--surface)) 10%, var(--surface));
+  }
+  .navpill b{ color:inherit; font-weight:700; }
+  .navpill.complete{ border-color:var(--done); color:var(--done); background:var(--done-soft); }
+
+  /* ---------- hero / intro ---------- */
+  .hero{ position:relative; padding-block:28px 20px; }
+  .hero::before{
+    content:"";
+    position:absolute;
+    inset:-32px -16px auto -16px;
+    height:240px;
+    background:
+      radial-gradient(circle at 12% 25%, color-mix(in srgb, var(--p-start) 40%, transparent), transparent 60%),
+      radial-gradient(circle at 88% 15%, color-mix(in srgb, var(--p-feedback) 38%, transparent), transparent 58%),
+      radial-gradient(circle at 55% 90%, color-mix(in srgb, var(--p-pitch) 32%, transparent), transparent 60%);
+    filter:blur(26px);
+    z-index:-1;
+    pointer-events:none;
+  }
+  .eyebrow{
+    font-family:"IBM Plex Mono",monospace;
+    font-size:12px;
+    font-weight:600;
+    letter-spacing:.08em;
+    text-transform:uppercase;
+    color:var(--accent);
+    margin-bottom:8px;
+  }
+  .hero h1{ font-size:clamp(30px,6vw,44px); font-weight:800; }
+  .hero p.lead{
+    color:var(--ink-soft);
+    max-width:62ch;
+    margin-top:10px;
+    font-size:15px;
+  }
+  .note{
+    margin-top:16px;
+    display:flex;
+    gap:10px;
+    align-items:flex-start;
+    background:var(--surface-2);
+    border:1px solid var(--border);
+    border-left:4px solid var(--p-start);
+    border-radius:10px;
+    padding:10px 12px;
+    font-size:13px;
+    color:var(--ink-soft);
+  }
+  .note svg{ flex:none; margin-top:2px; }
+  .savebar{
+    margin-top:10px;
+    font-family:"IBM Plex Mono",monospace;
+    font-size:11px;
+    color:var(--ink-faint);
+  }
+
+  details.ref{
+    margin-top:16px;
+    border:1px solid var(--border);
+    border-radius:10px;
+    background:var(--surface);
+    overflow:hidden;
+  }
+  details.ref summary{
+    cursor:pointer;
+    list-style:none;
+    padding:12px 14px;
+    font-weight:600;
+    font-size:14px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+  }
+  details.ref summary::-webkit-details-marker{ display:none; }
+  details.ref summary::after{
+    content:"+";
+    font-family:"IBM Plex Mono",monospace;
+    color:var(--ink-faint);
+    font-size:16px;
+  }
+  details.ref[open] summary::after{ content:"–"; }
+  details.ref .ref-body{ padding:0 14px 14px; color:var(--ink-soft); font-size:14px; }
+  details.ref .ref-body ol,details.ref .ref-body ul{ margin:6px 0; padding-left:20px; }
+  details.ref .ref-body li{ margin-bottom:4px; }
+
+  /* ---------- sections ---------- */
+  section.phase{ margin-top:28px; scroll-margin-top:96px; }
+  .phase-head{
+    display:flex;
+    align-items:baseline;
+    justify-content:space-between;
+    gap:10px;
+    flex-wrap:wrap;
+    border-bottom:3px solid var(--phase-color, var(--ink));
+    padding-bottom:8px;
+    margin-bottom:16px;
+  }
+  .phase-head .titles{ display:flex; align-items:baseline; gap:10px; flex-wrap:wrap; }
+  .phase-num{
+    font-family:"Big Shoulders Display",sans-serif;
+    font-weight:800;
+    font-size:34px;
+    color:var(--phase-color, var(--accent));
+    line-height:1;
+  }
+  .phase-head h2{ font-size:24px; font-weight:700; }
+  .phase-time{
+    font-family:"IBM Plex Mono",monospace;
+    font-size:12px;
+    font-weight:600;
+    color:var(--phase-color, var(--ink-faint));
+  }
+  .phase-chip{
+    font-family:"IBM Plex Mono",monospace;
+    font-size:12px;
+    font-weight:700;
+    background:color-mix(in srgb, var(--phase-color, var(--surface-2)) 16%, var(--surface-2));
+    border:1px solid color-mix(in srgb, var(--phase-color, var(--border)) 50%, var(--border));
+    border-radius:999px;
+    padding:4px 10px;
+    color:var(--phase-color, var(--ink-soft));
+  }
+  .phase-chip.complete{ background:var(--done-soft); color:var(--done); border-color:transparent; }
+
+  .card{
+    background:var(--surface);
+    border:1px solid var(--border);
+    border-radius:14px;
+    padding:16px;
+    transition:box-shadow .15s ease, border-color .15s ease;
+  }
+  .card:hover{
+    border-color:color-mix(in srgb, var(--phase-color, var(--border)) 35%, var(--border));
+    box-shadow:0 6px 20px -8px color-mix(in srgb, var(--phase-color, var(--ink)) 25%, transparent);
+  }
+  .card + .card{ margin-top:14px; }
+  .card h3{
+    font-size:13px;
+    font-weight:700;
+    font-family:"IBM Plex Mono",monospace;
+    letter-spacing:.04em;
+    text-transform:uppercase;
+    color:var(--ink-faint);
+    margin-bottom:12px;
+    display:flex;
+    align-items:center;
+    gap:7px;
+  }
+  .card h3::before{
+    content:"";
+    width:8px;
+    height:8px;
+    border-radius:50%;
+    background:var(--phase-color, var(--accent));
+    flex:none;
+  }
+
+  .checklist{ display:flex; flex-direction:column; gap:2px; }
+  .item{
+    display:flex;
+    align-items:flex-start;
+    gap:10px;
+    padding:8px 6px;
+    border-radius:8px;
+  }
+  .item:hover{ background:var(--surface-2); }
+  .item input[type="checkbox"]{
+    appearance:none;
+    -webkit-appearance:none;
+    width:20px;
+    height:20px;
+    flex:none;
+    margin-top:1px;
+    border:1.5px solid var(--border);
+    border-radius:5px;
+    background:var(--surface);
+    cursor:pointer;
+    display:grid;
+    place-content:center;
+  }
+  .item input[type="checkbox"]::before{
+    content:"";
+    width:11px;
+    height:11px;
+    transform:scale(0);
+    transition:transform .12s ease;
+    box-shadow:inset 1em 1em var(--accent-ink);
+    clip-path:polygon(14% 44%, 0 65%, 50% 100%, 100% 16%, 80% 0%, 45% 63%);
+  }
+  .item input[type="checkbox"]:checked{ background:var(--phase-color, var(--done)); border-color:var(--phase-color, var(--done)); }
+  .item input[type="checkbox"]:checked::before{ transform:scale(1); }
+  .item label{ font-size:14.5px; cursor:pointer; }
+  .item:has(input:checked) label{ color:var(--ink-faint); text-decoration:line-through; }
+
+  .field{ margin-bottom:12px; }
+  .field:last-child{ margin-bottom:0; }
+  .field label{
+    display:block;
+    font-size:12.5px;
+    font-weight:600;
+    color:var(--ink-soft);
+    margin-bottom:5px;
+  }
+  .field input[type="text"],
+  .field textarea{
+    width:100%;
+    background:var(--surface-2);
+    border:1px solid var(--border);
+    border-radius:8px;
+    padding:9px 10px;
+    font-family:inherit;
+    font-size:14px;
+    color:var(--ink);
+    resize:vertical;
+  }
+  .field textarea{ min-height:64px; }
+  .field input[type="text"]:focus, .field textarea:focus{ background:var(--surface); }
+  .grid2{ display:grid; grid-template-columns:1fr 1fr; gap:12px 16px; }
+  @media (max-width:600px){ .grid2{ grid-template-columns:1fr; } }
+
+  .case-grid{ display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+  @media (max-width:600px){ .case-grid{ grid-template-columns:1fr; } }
+  .case-card{
+    border:1.5px solid var(--border);
+    border-left:4px solid var(--case-color, var(--border));
+    border-radius:10px;
+    padding:11px 12px;
+    cursor:pointer;
+    display:flex;
+    gap:9px;
+    align-items:flex-start;
+    transition:background .12s ease, border-color .12s ease;
+  }
+  .case-card:hover{ border-color:var(--case-color, var(--accent)); border-left-color:var(--case-color, var(--accent)); }
+  .case-card input{ margin-top:3px; accent-color:var(--case-color, var(--accent)); flex:none; }
+  .case-card .case-name{ font-weight:700; font-size:14px; color:var(--case-color, var(--ink)); }
+  .case-card .case-desc{ font-size:12.5px; color:var(--ink-soft); margin-top:2px; }
+  .case-card .case-desc p{ margin:0 0 5px; }
+  .case-card .case-desc p:last-child{ margin-bottom:0; }
+  .case-card .case-desc strong{ color:var(--ink); font-weight:600; }
+  .case-card:has(input:checked){
+    border-color:var(--case-color, var(--accent));
+    background:color-mix(in srgb, var(--case-color, var(--accent)) 14%, var(--surface));
+  }
+
+  .team-row{ display:grid; grid-template-columns:1.4fr 1fr; gap:10px; margin-bottom:8px; }
+  @media (max-width:600px){ .team-row{ grid-template-columns:1fr; } }
+
+  .prompt-block{
+    background:var(--surface-2);
+    border:1px solid var(--border);
+    border-left:3px solid var(--p-build);
+    border-radius:10px;
+    padding:12px;
+    margin-bottom:10px;
+  }
+  .prompt-block:last-child{ margin-bottom:0; }
+  .prompt-block .p-label{ font-size:12px; font-weight:600; color:var(--ink-soft); margin-bottom:6px; }
+  .prompt-block .p-text{
+    font-family:"IBM Plex Mono",monospace;
+    font-size:12.5px;
+    color:var(--ink);
+    background:var(--surface);
+    border:1px solid var(--border);
+    border-radius:7px;
+    padding:9px 10px;
+    white-space:pre-wrap;
+    margin-bottom:8px;
+  }
+  .copy-btn{
+    font-size:12px;
+    font-weight:600;
+    border:1px solid var(--border);
+    background:var(--surface);
+    color:var(--ink);
+    border-radius:7px;
+    padding:5px 10px;
+    cursor:pointer;
+  }
+  .copy-btn:hover{ border-color:var(--p-build); color:var(--p-build); }
+  .copy-btn.copied{ border-color:var(--done); color:var(--done); }
+
+  .banner-done{
+    margin-top:24px;
+    background:linear-gradient(120deg, color-mix(in srgb, var(--p-start) 16%, var(--surface)), color-mix(in srgb, var(--p-feedback) 16%, var(--surface)));
+    border:1px solid var(--done);
+    color:var(--done);
+    border-radius:12px;
+    padding:14px 16px;
+    font-weight:700;
+    font-size:14.5px;
+    display:none;
+  }
+  .banner-done.show{ display:block; }
+
+  footer.foot{
+    margin-top:40px;
+    padding-top:16px;
+    border-top:1px solid var(--border);
+    color:var(--ink-faint);
+    font-size:12px;
+  }
+</style>
+</head>
+<body>
+
+
+<div class="topbar">
+  <div class="topbar-inner">
+    <div class="topbar-row">
+      <div class="brand">Van Klant <span>Tot</span> Site</div>
+      <div class="progress-shell">
+        <div class="progress-track"><div class="progress-fill" id="overallFill"></div></div>
+        <div class="progress-pct mono" id="overallPct">0%</div>
+      </div>
+      <button class="reset-btn" id="resetBtn" type="button">Alles wissen</button>
+    </div>
+    <div class="navpills" id="navPills"></div>
+  </div>
+</div>
+
+<div class="wrap">
+
+  <section class="hero">
+    <div class="eyebrow">Workshop · klantgesprek → ontwerp → bouwen</div>
+    <h1>Van klantgesprek naar live website</h1>
+    <p class="lead">Werk hier per fase het project af: intake bij de klant, concept &amp; structuur, bouwen met Canva AI, feedback verwerken en opleveren. Vink af wat af is en vul de formulieren onderweg in.</p>
+
+    <details class="ref" id="leerdoelenDetails">
+      <summary>Leerdoelen van deze workshop</summary>
+      <div class="ref-body">
+        <p>Aan het eind van deze workshop kun je:</p>
+        <ol>
+          <li>Een klantvraag uitvragen en vertalen naar concrete eisen</li>
+          <li>Een sitemap en contentstructuur opstellen vanuit doelgroep en doel</li>
+          <li>Canva AI doelgericht inzetten (Magic Design, Magic Write, Magic Media, Brand Kit)</li>
+          <li>Klantfeedback verwerken tot concrete aanpassingen</li>
+          <li>Je ontwerpproces en keuzes onderbouwd presenteren</li>
+          <li>Reflecteren op de rol van AI in een klantgericht ontwerpproces</li>
+        </ol>
+      </div>
+    </details>
+
+    <div class="note">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 9h18M8 4v5"/></svg>
+      <div>Je voortgang wordt automatisch opgeslagen in deze browser, op dit apparaat. Werkt je groepje op meerdere laptops, gebruik dan steeds dezelfde om alles bij te houden — de gegevens worden niet gedeeld tussen apparaten of met de klas.</div>
+    </div>
+    <div class="savebar" id="saveBar">nog niets opgeslagen</div>
+  </section>
+
+  <!-- FASE 0 -->
+  <section class="phase" id="fase0">
+    <div class="phase-head">
+      <div class="titles">
+        <span class="phase-num">0</span>
+        <h2>Opstart</h2>
+      </div>
+      <span class="phase-chip" data-chip="f0">0/3</span>
+    </div>
+
+    <div class="card">
+      <h3>Team</h3>
+      <div class="field">
+        <label for="teamName">Groepsnaam</label>
+        <input type="text" id="teamName" placeholder="bijv. Groep 4">
+      </div>
+      <div class="team-row" style="font-size:12px;font-weight:600;color:var(--ink-faint);margin-bottom:2px;">
+        <div>Naam</div><div>Rol (interview / notulist / bouwer / design)</div>
+      </div>
+      <div class="team-row"><input type="text" class="field-plain" id="m1n" placeholder="Naam lid 1"><input type="text" class="field-plain" id="m1r" placeholder="Rol"></div>
+      <div class="team-row"><input type="text" class="field-plain" id="m2n" placeholder="Naam lid 2"><input type="text" class="field-plain" id="m2r" placeholder="Rol"></div>
+      <div class="team-row"><input type="text" class="field-plain" id="m3n" placeholder="Naam lid 3 (optioneel)"><input type="text" class="field-plain" id="m3r" placeholder="Rol"></div>
+      <div class="team-row"><input type="text" class="field-plain" id="m4n" placeholder="Naam lid 4 (optioneel)"><input type="text" class="field-plain" id="m4r" placeholder="Rol"></div>
+    </div>
+
+    <div class="card">
+      <h3>Klantcase</h3>
+      <div class="case-grid">
+        <label class="case-card" style="--case-color:#2F7BF6;"><input type="radio" name="caseChoice" value="A" id="caseA">
+          <div><div class="case-name">A — Sneaker Spot</div><div class="case-desc">
+            <p>Gestart door twee vrienden die hun eigen sneakercollectie omzetten in een winkel in de stad, inmiddels een vaste plek voor de laatste drops.</p>
+            <p><strong>Doelgroep:</strong> 16-25 jaar, geeft om trends en snelheid.</p>
+            <p><strong>Uitdaging:</strong> twijfelt nog tussen "druk en energiek" of "strak en premium", en wil online een kijkje geven in de nieuwste drops.</p>
+          </div></div>
+        </label>
+        <label class="case-card" style="--case-color:#0EA5A6;"><input type="radio" name="caseChoice" value="B" id="caseB">
+          <div><div class="case-name">B — FysioActief</div><div class="case-desc">
+            <p>Buurtpraktijk die net een tweede fysiotherapeut heeft aangenomen en daardoor meer nieuwe patiënten wil aantrekken.</p>
+            <p><strong>Doelgroep:</strong> breed — van sporters met een blessure tot oudere patiënten met klachten.</p>
+            <p><strong>Uitdaging:</strong> wil vertrouwen en rust uitstralen, duidelijke info geven over behandelingen en het makkelijk maken om zelf een afspraak te plannen.</p>
+          </div></div>
+        </label>
+        <label class="case-card" style="--case-color:#8B5CF6;"><input type="radio" name="caseChoice" value="C" id="caseC">
+          <div><div class="case-name">C — Escape Room "De Kluis"</div><div class="case-desc">
+            <p>Nieuw escape room-concept in een oud bankgebouw, gebouwd rond het verhaal van een mislukte overval.</p>
+            <p><strong>Doelgroep:</strong> vriendengroepen en bedrijfsuitjes, 18-40 jaar.</p>
+            <p><strong>Uitdaging:</strong> heeft nu alleen een Instagram-pagina en wil spanning en mysterie overbrengen op de site, vooral gericht op meer online boekingen.</p>
+          </div></div>
+        </label>
+        <label class="case-card" style="--case-color:#22C55E;"><input type="radio" name="caseChoice" value="D" id="caseD">
+          <div><div class="case-name">D — GroenBroodje</div><div class="case-desc">
+            <p>Duurzame broodjeszaak die begon als foodtruck en nu ook een vaste plek overweegt.</p>
+            <p><strong>Doelgroep:</strong> lokale ondernemers en studenten die snel en gezond willen lunchen.</p>
+            <p><strong>Uitdaging:</strong> vindt duurzaamheid belangrijk, maar wil beslist niet "prekerig" overkomen — moet laagdrempelig en vrolijk blijven.</p>
+          </div></div>
+        </label>
+        <label class="case-card" style="grid-column:1/-1; --case-color:#FB6B45;"><input type="radio" name="caseChoice" value="eigen" id="caseEigen">
+          <div><div class="case-name">Eigen klant</div><div class="case-desc">Geen van bovenstaande past — overleg met je docent en beschrijf de klant hieronder.</div></div>
+        </label>
+      </div>
+      <div class="field" style="margin-top:10px;">
+        <label for="caseCustom">Omschrijving eigen klant (indien van toepassing)</label>
+        <textarea id="caseCustom" placeholder="Wie is de klant, wat doen ze, wat willen ze met de site?"></textarea>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>Checklist</h3>
+      <div class="checklist">
+        <div class="item"><input type="checkbox" id="f0_1"><label for="f0_1">Groepje gevormd (2-4 personen)</label></div>
+        <div class="item"><input type="checkbox" id="f0_2"><label for="f0_2">Klantcase ontvangen of gekozen</label></div>
+        <div class="item"><input type="checkbox" id="f0_3"><label for="f0_3">Rollen verdeeld (bijv. wie interviewt, wie noteert, wie bouwt in Canva)</label></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FASE 1 -->
+  <section class="phase" id="fase1">
+    <div class="phase-head">
+      <div class="titles">
+        <span class="phase-num">1</span>
+        <h2>Klantgesprek &amp; intake</h2>
+        <span class="phase-time mono">00:15–00:45</span>
+      </div>
+      <span class="phase-chip" data-chip="f1">0/8</span>
+    </div>
+
+    <div class="card">
+      <h3>Checklist</h3>
+      <div class="checklist">
+        <div class="item"><input type="checkbox" id="f1_1"><label for="f1_1">Klant geïnterviewd met open vragen, niet alleen ja/nee-vragen</label></div>
+        <div class="item"><input type="checkbox" id="f1_2"><label for="f1_2">Doel van de website vastgesteld</label></div>
+        <div class="item"><input type="checkbox" id="f1_3"><label for="f1_3">Doelgroep in kaart gebracht</label></div>
+        <div class="item"><input type="checkbox" id="f1_4"><label for="f1_4">Gewenste pagina's genoteerd</label></div>
+        <div class="item"><input type="checkbox" id="f1_5"><label for="f1_5">Sfeer/uitstraling in 3 kernwoorden genoteerd</label></div>
+        <div class="item"><input type="checkbox" id="f1_6"><label for="f1_6">Voorbeeldsites gevraagd die de klant mooi vindt</label></div>
+        <div class="item"><input type="checkbox" id="f1_7"><label for="f1_7">Must-haves en no-go's genoteerd</label></div>
+        <div class="item"><input type="checkbox" id="f1_8"><label for="f1_8">Intakeformulier volledig ingevuld</label></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>Intakeformulier</h3>
+      <div class="grid2">
+        <div class="field"><label for="bedrijfsnaam">Bedrijfsnaam</label><input type="text" id="bedrijfsnaam"></div>
+        <div class="field"><label for="sector">Sector/branche</label><input type="text" id="sector"></div>
+      </div>
+      <div class="field"><label for="doel">Wat is het doel van de website? (bijv. verkopen, informeren, boekingen, contact)</label><textarea id="doel"></textarea></div>
+      <div class="field"><label for="doelgroep">Wie is de doelgroep? (leeftijd, interesses, wat zoeken ze)</label><textarea id="doelgroep"></textarea></div>
+      <div class="field"><label for="paginas">Welke pagina's moet de site minimaal hebben?</label><textarea id="paginas"></textarea></div>
+      <div class="field"><label for="sfeer">Gewenste sfeer/uitstraling (3 kernwoorden)</label><input type="text" id="sfeer" placeholder="bijv. fris, direct, betrouwbaar"></div>
+      <div class="field"><label for="voorbeeldsites">Zijn er voorbeeldsites die de klant mooi vindt? Welke, en waarom?</label><textarea id="voorbeeldsites"></textarea></div>
+      <div class="grid2">
+        <div class="field"><label for="musthaves">Must-haves (wat moet er absoluut in staan?)</label><textarea id="musthaves"></textarea></div>
+        <div class="field"><label for="nogos">No-go's (wat wil de klant zeker niet?)</label><textarea id="nogos"></textarea></div>
+      </div>
+      <div class="field"><label for="huisstijl">Heeft de klant al een logo/huisstijl, of moet dit ontstaan uit Canva?</label><textarea id="huisstijl"></textarea></div>
+      <div class="field"><label for="overig">Overige opmerkingen</label><textarea id="overig"></textarea></div>
+    </div>
+  </section>
+
+  <!-- FASE 2 -->
+  <section class="phase" id="fase2">
+    <div class="phase-head">
+      <div class="titles">
+        <span class="phase-num">2</span>
+        <h2>Concept &amp; structuur</h2>
+        <span class="phase-time mono">00:45–01:05</span>
+      </div>
+      <span class="phase-chip" data-chip="f2">0/4</span>
+    </div>
+
+    <div class="card">
+      <h3>Checklist</h3>
+      <div class="checklist">
+        <div class="item"><input type="checkbox" id="f2_1"><label for="f2_1">Doelgroep-persona geschreven (3 zinnen)</label></div>
+        <div class="item"><input type="checkbox" id="f2_2"><label for="f2_2">Sitemap opgesteld (welke pagina's, welke navigatie)</label></div>
+        <div class="item"><input type="checkbox" id="f2_3"><label for="f2_3">Mini-wireframe van de homepage geschetst</label></div>
+        <div class="item"><input type="checkbox" id="f2_4"><label for="f2_4">Moodboard-richting bepaald: kleuren, sfeer, 2-3 referentiesites</label></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>Persona &amp; sitemap</h3>
+      <div class="field"><label for="persona">Doelgroep-persona (3 zinnen)</label><textarea id="persona"></textarea></div>
+      <div class="grid2">
+        <div class="field"><label for="site1">Pagina 1 (navigatievolgorde)</label><input type="text" id="site1"></div>
+        <div class="field"><label for="site2">Pagina 2</label><input type="text" id="site2"></div>
+        <div class="field"><label for="site3">Pagina 3</label><input type="text" id="site3"></div>
+        <div class="field"><label for="site4">Pagina 4</label><input type="text" id="site4"></div>
+      </div>
+      <div class="field"><label for="wireframe">Mini-wireframe homepage — wat staat er van boven naar beneden op de pagina? (bijv. header met logo en menu, hero met tekst + knop, sectie diensten, testimonials, contact/footer)</label><textarea id="wireframe"></textarea></div>
+    </div>
+
+    <div class="card">
+      <h3>Moodboard-richting</h3>
+      <div class="grid2">
+        <div class="field"><label for="moodKleuren">Kleuren</label><input type="text" id="moodKleuren"></div>
+        <div class="field"><label for="moodLettertype">Lettertype-sfeer</label><input type="text" id="moodLettertype"></div>
+      </div>
+      <div class="field"><label for="moodRef">2-3 referentiesites en waarom</label><textarea id="moodRef"></textarea></div>
+    </div>
+  </section>
+
+  <!-- FASE 3 -->
+  <section class="phase" id="fase3">
+    <div class="phase-head">
+      <div class="titles">
+        <span class="phase-num">3</span>
+        <h2>Bouwen met Canva AI</h2>
+        <span class="phase-time mono">01:15–02:05</span>
+      </div>
+      <span class="phase-chip" data-chip="f3">0/8</span>
+    </div>
+
+    <div class="card">
+      <h3>Checklist</h3>
+      <div class="checklist">
+        <div class="item"><input type="checkbox" id="f3_1"><label for="f3_1">Brand Kit ingesteld: kleuren, lettertype, naam/logo</label></div>
+        <div class="item"><input type="checkbox" id="f3_2"><label for="f3_2">Website-opzet gestart met Magic Design</label></div>
+        <div class="item"><input type="checkbox" id="f3_3"><label for="f3_3">Homepage-tekst geschreven en gecheckt met Magic Write</label></div>
+        <div class="item"><input type="checkbox" id="f3_4"><label for="f3_4">Minimaal 1 subpagina met tekst afgerond</label></div>
+        <div class="item"><input type="checkbox" id="f3_5"><label for="f3_5">Beeld toegevoegd met Magic Media, passend bij huisstijl</label></div>
+        <div class="item"><input type="checkbox" id="f3_6"><label for="f3_6">Duidelijke call-to-action toegevoegd (bijv. contactknop)</label></div>
+        <div class="item"><input type="checkbox" id="f3_7"><label for="f3_7">Consistentie gecheckt: kloppen kleuren, fonts en toon overal?</label></div>
+        <div class="item"><input type="checkbox" id="f3_8"><label for="f3_8">Site bekeken in preview</label></div>
+      </div>
+    </div>
+
+    <details class="ref" open>
+      <summary>Prompt-cheatsheet (Canva AI)</summary>
+      <div class="ref-body">
+        <div class="field"><label for="dienst">Dienst/product voor de prompt hieronder</label><input type="text" id="dienst" placeholder="bijv. hardloopschoenen, behandeling, escape room, lunchbroodjes"></div>
+
+        <div class="prompt-block">
+          <div class="p-label">Magic Write — homepage-intro</div>
+          <div class="p-text" data-tpl="homepage">Schrijf een korte, wervende introductietekst voor de homepage van {bedrijf}, gericht op {doelgroep}, toon: {sfeer}</div>
+          <button class="copy-btn" data-copy="homepage" type="button">Kopieer</button>
+        </div>
+        <div class="prompt-block">
+          <div class="p-label">Magic Write — over ons</div>
+          <div class="p-text" data-tpl="overons">Schrijf een over-ons tekst voor {bedrijf} die het verhaal en de missie benadrukt, maximaal 80 woorden</div>
+          <button class="copy-btn" data-copy="overons" type="button">Kopieer</button>
+        </div>
+        <div class="prompt-block">
+          <div class="p-label">Magic Write — dienst/product</div>
+          <div class="p-text" data-tpl="dienst">Beschrijf {dienst} van {bedrijf} in 2-3 zinnen, gericht op {doelgroep}</div>
+          <button class="copy-btn" data-copy="dienst" type="button">Kopieer</button>
+        </div>
+        <div class="prompt-block">
+          <div class="p-label">Magic Write — call-to-action</div>
+          <div class="p-text" data-tpl="cta">Schrijf 3 korte, krachtige CTA-teksten voor de contactknop van {bedrijf}</div>
+          <button class="copy-btn" data-copy="cta" type="button">Kopieer</button>
+        </div>
+        <div class="prompt-block">
+          <div class="p-label">Magic Media — hero-afbeelding</div>
+          <div class="p-text" data-tpl="hero">{sfeer}, {dienst} passend bij de branche van {bedrijf}, kleuren uit de Brand Kit ({moodKleuren}), geen tekst in beeld</div>
+          <button class="copy-btn" data-copy="hero" type="button">Kopieer</button>
+        </div>
+
+        <p style="margin-top:10px;font-weight:600;font-size:13px;">Checkvragen bij elke AI-output:</p>
+        <ul>
+          <li>Klopt de toon met wat de klant wilde?</li>
+          <li>Klopt het beeld/de tekst met de branche en doelgroep?</li>
+          <li>Is het geen algemeen cliché dat bij elk bedrijf zou passen?</li>
+        </ul>
+      </div>
+    </details>
+  </section>
+
+  <!-- FASE 4 -->
+  <section class="phase" id="fase4">
+    <div class="phase-head">
+      <div class="titles">
+        <span class="phase-num">4</span>
+        <h2>Klantfeedback-ronde</h2>
+        <span class="phase-time mono">02:05–02:25</span>
+      </div>
+      <span class="phase-chip" data-chip="f4">0/4</span>
+    </div>
+
+    <div class="card">
+      <h3>Checklist</h3>
+      <div class="checklist">
+        <div class="item"><input type="checkbox" id="f4_1"><label for="f4_1">Site laten zien aan de "klant"</label></div>
+        <div class="item"><input type="checkbox" id="f4_2"><label for="f4_2">Feedbackformulier samen ingevuld</label></div>
+        <div class="item"><input type="checkbox" id="f4_3"><label for="f4_3">Minimaal 2 actiepunten genoteerd</label></div>
+        <div class="item"><input type="checkbox" id="f4_4"><label for="f4_4">Minimaal 2 aanpassingen daadwerkelijk doorgevoerd in Canva</label></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>Klantfeedback-formulier</h3>
+      <div class="field"><label for="fbAansluit">Sluit de site aan bij wat er in de intake is gevraagd? (ja / deels / nee, waarom)</label><textarea id="fbAansluit"></textarea></div>
+      <div class="field"><label for="fbSpreekt">Wat spreekt het meest aan?</label><textarea id="fbSpreekt"></textarea></div>
+      <div class="field"><label for="fbMist">Wat mist er nog, of wat klopt niet?</label><textarea id="fbMist"></textarea></div>
+      <div class="grid2">
+        <div class="field"><label for="fbToon">Is de tekst/toon passend voor het bedrijf?</label><textarea id="fbToon"></textarea></div>
+        <div class="field"><label for="fbCta">Is het duidelijk wat een bezoeker moet doen (CTA)?</label><textarea id="fbCta"></textarea></div>
+      </div>
+      <div class="grid2">
+        <div class="field"><label for="actie1">Actiepunt 1 (direct te verwerken)</label><input type="text" id="actie1"></div>
+        <div class="field"><label for="actie2">Actiepunt 2 (direct te verwerken)</label><input type="text" id="actie2"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FASE 5 -->
+  <section class="phase" id="fase5">
+    <div class="phase-head">
+      <div class="titles">
+        <span class="phase-num">5</span>
+        <h2>Oplevering &amp; pitch</h2>
+        <span class="phase-time mono">02:25–02:50</span>
+      </div>
+      <span class="phase-chip" data-chip="f5">0/8</span>
+    </div>
+
+    <div class="card">
+      <h3>Checklist</h3>
+      <div class="checklist">
+        <div class="item"><input type="checkbox" id="f5_1"><label for="f5_1">Pitch voorbereid: klant, keuzes, AI-inzet, verwerkte feedback</label></div>
+        <div class="item"><input type="checkbox" id="f5_2"><label for="f5_2">Gepitcht aan de klas/klant (3-4 minuten)</label></div>
+        <div class="item"><input type="checkbox" id="f5_3"><label for="f5_3">Vragen uit de klas beantwoord</label></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>Pitch-voorbereiding (3-4 minuten per groep) — zorg dat je pitch dit bevat</h3>
+      <div class="checklist">
+        <div class="item"><input type="checkbox" id="f5p_1"><label for="f5p_1">Wie is de klant en wat was de kernvraag?</label></div>
+        <div class="item"><input type="checkbox" id="f5p_2"><label for="f5p_2">Welke keuzes maakte je in structuur en design, en waarom (koppel terug naar de intake)?</label></div>
+        <div class="item"><input type="checkbox" id="f5p_3"><label for="f5p_3">Welke Canva AI-tools zette je in, en waar moest je de AI-output aanpassen of afkeuren?</label></div>
+        <div class="item"><input type="checkbox" id="f5p_4"><label for="f5p_4">Welke feedback kreeg je, en wat heb je daarmee gedaan?</label></div>
+        <div class="item"><input type="checkbox" id="f5p_5"><label for="f5p_5">Laat de site kort zien (homepage + subpagina)</label></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- EINDCHECK -->
+  <section class="phase" id="eindcheck">
+    <div class="phase-head">
+      <div class="titles">
+        <h2>Eindcheck — klaar voor beoordeling?</h2>
+      </div>
+      <span class="phase-chip" data-chip="fe">0/5</span>
+    </div>
+    <div class="card">
+      <div class="checklist">
+        <div class="item"><input type="checkbox" id="fe_1"><label for="fe_1">Homepage af</label></div>
+        <div class="item"><input type="checkbox" id="fe_2"><label for="fe_2">Minimaal 3 subpagina's af</label></div>
+        <div class="item"><input type="checkbox" id="fe_3"><label for="fe_3">Brand Kit consistent toegepast op de hele site</label></div>
+        <div class="item"><input type="checkbox" id="fe_4"><label for="fe_4">Klantfeedback zichtbaar verwerkt</label></div>
+        <div class="item"><input type="checkbox" id="fe_5"><label for="fe_5">Pitch gehouden</label></div>
+      </div>
+    </div>
+  </section>
+
+  <div class="banner-done" id="doneBanner">Alles afgevinkt — klaar voor beoordeling. Goed gedaan!</div>
+
+  <footer class="foot">Werkschema klantgesprek → ontwerp → bouw · voortgang staat lokaal opgeslagen in deze browser.</footer>
+</div>
+
+<script>
+(function(){
+  "use strict";
+  var STORAGE_KEY = "vkts-werkplan-v1";
+
+  var CHECK_IDS = {
+    f0: ["f0_1","f0_2","f0_3"],
+    f1: ["f1_1","f1_2","f1_3","f1_4","f1_5","f1_6","f1_7","f1_8"],
+    f2: ["f2_1","f2_2","f2_3","f2_4"],
+    f3: ["f3_1","f3_2","f3_3","f3_4","f3_5","f3_6","f3_7","f3_8"],
+    f4: ["f4_1","f4_2","f4_3","f4_4"],
+    f5: ["f5_1","f5_2","f5_3","f5p_1","f5p_2","f5p_3","f5p_4","f5p_5"],
+    fe: ["fe_1","fe_2","fe_3","fe_4","fe_5"]
+  };
+  var ALL_CHECK_IDS = [].concat(CHECK_IDS.f0, CHECK_IDS.f1, CHECK_IDS.f2, CHECK_IDS.f3, CHECK_IDS.f4, CHECK_IDS.f5, CHECK_IDS.fe);
+
+  var TEXT_IDS = [
+    "teamName","m1n","m1r","m2n","m2r","m3n","m3r","m4n","m4r","caseCustom",
+    "bedrijfsnaam","sector","doel","doelgroep","paginas","sfeer","voorbeeldsites","musthaves","nogos","huisstijl","overig",
+    "persona","site1","site2","site3","site4","wireframe","moodKleuren","moodLettertype","moodRef",
+    "dienst",
+    "fbAansluit","fbSpreekt","fbMist","fbToon","fbCta","actie1","actie2"
+  ];
+
+  var NAV = [
+    {id:"fase0", label:"Start", chip:"f0"},
+    {id:"fase1", label:"F1 Intake", chip:"f1"},
+    {id:"fase2", label:"F2 Concept", chip:"f2"},
+    {id:"fase3", label:"F3 Bouwen", chip:"f3"},
+    {id:"fase4", label:"F4 Feedback", chip:"f4"},
+    {id:"fase5", label:"F5 Pitch", chip:"f5"},
+    {id:"eindcheck", label:"Eindcheck", chip:"fe"}
+  ];
+
+  var PHASE_COLORS = {
+    f0:"#8B5CF6", f1:"#2F7BF6", f2:"#F5A400", f3:"#EC4899",
+    f4:"#0EA5A6", f5:"#FB6B45", fe:"#22C55E"
+  };
+
+  function loadState(){
+    var fallback = { checks:{}, fields:{}, caseChoice:"", savedAt:null };
+    try{
+      var raw = localStorage.getItem(STORAGE_KEY);
+      if(!raw) return fallback;
+      var parsed = JSON.parse(raw);
+      if(!parsed || typeof parsed !== "object") return fallback;
+      parsed.checks = parsed.checks || {};
+      parsed.fields = parsed.fields || {};
+      parsed.caseChoice = parsed.caseChoice || "";
+      return parsed;
+    }catch(e){
+      return fallback;
+    }
+  }
+
+  function saveState(){
+    try{
+      state.savedAt = new Date().toISOString();
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+    }catch(e){
+      /* storage unavailable (private mode, quota, etc) — keep working in memory */
+    }
+    updateSaveBar();
+  }
+
+  function updateSaveBar(){
+    var bar = document.getElementById("saveBar");
+    if(!bar) return;
+    if(!state.savedAt){ bar.textContent = "nog niets opgeslagen"; return; }
+    try{
+      var d = new Date(state.savedAt);
+      var hh = String(d.getHours()).padStart(2,"0");
+      var mm = String(d.getMinutes()).padStart(2,"0");
+      bar.textContent = "laatst opgeslagen om " + hh + ":" + mm + " (op dit apparaat)";
+    }catch(e){
+      bar.textContent = "opgeslagen op dit apparaat";
+    }
+  }
+
+  var state = (window.claude && window.claude.hot && window.claude.hot.data && Object.keys(window.claude.hot.data).length)
+    ? window.claude.hot.data
+    : loadState();
+
+  function applyStateToDom(){
+    ALL_CHECK_IDS.forEach(function(id){
+      var el = document.getElementById(id);
+      if(el) el.checked = !!state.checks[id];
+    });
+    TEXT_IDS.forEach(function(id){
+      var el = document.getElementById(id);
+      if(el && state.fields[id] !== undefined) el.value = state.fields[id];
+    });
+    if(state.caseChoice){
+      var radio = document.querySelector('input[name="caseChoice"][value="' + state.caseChoice + '"]');
+      if(radio) radio.checked = true;
+    }
+  }
+
+  function countGroup(ids){
+    var done = 0;
+    ids.forEach(function(id){ if(state.checks[id]) done++; });
+    return done;
+  }
+
+  function renderProgress(){
+    var totalDone = 0, totalAll = ALL_CHECK_IDS.length;
+    Object.keys(CHECK_IDS).forEach(function(key){
+      var ids = CHECK_IDS[key];
+      var done = countGroup(ids);
+      totalDone += done;
+      var chip = document.querySelector('[data-chip="' + key + '"]');
+      if(chip){
+        chip.textContent = done + "/" + ids.length;
+        chip.classList.toggle("complete", done === ids.length);
+      }
+      var navChip = document.querySelector('[data-navchip="' + key + '"]');
+      if(navChip){
+        navChip.textContent = done + "/" + ids.length;
+        navChip.parentElement.classList.toggle("complete", done === ids.length);
+      }
+    });
+    var pct = totalAll ? Math.round((totalDone / totalAll) * 100) : 0;
+    var fill = document.getElementById("overallFill");
+    var pctLabel = document.getElementById("overallPct");
+    if(fill) fill.style.width = pct + "%";
+    if(pctLabel) pctLabel.textContent = pct + "%";
+    var banner = document.getElementById("doneBanner");
+    if(banner) banner.classList.toggle("show", pct === 100);
+  }
+
+  function buildNav(){
+    var wrap = document.getElementById("navPills");
+    if(!wrap) return;
+    wrap.innerHTML = "";
+    NAV.forEach(function(n){
+      var a = document.createElement("a");
+      a.className = "navpill";
+      a.href = "#" + n.id;
+      if(PHASE_COLORS[n.chip]) a.style.setProperty("--phase-color", PHASE_COLORS[n.chip]);
+      a.innerHTML = n.label + ' <b data-navchip="' + n.chip + '">0/0</b>';
+      wrap.appendChild(a);
+    });
+  }
+
+  function wireEvents(){
+    ALL_CHECK_IDS.forEach(function(id){
+      var el = document.getElementById(id);
+      if(!el) return;
+      el.addEventListener("change", function(){
+        state.checks[id] = el.checked;
+        saveState();
+        renderProgress();
+      });
+    });
+
+    TEXT_IDS.forEach(function(id){
+      var el = document.getElementById(id);
+      if(!el) return;
+      el.addEventListener("input", function(){
+        state.fields[id] = el.value;
+        saveState();
+      });
+    });
+
+    var caseRadios = document.querySelectorAll('input[name="caseChoice"]');
+    caseRadios.forEach(function(r){
+      r.addEventListener("change", function(){
+        if(r.checked){
+          state.caseChoice = r.value;
+          saveState();
+        }
+      });
+    });
+
+    var resetBtn = document.getElementById("resetBtn");
+    var resetArmed = false;
+    var resetTimer = null;
+    resetBtn.addEventListener("click", function(){
+      if(!resetArmed){
+        resetArmed = true;
+        resetBtn.textContent = "Weet je het zeker?";
+        resetBtn.classList.add("confirm");
+        resetTimer = setTimeout(function(){
+          resetArmed = false;
+          resetBtn.textContent = "Alles wissen";
+          resetBtn.classList.remove("confirm");
+        }, 3500);
+        return;
+      }
+      clearTimeout(resetTimer);
+      resetArmed = false;
+      resetBtn.textContent = "Alles wissen";
+      resetBtn.classList.remove("confirm");
+      state = { checks:{}, fields:{}, caseChoice:"", savedAt:null };
+      try{ localStorage.removeItem(STORAGE_KEY); }catch(e){}
+      document.querySelectorAll('input[type="checkbox"]').forEach(function(el){ el.checked = false; });
+      document.querySelectorAll('input[type="text"], textarea').forEach(function(el){ el.value = ""; });
+      document.querySelectorAll('input[name="caseChoice"]').forEach(function(el){ el.checked = false; });
+      renderProgress();
+      updateSaveBar();
+    });
+
+    document.querySelectorAll(".copy-btn").forEach(function(btn){
+      btn.addEventListener("click", function(){
+        var key = btn.getAttribute("data-copy");
+        var tplEl = document.querySelector('[data-tpl="' + key + '"]');
+        if(!tplEl) return;
+        var text = fillTemplate(tplEl.textContent);
+        copyText(text, btn);
+      });
+    });
+  }
+
+  function fillTemplate(tpl){
+    var bedrijf = (state.fields.bedrijfsnaam || "[bedrijf]").trim() || "[bedrijf]";
+    var doelgroep = (state.fields.doelgroep || "[doelgroep]").trim() || "[doelgroep]";
+    var sfeer = (state.fields.sfeer || "[kernwoorden uit intake]").trim() || "[kernwoorden uit intake]";
+    var dienst = (state.fields.dienst || "[dienst/product]").trim() || "[dienst/product]";
+    var moodKleuren = (state.fields.moodKleuren || "[brand kit kleuren]").trim() || "[brand kit kleuren]";
+    return tpl
+      .replace(/\{bedrijf\}/g, bedrijf)
+      .replace(/\{doelgroep\}/g, doelgroep)
+      .replace(/\{sfeer\}/g, sfeer)
+      .replace(/\{dienst\}/g, dienst)
+      .replace(/\{moodKleuren\}/g, moodKleuren);
+  }
+
+  function copyText(text, btn){
+    var done = function(){
+      var original = "Kopieer";
+      btn.textContent = "Gekopieerd";
+      btn.classList.add("copied");
+      setTimeout(function(){ btn.textContent = original; btn.classList.remove("copied"); }, 1600);
+    };
+    var fail = function(){
+      try{
+        var ta = document.createElement("textarea");
+        ta.value = text;
+        ta.style.position = "fixed";
+        ta.style.opacity = "0";
+        document.body.appendChild(ta);
+        ta.focus();
+        ta.select();
+        document.execCommand("copy");
+        document.body.removeChild(ta);
+        done();
+      }catch(e){
+        btn.textContent = "Selecteer handmatig";
+        setTimeout(function(){ btn.textContent = "Kopieer"; }, 1600);
+      }
+    };
+    if(navigator.clipboard && navigator.clipboard.writeText){
+      navigator.clipboard.writeText(text).then(done).catch(fail);
+    }else{
+      fail();
+    }
+  }
+
+  function start(){
+    buildNav();
+    applyStateToDom();
+    wireEvents();
+    renderProgress();
+    updateSaveBar();
+
+    if(window.claude && window.claude.hot && typeof window.claude.hot.snapshot === "function"){
+      window.claude.hot.snapshot(function(){ return state; });
+    }
+  }
+
+  if(window.claude && window.claude.hot && window.claude.hot.ready){
+    window.claude.hot.ready(start);
+  }else{
+    start();
+  }
+})();
+</script>
+
+</body>
+</html>
