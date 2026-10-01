@@ -27,7 +27,7 @@
       <p>Bekijk verschillende layouts en inspecteer de elementen om te zien hoe Flexbox ze positioneert. De code staat in de CSS van deze pagina.</p>
     </section>
 
-    <div class="section-title"><h2>Richting en ruimte</h2><span>01 — 04</span></div>
+    <div class="section-title"><h2>Richting en ruimte</h2><span>BASIS / ROW</span></div>
     <section class="examples-grid" aria-label="Voorbeelden van richting en ruimte">
       <article class="example">
         <header class="example-head"><div><h3>Navigatiebalk</h3><p>Logo links, navigatie rechts, alles verticaal gecentreerd.</p></div><span class="class-name">.demo-nav</span></header>
@@ -50,7 +50,7 @@
       </article>
     </section>
 
-    <div class="section-title"><h2>Flex in verticale richting</h2><span>COLUMN / 04 — 06</span></div>
+    <div class="section-title"><h2>Flex in verticale richting</h2><span>BASIS / COLUMN</span></div>
     <section class="examples-grid" aria-label="Extra voorbeelden met flex-direction column">
       <article class="example">
         <header class="example-head"><div><h3>Verticale navigatie</h3><p>Links staan onder elkaar in plaats van naast elkaar.</p></div><span class="class-name">.vertical-menu</span></header>
@@ -68,7 +68,7 @@
       </article>
     </section>
 
-    <div class="section-title"><h2>Uitlijnen en verdelen</h2><span>05 — 07</span></div>
+    <div class="section-title"><h2>Uitlijnen en verdelen</h2><span>ALIGN / AXES</span></div>
     <section class="examples-grid" aria-label="Voorbeelden van uitlijnen en verdelen">
       <article class="example wide">
         <header class="example-head"><div><h3>justify-content vergelijken</h3><p>De hoofdas is hier horizontaal. Elke rij gebruikt een andere waarde.</p></div><span class="class-name">justify-content</span></header>
@@ -86,7 +86,35 @@
       </article>
     </section>
 
-    <div class="section-title"><h2>Responsive gedrag</h2><span>08</span></div>
+    <div class="section-title"><h2>Verder met Flexbox</h2><span>GROEI / VOLGORDE / RIJEN</span></div>
+    <section class="examples-grid" aria-label="Extra Flexbox-eigenschappen">
+      <article class="example">
+        <header class="example-head"><div><h3>Richting omkeren</h3><p>De items behouden hun HTML-volgorde, maar de flexrichting draait om.</p></div><span class="class-name">*-reverse</span></header>
+        <div class="stage"><div class="reverse-row"><span>01</span><span>02</span><span>03</span></div><p class="code-note"><code>flex-direction: row-reverse</code></p><div class="reverse-column"><span>01</span><span>02</span><span>03</span></div><p class="code-note"><code>flex-direction: column-reverse</code></p></div>
+      </article>
+
+      <article class="example">
+        <header class="example-head"><div><h3>Groeien en krimpen</h3><p>Een flexibel contentgebied naast een vaste sidebar.</p></div><span class="class-name">flex: grow shrink basis</span></header>
+        <div class="stage"><div class="grow-layout"><div class="grow-sidebar">Sidebar<br><code>0 0 105px</code></div><div class="grow-main">Hoofdinhoud<br><code>1 1 180px</code></div><div class="grow-extra">Extra paneel<br><code>1 1 140px</code></div></div><p class="code-note"><code>flex-grow</code> verdeelt extra ruimte · <code>flex-shrink</code> bepaalt wat krimpt · <code>flex-basis</code> is de startmaat.</p></div>
+      </article>
+
+      <article class="example">
+        <header class="example-head"><div><h3>Eén item apart uitlijnen</h3><p>De andere items staan in het midden; het eerste en laatste wijken af.</p></div><span class="class-name">align-self</span></header>
+        <div class="stage"><div class="self-demo"><div class="self-item self-start">flex-start</div><div class="self-item">center</div><div class="self-item self-end">flex-end</div></div><p class="code-note"><code>align-items: center</code> op de rij · <code>align-self</code> op één item.</p></div>
+      </article>
+
+      <article class="example">
+        <header class="example-head"><div><h3>Meerdere regels uitlijnen</h3><p>align-content verdeelt de rijen binnen een flex-container met wrap.</p></div><span class="class-name">align-content</span></header>
+        <div class="stage"><div class="content-compare"><div><p class="justify-label">space-between</p><div class="content-demo content-between"><i>01</i><i>02</i><i>03</i><i>04</i><i>05</i><i>06</i></div></div><div><p class="justify-label">center</p><div class="content-demo content-center"><i>01</i><i>02</i><i>03</i><i>04</i><i>05</i><i>06</i></div></div></div><p class="code-note"><code>flex-wrap: wrap</code> is nodig voordat <code>align-content</code> meerdere rijen kan verdelen.</p></div>
+      </article>
+
+      <article class="example wide">
+        <header class="example-head"><div><h3>Visuele volgorde aanpassen</h3><p>CSS order verandert de positie van de items zonder de HTML te verplaatsen.</p></div><span class="class-name">order</span></header>
+        <div class="stage"><div class="order-demo"><div class="order-item order-last"><b>Item A</b><code>order: 3</code></div><div class="order-item order-first"><b>Item B</b><code>order: 1</code></div><div class="order-item order-middle"><b>Item C</b><code>order: 2</code></div></div><p class="order-warning"><strong>Let op:</strong> de visuele volgorde wijkt hier af van de HTML- en toetsenbordvolgorde. Gebruik <code>order</code> daarom niet om de betekenisvolle leesvolgorde te veranderen.</p></div>
+      </article>
+    </section>
+
+    <div class="section-title"><h2>Responsive gedrag</h2><span>WRAP / BASISMAAT</span></div>
     <section class="examples-grid" aria-label="Responsive Flexbox voorbeeld">
       <article class="example wide">
         <header class="example-head"><div><h3>Flex-wrap: kaarten op meerdere regels</h3><p>Als de rij vol raakt, beginnen de volgende kaarten op een nieuwe regel. Verklein het browservenster om het effect te zien.</p></div><span class="class-name">.wrap-demo</span></header>
@@ -95,5 +123,8 @@
     </section>
     <footer class="footer">Flexbox Praktijk · Statische voorbeelden om te bekijken met de browser-inspector.</footer>
   </main>
+  <style>
+    .reverse-row{display:flex;flex-direction:row-reverse;justify-content:flex-end;gap:8px}.reverse-row span,.reverse-column span{min-width:42px;padding:8px;border-radius:4px;background:#dcebe0;color:#345b40;text-align:center;font:10px var(--mono)}.reverse-column{height:116px;display:flex;flex-direction:column-reverse;align-items:flex-start;justify-content:flex-start;gap:5px;margin-top:14px;padding:8px;border:1px dashed #cbd8cd;border-radius:5px;background:white}.grow-layout{display:flex;gap:8px;min-height:115px}.grow-sidebar,.grow-main,.grow-extra{padding:12px 9px;border-radius:5px;font-size:10px}.grow-sidebar{flex:0 0 105px;background:#204637;color:white}.grow-main{flex:1 1 180px;background:#dcebe0;color:#2d543a}.grow-extra{flex:1 1 140px;background:#f1e7d1;color:#675a35}.grow-layout code{font:9px var(--mono)}.self-demo{height:130px;display:flex;align-items:center;gap:9px;padding:9px;border:1px solid #dfe6df;border-radius:5px;background:white}.self-item{flex:1;padding:10px 6px;border-radius:4px;background:#e2eee3;color:#3d6245;text-align:center;font:9px var(--mono)}.self-start{align-self:flex-start;background:#f0e7d4;color:#725c32}.self-end{align-self:flex-end;background:#dce8ef;color:#3e5d72}.content-compare{display:grid;grid-template-columns:1fr 1fr;gap:10px}.content-demo{height:116px;display:flex;flex-wrap:wrap;align-content:space-between;gap:4px;padding:7px;border:1px solid #dfe6df;border-radius:5px;background:white}.content-demo i{flex:0 0 calc(33.333% - 3px);height:24px;display:grid;place-items:center;border-radius:3px;background:#dcebe0;color:#345b40;font:9px var(--mono);font-style:normal}.content-center{align-content:center}.order-demo{display:flex;gap:9px}.order-item{flex:1;min-width:0;padding:13px;border:1px solid #dfe6df;border-radius:5px;background:white;color:#34483b}.order-item b,.order-item code{display:block}.order-item b{font-size:11px}.order-item code{margin-top:6px;color:#64806c;font:9px var(--mono)}.order-first{order:1;background:#e4f0e4}.order-middle{order:2;background:#f3ebd8}.order-last{order:3;background:#e2eaf0}.order-warning{margin:12px 0 0;color:#6d6550;font-size:10px;line-height:1.6}.order-warning strong{color:#59491f}.order-warning code{font:10px var(--mono)}@media(max-width:480px){.grow-layout{gap:5px}.grow-sidebar{flex-basis:74px;padding:9px 6px}.grow-main,.grow-extra{padding:9px 6px}.content-compare{grid-template-columns:1fr}.order-demo{gap:6px}.order-item{padding:9px 7px}}
+  </style>
 </body>
 </html>
