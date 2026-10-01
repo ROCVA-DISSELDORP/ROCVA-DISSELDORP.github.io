@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="nl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Voorbeelden van Flexbox-layouts en CSS-properties.">
+  <title>Flexbox voorbeelden | Flexbox Praktijk</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    .vertical-menu{min-height:150px;max-width:230px;padding:13px;display:flex;flex-direction:column;align-items:stretch;gap:6px;border:1px solid #e1e7e1;border-radius:5px;background:white}.vertical-menu strong{margin-bottom:3px;color:#315b40;font-size:11px}.vertical-menu a{padding:7px 9px;border-radius:4px;background:#f3f6f2;color:#536359;text-decoration:none;font-size:10px}.vertical-menu a:first-of-type{background:#e5f0e6;color:#275b3e;font-weight:700}.vertical-product{min-height:150px;max-width:230px;padding:13px;display:flex;flex-direction:column;justify-content:space-between;gap:9px;border:1px solid #e1e7e1;border-radius:5px;background:white}.vertical-product-art{height:50px;display:grid;place-items:center;border-radius:4px;background:#e6e9d8;color:#5f7049;font:600 14px var(--mono)}.vertical-product strong{font-size:11px}.vertical-product p{margin:4px 0 0;color:#79857e;font-size:10px}.vertical-product button{border:0;border-radius:4px;padding:8px;background:#286c4d;color:white;font:600 10px 'DM Sans',sans-serif}.vertical-notifications{display:flex;flex-direction:column;gap:8px}.notice{display:flex;align-items:center;gap:9px;padding:10px;border:1px solid #e1e7e1;border-radius:5px;background:white}.notice-icon{width:25px;height:25px;flex:none;display:grid;place-items:center;border-radius:50%;background:#e3efe4;color:#34674a;font:600 9px var(--mono)}.notice-copy{min-width:0}.notice-copy strong{display:block;color:#34483b;font-size:10px}.notice-copy span{display:block;margin-top:3px;color:#7a867e;font-size:9px}.notice-time{margin-left:auto;align-self:flex-start;color:#869189;font:9px var(--mono)}
+  </style>
+  <style>
+    :root{font-family:'DM Sans',sans-serif;color:#20332b;background:#f4f6f2;font-synthesis:none;--green:#256c4d;--green-dark:#193e31;--muted:#718077;--line:#dfe6df;--mono:'IBM Plex Mono',monospace}*{box-sizing:border-box}body{margin:0;min-width:320px}.topbar{height:64px;padding:0 clamp(16px,4vw,56px);display:flex;align-items:center;justify-content:space-between;background:#fff;border-bottom:1px solid var(--line)}.brand{display:flex;align-items:center;gap:11px}.brand-mark{width:36px;height:36px;border-radius:7px;background:var(--green-dark);color:white;display:grid;place-items:center;font-weight:700}.brand-name{font-size:14px;font-weight:700}.brand-caption{margin-top:2px;font-size:11px;color:var(--muted)}.top-label{font:10px var(--mono);color:#75837a}.page{max-width:1360px;margin:auto;padding:38px clamp(16px,4vw,48px) 56px}.intro{margin-bottom:27px}.eyebrow{font:600 10px var(--mono);text-transform:uppercase;color:#578065;letter-spacing:1px}.intro h1{margin:9px 0 7px;font-size:34px;line-height:1.1;letter-spacing:0}.intro p{max-width:720px;margin:0;color:#66746c;font-size:14px;line-height:1.65}.section-title{display:flex;align-items:baseline;gap:10px;margin:31px 0 13px}.section-title h2{font-size:16px;margin:0}.section-title span{font:10px var(--mono);color:#819087}.examples-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}.example{min-width:0;overflow:hidden;border:1px solid var(--line);border-radius:7px;background:#fff}.example.wide{grid-column:1/-1}.example-head{display:flex;justify-content:space-between;align-items:start;gap:16px;padding:15px 17px 12px}.example-head h3{margin:0;font-size:13px}.example-head p{margin:4px 0 0;color:#748078;font-size:11px;line-height:1.5}.class-name{flex:none;color:#64806c;font:10px var(--mono)}.stage{min-height:130px;padding:17px;background:#f6f8f5;border-top:1px solid #edf0ed}.demo-nav{min-height:72px;padding:0 18px;display:flex;justify-content:space-between;align-items:center;gap:20px;background:#193f32;color:white;border-radius:5px}.nav-logo{font-size:16px;font-weight:700;letter-spacing:.3px}.nav-logo span{color:#9bd0a6}.nav-links{display:flex;align-items:center;gap:17px}.nav-links a{color:#e3eee5;text-decoration:none;font-size:11px}.product-row{display:flex;gap:12px}.product-card{flex:1;min-width:0;padding:12px;border:1px solid #e2e8e2;border-radius:5px;background:white}.product-art{height:54px;margin-bottom:10px;border-radius:4px;background:#dcebe0;display:grid;place-items:center;color:#386349;font:600 16px var(--mono)}.product-card:nth-child(2) .product-art{background:#e6e8d6;color:#687147}.product-card:nth-child(3) .product-art{background:#f2e3d5;color:#986547}.product-name{font-size:11px;font-weight:700}.product-description{margin-top:3px;color:#79857e;font-size:10px}.column-layout{height:160px;display:flex;flex-direction:column;align-items:flex-start;justify-content:center;gap:7px;padding:14px 20px;border:1px solid #e3e8e3;border-radius:5px;background:white}.column-logo{margin-bottom:2px;color:#286646;font-size:12px;font-weight:700}.column-title{font-size:16px;font-weight:700}.column-copy{color:#6c7971;font-size:11px}.column-button{margin-top:5px;padding:7px 12px;border-radius:4px;background:#286c4d;color:white;font-size:10px;font-weight:600}.justify-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:9px}.justify-sample{min-width:0}.justify-label{margin:0 0 5px;color:#627168;font:10px var(--mono)}.justify-track{height:42px;padding:4px;display:flex;gap:2px;border:1px solid #dfe6df;border-radius:4px;background:white}.justify-track i{width:19px;height:30px;flex:none;border-radius:2px;background:#73a880}.jc-start{justify-content:flex-start}.jc-center{justify-content:center}.jc-end{justify-content:flex-end}.jc-between{justify-content:space-between}.jc-around{justify-content:space-around}.jc-evenly{justify-content:space-evenly}.wrap-demo{display:flex;flex-wrap:wrap;gap:9px}.wrap-card{flex:1 1 165px;min-height:75px;padding:11px;border:1px solid #dfe7df;border-radius:5px;background:white}.wrap-card small{display:block;color:#598064;font:9px var(--mono)}.wrap-card strong{display:block;margin-top:8px;font-size:11px}.dashboard{min-height:150px;display:flex;gap:12px;padding:12px;border-radius:5px;background:#f0f3ef}.dash-sidebar{width:110px;flex:none;padding:12px;border-radius:4px;background:#1e4235;color:white;display:flex;flex-direction:column;gap:11px}.dash-sidebar strong{margin-bottom:4px;color:#b5d4b9;font-size:9px}.dash-sidebar span{font-size:10px}.dash-content{flex:1;min-width:0;padding:12px;border:1px solid #e3e8e3;border-radius:4px;background:white}.dash-content h4{margin:0 0 10px;font-size:12px}.metric-row{display:flex;gap:8px}.metric{flex:1;min-width:0;padding:9px;border-radius:4px;background:#f4f7f3;color:#6d7971;font-size:9px}.metric b{display:block;margin-top:5px;color:#294b38;font-size:16px}.align-demo{height:115px;display:flex;align-items:stretch;gap:10px;padding:10px;border:1px solid #dfe6df;border-radius:5px;background:white}.align-demo.center{align-items:center}.align-demo.end{align-items:flex-end}.align-item{flex:1;padding:9px 7px;border-radius:4px;background:#dcebe0;color:#345b40;text-align:center;font-size:10px}.align-item:nth-child(2){background:#f2e7ce}.align-item:nth-child(3){background:#dce8ee}.align-item.short{flex:0 0 26px}.code-note{margin-top:9px;color:#78857d;font-size:10px}.code-note code{padding:2px 4px;border-radius:3px;background:#eef2ee;color:#385642;font:10px var(--mono)}.footer-demo{display:flex;justify-content:space-between;align-items:flex-start;gap:18px;padding:18px;border-radius:5px;background:#203d32;color:#eaf1eb}.footer-brand{max-width:180px;font-size:13px;font-weight:700}.footer-brand small{display:block;margin-top:5px;color:#b7c9bb;font-size:10px;font-weight:400;line-height:1.5}.footer-col{display:flex;flex-direction:column;gap:7px;color:#c6d3c9;font-size:10px}.footer-col strong{color:white;font-size:10px}.responsive-note{display:flex;justify-content:space-between;gap:10px;margin-top:10px;color:#78857d;font-size:10px}.responsive-note code{font:10px var(--mono);color:#385642}.footer{margin-top:24px;padding-top:14px;border-top:1px solid var(--line);color:#849087;font-size:10px}@media(max-width:760px){.page{padding-top:27px}.intro h1{font-size:29px}.examples-grid{grid-template-columns:1fr}.example.wide{grid-column:auto}.section-title{margin-top:25px}.top-label{display:none}}@media(max-width:480px){.examples-grid{gap:10px}.example-head{padding:13px 13px 10px}.stage{padding:12px}.justify-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.nav-links{gap:9px}.nav-links a{font-size:9px}.demo-nav{gap:10px;padding:0 12px}.product-row{gap:7px}.product-card{padding:8px}.product-art{height:46px}.dashboard{gap:7px;padding:8px}.dash-sidebar{width:83px;padding:9px}.dash-content{padding:9px}.footer-demo{gap:12px;padding:13px}.footer-brand{max-width:110px}}
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand"><span class="brand-mark">F</span><span><span class="brand-name">Flexbox Praktijk</span><span class="brand-caption" style="display:block">Voorbeelden</span></span></div>
+    <span class="top-label">CSS LAYOUT / FLEXBOX</span>
+  </header>
+  <main class="page">
+    <section class="intro">
+      <div class="eyebrow">Flexbox in echte interfaces</div>
+      <h1>Flexbox voorbeelden</h1>
+      <p>Bekijk verschillende layouts en inspecteer de elementen om te zien hoe Flexbox ze positioneert. De code staat in de CSS van deze pagina.</p>
+    </section>
+
+    <div class="section-title"><h2>Richting en ruimte</h2><span>01 — 04</span></div>
+    <section class="examples-grid" aria-label="Voorbeelden van richting en ruimte">
+      <article class="example">
+        <header class="example-head"><div><h3>Navigatiebalk</h3><p>Logo links, navigatie rechts, alles verticaal gecentreerd.</p></div><span class="class-name">.demo-nav</span></header>
+        <div class="stage"><nav class="demo-nav"><strong class="nav-logo">NORTH<span> / </span>STUDIO</strong><div class="nav-links"><a href="#">Diensten</a><a href="#">Werk</a><a href="#">Contact</a></div></nav><p class="code-note"><code>justify-content: space-between</code> · <code>align-items: center</code></p></div>
+      </article>
+
+      <article class="example">
+        <header class="example-head"><div><h3>Productkaarten</h3><p>Kaarten delen de ruimte; gap houdt een vaste tussenruimte.</p></div><span class="class-name">.product-row</span></header>
+        <div class="stage"><div class="product-row"><article class="product-card"><div class="product-art">01</div><div class="product-name">Road Lite</div><div class="product-description">Hardloopschoen · €89</div></article><article class="product-card"><div class="product-art">02</div><div class="product-name">Trail Pro</div><div class="product-description">Trailschoen · €119</div></article><article class="product-card"><div class="product-art">03</div><div class="product-name">Daily Run</div><div class="product-description">Allround · €99</div></article></div><p class="code-note"><code>display: flex</code> · <code>gap: 12px</code> · <code>flex: 1</code></p></div>
+      </article>
+
+      <article class="example">
+        <header class="example-head"><div><h3>Loginpaneel</h3><p>Een verticale groep met ruimte tussen de onderdelen.</p></div><span class="class-name">.column-layout</span></header>
+        <div class="stage"><div class="column-layout"><span class="column-logo">LEERWERK</span><strong class="column-title">Welkom terug</strong><span class="column-copy">Log in om verder te gaan.</span><span class="column-button">Inloggen</span></div><p class="code-note"><code>flex-direction: column</code> · <code>justify-content: center</code> · <code>gap: 7px</code></p></div>
+      </article>
+
+      <article class="example">
+        <header class="example-head"><div><h3>Dashboard met sidebar</h3><p>De sidebar houdt zijn breedte; de inhoud vult de rest.</p></div><span class="class-name">.dashboard</span></header>
+        <div class="stage"><div class="dashboard"><aside class="dash-sidebar"><strong>WORKSPACE</strong><span>Overzicht</span><span>Projecten</span><span>Team</span></aside><section class="dash-content"><h4>Projectoverzicht</h4><div class="metric-row"><div class="metric">Projecten<b>08</b></div><div class="metric">Taken<b>24</b></div><div class="metric">Team<b>12</b></div></div></section></div><p class="code-note"><code>.dash-sidebar { flex: none }</code> · <code>.dash-content { flex: 1 }</code></p></div>
+      </article>
+    </section>
+
+    <div class="section-title"><h2>Flex in verticale richting</h2><span>COLUMN / 04 — 06</span></div>
+    <section class="examples-grid" aria-label="Extra voorbeelden met flex-direction column">
+      <article class="example">
+        <header class="example-head"><div><h3>Verticale navigatie</h3><p>Links staan onder elkaar in plaats van naast elkaar.</p></div><span class="class-name">.vertical-menu</span></header>
+        <div class="stage"><nav class="vertical-menu"><strong>ACCOUNT</strong><a href="#">Mijn profiel</a><a href="#">Instellingen</a><a href="#">Uitloggen</a></nav><p class="code-note"><code>flex-direction: column</code> · <code>gap: 6px</code></p></div>
+      </article>
+
+      <article class="example">
+        <header class="example-head"><div><h3>Productpaneel</h3><p>Afbeelding, details en actie staan gestapeld; de knop blijft onderaan.</p></div><span class="class-name">.vertical-product</span></header>
+        <div class="stage"><article class="vertical-product"><div class="vertical-product-art">TRAIL / 02</div><div><strong>Trail Pro</strong><p>Grip voor onverharde paden.</p></div><button type="button">Bekijk product</button></article><p class="code-note"><code>flex-direction: column</code> · <code>justify-content: space-between</code></p></div>
+      </article>
+
+      <article class="example wide">
+        <header class="example-head"><div><h3>Notificaties</h3><p>Een verticale lijst gebruikt gap voor gelijke afstand tussen berichten.</p></div><span class="class-name">.vertical-notifications</span></header>
+        <div class="stage"><div class="vertical-notifications"><article class="notice"><span class="notice-icon">JD</span><div class="notice-copy"><strong>Jamie heeft een reactie geplaatst</strong><span>Project: Nieuwe website · Bekijk de update</span></div><time class="notice-time">09:42</time></article><article class="notice"><span class="notice-icon">OK</span><div class="notice-copy"><strong>Je ontwerp is goedgekeurd</strong><span>Project: Klantportaal · Status bijgewerkt</span></div><time class="notice-time">08:15</time></article><article class="notice"><span class="notice-icon">+1</span><div class="notice-copy"><strong>Je bent toegevoegd aan een team</strong><span>Frontend werkgroep · 4 leden</span></div><time class="notice-time">Gisteren</time></article></div><p class="code-note"><code>display: flex</code> · <code>flex-direction: column</code> · <code>gap: 8px</code></p></div>
+      </article>
+    </section>
+
+    <div class="section-title"><h2>Uitlijnen en verdelen</h2><span>05 — 07</span></div>
+    <section class="examples-grid" aria-label="Voorbeelden van uitlijnen en verdelen">
+      <article class="example wide">
+        <header class="example-head"><div><h3>justify-content vergelijken</h3><p>De hoofdas is hier horizontaal. Elke rij gebruikt een andere waarde.</p></div><span class="class-name">justify-content</span></header>
+        <div class="stage"><div class="justify-grid"><div class="justify-sample"><p class="justify-label">flex-start</p><div class="justify-track jc-start"><i></i><i></i><i></i></div></div><div class="justify-sample"><p class="justify-label">center</p><div class="justify-track jc-center"><i></i><i></i><i></i></div></div><div class="justify-sample"><p class="justify-label">flex-end</p><div class="justify-track jc-end"><i></i><i></i><i></i></div></div><div class="justify-sample"><p class="justify-label">space-between</p><div class="justify-track jc-between"><i></i><i></i><i></i></div></div><div class="justify-sample"><p class="justify-label">space-around</p><div class="justify-track jc-around"><i></i><i></i><i></i></div></div><div class="justify-sample"><p class="justify-label">space-evenly</p><div class="justify-track jc-evenly"><i></i><i></i><i></i></div></div></div></div>
+      </article>
+
+      <article class="example">
+        <header class="example-head"><div><h3>align-items vergelijken</h3><p>De cross-axis is hier verticaal.</p></div><span class="class-name">align-items</span></header>
+        <div class="stage"><div class="align-demo"><div class="align-item">stretch</div><div class="align-item short">center</div><div class="align-item short">end</div></div><p class="code-note"><code>align-items: stretch</code> (standaard)</p><div class="align-demo center" style="height:78px;margin-top:9px"><div class="align-item">center</div><div class="align-item short">center</div><div class="align-item short">center</div></div><p class="code-note"><code>align-items: center</code></p><div class="align-demo end" style="height:78px;margin-top:9px"><div class="align-item">flex-end</div><div class="align-item short">flex-end</div><div class="align-item short">flex-end</div></div><p class="code-note"><code>align-items: flex-end</code></p></div>
+      </article>
+
+      <article class="example">
+        <header class="example-head"><div><h3>Footer met kolommen</h3><p>Kolommen aan de bovenkant, verdeeld over de hele footer.</p></div><span class="class-name">.footer-demo</span></header>
+        <div class="stage"><footer class="footer-demo"><div class="footer-brand">northstar.<small>Digitale producten met aandacht gemaakt.</small></div><div class="footer-col"><strong>Diensten</strong><span>Strategie</span><span>Design</span><span>Development</span></div><div class="footer-col"><strong>Studio</strong><span>Over ons</span><span>Contact</span></div></footer><p class="code-note"><code>space-between</code> · <code>align-items: flex-start</code></p></div>
+      </article>
+    </section>
+
+    <div class="section-title"><h2>Responsive gedrag</h2><span>08</span></div>
+    <section class="examples-grid" aria-label="Responsive Flexbox voorbeeld">
+      <article class="example wide">
+        <header class="example-head"><div><h3>Flex-wrap: kaarten op meerdere regels</h3><p>Als de rij vol raakt, beginnen de volgende kaarten op een nieuwe regel. Verklein het browservenster om het effect te zien.</p></div><span class="class-name">.wrap-demo</span></header>
+        <div class="stage"><div class="wrap-demo"><article class="wrap-card"><small>09:30 · DESIGN</small><strong>Design systems</strong></article><article class="wrap-card"><small>11:00 · CODE</small><strong>Toegankelijke componenten</strong></article><article class="wrap-card"><small>13:15 · CAREER</small><strong>Je eerste frontend baan</strong></article><article class="wrap-card"><small>14:00 · CODE</small><strong>Flex layouts bouwen</strong></article></div><div class="responsive-note"><span>Elke kaart start rond <code>165px</code> breed.</span><code>flex: 1 1 165px</code> · <code>flex-wrap: wrap</code></div></div>
+      </article>
+    </section>
+    <footer class="footer">Flexbox Praktijk · Statische voorbeelden om te bekijken met de browser-inspector.</footer>
+  </main>
+</body>
+</html>

@@ -264,6 +264,117 @@ footer{
 @media (min-height:760px){
   .stage{max-height:62vh}
 }
+
+/* ---------- settings icon ---------- */
+.icon-btn{
+  appearance:none;
+  border:1.5px solid rgba(144,137,201,.45);
+  background:transparent;
+  color:var(--lav);
+  font-size:18px;
+  line-height:1;
+  border-radius:999px;
+  width:40px;
+  height:40px;
+  flex:0 0 auto;
+  cursor:pointer;
+  touch-action:manipulation;
+  -webkit-tap-highlight-color:transparent;
+  transition:background .15s ease,color .15s ease,border-color .15s ease;
+}
+.icon-btn:hover{background:rgba(144,137,201,.12)}
+.icon-btn:active{background:rgba(144,137,201,.22)}
+
+/* ---------- modal ---------- */
+.modal-overlay{
+  position:fixed;
+  inset:0;
+  background:rgba(10,7,30,.72);
+  display:flex;
+  align-items:flex-end;
+  justify-content:center;
+  z-index:50;
+  padding:0;
+}
+.modal-overlay[hidden]{display:none}
+.modal{
+  background:var(--paper);
+  color:var(--ink);
+  width:100%;
+  max-width:520px;
+  max-height:88dvh;
+  overflow-y:auto;
+  border-radius:22px 22px 0 0;
+  padding:calc(env(safe-area-inset-bottom) + 18px) var(--pad) 18px;
+  display:flex;
+  flex-direction:column;
+  gap:18px;
+}
+.modal-head{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  position:sticky;
+  top:0;
+  background:var(--paper);
+}
+.modal-head h2{font-size:18px;font-weight:800}
+.modal-head .icon-btn{color:var(--ink);border-color:rgba(23,18,53,.25)}
+.modal-section h3{font-size:14px;font-weight:800;margin-bottom:8px;letter-spacing:-.01em}
+.hint{font-size:12px;color:rgba(23,18,53,.6);margin-bottom:8px;line-height:1.4}
+.radio-row{display:flex;flex-direction:column;gap:8px;font-size:14px;font-weight:600}
+.radio-row label{display:flex;align-items:center;gap:8px}
+.word-inputs{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px}
+.word-inputs .word-input{grid-column:span 1}
+.modal input[type="text"],
+.modal input[type="password"],
+.modal input[type="number"]{
+  font-family:var(--sans);
+  font-size:14px;
+  padding:10px 12px;
+  border-radius:12px;
+  border:1.5px solid rgba(23,18,53,.18);
+  background:#fff;
+  color:var(--ink);
+  width:100%;
+}
+.modal .btn{
+  border-color:rgba(23,18,53,.25);
+  color:var(--ink);
+  background:var(--amber);
+  border-color:var(--amber);
+  font-weight:800;
+}
+.modal .btn:hover{filter:brightness(.96)}
+.gen-row{display:flex;gap:8px;margin-top:8px;flex-wrap:wrap}
+.gen-row #topicInput{flex:1 1 140px}
+.gen-row #countInput{flex:0 0 70px}
+.status{font-size:12px;margin-top:8px;min-height:16px;color:rgba(23,18,53,.7)}
+.status.error{color:var(--coral);font-weight:700}
+.status.ok{color:#1e7a3c;font-weight:700}
+.custom-list{list-style:none;display:flex;flex-direction:column;gap:8px}
+.custom-list li{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+  background:rgba(23,18,53,.05);
+  border-radius:12px;
+  padding:8px 10px;
+  font-size:13px;
+  font-weight:600;
+}
+.custom-list li span{flex:1 1 auto;overflow-wrap:anywhere}
+.custom-list li button{
+  appearance:none;
+  border:none;
+  background:none;
+  color:var(--coral);
+  font-size:16px;
+  cursor:pointer;
+  flex:0 0 auto;
+}
+.empty-note{font-size:13px;color:rgba(23,18,53,.5);font-style:italic}
 </style>
 </head>
 <body>
@@ -272,6 +383,7 @@ footer{
   <header>
     <div class="wordmark">30 seconds<b>AI &amp; Development</b></div>
     <div class="counter" id="counter">Kaart 0 / 0</div>
+    <button class="icon-btn" id="settingsBtn" aria-label="Instellingen: eigen kaarten en AI" title="Instellingen">⚙</button>
   </header>
 
   <div class="stage">
@@ -302,6 +414,53 @@ footer{
       <button class="btn" id="resetBtn">Nieuw spel</button>
     </div>
   </footer>
+</div>
+
+<div class="modal-overlay" id="modalOverlay" hidden>
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+    <div class="modal-head">
+      <h2 id="modalTitle">Kaarten beheren</h2>
+      <button class="icon-btn" id="closeModalBtn" aria-label="Sluiten">✕</button>
+    </div>
+
+    <section class="modal-section">
+      <h3>Welke kaarten spelen?</h3>
+      <div class="radio-row">
+        <label><input type="radio" name="deckMode" value="standaard"> Standaard kaarten</label>
+        <label><input type="radio" name="deckMode" value="eigen"> Alleen mijn kaarten</label>
+        <label><input type="radio" name="deckMode" value="beide"> Allebei</label>
+      </div>
+    </section>
+
+    <section class="modal-section">
+      <h3>Zelf een kaart toevoegen</h3>
+      <div class="word-inputs" id="wordInputs">
+        <input type="text" class="word-input" placeholder="Woord 1">
+        <input type="text" class="word-input" placeholder="Woord 2">
+        <input type="text" class="word-input" placeholder="Woord 3">
+        <input type="text" class="word-input" placeholder="Woord 4">
+        <input type="text" class="word-input" placeholder="Woord 5">
+      </div>
+      <button class="btn" id="addCardBtn">Kaart toevoegen</button>
+    </section>
+
+    <section class="modal-section">
+      <h3>Genereren met AI</h3>
+      <p class="hint">Je eigen OpenAI API key wordt alleen lokaal in je browser bewaard (localStorage). Deel hem met niemand.</p>
+      <input type="password" id="apiKeyInput" placeholder="sk-... (jouw OpenAI API key)" autocomplete="off">
+      <div class="gen-row">
+        <input type="text" id="topicInput" placeholder="Onderwerp (optioneel)">
+        <input type="number" id="countInput" value="5" min="1" max="20">
+        <button class="btn" id="generateBtn">Genereer</button>
+      </div>
+      <p class="status" id="genStatus"></p>
+    </section>
+
+    <section class="modal-section">
+      <h3>Mijn kaarten (<span id="customCount">0</span>)</h3>
+      <ul class="custom-list" id="customList"></ul>
+    </section>
+  </div>
 </div>
 
 <script>
@@ -356,6 +515,10 @@ const DECK = [
 
 const DURATION = 30; // seconden
 
+const LS_CUSTOM_CARDS = "tts_custom_cards";
+const LS_API_KEY      = "tts_api_key";
+const LS_DECK_MODE    = "tts_deck_mode";
+
 /* ---------------------------------------------------------
    Elementen
    --------------------------------------------------------- */
@@ -371,6 +534,19 @@ const lead       = document.getElementById("lead");
 const track      = document.getElementById("track");
 const ring       = document.getElementById("ring");
 
+const settingsBtn    = document.getElementById("settingsBtn");
+const modalOverlay   = document.getElementById("modalOverlay");
+const closeModalBtn  = document.getElementById("closeModalBtn");
+const wordInputsWrap = document.getElementById("wordInputs");
+const addCardBtn     = document.getElementById("addCardBtn");
+const apiKeyInput    = document.getElementById("apiKeyInput");
+const topicInput     = document.getElementById("topicInput");
+const countInput     = document.getElementById("countInput");
+const generateBtn    = document.getElementById("generateBtn");
+const genStatus      = document.getElementById("genStatus");
+const customListEl   = document.getElementById("customList");
+const customCountEl  = document.getElementById("customCount");
+
 let order = [];
 let drawn = 0;
 let state = "idle";           // idle | playing | done
@@ -380,10 +556,41 @@ let wakeLock = null;
 let perimeter = 0;
 
 /* ---------------------------------------------------------
+   Eigen kaarten (localStorage)
+   --------------------------------------------------------- */
+function loadCustomCards(){
+  try{
+    const raw = localStorage.getItem(LS_CUSTOM_CARDS);
+    const parsed = raw ? JSON.parse(raw) : [];
+    return Array.isArray(parsed) ? parsed : [];
+  }catch(e){ return []; }
+}
+function saveCustomCards(cards){
+  localStorage.setItem(LS_CUSTOM_CARDS, JSON.stringify(cards));
+}
+function loadDeckMode(){
+  const v = localStorage.getItem(LS_DECK_MODE);
+  return (v === "eigen" || v === "beide") ? v : "standaard";
+}
+function saveDeckMode(mode){
+  localStorage.setItem(LS_DECK_MODE, mode);
+}
+
+let customCards = loadCustomCards();
+let deckMode = loadDeckMode();
+
+function getDeck(){
+  if (deckMode === "eigen")  return customCards.length ? customCards : DECK;
+  if (deckMode === "beide")  return DECK.concat(customCards);
+  return DECK;
+}
+
+/* ---------------------------------------------------------
    Deck
    --------------------------------------------------------- */
 function shuffle(){
-  order = DECK.map((_, i) => i);
+  const deck = getDeck();
+  order = deck.map((_, i) => i);
   for (let i = order.length - 1; i > 0; i--){
     const j = Math.floor(Math.random() * (i + 1));
     [order[i], order[j]] = [order[j], order[i]];
@@ -392,7 +599,7 @@ function shuffle(){
 }
 
 function updateCounter(){
-  counterEl.textContent = "Kaart " + drawn + " / " + DECK.length;
+  counterEl.textContent = "Kaart " + drawn + " / " + getDeck().length;
 }
 
 /* ---------------------------------------------------------
@@ -466,7 +673,7 @@ function start(){
   if (state !== "idle") return;
 
   if (drawn >= order.length) shuffle();
-  const cardWords = DECK[order[drawn]];
+  const cardWords = getDeck()[order[drawn]];
   drawn++;
 
   wordsEl.innerHTML = "";
@@ -558,6 +765,140 @@ function newGame(){
 }
 
 /* ---------------------------------------------------------
+   Instellingen-modal: eigen kaarten + AI
+   --------------------------------------------------------- */
+function renderCustomList(){
+  customCountEl.textContent = customCards.length;
+  customListEl.innerHTML = "";
+  if (!customCards.length){
+    const li = document.createElement("li");
+    li.className = "empty-note";
+    li.textContent = "Je hebt nog geen eigen kaarten toegevoegd.";
+    customListEl.appendChild(li);
+    return;
+  }
+  customCards.forEach((words, idx) => {
+    const li = document.createElement("li");
+    const span = document.createElement("span");
+    span.textContent = words.join(" · ");
+    const del = document.createElement("button");
+    del.textContent = "✕";
+    del.setAttribute("aria-label", "Verwijder kaart");
+    del.addEventListener("click", () => {
+      customCards.splice(idx, 1);
+      saveCustomCards(customCards);
+      renderCustomList();
+      shuffle();
+      updateCounter();
+    });
+    li.appendChild(span);
+    li.appendChild(del);
+    customListEl.appendChild(li);
+  });
+}
+
+function setDeckModeUI(){
+  modalOverlay.querySelectorAll('input[name="deckMode"]').forEach(r => {
+    r.checked = (r.value === deckMode);
+  });
+}
+
+function openModal(){
+  apiKeyInput.value = localStorage.getItem(LS_API_KEY) || "";
+  setDeckModeUI();
+  renderCustomList();
+  genStatus.textContent = "";
+  genStatus.className = "status";
+  modalOverlay.hidden = false;
+}
+function closeModal(){ modalOverlay.hidden = true; }
+
+function addCustomCard(){
+  const inputs = Array.from(wordInputsWrap.querySelectorAll(".word-input"));
+  const words = inputs.map(i => i.value.trim()).filter(Boolean);
+  if (words.length < 2){
+    genStatus.className = "status error";
+    genStatus.textContent = "Vul minstens 2 woorden in.";
+    return;
+  }
+  customCards.push(words);
+  saveCustomCards(customCards);
+  inputs.forEach(i => i.value = "");
+  renderCustomList();
+  shuffle();
+  updateCounter();
+}
+
+async function generateWithAI(){
+  const apiKey = apiKeyInput.value.trim();
+  const topic  = topicInput.value.trim();
+  const count  = Math.min(20, Math.max(1, parseInt(countInput.value, 10) || 5));
+
+  if (!apiKey){
+    genStatus.className = "status error";
+    genStatus.textContent = "Vul eerst je OpenAI API key in.";
+    return;
+  }
+  localStorage.setItem(LS_API_KEY, apiKey);
+
+  generateBtn.disabled = true;
+  genStatus.className = "status";
+  genStatus.textContent = "Bezig met genereren…";
+
+  const onderwerp = topic ? ("over het onderwerp: " + topic) : "over AI en software ontwikkeling voor MBO-leerlingen";
+  const prompt = "Maak " + count + " kaarten voor het spel '30 seconds', " + onderwerp +
+    ". Elke kaart heeft precies 5 korte Nederlandse woorden of korte termen (max 3 woorden per item). " +
+    "Antwoord ALLEEN met geldige JSON: een array van arrays met strings, zonder uitleg, zonder markdown.";
+
+  try{
+    const res = await fetch("https://api.openai.com/v1/chat/completions", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": "Bearer " + apiKey
+      },
+      body: JSON.stringify({
+        model: "gpt-4o-mini",
+        messages: [{ role: "user", content: prompt }],
+        temperature: 0.9
+      })
+    });
+
+    if (!res.ok){
+      const errBody = await res.text();
+      throw new Error("API fout (" + res.status + "): " + errBody.slice(0, 200));
+    }
+
+    const data = await res.json();
+    let text = (data.choices && data.choices[0] && data.choices[0].message && data.choices[0].message.content) || "";
+    text = text.trim().replace(/^```json/i, "").replace(/^```/, "").replace(/```$/, "").trim();
+
+    const parsed = JSON.parse(text);
+    if (!Array.isArray(parsed)) throw new Error("Onverwacht antwoordformaat.");
+
+    const newCards = parsed
+      .filter(c => Array.isArray(c) && c.length)
+      .map(c => c.map(w => String(w).trim()).filter(Boolean).slice(0, 5));
+
+    if (!newCards.length) throw new Error("Geen bruikbare kaarten ontvangen.");
+
+    customCards = customCards.concat(newCards);
+    saveCustomCards(customCards);
+    renderCustomList();
+    shuffle();
+    updateCounter();
+
+    genStatus.className = "status ok";
+    genStatus.textContent = newCards.length + " nieuwe kaart(en) toegevoegd!";
+  }catch(e){
+    genStatus.className = "status error";
+    genStatus.textContent = "Mislukt: " + e.message;
+  }finally{
+    generateBtn.disabled = false;
+  }
+}
+
+/* ---------------------------------------------------------
    Bediening
    --------------------------------------------------------- */
 card.addEventListener("click", () => { if (state === "idle") start(); });
@@ -566,6 +907,19 @@ card.addEventListener("keydown", e => {
 });
 stopBtn.addEventListener("click", e => { e.stopPropagation(); stop(); });
 resetBtn.addEventListener("click", e => { e.stopPropagation(); newGame(); });
+
+settingsBtn.addEventListener("click", openModal);
+closeModalBtn.addEventListener("click", closeModal);
+modalOverlay.addEventListener("click", e => { if (e.target === modalOverlay) closeModal(); });
+addCardBtn.addEventListener("click", addCustomCard);
+generateBtn.addEventListener("click", generateWithAI);
+modalOverlay.querySelectorAll('input[name="deckMode"]').forEach(r => {
+  r.addEventListener("change", () => {
+    deckMode = r.value;
+    saveDeckMode(deckMode);
+    newGame();
+  });
+});
 
 document.addEventListener("visibilitychange", () => {
   if (document.visibilityState === "visible" && state === "playing") keepAwake();
