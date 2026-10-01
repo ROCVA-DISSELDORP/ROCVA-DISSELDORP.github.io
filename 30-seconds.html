@@ -322,10 +322,39 @@ footer{
 .modal-head .icon-btn{color:var(--ink);border-color:rgba(23,18,53,.25)}
 .modal-section h3{font-size:14px;font-weight:800;margin-bottom:8px;letter-spacing:-.01em}
 .hint{font-size:12px;color:rgba(23,18,53,.6);margin-bottom:8px;line-height:1.4}
-.radio-row{display:flex;flex-direction:column;gap:8px;font-size:14px;font-weight:600}
+.radio-row{display:flex;flex-direction:column;gap:2px;font-size:14px;font-weight:600}
 .radio-row label{display:flex;align-items:center;gap:8px}
-.word-inputs{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px}
-.word-inputs .word-input{grid-column:span 1}
+.list-toggle-row{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+  padding:7px 0;
+  border-bottom:1px solid rgba(23,18,53,.08);
+}
+.list-toggle-row:last-child{border-bottom:0}
+.list-toggle-row label{display:flex;align-items:center;gap:8px;flex:1 1 auto;overflow-wrap:anywhere}
+.list-toggle-row .del-btn{
+  appearance:none;
+  border:none;
+  background:none;
+  color:var(--coral);
+  font-size:16px;
+  cursor:pointer;
+  flex:0 0 auto;
+}
+.modal textarea{
+  font-family:var(--sans);
+  font-size:14px;
+  padding:10px 12px;
+  border-radius:12px;
+  border:1.5px solid rgba(23,18,53,.18);
+  background:#fff;
+  color:var(--ink);
+  width:100%;
+  resize:vertical;
+  margin:8px 0;
+}
 .modal input[type="text"],
 .modal input[type="password"],
 .modal input[type="number"]{
@@ -424,24 +453,17 @@ footer{
     </div>
 
     <section class="modal-section">
-      <h3>Welke kaarten spelen?</h3>
-      <div class="radio-row">
-        <label><input type="radio" name="deckMode" value="standaard"> Standaard kaarten</label>
-        <label><input type="radio" name="deckMode" value="eigen"> Alleen mijn kaarten</label>
-        <label><input type="radio" name="deckMode" value="beide"> Allebei</label>
-      </div>
+      <h3>Welke speellijsten spelen?</h3>
+      <div class="radio-row" id="listToggles"></div>
     </section>
 
     <section class="modal-section">
-      <h3>Zelf een kaart toevoegen</h3>
-      <div class="word-inputs" id="wordInputs">
-        <input type="text" class="word-input" placeholder="Woord 1">
-        <input type="text" class="word-input" placeholder="Woord 2">
-        <input type="text" class="word-input" placeholder="Woord 3">
-        <input type="text" class="word-input" placeholder="Woord 4">
-        <input type="text" class="word-input" placeholder="Woord 5">
-      </div>
-      <button class="btn" id="addCardBtn">Kaart toevoegen</button>
+      <h3>Lijst met woorden toevoegen</h3>
+      <p class="hint">Plak in één keer een hele lijst met woorden (één per regel, of gescheiden door komma's). Ze worden automatisch verdeeld in kaarten van 5 woorden en opgeslagen als speellijst.</p>
+      <input type="text" id="listNameInput" placeholder="Naam van deze speellijst">
+      <textarea id="wordsTextarea" rows="6" placeholder="woord 1&#10;woord 2&#10;woord 3, woord 4, woord 5"></textarea>
+      <button class="btn" id="saveListBtn">Lijst opslaan</button>
+      <p class="status" id="addStatus"></p>
     </section>
 
     <section class="modal-section">
@@ -449,7 +471,7 @@ footer{
       <p class="hint">Je eigen OpenAI API key wordt alleen lokaal in je browser bewaard (localStorage). Deel hem met niemand.</p>
       <input type="password" id="apiKeyInput" placeholder="sk-... (jouw OpenAI API key)" autocomplete="off">
       <div class="gen-row">
-        <input type="text" id="topicInput" placeholder="Onderwerp (optioneel)">
+        <input type="text" id="topicInput" placeholder="Onderwerp / naam speellijst">
         <input type="number" id="countInput" value="5" min="1" max="20">
         <button class="btn" id="generateBtn">Genereer</button>
       </div>
@@ -457,7 +479,7 @@ footer{
     </section>
 
     <section class="modal-section">
-      <h3>Mijn kaarten (<span id="customCount">0</span>)</h3>
+      <h3>Mijn speellijsten (<span id="customCount">0</span>)</h3>
       <ul class="custom-list" id="customList"></ul>
     </section>
   </div>
