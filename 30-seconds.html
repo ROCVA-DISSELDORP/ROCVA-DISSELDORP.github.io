@@ -535,11 +535,28 @@ const DECK = [
   ["Fout maken","Leren","Oefenen","Beter worden","Geduld"]
 ];
 
+const HTML_CSS_TERMS = [
+  "HTML","Element","Tag","Opening tag","Closing tag","Attribute","class","id","href","src","alt",
+  "Document","DOCTYPE","head","body","meta","charset",
+  "Heading","h1","h2","h3","p","br","strong","em","a","Link","img",
+  "ul","ol","li","div","span","header","nav","main","section","article","footer",
+  "Form","input","label","button","textarea","select",
+  "CSS","Selector","Property","Value","color","background-color","font-size","font-family","font-weight","text-align",
+  "width","height","margin","padding","border","border-radius","display","block","inline",
+  "Flexbox","flex-direction","justify-content","align-items","gap",
+  "position","relative","absolute","z-index",":hover",":focus",
+  "Responsive design","@media"
+];
+
 const DURATION = 30; // seconden
 
-const LS_CUSTOM_CARDS = "tts_custom_cards";
+const LS_WORD_LISTS  = "tts_word_lists";
 const LS_API_KEY      = "tts_api_key";
-const LS_DECK_MODE    = "tts_deck_mode";
+const LS_ACTIVE_LISTS = "tts_active_lists";
+const STANDAARD_ID    = "standaard";
+const STANDAARD_NAAM  = "Standaard: computer & software";
+const HTMLCSS_ID      = "htmlcss";
+const HTMLCSS_NAAM    = "HTML & CSS begrippen";
 
 /* ---------------------------------------------------------
    Elementen
@@ -559,8 +576,11 @@ const ring       = document.getElementById("ring");
 const settingsBtn    = document.getElementById("settingsBtn");
 const modalOverlay   = document.getElementById("modalOverlay");
 const closeModalBtn  = document.getElementById("closeModalBtn");
-const wordInputsWrap = document.getElementById("wordInputs");
-const addCardBtn     = document.getElementById("addCardBtn");
+const listTogglesEl  = document.getElementById("listToggles");
+const listNameInput  = document.getElementById("listNameInput");
+const wordsTextarea  = document.getElementById("wordsTextarea");
+const saveListBtn    = document.getElementById("saveListBtn");
+const addStatus      = document.getElementById("addStatus");
 const apiKeyInput    = document.getElementById("apiKeyInput");
 const topicInput     = document.getElementById("topicInput");
 const countInput     = document.getElementById("countInput");
@@ -578,33 +598,60 @@ let wakeLock = null;
 let perimeter = 0;
 
 /* ---------------------------------------------------------
-   Eigen kaarten (localStorage)
+   Speellijsten (localStorage) - de standaard lijst blijft altijd bestaan
    --------------------------------------------------------- */
-function loadCustomCards(){
+function loadLists(){
   try{
-    const raw = localStorage.getItem(LS_CUSTOM_CARDS);
+    const raw = localStorage.getItem(LS_WORD_LISTS);
     const parsed = raw ? JSON.parse(raw) : [];
     return Array.isArray(parsed) ? parsed : [];
   }catch(e){ return []; }
 }
-function saveCustomCards(cards){
-  localStorage.setItem(LS_CUSTOM_CARDS, JSON.stringify(cards));
+function saveLists(lists){
+  localStorage.setItem(LS_WORD_LISTS, JSON.stringify(lists));
 }
-function loadDeckMode(){
-  const v = localStorage.getItem(LS_DECK_MODE);
-  return (v === "eigen" || v === "beide") ? v : "standaard";
+function loadActiveIds(){
+  try{
+    const raw = localStorage.getItem(LS_ACTIVE_LISTS);
+    const parsed = raw ? JSON.parse(raw) : null;
+    return Array.isArray(parsed) ? parsed : [STANDAARD_ID];
+  }catch(e){ return [STANDAARD_ID]; }
 }
-function saveDeckMode(mode){
-  localStorage.setItem(LS_DECK_MODE, mode);
+function saveActiveIds(ids){
+  localStorage.setItem(LS_ACTIVE_LISTS, JSON.stringify(ids));
 }
 
-let customCards = loadCustomCards();
-let deckMode = loadDeckMode();
+let customLists = loadLists();          // [{id, name, cards:[[...]]}]
+let activeIds   = loadActiveIds();
+const HTML_CSS_DECK = chunkWords(HTML_CSS_TERMS);
+
+function allLists(){
+  return [
+    { id: STANDAARD_ID, name: STANDAARD_NAAM, cards: DECK, builtin: true },
+    { id: HTMLCSS_ID, name: HTMLCSS_NAAM, cards: HTML_CSS_DECK, builtin: true }
+  ].concat(customLists);
+}
 
 function getDeck(){
-  if (deckMode === "eigen")  return customCards.length ? customCards : DECK;
-  if (deckMode === "beide")  return DECK.concat(customCards);
-  return DECK;
+  const cards = allLists()
+    .filter(l => activeIds.includes(l.id))
+    .reduce((acc, l) => acc.concat(l.cards), []);
+  return cards.length ? cards : DECK;
+}
+
+/* splitst een platte woordenlijst in kaarten van 5 woorden */
+function chunkWords(words){
+  const size = 5;
+  const chunks = [];
+  for (let i = 0; i < words.length; i += size) chunks.push(words.slice(i, i + size));
+  if (chunks.length > 1 && chunks[chunks.length - 1].length < 2){
+    const last = chunks.pop();
+    chunks[chunks.length - 1] = chunks[chunks.length - 1].concat(last);
+  }
+  return chunks;
+}
+function parseWordList(text){
+  return text.split(/[\n,]+/).map(w => w.trim()).filter(Boolean);
 }
 
 /* ---------------------------------------------------------
@@ -787,68 +834,115 @@ function newGame(){
 }
 
 /* ---------------------------------------------------------
-   Instellingen-modal: eigen kaarten + AI
+   Instellingen-modal: speellijsten + AI
    --------------------------------------------------------- */
+function renderListToggles(){
+  listTogglesEl.innerHTML = "";
+  allLists().forEach(list => {
+    const row = document.createElement("div");
+    row.className = "list-toggle-row";
+
+    const label = document.createElement("label");
+    const cb = document.createElement("input");
+    cb.type = "checkbox";
+    cb.value = list.id;
+    cb.checked = activeIds.includes(list.id);
+    cb.addEventListener("change", () => {
+      activeIds = cb.checked
+        ? activeIds.concat(list.id)
+        : activeIds.filter(id => id !== list.id);
+      saveActiveIds(activeIds);
+      newGame();
+    });
+    label.appendChild(cb);
+    label.appendChild(document.createTextNode(" " + list.name + " (" + list.cards.length + " kaarten)"));
+    row.appendChild(label);
+
+    if (!list.builtin){
+      const del = document.createElement("button");
+      del.className = "del-btn";
+      del.textContent = "✕";
+      del.setAttribute("aria-label", "Verwijder speellijst " + list.name);
+      del.addEventListener("click", () => {
+        if (!confirm("Speellijst \"" + list.name + "\" verwijderen?")) return;
+        customLists = customLists.filter(l => l.id !== list.id);
+        activeIds = activeIds.filter(id => id !== list.id);
+        saveLists(customLists);
+        saveActiveIds(activeIds);
+        renderListToggles();
+        renderCustomList();
+        newGame();
+      });
+      row.appendChild(del);
+    }
+
+    listTogglesEl.appendChild(row);
+  });
+}
+
 function renderCustomList(){
-  customCountEl.textContent = customCards.length;
+  customCountEl.textContent = customLists.length;
   customListEl.innerHTML = "";
-  if (!customCards.length){
+  if (!customLists.length){
     const li = document.createElement("li");
     li.className = "empty-note";
-    li.textContent = "Je hebt nog geen eigen kaarten toegevoegd.";
+    li.textContent = "Je hebt nog geen eigen speellijsten toegevoegd.";
     customListEl.appendChild(li);
     return;
   }
-  customCards.forEach((words, idx) => {
+  customLists.forEach(list => {
     const li = document.createElement("li");
     const span = document.createElement("span");
-    span.textContent = words.join(" · ");
-    const del = document.createElement("button");
-    del.textContent = "✕";
-    del.setAttribute("aria-label", "Verwijder kaart");
-    del.addEventListener("click", () => {
-      customCards.splice(idx, 1);
-      saveCustomCards(customCards);
-      renderCustomList();
-      shuffle();
-      updateCounter();
-    });
+    span.textContent = list.name + " — " + list.cards.length + " kaarten";
     li.appendChild(span);
-    li.appendChild(del);
     customListEl.appendChild(li);
   });
 }
 
-function setDeckModeUI(){
-  modalOverlay.querySelectorAll('input[name="deckMode"]').forEach(r => {
-    r.checked = (r.value === deckMode);
-  });
+function addOrMergeList(name, cards){
+  const existing = customLists.find(l => l.name.toLowerCase() === name.toLowerCase());
+  if (existing){
+    existing.cards = existing.cards.concat(cards);
+  }else{
+    customLists.push({ id: "list_" + Date.now(), name, cards });
+  }
+  saveLists(customLists);
+  const id = existing ? existing.id : customLists[customLists.length - 1].id;
+  if (!activeIds.includes(id)){
+    activeIds = activeIds.concat(id);
+    saveActiveIds(activeIds);
+  }
 }
 
 function openModal(){
   apiKeyInput.value = localStorage.getItem(LS_API_KEY) || "";
-  setDeckModeUI();
+  renderListToggles();
   renderCustomList();
+  addStatus.textContent = "";
+  addStatus.className = "status";
   genStatus.textContent = "";
   genStatus.className = "status";
   modalOverlay.hidden = false;
 }
 function closeModal(){ modalOverlay.hidden = true; }
 
-function addCustomCard(){
-  const inputs = Array.from(wordInputsWrap.querySelectorAll(".word-input"));
-  const words = inputs.map(i => i.value.trim()).filter(Boolean);
+function saveWordList(){
+  const name = listNameInput.value.trim() || ("Speellijst " + (customLists.length + 1));
+  const words = parseWordList(wordsTextarea.value);
   if (words.length < 2){
-    genStatus.className = "status error";
-    genStatus.textContent = "Vul minstens 2 woorden in.";
+    addStatus.className = "status error";
+    addStatus.textContent = "Plak minstens 2 woorden.";
     return;
   }
-  customCards.push(words);
-  saveCustomCards(customCards);
-  inputs.forEach(i => i.value = "");
+  const cards = chunkWords(words);
+  addOrMergeList(name, cards);
+  listNameInput.value = "";
+  wordsTextarea.value = "";
+  renderListToggles();
   renderCustomList();
-  shuffle();
-  updateCounter();
+  newGame();
+  addStatus.className = "status ok";
+  addStatus.textContent = words.length + " woorden opgeslagen als \"" + name + "\" (" + cards.length + " kaarten).";
 }
 
 async function generateWithAI(){
@@ -904,14 +998,14 @@ async function generateWithAI(){
 
     if (!newCards.length) throw new Error("Geen bruikbare kaarten ontvangen.");
 
-    customCards = customCards.concat(newCards);
-    saveCustomCards(customCards);
+    const listName = topic || "AI gegenereerd";
+    addOrMergeList(listName, newCards);
+    renderListToggles();
     renderCustomList();
-    shuffle();
-    updateCounter();
+    newGame();
 
     genStatus.className = "status ok";
-    genStatus.textContent = newCards.length + " nieuwe kaart(en) toegevoegd!";
+    genStatus.textContent = newCards.length + " nieuwe kaart(en) toegevoegd aan \"" + listName + "\"!";
   }catch(e){
     genStatus.className = "status error";
     genStatus.textContent = "Mislukt: " + e.message;
@@ -933,15 +1027,8 @@ resetBtn.addEventListener("click", e => { e.stopPropagation(); newGame(); });
 settingsBtn.addEventListener("click", openModal);
 closeModalBtn.addEventListener("click", closeModal);
 modalOverlay.addEventListener("click", e => { if (e.target === modalOverlay) closeModal(); });
-addCardBtn.addEventListener("click", addCustomCard);
+saveListBtn.addEventListener("click", saveWordList);
 generateBtn.addEventListener("click", generateWithAI);
-modalOverlay.querySelectorAll('input[name="deckMode"]').forEach(r => {
-  r.addEventListener("change", () => {
-    deckMode = r.value;
-    saveDeckMode(deckMode);
-    newGame();
-  });
-});
 
 document.addEventListener("visibilitychange", () => {
   if (document.visibilityState === "visible" && state === "playing") keepAwake();
