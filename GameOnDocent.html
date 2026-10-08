@@ -3,147 +3,99 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>GAME ON — Docententimer</title>
+<title>GAME ON — Klantvragen timer</title>
 <style>
-:root{--bg:#0b1020;--panel:#141c31;--panel2:#1b2742;--text:#f4f7ff;--muted:#a9b6d0;--cyan:#53e0e7;--pink:#ff5ca8;--lime:#b9f36b;--line:#2a3858}
-*{box-sizing:border-box}body{margin:0;background:radial-gradient(ellipse at top right,#202e52 0,transparent 45%),var(--bg);color:var(--text);font:16px/1.45 system-ui,-apple-system,Segoe UI,sans-serif}
-main{max-width:1180px;margin:auto;padding:24px}header{display:flex;justify-content:space-between;gap:20px;align-items:center;flex-wrap:wrap;margin-bottom:22px}
-.eyebrow{color:var(--cyan);font-weight:800;letter-spacing:.16em;font-size:.76rem}h1{font-size:clamp(2rem,4vw,3.3rem);line-height:1.05;margin:.3rem 0}h2{margin:0 0 12px;font-size:1.15rem}p{color:var(--muted);margin:.35rem 0}
-.pill{border:1px solid var(--line);border-radius:999px;padding:8px 12px;color:var(--muted);font-size:.9rem}
-.layout{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(290px,.8fr);gap:18px}
-.card{background:linear-gradient(145deg,var(--panel),#10182b);border:1px solid var(--line);border-radius:20px;padding:20px;box-shadow:0 14px 38px #0002}
-.timer-card{position:relative;overflow:hidden}.timer-card:after{content:"";position:absolute;width:240px;height:240px;border:1px solid #53e0e722;border-radius:50%;right:-85px;top:-100px;pointer-events:none}
-.topline{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}.phase{color:var(--cyan);font-weight:800;text-transform:uppercase;letter-spacing:.1em;font-size:.78rem}
-.clock{font-variant-numeric:tabular-nums;font-size:clamp(4rem,11vw,8rem);font-weight:850;letter-spacing:-.06em;line-height:1.05;margin:20px 0 10px}
-.progress{height:9px;background:#293652;border-radius:20px;overflow:hidden}.bar{height:100%;width:0;background:linear-gradient(90deg,var(--cyan),var(--lime));transition:width .25s linear}
-.controls{display:flex;flex-wrap:wrap;gap:9px;margin-top:18px}
-button,select,input{font:inherit;color:var(--text);background:var(--panel2);border:1px solid #3b4c70;border-radius:12px;padding:11px 14px}
-button{cursor:pointer;font-weight:750;transition:transform .12s,border-color .12s}button:hover{border-color:var(--cyan)}button:active{transform:scale(.98)}button.primary{background:var(--cyan);color:#071321;border-color:var(--cyan)}button.warn{border-color:#a64c78;color:#ffb4d5}
-button:focus-visible,select:focus-visible,input:focus-visible{outline:3px solid var(--lime);outline-offset:2px}
-.small{font-size:.88rem;color:var(--muted)}.round-list{display:grid;gap:8px;max-height:600px;overflow:auto}
-.round{display:grid;grid-template-columns:1fr auto;gap:8px;align-items:center;text-align:left;width:100%;padding:12px 13px;background:#111a2d;border-color:var(--line)}
-.round.active{border-color:var(--cyan);background:#193047}.round strong{display:block;font-size:.95rem}.round span{display:block;color:var(--muted);font-size:.82rem;margin-top:3px}.duration{color:var(--lime);font-variant-numeric:tabular-nums;font-weight:800}
-.grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px}.settings{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-top:12px}
-.settings label{display:flex;align-items:center;gap:8px;color:var(--muted);font-size:.9rem}.settings input{width:80px;padding:8px}
-.notes{margin-top:18px}.notes ul{padding-left:20px;color:var(--muted);margin-bottom:0}.notes li{margin:7px 0}
-.status{color:var(--lime);font-weight:700;min-height:1.4em}.footer{margin-top:16px;display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;color:var(--muted);font-size:.82rem}
-.overlay{position:fixed;inset:0;background:#050913ee;display:none;place-items:center;text-align:center;padding:24px;z-index:10}.overlay.show{display:grid}.overlay h2{font-size:clamp(2rem,6vw,4rem)}.overlay p{font-size:1.2rem}.overlay button{margin-top:18px}
-@media(max-width:800px){main{padding:14px}.layout{grid-template-columns:1fr}.round-list{max-height:340px}.clock{font-size:clamp(4rem,17vw,7rem)}}
-@media(prefers-reduced-motion:reduce){*{transition:none!important}}
+:root{color-scheme:dark;--bg:#0a0d18;--panel:#151b2d;--line:#2b3554;--text:#f5f7ff;--muted:#aab4d0;--accent:#7c5cff;--cyan:#40e0d0;--warn:#ffca58}
+*{box-sizing:border-box}body{margin:0;min-height:100vh;background:radial-gradient(ellipse at top,#20274a 0%,var(--bg) 58%);font-family:system-ui,-apple-system,Segoe UI,sans-serif;color:var(--text);display:grid;place-items:center;padding:22px}
+main{width:min(760px,100%)}.eyebrow{color:var(--cyan);font-weight:800;letter-spacing:.16em;text-transform:uppercase;font-size:.78rem}.top{display:flex;justify-content:space-between;align-items:center;gap:14px;flex-wrap:wrap}h1{font-size:clamp(1.8rem,5vw,3rem);line-height:1.05;margin:.4rem 0}.sub{color:var(--muted);margin:.5rem 0 1.4rem}
+.panel{background:rgba(21,27,45,.94);border:1px solid var(--line);border-radius:24px;padding:clamp(18px,4vw,30px);box-shadow:0 22px 70px #0005}
+.controls{display:flex;gap:10px;flex-wrap:wrap;align-items:center}.controls label{color:var(--muted);font-size:.9rem}.controls select,.controls input{background:#0d1222;color:var(--text);border:1px solid var(--line);border-radius:10px;padding:10px;font:inherit}
+.display{text-align:center;padding:26px 8px 20px}.group{color:var(--cyan);font-weight:800;text-transform:uppercase;letter-spacing:.12em;font-size:.9rem}.time{font-variant-numeric:tabular-nums;font-size:clamp(4.5rem,18vw,8.5rem);font-weight:900;letter-spacing:-.06em;line-height:1.1;margin:8px 0}.time.urgent{color:var(--warn)}.detail{color:var(--muted)}.bar{height:10px;background:#0b1020;border-radius:99px;overflow:hidden;margin:14px 0 24px;border:1px solid #29314b}.bar span{display:block;height:100%;width:100%;background:linear-gradient(90deg,var(--accent),var(--cyan));transition:width .2s linear}
+.buttons{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}.buttons button{border:1px solid var(--line);background:#222a43;color:var(--text);border-radius:13px;padding:13px 10px;font:inherit;font-weight:750;cursor:pointer}.buttons .primary{background:var(--accent);border-color:var(--accent)}.buttons button:hover{filter:brightness(1.12)}.buttons button:focus-visible,select:focus-visible,input:focus-visible{outline:3px solid var(--cyan);outline-offset:2px}
+.hint{margin-top:20px;color:var(--muted);font-size:.9rem;line-height:1.5}.status{margin-top:18px;padding:12px 14px;background:#0d1222;border:1px solid var(--line);border-radius:12px;text-align:center;font-weight:700}.status.done{color:var(--warn);border-color:#80652a}
+@media(max-width:520px){.buttons{grid-template-columns:repeat(2,minmax(0,1fr))}.time{font-size:5rem}}
 </style>
 </head>
 <body>
 <main>
-<header>
-  <div><div class="eyebrow">GAME ON / DOCENTENMODUS</div><h1>De rondes. De tijd. De flow.</h1><p>Scrum-workshop · 12:30–15:30 · 6 of 7 teams</p></div>
-  <div class="pill" id="wallClock">Lokale tijd: --:--:--</div>
-</header>
-<div class="layout">
-<section>
-  <div class="card timer-card">
-    <div class="topline"><span class="phase" id="phase">Klaar om te starten</span><span class="pill" id="roundCounter">Ronde 1 van 12</span></div>
-    <h2 id="roundTitle" style="font-size:clamp(1.3rem,3vw,2rem);margin-top:12px">Welkom en context</h2>
-    <p id="roundDesc">Start de timer wanneer je klaar bent.</p>
-    <div class="clock" id="clock" aria-live="polite">05:00</div>
-    <div class="progress" aria-label="Voortgang"><div class="bar" id="bar"></div></div>
+  <div class="top"><div><div class="eyebrow">GAME ON · Scrum workshop</div><h1>Klantvragen timer</h1></div></div>
+  <p class="sub">Alleen de klantvragenrondes — stel per groep dezelfde tijd in en wissel door zodra de timer afloopt.</p>
+  <section class="panel">
     <div class="controls">
-      <button class="primary" id="startBtn">▶ Start timer</button><button id="pauseBtn">Ⅱ Pauze</button><button id="resetBtn">↺ Reset ronde</button>
-      <button id="prevBtn">← Vorige</button><button id="nextBtn">Volgende →</button>
+      <label for="groups">Aantal groepen</label>
+      <select id="groups"><option value="6">6 groepen</option><option value="7" selected>7 groepen</option></select>
+      <label for="minutes">Minuten per groep</label>
+      <input id="minutes" type="number" min="1" max="15" value="2" style="width:76px">
+      <button id="apply" type="button">Instellen</button>
     </div>
-    <div class="settings">
-      <label>Minuten <input id="mins" type="number" min="0" max="180" value="5"></label>
-      <label>Seconden <input id="secs" type="number" min="0" max="59" value="0"></label>
-      <button id="applyBtn">Stel tijd in</button>
+    <div class="display" aria-live="polite">
+      <div class="group" id="groupLabel">GROEP 1 VAN 7</div>
+      <div class="time" id="time">02:00</div>
+      <div class="detail" id="detail">Stel de timer klaar en druk op Start.</div>
     </div>
-    <p class="status" id="status" role="status">Timer staat stil.</p>
-    <p class="small">Tip: gebruik Volgende om handmatig door te gaan. De timer springt niet automatisch naar de volgende ronde.</p>
-  </div>
-  <div class="card notes">
-    <h2>Docentnotities voor deze ronde</h2>
-    <ul id="tips"></ul>
-  </div>
-</section>
-<aside class="card">
-  <div class="topline"><h2>Programma</h2><label class="small">Teams <select id="teamCount"><option value="6">6 groepen</option><option value="7">7 groepen</option></select></label></div>
-  <p class="small">Klik op een ronde om de timer daarop in te stellen.</p>
-  <div class="round-list" id="roundList"></div>
-</aside>
-</div>
-<div class="footer"><span>Werkt lokaal in je browser · geen internet nodig na openen</span><span>Tip: zet je browser op volledig scherm (F11)</span></div>
+    <div class="bar"><span id="progress"></span></div>
+    <div class="buttons">
+      <button class="primary" id="start">▶ Start</button>
+      <button id="reset">↺ Reset groep</button>
+      <button id="prev">← Vorige</button>
+      <button id="next">Volgende →</button>
+    </div>
+    <div class="status" id="status">Klaar om te starten</div>
+    <p class="hint">Tip voor de docent: laat elke groep in maximaal 2 minuten vragen stellen. Geef geen technische oplossingen; beantwoord alleen wat de klant weet. Gebruik <b>Volgende</b> om direct door te gaan naar de volgende groep.</p>
+  </section>
 </main>
-<div class="overlay" id="alarm" role="dialog" aria-modal="true" aria-labelledby="alarmTitle">
- <div><div class="eyebrow">TIJD IS OM</div><h2 id="alarmTitle">Ronde afgerond</h2><p id="alarmText">Geef een seintje en wissel van ronde.</p><button class="primary" id="dismissAlarm">Verder</button></div>
-</div>
 <script>
-const baseRounds = [
- {start:'12:30',end:'12:35',title:'Welkom en context',desc:'Introduceer de klantopdracht en het doel: iteratief samenwerken.',tips:['Vertel dat het proces net zo belangrijk is als de website.','Maak duidelijk: vandaag leren ze door te doen.']},
- {start:'12:35',end:'12:43',title:'Opdracht en spelregels',desc:'Leg de uitdaging en praktische afspraken uit.',tips:['AI mag als hulpmiddel; geen Git.','Laat studenten niet wachten op een perfect plan.']},
- {start:'12:43',end:'12:50',title:'Scrum in het kort',desc:'Sprintdoel, taken kiezen, samenwerken, testen en feedback.',tips:['Houd de uitleg kort en concreet.','Benadruk: vaak controleren en bijstellen.']},
- {start:'12:50',end:'12:57',title:'Teams en rollen',desc:'Teams vormen en een praktische rolverdeling afspreken.',tips:['Denk aan facilitator/tijdsbewaker, vragensteller, bouwer(s) en tester.','Rollen mogen tijdens de workshop wisselen.']},
- {start:'12:57',end:'13:00',title:'Klaarzetten',desc:'Open bestanden en werkblad; maak de klantvragen klaar.',tips:['Zet de timer zichtbaar aan.','Wijs vooraf de volgorde van de groepen toe.']},
- {start:'13:00',end:'13:02',title:'Klantvragen — groep 1',desc:'Groep 1 stelt vragen aan Jamie, de organisator.',tips:['Maximaal 2 minuten.','Antwoord alleen op wat daadwerkelijk gevraagd wordt.']},
- {start:'13:02',end:'13:04',title:'Klantvragen — groep 2',desc:'Groep 2 stelt vragen aan Jamie, de organisator.',tips:['Maximaal 2 minuten.','Waarschuw na 90 seconden: nog 30 seconden.']},
- {start:'13:04',end:'13:06',title:'Klantvragen — groep 3',desc:'Groep 3 stelt vragen aan Jamie, de organisator.',tips:['Maximaal 2 minuten.','Laat studenten de belangrijkste vragen eerst stellen.']},
- {start:'13:06',end:'13:08',title:'Klantvragen — groep 4',desc:'Groep 4 stelt vragen aan Jamie, de organisator.',tips:['Maximaal 2 minuten.','Houd antwoorden kort, zodat de volgende groep op tijd kan beginnen.']},
- {start:'13:08',end:'13:10',title:'Klantvragen — groep 5',desc:'Groep 5 stelt vragen aan Jamie, de organisator.',tips:['Maximaal 2 minuten.','Geen kant-en-klaar ontwerp voorschrijven.']},
- {start:'13:10',end:'13:12',title:'Klantvragen — groep 6',desc:'Groep 6 stelt vragen aan Jamie, de organisator.',tips:['Maximaal 2 minuten.','Vraag de groep om de antwoorden kort te noteren.']},
- {start:'13:12',end:'13:14',title:'Klantvragen — groep 7',desc:'Alleen gebruiken als er 7 groepen zijn.',tips:['Maximaal 2 minuten.','Bij 6 groepen: sla deze ronde over.']},
- {start:'13:14',end:'13:18',title:'Klantvragen afronden',desc:'Buffer en notities voor alle teams.',tips:['Bij 6 groepen: gebruik tijd voor verduidelijking.','Bij 7 groepen: laat teams hun belangrijkste inzichten en onzekerheden noteren.']},
- {start:'13:18',end:'13:25',title:'Begrijpen en eerste keuzes',desc:'Teams bespreken wat ze hebben gehoord en kiezen een eerste sprintdoel.',tips:['Welke informatie is duidelijk?','Welke aannames doen ze nog?']},
- {start:'13:25',end:'13:45',title:'SPRINT 1 — Begrijpen en opdelen',desc:'Kies een haalbaar doel en deel het werk op in kleine taken.',tips:['Help met procesvragen, niet met de oplossing.','Teams mogen bouwen zodra ze een werkbare eerste keuze hebben.']},
- {start:'13:45',end:'13:50',title:'Review 1 — eerste feedback',desc:'Teams laten kort zien of beschrijven wat er is.',tips:['Maximaal 1–2 verbeterpunten.','Stel één open vraag; schrijf geen specifieke pagina-indeling voor.']},
- {start:'13:50',end:'14:10',title:'SPRINT 2 — Eerste versie bouwen',desc:'Werk aan een eerste versie en controleer tussendoor of die werkt.',tips:['Laat teams regelmatig in de browser kijken.','Code geschreven betekent niet automatisch dat het werkt.']},
- {start:'14:10',end:'14:15',title:'Review 2 — prioriteit kiezen',desc:'Bespreek wat werkt en wat de belangrijkste volgende stap is.',tips:['Vraag: wat heeft nu de meeste waarde?','Laat het team zelf de prioriteit kiezen.']},
- {start:'14:15',end:'14:30',title:'PAUZE — 15 minuten',desc:'Even pauze. De volgende sprint start om 14:30.',tips:['Zet eventueel een waarschuwing voor het einde van de pauze.','Start de volgende ronde op tijd.']},
- {start:'14:30',end:'14:50',title:'SPRINT 3 — Testen en verbeteren',desc:'Test de website en maak van bevindingen kleine taken.',tips:['Controleer in de browser en indien mogelijk op smal scherm.','Laat studenten eerst zelf benoemen wat niet goed werkt.']},
- {start:'14:50',end:'14:55',title:'Review 3 — feedback op verbetering',desc:'Teams vertellen wat ze hebben aangepast en waarom.',tips:['Geef beperkte feedback.','Vraag welk probleem de aanpassing oplost.']},
- {start:'14:55',end:'15:15',title:'SPRINT 4 — Afronden en controleren',desc:'Kies de belangrijkste verbeteringen en bereid de demo voor.',tips:['Laatste 3 minuten: test en zet de demo klaar.','Moedig afmaken en controleren aan boven steeds nieuwe dingen toevoegen.']},
- {start:'15:15',end:'15:25',title:'Einddemo’s',desc:'Iedere groep presenteert kort het resultaat en één leerpunt.',tips:['6 groepen: circa 1 min 25 sec per groep.','7 groepen: circa 1 min 15 sec per groep.','Gebruik de timer streng en houd vragen kort.']},
- {start:'15:25',end:'15:30',title:'Retrospective en afsluiting',desc:'Reflecteer op samenwerken, feedback en volgende keer anders doen.',tips:['Wat hielp jullie samenwerken?','Wat veranderden jullie door feedback?','Wat doen jullie een volgende keer anders?']}
-];
-const $=id=>document.getElementById(id);
-let rounds=[],idx=0,total=300,remaining=300,interval=null,running=false,alarmShown=false,endAt=0;
-function parseTime(t){const [h,m]=t.split(':').map(Number);return h*60+m}
-function fmt(s){s=Math.max(0,Math.ceil(s));return String(Math.floor(s/60)).padStart(2,'0')+':'+String(s%60).padStart(2,'0')}
-function makeRounds(){
- const count=+$('teamCount').value;
- rounds=baseRounds.filter(r=>!(r.title==='Klantvragen — groep 7'&&count===6)).map(r=>({...r}));
-}
-function stop(){if(interval)clearInterval(interval);interval=null;running=false}
-function renderList(){
- $('roundList').innerHTML='';
- rounds.forEach((r,i)=>{
-  const b=document.createElement('button');b.className='round'+(i===idx?' active':'');
-  const start=r.start||'';
-  const duration=(parseTime(r.end)-parseTime(r.start));
-  b.innerHTML=`<div><strong>${r.title}</strong><span>${r.start}–${r.end}</span></div><div class="duration">${duration} min</div>`;
-  b.addEventListener('click',()=>loadRound(i));$('roundList').appendChild(b);
- });
- $('roundCounter').textContent=`Ronde ${idx+1} van ${rounds.length}`;
-}
-function render(){
- const r=rounds[idx];if(!r)return;
- $('phase').textContent=r.title.includes('SPRINT')?'SPRINT':r.title.includes('Review')?'REVIEW':r.title.includes('Klantvragen')?'KLANTVRAGEN':'DOCENTENRONDE';
- $('roundTitle').textContent=r.title;$('roundDesc').textContent=r.desc;
- $('clock').textContent=fmt(remaining);$('mins').value=Math.floor(total/60);$('secs').value=total%60;
- $('bar').style.width=(total?100*(total-remaining)/total:0)+'%';
- $('tips').innerHTML='';r.tips.forEach(t=>{const li=document.createElement('li');li.textContent=t;$('tips').appendChild(li)});
- $('roundCounter').textContent=`Ronde ${idx+1} van ${rounds.length}`;
- [...$('roundList').children].forEach((b,i)=>b.classList.toggle('active',i===idx));
-}
-function loadRound(i){stop();$('alarm').classList.remove('show');idx=Math.max(0,Math.min(i,rounds.length-1));const r=rounds[idx];total=(parseTime(r.end)-parseTime(r.start))*60;remaining=total;alarmShown=false;$('status').textContent='Timer staat stil.';render()}
-function tick(){remaining=Math.max(0,(endAt-Date.now())/1000);render();if(remaining<=0){stop();remaining=0;render();$('status').textContent='Tijd is om — wissel van ronde.';$('alarmTitle').textContent='Tijd is om!';$('alarmText').textContent=rounds[idx].title+' is afgelopen. Geef een seintje en ga door wanneer je klaar bent.';$('alarm').classList.add('show');beep()}}
-function beep(){try{const C=window.AudioContext||window.webkitAudioContext;if(!C)return;const c=new C(),o=c.createOscillator(),g=c.createGain();o.connect(g);g.connect(c.destination);o.frequency.value=880;g.gain.value=.12;o.start();setTimeout(()=>{o.stop();c.close()},450)}catch(e){}}
-$('startBtn').addEventListener('click',()=>{if(running)return;if(remaining<=0)remaining=total;running=true;endAt=Date.now()+remaining*1000;$('status').textContent='Timer loopt.';interval=setInterval(tick,200);tick()});
-$('pauseBtn').addEventListener('click',()=>{if(!running){$('status').textContent='Timer staat stil.';return}remaining=Math.max(0,(endAt-Date.now())/1000);stop();render();$('status').textContent='Timer gepauzeerd.'});
-$('resetBtn').addEventListener('click',()=>loadRound(idx));
-$('prevBtn').addEventListener('click',()=>loadRound(idx-1));
-$('nextBtn').addEventListener('click',()=>loadRound(idx+1));
-$('applyBtn').addEventListener('click',()=>{stop();const m=Math.max(0,Math.min(180,Number($('mins').value)||0)),s=Math.max(0,Math.min(59,Number($('secs').value)||0));total=m*60+s;remaining=total;$('alarm').classList.remove('show');$('status').textContent='Aangepaste tijd ingesteld.';render()});
-$('dismissAlarm').addEventListener('click',()=>$('alarm').classList.remove('show'));
-$('teamCount').addEventListener('change',()=>{const old=rounds[idx]?.title;makeRounds();let n=rounds.findIndex(r=>r.title===old);if(n<0)n=Math.min(idx,rounds.length-1);loadRound(n);renderList()});
-function updateWallClock(){$('wallClock').textContent='Lokale tijd: '+new Date().toLocaleTimeString('nl-NL',{hour:'2-digit',minute:'2-digit',second:'2-digit'})}
-makeRounds();loadRound(0);renderList();updateWallClock();setInterval(updateWallClock,1000);
+(() => {
+  const $ = id => document.getElementById(id);
+  let count = 7, secondsPerGroup = 120, remaining = 120, current = 0, interval = null, running = false, ended = false;
+  let audioCtx = null;
+  function mmss(s){const m=Math.floor(s/60), sec=s%60;return String(m).padStart(2,'0')+':'+String(sec).padStart(2,'0')}
+  function stop(){if(interval!==null)clearInterval(interval);interval=null;running=false}
+  function beep(){
+    try{
+      audioCtx = audioCtx || new (window.AudioContext || window.webkitAudioContext)();
+      const osc=audioCtx.createOscillator(), gain=audioCtx.createGain();
+      osc.connect(gain);gain.connect(audioCtx.destination);osc.type='sine';osc.frequency.value=880;
+      gain.gain.setValueAtTime(.001,audioCtx.currentTime);gain.gain.exponentialRampToValueAtTime(.22,audioCtx.currentTime+.03);gain.gain.exponentialRampToValueAtTime(.001,audioCtx.currentTime+.65);
+      osc.start();osc.stop(audioCtx.currentTime+.68);
+    }catch(e){}
+  }
+  function render(){
+    $('groupLabel').textContent = current < count ? `GROEP ${current+1} VAN ${count}` : 'ALLE GROEPEN GEWEEST';
+    $('time').textContent = mmss(remaining);
+    $('time').classList.toggle('urgent',remaining<=15);
+    $('progress').style.width = `${Math.max(0,Math.min(100,remaining/secondsPerGroup*100))}%`;
+    $('start').textContent = running ? 'Ⅱ Pauze' : (remaining===0 ? '▶ Opnieuw' : '▶ Start');
+    $('prev').disabled = current===0;
+    $('next').textContent = current >= count-1 ? 'Opnieuw ↻' : 'Volgende →';
+    $('status').classList.toggle('done',ended);
+    $('status').textContent = ended ? (current>=count-1 ? 'Klantvragenrondes afgerond!' : `Tijd om — wissel naar groep ${current+2}`) : running ? 'Timer loopt…' : 'Gepauzeerd / klaar';
+    $('detail').textContent = ended ? (current>=count-1 ? 'Goed gedaan. Alle groepen hebben hun klantvragen gesteld.' : 'Klik op Volgende om de volgende groep te starten.') : 'Stel de timer klaar en druk op Start.';
+  }
+  function loadGroup(index){
+    stop();current=Math.max(0,Math.min(count-1,index));remaining=secondsPerGroup;ended=false;render();
+  }
+  function start(){
+    if(running){stop();render();return}
+    if(remaining<=0){remaining=secondsPerGroup;ended=false}
+    if(current>=count){current=0;remaining=secondsPerGroup}
+    running=true;ended=false;
+    interval=setInterval(()=>{
+      if(remaining>0)remaining--;
+      if(remaining<=0){remaining=0;stop();ended=true;beep()}
+      render();
+    },1000);
+    render();
+  }
+  $('start').addEventListener('click',start);
+  $('reset').addEventListener('click',()=>{stop();remaining=secondsPerGroup;ended=false;render()});
+  $('prev').addEventListener('click',()=>loadGroup(current-1));
+  $('next').addEventListener('click',()=>{if(current>=count-1){loadGroup(0)}else{loadGroup(current+1)}});
+  $('apply').addEventListener('click',()=>{
+    stop();count=Number($('groups').value);secondsPerGroup=Math.max(60,Math.min(900,Number($('minutes').value||2)*60));$('minutes').value=secondsPerGroup/60;loadGroup(0);
+  });
+  render();
+})();
 </script>
 </body>
 </html>
