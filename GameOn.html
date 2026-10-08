@@ -1,0 +1,175 @@
+<!doctype html>
+<html lang="nl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>GAME ON — Studentenhandleiding</title>
+<style>
+:root{--ink:#edf3ff;--muted:#b7c4d9;--bg:#0b1020;--panel:#121b31;--line:#2a3a5b;--accent:#54f0c1;--warm:#ffcb6b}
+*{box-sizing:border-box}html{scroll-behavior:smooth}
+body{margin:0;font-family:Arial,sans-serif;line-height:1.55;background:radial-gradient(ellipse at top right,#1c2c4c 0,transparent 42%),var(--bg);color:var(--ink)}
+header{background:linear-gradient(125deg,#131d36,#273260);color:white;padding:38px 22px;border-bottom:3px solid var(--accent)}
+header div,main{max-width:1000px;margin:auto}header h1{font-size:clamp(2rem,5vw,3.3rem);line-height:1.05;margin:10px 0}
+header p{max-width:720px;color:#dce6fa;font-size:1.08rem}main{padding:24px 16px 56px}
+section{background:linear-gradient(145deg,#121b31,#10182a);padding:clamp(18px,3vw,28px);margin:20px 0;border:1px solid var(--line);border-radius:18px;box-shadow:0 12px 28px #0003;break-inside:avoid}
+section h2{display:flex;align-items:center;gap:10px;font-size:1.35rem;margin:0 0 12px}section h2:before{content:"";width:8px;height:26px;border-radius:6px;background:var(--accent)}
+.note{padding:14px 16px;background:#1b2b42;border:1px solid #34516b;border-left:5px solid var(--accent);border-radius:10px;margin:14px 0}
+.checklist{margin:14px 0}.checklist label{display:flex;align-items:flex-start;gap:10px;margin:10px 0;padding:10px 12px;background:#17233a;border:1px solid #283b5c;border-radius:10px}
+.checklist input[type=checkbox]{appearance:none;flex:0 0 19px;width:19px;height:19px;margin:2px 0 0;border:2px solid #91a3c2;border-radius:5px;background:#0b1426;cursor:pointer}
+.checklist input[type=checkbox]:checked{background:var(--accent);border-color:var(--accent)}.checklist input[type=checkbox]:checked:after{content:"✓";display:block;color:#071a18;font-weight:900;text-align:center;line-height:15px}
+table{width:100%;border-collapse:separate;border-spacing:0;margin:14px 0;border:1px solid var(--line);border-radius:12px;overflow:hidden}th,td{padding:10px;text-align:left;vertical-align:top;border-right:1px solid var(--line);border-bottom:1px solid var(--line)}th{background:#202d49;color:#eaf2ff}td{background:#111b30}tr:last-child td{border-bottom:0}th:last-child,td:last-child{border-right:0}
+.sprint{border-color:#3c6b71;position:relative}.time{display:inline-block;font-weight:800;color:var(--warm);background:#332b27;border:1px solid #5b4a36;padding:5px 10px;border-radius:999px}.question{font-weight:800;color:var(--warm)}
+input[type=text],textarea{width:100%;font:inherit;color:var(--ink);background:#0b1426;border:1px solid #3b4f73;border-radius:9px;padding:11px 12px;outline:none}
+textarea{min-height:78px;resize:vertical}input:focus,textarea:focus{border-color:var(--accent);box-shadow:0 0 0 3px #54f0c11f}
+.field{display:block;margin:12px 0}.field span{display:block;font-weight:700;font-size:.93rem;margin-bottom:6px;color:#d9e5f8}
+.input-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.progress-line{display:flex;flex-wrap:wrap;gap:8px;margin:18px 0 4px}.progress-line span{border:1px solid #435476;background:#18243c;border-radius:999px;padding:6px 10px;font-size:.83rem}
+footer{text-align:center;color:var(--muted);padding:22px}
+@media(max-width:650px){.input-grid{grid-template-columns:1fr}table{font-size:.88rem}th,td{padding:7px}header{padding:28px 18px}}
+@media print{body{background:white;color:#111;font-size:10pt}header{background:#eee;color:#111;border-bottom:2px solid #333;padding:20px}header p{color:#222}section{background:white;box-shadow:none;border:1px solid #aaa;padding:16px;margin:12px 0}.checklist label,td,th,.note{background:white;color:#111;border-color:#bbb}strong{color:#111}input[type=text],textarea{background:white;color:#111;border-color:#888}.time{background:white;color:#111;border-color:#888}}
+</style>
+</head>
+<body>
+<header><div>
+<p style="font-size:.78rem;letter-spacing:.16em;text-transform:uppercase;color:#54f0c1;font-weight:bold">TEAM CHALLENGE · WEB DESIGN · SCRUM</p>
+<h1>GAME ON — Van klantvraag naar website</h1>
+<p>Jullie bouwen samen één website. De klant bepaalt de behoefte. Jullie ontdekken zelf wat de beste oplossing is.</p>
+</div></header>
+<main>
+<div class="progress-line"><span>1. Begrijpen</span><span>2. Opdelen</span><span>3. Bouwen</span><span>4. Testen</span><span>5. Verbeteren</span></div>
+
+<section><h2>De opdracht</h2>
+<p>Jullie zijn een webteam. Een klant komt met een idee en wil daar een website voor.</p>
+<p>Jullie taak is niet om meteen te gaan bouwen. Eerst begrijpen jullie de vraag, daarna maken jullie keuzes, bouwen jullie een eerste versie, vragen jullie feedback en verbeteren jullie het product.</p>
+<div class="note"><strong>Belangrijk:</strong> er is niet één voorgeschreven goede website. Jullie keuzes moeten passen bij wat jullie uit de klantgesprekken leren.</div></section>
+
+<section><h2>Zo werken jullie</h2>
+<ol><li><strong>Eerst begrijpen</strong></li><li><strong>Dan opdelen</strong></li><li><strong>Dan bouwen</strong></li><li><strong>Dan testen</strong></li><li><strong>Dan verbeteren</strong></li></ol>
+<div class="checklist">
+<label><input type="checkbox"> We werken aan één gezamenlijk product.</label>
+<label><input type="checkbox"> We maken werk klein genoeg om binnen een sprint af te krijgen.</label>
+<label><input type="checkbox"> We overleggen voordat we grote keuzes maken.</label>
+<label><input type="checkbox"> We testen wat we maken.</label>
+<label><input type="checkbox"> We gebruiken feedback om onze keuzes aan te passen.</label>
+</div></section>
+
+<section><h2>Stap 1 — Begrijp de klant</h2>
+<p>Jullie krijgen een kort gesprek met de klant. Stel zelf vragen. De klant vertelt niet automatisch alles.</p>
+<div class="checklist">
+<label><input type="checkbox"> We kunnen in onze eigen woorden uitleggen welk probleem of doel de klant heeft.</label>
+<label><input type="checkbox"> We weten voor wie het product bedoeld is.</label>
+<label><input type="checkbox"> We weten wat de bezoeker met de website moet kunnen bereiken.</label>
+<label><input type="checkbox"> We kennen belangrijke voorwaarden of beperkingen.</label>
+<label><input type="checkbox"> We hebben opgeschreven wat nog onduidelijk is.</label>
+<label><input type="checkbox"> We weten welke vraag we nog aan de klant kunnen stellen als dat nodig is.</label>
+</div>
+<label class="field"><span>Onze samenvatting van de klantvraag</span><textarea placeholder="De klant wil..."></textarea></label>
+<label class="field"><span>Voor wie maken we dit?</span><input type="text" placeholder="De belangrijkste doelgroep is..."></label>
+<label class="field"><span>Wat moet de bezoeker kunnen bereiken?</span><textarea placeholder="Na het bekijken van de website kan een bezoeker..."></textarea></label>
+<label class="field"><span>Wat is nog onduidelijk? Schrijf vragen op.</span><textarea placeholder="1. ...&#10;2. ...&#10;3. ..."></textarea></label>
+<p class="question">Tip: vraag door. “Wat bedoel je precies?” is vaak een goede vraag.</p></section>
+
+<section><h2>Stap 2 — Maak jullie werk zichtbaar</h2>
+<p>Schrijf op wat jullie denken dat er voor het product nodig is. Gebruik wat jullie uit het gesprek halen of wat jullie zelf als idee toevoegen.</p>
+<table><tr><th>Onderdeel van jullie werk</th><th>Waarom denken we dat dit nodig is?</th><th>Wat is nog onduidelijk?</th></tr>
+<tr><td><input type="text" placeholder="Taak / idee"></td><td><input type="text" placeholder="Waarom?"></td><td><input type="text" placeholder="Vraag / onzekerheid"></td></tr>
+<tr><td><input type="text" placeholder="Taak / idee"></td><td><input type="text" placeholder="Waarom?"></td><td><input type="text" placeholder="Vraag / onzekerheid"></td></tr>
+<tr><td><input type="text" placeholder="Taak / idee"></td><td><input type="text" placeholder="Waarom?"></td><td><input type="text" placeholder="Vraag / onzekerheid"></td></tr>
+<tr><td><input type="text" placeholder="Taak / idee"></td><td><input type="text" placeholder="Waarom?"></td><td><input type="text" placeholder="Vraag / onzekerheid"></td></tr></table>
+<label class="field"><span>Welke taken kunnen kleiner gemaakt worden?</span><textarea placeholder="Deze taak kunnen we opdelen in..."></textarea></label>
+<div class="checklist">
+<label><input type="checkbox"> We hebben grote taken kleiner gemaakt.</label>
+<label><input type="checkbox"> We kunnen zien welke taken bij elkaar horen.</label>
+<label><input type="checkbox"> We maken onderscheid tussen wat de klant heeft gezegd en wat wij zelf bedacht hebben.</label>
+</div></section>
+
+<section><h2>Stap 3 — Kies wat eerst moet</h2>
+<p>Jullie hebben waarschijnlijk meer ideeën dan tijd. Dat is normaal. Kies bewust.</p>
+<p><strong>Vraag jezelf:</strong> als we maar een paar dingen kunnen maken, welke dingen leveren dan de meeste waarde voor de klant en bezoeker?</p>
+<table><tr><th>Nu</th><th>Later</th><th>Misschien / alleen als er tijd is</th></tr>
+<tr><td><input type="text" placeholder="Wat eerst?"></td><td><input type="text" placeholder="Wat kan later?"></td><td><input type="text" placeholder="Wat is extra?"></td></tr>
+<tr><td><input type="text" placeholder="Wat eerst?"></td><td><input type="text" placeholder="Wat kan later?"></td><td><input type="text" placeholder="Wat is extra?"></td></tr></table>
+<label class="field"><span>Waarom kiezen we hiervoor als eerste?</span><textarea placeholder="Dit levert de meeste waarde op omdat..."></textarea></label>
+<div class="checklist"><label><input type="checkbox"> We kunnen uitleggen waarom we iets als eerste hebben gekozen.</label><label><input type="checkbox"> We hebben niet geprobeerd alles tegelijk te bouwen.</label></div></section>
+
+<section><h2>Maak afspraken als team</h2>
+<p>Gebruik deze ruimte om kort af te spreken wie waaraan werkt en wat je van elkaar nodig hebt.</p>
+<div class="input-grid">
+<label class="field"><span>Teamnaam</span><input type="text" placeholder="Naam van jullie team"></label>
+<label class="field"><span>Wie houdt de tijd in de gaten?</span><input type="text" placeholder="Naam"></label>
+</div>
+<label class="field"><span>Wie werkt aan welke taak?</span><textarea placeholder="Naam — taak&#10;Naam — taak&#10;Naam — taak"></textarea></label>
+<label class="field"><span>Wat hebben we van elkaar nodig?</span><textarea placeholder="Ik kan verder als..."></textarea></label>
+</section>
+
+<section class="sprint"><h2>Sprint 1 — Maak een eerste bruikbare versie</h2>
+<p class="time">Bouwen: 20 minuten</p>
+<p>Gebruik jullie eigen prioriteiten. Maak een eerste versie waarmee iemand al iets van het product kan ervaren.</p>
+<p><strong>Voor je begint:</strong></p><div class="checklist">
+<label><input type="checkbox"> We hebben afgesproken wie wat doet.</label>
+<label><input type="checkbox"> We weten wat “klaar” betekent voor onze gekozen taken.</label>
+<label><input type="checkbox"> We weten wat we bewust nog niet gaan maken.</label>
+</div><p><strong>Tijdens het bouwen:</strong> houd elkaar op de hoogte. Als je vastloopt, vraag hulp of maak de taak kleiner.</p>
+<p><strong>Voor de review:</strong> test jullie versie en bereid een korte demonstratie voor.</p>
+<label class="field"><span>Ons sprintdoel</span><input type="text" placeholder="Aan het einde van deze sprint kunnen we..."></label>
+<label class="field"><span>Wat is af en wat nog niet?</span><textarea placeholder="Af: ...&#10;Nog niet af: ..."></textarea></label></section>
+
+<section><h2>Review 1 — Laat de klant kijken</h2><p>Laat zien wat jullie hebben gemaakt. Luister naar de reactie van de klant.</p>
+<div class="checklist"><label><input type="checkbox"> We hebben laten zien wat er al werkt.</label><label><input type="checkbox"> We hebben geluisterd naar de reactie van de klant.</label><label><input type="checkbox"> We hebben feedback opgeschreven.</label><label><input type="checkbox"> We passen onze werkplanning aan als de feedback daar aanleiding toe geeft.</label></div>
+<p class="question">Vraag: “Wat is volgens de klant nu het belangrijkste om te verbeteren?”</p>
+<label class="field"><span>Feedback van de klant</span><textarea placeholder="De klant vindt goed dat... De klant mist / vraagt zich af..."></textarea></label>
+<label class="field"><span>Wat kiezen we met deze feedback te doen?</span><textarea placeholder="We gaan... omdat..."></textarea></label></section>
+
+<section class="sprint"><h2>Sprint 2 — Verbeter wat de meeste waarde oplevert</h2><p class="time">Bouwen: 20 minuten</p>
+<p>Kijk opnieuw naar jullie werk en naar de feedback. Kies zelf wat nu het belangrijkst is.</p>
+<div class="checklist"><label><input type="checkbox"> We hebben onze prioriteiten opnieuw bekeken.</label><label><input type="checkbox"> We werken aan iets dat de klant of gebruiker echt helpt.</label><label><input type="checkbox"> We maken niet alleen nieuwe dingen; we mogen ook bestaande dingen verbeteren.</label><label><input type="checkbox"> We testen opnieuw voordat de sprint voorbij is.</label></div>
+<label class="field"><span>Ons sprintdoel</span><input type="text" placeholder="In deze sprint verbeteren we..."></label>
+<label class="field"><span>Wat hebben we aangepast?</span><textarea placeholder="We hebben..."></textarea></label>
+</section>
+
+<section><h2>Review 2 — Opnieuw feedback ophalen</h2><p>Laat de verbeterde versie zien. Vraag wat nu beter werkt en wat nog niet duidelijk of handig genoeg is.</p>
+<div class="checklist"><label><input type="checkbox"> We hebben de belangrijkste feedback genoteerd.</label><label><input type="checkbox"> We hebben besloten welke feedback we wel en niet verwerken.</label><label><input type="checkbox"> We kunnen uitleggen waarom.</label></div>
+<label class="field"><span>Welke feedback nemen we mee?</span><textarea placeholder="We nemen mee..."></textarea></label>
+<label class="field"><span>Wat laten we bewust liggen, en waarom?</span><textarea placeholder="We doen dit nu niet omdat..."></textarea></label>
+</section>
+
+<section><h2>Pauze — 15 minuten</h2><p>Leg het werk even weg. Na de pauze begint een nieuwe ronde: opnieuw kijken, kiezen en verbeteren.</p></section>
+
+<section class="sprint"><h2>Sprint 3 — Maak betere keuzes</h2><p class="time">Bouwen: 20 minuten</p>
+<p>Jullie hebben nu meer informatie dan aan het begin. Gebruik die informatie.</p>
+<div class="checklist"><label><input type="checkbox"> We hebben opnieuw bepaald wat nu de meeste waarde oplevert.</label><label><input type="checkbox"> We controleren of nieuwe ideeën echt bij de klantvraag passen.</label><label><input type="checkbox"> We kijken ook naar duidelijkheid en gebruiksgemak.</label><label><input type="checkbox"> We testen op het apparaat waarop bezoekers waarschijnlijk kijken.</label><label><input type="checkbox"> We schrappen of veranderen dingen als dat het product beter maakt.</label></div>
+<label class="field"><span>Ons sprintdoel</span><input type="text" placeholder="We maken het product beter door..."></label>
+<label class="field"><span>Wat gaan we testen?</span><textarea placeholder="We controleren of..."></textarea></label>
+</section>
+
+<section><h2>Review 3 — Laat zien wat er veranderd is</h2><p>Toon de huidige versie en vraag gericht om feedback.</p>
+<div class="checklist"><label><input type="checkbox"> We kunnen minimaal één belangrijke verbetering uitleggen.</label><label><input type="checkbox"> We hebben gecontroleerd of de belangrijkste behoefte van de klant nog steeds goed wordt bediend.</label><label><input type="checkbox"> We weten wat in de laatste sprint nog moet gebeuren.</label></div></section>
+
+<section class="sprint"><h2>Sprint 4 — Maak het klantklaar</h2><p class="time">Bouwen: 20 minuten</p>
+<p>Nu is de vraag niet: “Wat kunnen we er nog bij zetten?” maar: <strong>“Wat moet goed zijn voordat we dit aan de klant laten zien?”</strong></p>
+<div class="checklist"><label><input type="checkbox"> De belangrijkste onderdelen werken.</label><label><input type="checkbox"> We hebben de belangrijkste gebruikersroute zelf getest.</label><label><input type="checkbox"> We hebben onduidelijke of kapotte onderdelen verbeterd.</label><label><input type="checkbox"> We hebben bewust gekozen wat we niet meer gaan bouwen.</label><label><input type="checkbox"> We hebben de website nog één keer gecontroleerd.</label></div>
+<label class="field"><span>Wat moet echt af zijn in de laatste sprint?</span><textarea placeholder="Onze belangrijkste laatste taken zijn..."></textarea></label>
+</section>
+
+<section><h2>AI gebruiken</h2><p>AI mag jullie helpen bij bijvoorbeeld code schrijven, uitleg geven, fouten zoeken of ideeën vergelijken.</p>
+<div class="checklist"><label><input type="checkbox"> We weten wat we aan AI hebben gevraagd.</label><label><input type="checkbox"> We controleren of de output doet wat we verwachten.</label><label><input type="checkbox"> We kunnen uitleggen wat we hebben overgenomen.</label><label><input type="checkbox"> We laten AI niet bepalen wat de klant wil.</label></div>
+<div class="note"><strong>Regel:</strong> AI kan helpen bouwen, maar jullie blijven verantwoordelijk voor het resultaat.</div>
+<label class="field"><span>Waarvoor hebben we AI gebruikt?</span><textarea placeholder="We vroegen AI om..."></textarea></label>
+<label class="field"><span>Wat hebben we zelf gecontroleerd of aangepast?</span><textarea placeholder="We hebben gecontroleerd dat..."></textarea></label></section>
+
+<section><h2>Finale demo</h2><p>Laat jullie website aan de klant zien.</p><ol><li>Welk probleem of doel van de klant hebben jullie opgelost?</li><li>Welke keuze hebben jullie gemaakt over wat eerst moest?</li><li>Wat hebben jullie veranderd door feedback?</li><li>Wat hebben jullie bewust niet gebouwd?</li></ol>
+<label class="field"><span>Onze belangrijkste keuze en waarom</span><textarea placeholder="We kozen ervoor om... omdat..."></textarea></label>
+<label class="field"><span>Wat veranderde door feedback?</span><textarea placeholder="Na de review hebben we..."></textarea></label>
+</section>
+
+<section><h2>Terugkijken op jullie samenwerking</h2>
+<table><tr><th>DOORGAAN</th><th>STOPPEN</th><th>STARTEN</th></tr><tr><td>Wat werkte goed?</td><td>Wat kostte onnodig tijd?</td><td>Wat gaan we volgende keer anders doen?</td></tr><tr><td><textarea placeholder="Wat werkte goed?"></textarea></td><td><textarea placeholder="Wat kostte onnodig tijd?"></textarea></td><td><textarea placeholder="Wat doen we volgende keer?"></textarea></td></tr></table></section>
+
+<section><h2>Wat hebben jullie eigenlijk gedaan?</h2>
+<table><tr><th>Wat jullie deden</th><th>Term</th></tr>
+<tr><td>Werk zichtbaar maken</td><td>Backlog</td></tr><tr><td>Werk kleiner maken</td><td>Decompositie</td></tr><tr><td>Kiezen wat eerst moet</td><td>Prioriteren</td></tr><tr><td>In korte rondes bouwen</td><td>Sprint</td></tr><tr><td>Resultaat aan de klant laten zien</td><td>Review</td></tr><tr><td>Op basis van feedback aanpassen</td><td>Inspecteren &amp; aanpassen</td></tr><tr><td>Terugkijken op de samenwerking</td><td>Retrospective</td></tr></table>
+<p><strong>De belangrijkste les:</strong> goed samenwerken betekent niet dat je alles bouwt. Het betekent dat je samen de juiste dingen kiest, controleert en verbetert.</p></section>
+
+</main>
+<footer>GAME ON — workshop eerstejaars MBO niveau 2/3 · Tip: print dit werkblad of vul het digitaal in.</footer>
+</body>
+</html>
