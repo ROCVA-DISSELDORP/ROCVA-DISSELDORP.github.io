@@ -1,0 +1,935 @@
+<!doctype html>
+<html lang="nl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#10131d">
+  <title>PHP Bootcamp | ROCvA</title>
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg: #10131d;
+      --surface: #181c28;
+      --surface-raised: #202636;
+      --surface-soft: #242b3d;
+      --line: #30384b;
+      --text: #eef1f8;
+      --muted: #9ca6bb;
+      --accent: #a78bfa;
+      --accent-strong: #8b6cf0;
+      --green: #55d6a2;
+      --red: #ff7c86;
+      --yellow: #f4c76b;
+      --code: #0d111a;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+    * { box-sizing: border-box; }
+    body { margin: 0; min-width: 320px; min-height: 100vh; background: var(--bg); color: var(--text); }
+    button, textarea { font: inherit; }
+    button { color: inherit; }
+    .topbar { height: 64px; display: flex; align-items: center; justify-content: space-between; gap: 20px; padding: 0 24px; border-bottom: 1px solid var(--line); background: #141722; }
+    .brand { display: flex; align-items: center; gap: 12px; min-width: 0; }
+    .brand-mark { display: grid; place-items: center; width: 34px; height: 34px; border-radius: 10px; background: linear-gradient(145deg, #b7a1ff, #7758d5); color: #fff; font-weight: 850; font-size: 15px; }
+    .brand-title { font-weight: 740; letter-spacing: -.02em; }
+    .brand-subtitle { margin-top: 2px; color: var(--muted); font-size: 11px; }
+    .top-meta { display: flex; align-items: center; gap: 16px; color: var(--muted); font-size: 12px; }
+    .progress-pill { display: flex; align-items: center; gap: 9px; padding: 8px 12px; border: 1px solid var(--line); border-radius: 999px; background: var(--surface); color: var(--text); }
+    .progress-track { width: 74px; height: 5px; border-radius: 9px; background: #343b4e; overflow: hidden; }
+    .progress-fill { width: 0; height: 100%; border-radius: inherit; background: var(--green); transition: width .25s ease; }
+    .app-layout { display: grid; grid-template-columns: 260px minmax(310px, .9fr) minmax(380px, 1.2fr); height: calc(100vh - 64px); min-height: 600px; }
+    .sidebar { min-height: 0; overflow: auto; padding: 22px 14px 28px; border-right: 1px solid var(--line); background: #141722; }
+    .side-heading { margin: 0 10px 12px; color: var(--muted); font-size: 10px; font-weight: 750; letter-spacing: .13em; text-transform: uppercase; }
+    .module { margin: 0 0 7px; }
+    .module-title { display: flex; justify-content: space-between; gap: 10px; margin: 17px 10px 7px; color: #c4cbda; font-size: 11px; font-weight: 700; }
+    .module-title span:last-child { color: #758097; font-weight: 500; }
+    .lesson-nav { display: grid; gap: 3px; }
+    .lesson-button { display: flex; width: 100%; align-items: center; gap: 10px; padding: 9px 10px; border: 1px solid transparent; border-radius: 8px; background: transparent; text-align: left; color: #b7bfd0; font-size: 12px; cursor: pointer; transition: background .15s, color .15s; }
+    .lesson-button:hover { background: #1d2230; color: var(--text); }
+    .lesson-button[aria-current="page"] { border-color: #3d355e; background: #29233e; color: #d9ceff; }
+    .lesson-number { display: grid; flex: 0 0 22px; place-items: center; width: 22px; height: 22px; border: 1px solid #3a4255; border-radius: 50%; color: #a5aec0; font-size: 10px; }
+    .lesson-button.is-done .lesson-number { border-color: #29694f; background: #153d30; color: var(--green); }
+    .nav-check { margin-left: auto; color: var(--green); }
+    .lesson-panel { min-height: 0; overflow: auto; padding: 30px 28px 42px; border-right: 1px solid var(--line); background: #191d29; }
+    .breadcrumbs { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 18px; color: #929db2; font-size: 11px; }
+    .breadcrumbs span:last-child { color: #c6b8ff; }
+    h1 { margin: 0 0 12px; font-size: clamp(25px, 2.1vw, 32px); line-height: 1.2; letter-spacing: -.035em; }
+    .lesson-intro { max-width: 680px; margin: 0 0 23px; color: #b2bbcd; font-size: 13px; line-height: 1.75; }
+    .lesson-tags { display: flex; flex-wrap: wrap; gap: 7px; margin-bottom: 28px; }
+    .tag { padding: 5px 9px; border: 1px solid #363e52; border-radius: 20px; color: #b4bdd0; font-size: 10px; }
+    .content-section { margin: 0 0 25px; }
+    .content-section h2 { margin: 0 0 10px; font-size: 14px; letter-spacing: -.01em; }
+    .content-section p, .content-section li { color: #b3bdd0; font-size: 12px; line-height: 1.75; }
+    .content-section p { margin: 7px 0; }
+    .content-section ul { margin: 8px 0; padding-left: 19px; }
+    .hint-box, .task-box { padding: 13px 14px; border: 1px solid #363d50; border-radius: 10px; background: #202535; }
+    .task-box { border-color: #463a6d; background: #242039; }
+    .hint-box strong, .task-box strong { display: block; margin-bottom: 5px; font-size: 11px; }
+    .hint-box p, .task-box p { margin: 0; }
+    .hidden { display: none !important; }
+    .inline-actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 11px; }
+    .button { display: inline-flex; justify-content: center; align-items: center; gap: 7px; min-height: 34px; padding: 7px 11px; border: 1px solid #41495b; border-radius: 7px; background: #272e3d; color: #e7eaf2; font-size: 11px; font-weight: 650; cursor: pointer; transition: background .15s, border-color .15s; }
+    .button:hover { border-color: #77708f; background: #30384a; }
+    .button.primary { border-color: var(--accent-strong); background: var(--accent-strong); color: white; }
+    .button.primary:hover { background: #9a7cf2; }
+    .button:disabled { opacity: .45; cursor: not-allowed; }
+    .lesson-footer { display: flex; justify-content: space-between; gap: 9px; margin-top: 27px; padding-top: 17px; border-top: 1px solid var(--line); }
+    .workspace { display: grid; grid-template-rows: minmax(0, 1fr); min-width: 0; min-height: 0; background: var(--code); }
+    .workspace-content { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); min-height: 0; }
+    .workspace-pane { display: flex; min-width: 0; min-height: 0; flex-direction: column; }
+    .workspace-pane + .workspace-pane { border-left: 1px solid var(--line); }
+    .pane-header { display: flex; min-height: 52px; align-items: center; justify-content: space-between; gap: 8px; padding: 0 15px; border-bottom: 1px solid var(--line); background: #151923; }
+    .pane-title { display: flex; align-items: center; gap: 8px; color: #dce1eb; font-size: 11px; font-weight: 680; }
+    .file-icon { color: #9d86f4; font-size: 14px; }
+    .pane-actions { display: flex; align-items: center; gap: 7px; }
+    .run-button { display: inline-flex; align-items: center; gap: 6px; padding: 7px 10px; border: 0; border-radius: 6px; background: #7959dc; color: white; font-size: 10px; font-weight: 700; cursor: pointer; }
+    .run-button:hover { background: #9274ee; }
+    .subtle-button { padding: 6px 8px; border: 1px solid transparent; border-radius: 6px; background: transparent; color: #aab3c5; font-size: 10px; cursor: pointer; }
+    .subtle-button:hover { border-color: var(--line); background: #202636; color: white; }
+    .editor-wrap { display: flex; flex: 1; min-height: 0; }
+    .line-numbers { flex: 0 0 39px; overflow: hidden; padding: 17px 8px 24px 0; color: #596378; text-align: right; font: 12px/1.65 "Cascadia Code", Consolas, monospace; user-select: none; }
+    #code-editor { width: 100%; height: 100%; min-height: 250px; resize: none; padding: 17px 15px 24px 0; border: 0; outline: none; background: transparent; color: #d9e0ed; caret-color: #c4acff; font: 12px/1.65 "Cascadia Code", Consolas, "Courier New", monospace; tab-size: 4; white-space: pre; overflow: auto; }
+    .editor-hint { padding: 9px 13px; border-top: 1px solid #252b39; color: #8994aa; font-size: 10px; line-height: 1.6; }
+    .editor-hint strong { color: #c4b4ff; font-weight: 600; }
+    .console { display: flex; flex: 1; min-height: 0; flex-direction: column; }
+    .console-tabs { display: flex; gap: 16px; padding: 0 15px; border-bottom: 1px solid var(--line); background: #151923; }
+    .console-tab { padding: 13px 0 11px; border: 0; border-bottom: 2px solid transparent; background: none; color: #909bb0; font-size: 10px; cursor: pointer; }
+    .console-tab.active { border-color: var(--accent); color: #e1d8ff; }
+    .console-status { display: flex; align-items: center; gap: 6px; color: #8792a8; font-size: 9px; }
+    .status-dot { width: 6px; height: 6px; border-radius: 50%; background: #67738b; }
+    .status-dot.ok { background: var(--green); box-shadow: 0 0 8px #55d6a277; }
+    .status-dot.error { background: var(--red); }
+    .output-view { flex: 1; min-height: 0; overflow: auto; padding: 19px 16px; }
+    .output-label { margin-bottom: 10px; color: #8793aa; font-size: 9px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; }
+    .output-content { min-height: 86px; margin: 0 0 18px; padding: 13px; border: 1px solid #2a3242; border-radius: 8px; background: #121722; color: #e0e6f1; font: 12px/1.7 "Cascadia Code", Consolas, monospace; white-space: pre-wrap; overflow-wrap: anywhere; }
+    .output-content.error-output { border-color: #663842; color: #ffabb0; }
+    .source-code { max-height: 32vh; overflow: auto; margin: 0; padding: 13px; border: 1px solid #2a3242; border-radius: 8px; background: #121722; color: #b8c2d6; font: 10px/1.65 "Cascadia Code", Consolas, monospace; white-space: pre-wrap; overflow-wrap: anywhere; }
+    .feedback { display: none; margin-top: 12px; padding: 10px 11px; border: 1px solid #355b4d; border-radius: 7px; background: #162b25; color: #9ce8c8; font-size: 10px; line-height: 1.6; }
+    .feedback.visible { display: block; }
+    .feedback.wrong { border-color: #664047; background: #2a1d25; color: #ffb2b6; }
+    .unsupported { display: none; margin: 12px 0 0; padding: 10px 11px; border: 1px solid #6c5733; border-radius: 7px; background: #2c261b; color: #f1d28e; font-size: 10px; line-height: 1.6; }
+    .unsupported.visible { display: block; }
+    .mobile-tabs { display: none; }
+    .toast { position: fixed; right: 18px; bottom: 18px; z-index: 5; max-width: min(360px, calc(100vw - 36px)); padding: 11px 14px; border: 1px solid #3e705d; border-radius: 9px; background: #192b24; color: #bcf0db; font-size: 11px; box-shadow: 0 12px 30px #0006; }
+    @media (max-width: 1050px) {
+      .app-layout { grid-template-columns: 220px minmax(290px, .9fr) minmax(340px, 1.1fr); }
+      .lesson-panel { padding: 25px 21px 36px; }
+      .workspace-content { grid-template-columns: 1fr; grid-template-rows: 1fr 1fr; }
+      .workspace-pane + .workspace-pane { border-top: 1px solid var(--line); border-left: 0; }
+    }
+    @media (max-width: 760px) {
+      .topbar { height: 58px; padding: 0 14px; }
+      .top-meta { gap: 0; }
+      .top-meta > span:first-child { display: none; }
+      .progress-pill { padding: 7px 9px; font-size: 10px; }
+      .progress-track { width: 45px; }
+      .app-layout { display: flex; height: calc(100vh - 58px); min-height: 590px; flex-direction: column; }
+      .sidebar { display: flex; flex: 0 0 auto; gap: 9px; overflow-x: auto; overflow-y: hidden; padding: 10px 12px; border-right: 0; border-bottom: 1px solid var(--line); }
+      .side-heading, .module-title { display: none; }
+      .module { flex: 0 0 auto; margin: 0; }
+      .lesson-nav { display: flex; gap: 6px; }
+      .lesson-button { width: auto; min-height: 35px; padding: 6px 9px; border-color: #30384b; background: #1a1f2c; white-space: nowrap; }
+      .lesson-number { flex-basis: 20px; width: 20px; height: 20px; }
+      .nav-check { display: none; }
+      .lesson-panel { flex: 1; border-right: 0; padding: 23px 18px 25px; }
+      .workspace { display: none; flex: 1; min-height: 0; }
+      .workspace.mobile-active { display: grid; }
+      .workspace-content { grid-template-columns: 1fr; grid-template-rows: 1fr 1fr; min-height: 0; }
+      .mobile-tabs { display: flex; flex: 0 0 auto; gap: 8px; padding: 9px 12px; border-bottom: 1px solid var(--line); background: #151923; }
+      .mobile-tabs .button { flex: 1; }
+      body.workspace-open .lesson-panel { display: none; }
+      body.workspace-open .workspace { min-height: 0; }
+    }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">
+      <div class="brand-mark" aria-hidden="true">&lt;?&gt;</div>
+      <div><div class="brand-title">PHP Bootcamp</div><div class="brand-subtitle">Leer programmeren, stap voor stap</div></div>
+    </div>
+    <div class="top-meta"><span>Jouw voortgang</span><div class="progress-pill"><span id="progress-label">0 / 10 lessen</span><span class="progress-track" aria-hidden="true"><span class="progress-fill" id="progress-fill"></span></span></div></div>
+  </header>
+  <main class="app-layout">
+    <nav class="sidebar" aria-label="Lessen">
+      <div class="side-heading">Cursusinhoud</div>
+      <div id="lesson-nav"></div>
+    </nav>
+    <article class="lesson-panel" id="lesson-panel" aria-live="polite">
+      <div class="breadcrumbs"><span>PHP Bootcamp</span><span>›</span><span id="breadcrumb-module">Module 1</span><span>›</span><span id="breadcrumb-lesson">Kennismaken met PHP</span></div>
+      <h1 id="lesson-title"></h1>
+      <p class="lesson-intro" id="lesson-intro"></p>
+      <div class="lesson-tags" id="lesson-tags"></div>
+      <section class="content-section"><h2>Wat ga je leren?</h2><ul id="lesson-topics"></ul></section>
+      <section class="content-section"><h2>Zo werkt het</h2><div id="lesson-explanation"></div></section>
+      <section class="content-section task-box">
+        <strong>✦ Jouw opdracht</strong><p id="lesson-task"></p>
+        <div class="inline-actions">
+          <button class="button" id="hint-button" type="button">💡 Toon hint</button>
+          <button class="button" id="solution-button" type="button">Bekijk voorbeeldoplossing</button>
+        </div>
+        <div class="hint-box hidden" id="hint-box" style="margin-top:11px"><strong>Hint</strong><p id="hint-text"></p></div>
+        <div class="hint-box hidden" id="solution-box" style="margin-top:11px"><strong>Voorbeeldoplossing</strong><p id="solution-text"></p><button class="button" id="use-solution" type="button" style="margin-top:9px">Gebruik voorbeeldcode</button></div>
+      </section>
+      <section class="content-section">
+        <h2>Controleer je werk</h2>
+        <p id="check-description">Voer je code uit. De opdracht wordt automatisch gecontroleerd op het resultaat.</p>
+        <div class="feedback" id="feedback" role="status"></div>
+      </section>
+      <div class="lesson-footer">
+        <button class="button" id="previous-button" type="button">← Vorige les</button>
+        <button class="button primary" id="next-button" type="button">Volgende les →</button>
+      </div>
+    </article>
+    <section class="workspace" id="workspace" aria-label="Code-editor en uitvoer">
+      <div class="mobile-tabs"><button class="button" id="back-to-lesson" type="button">← Terug naar les</button><button class="button primary" id="mobile-run" type="button">▶ Uitvoeren</button></div>
+      <div class="workspace-content">
+        <section class="workspace-pane" aria-label="PHP-code-editor">
+          <div class="pane-header"><div class="pane-title"><span class="file-icon">▣</span> <span>jouw-code.php</span></div><div class="pane-actions"><button class="subtle-button" id="reset-button" type="button" title="Herstel de oorspronkelijke code">Herstel</button><button class="run-button" id="run-button" type="button">▶ Uitvoeren</button></div></div>
+          <div class="editor-wrap"><div class="line-numbers" id="line-numbers" aria-hidden="true">1</div><textarea id="code-editor" spellcheck="false" autocapitalize="off" autocomplete="off" autocorrect="off" aria-label="Schrijf hier je PHP-code"></textarea></div>
+          <div class="editor-hint"><strong>Simulator:</strong> variabelen, strings, berekeningen, echo/print, if/else, loops en arrays. Geen volledige PHP-runtime.</div>
+        </section>
+        <section class="workspace-pane" aria-label="Code-uitvoer">
+          <div class="pane-header"><div class="pane-title">Uitvoer</div><div class="console-status" id="console-status"><span class="status-dot" id="status-dot"></span><span id="status-text">Nog niet uitgevoerd</span></div></div>
+          <div class="console">
+            <div class="console-tabs"><button class="console-tab active" id="output-tab" type="button">Uitvoer</button><button class="console-tab" id="code-tab" type="button">Uitgevoerde code</button></div>
+            <div class="output-view" id="output-view"><div id="output-pane"><div class="output-label">Resultaat van jouw code</div><pre class="output-content" id="output-content">Klik op ‘Uitvoeren’ om je code te starten.</pre><div class="output-label">Opdrachtcontrole</div><div class="feedback visible" id="output-feedback">Voer je code uit om feedback over je opdracht te zien.</div><div class="unsupported" id="unsupported"></div></div><div id="code-pane" class="hidden"><div class="output-label">Deze actuele code is aangeboden aan de simulator</div><pre class="source-code" id="source-code"></pre></div></div>
+          </div>
+        </section>
+      </div>
+    </section>
+  </main>
+  <div class="toast hidden" id="toast" role="status"></div>
+  <script>
+    "use strict";
+    const lessons = [
+      {
+        module: "Kennismaken met PHP", title: "Je eerste PHP-programma", duration: "10 min",
+        intro: "PHP is een programmeertaal die vaak wordt gebruikt om websites interactief te maken. In deze les schrijf je je eerste regel PHP en zie je direct wat die doet.",
+        topics: ["Wat PHP doet op een website", "PHP-code herken je aan <?php", "Tekst tonen met echo of print", "Commentaar schrijven met // of /* ... */"],
+        explanation: "<p>PHP-code staat tussen de PHP-tags. De browser ziet normaal gesproken alleen het resultaat dat PHP maakt. In deze bootcamp voer je een veilige, beperkte selectie PHP-code uit in een simulator.</p><p><code>echo</code> toont tekst. Een puntkomma sluit een instructie af.</p>",
+        task: "Pas de tekst aan zodat er een persoonlijke begroeting verschijnt, bijvoorbeeld met je eigen naam.",
+        hint: "Vervang alleen de tekst tussen de aanhalingstekens na echo. Laat de aanhalingstekens en puntkomma staan.",
+        solution: "Vervang de tekst Hallo wereld! door je eigen begroeting tussen de aanhalingstekens.",
+        starter: '<?php\necho "Hallo wereld!";\n?>',
+        solutionCode: '<?php\necho "Hoi, ik ben Alex!";\n?>',
+        check: (code, out) => /echo\s*["'](?!Hallo wereld!)[^"']+["']\s*;/i.test(code) && out.trim() !== "Hallo wereld!" && out.trim().length > 0,
+        checkFail: "Je code werkt al. Pas de tekst in echo nog aan om de opdracht af te ronden.",
+        success: "Goed gedaan! Je hebt de begroeting aangepast en je gewijzigde code uitgevoerd."
+      },
+      {
+        module: "Variabelen en datatypen", title: "Gegevens bewaren in variabelen", duration: "15 min",
+        intro: "Een variabele bewaart een waarde die je later opnieuw kunt gebruiken. In PHP begint de naam van iedere variabele met een dollarteken.",
+        topics: ["Variabelen beginnen met $", "Strings staan tussen aanhalingstekens", "Getallen kunnen zonder aanhalingstekens", "Combineer tekst en waarden met een punt"],
+        explanation: '<p>Met <code>$naam = "Sam";</code> geef je de variabele <code>$naam</code> de tekstwaarde Sam. Gebruik daarna een punt om tekst en een variabele samen te voegen.</p><p>De waarde kan op meerdere plekken worden aangepast zonder alle uitvoerregels te wijzigen.</p>',
+        task: "Verander de naam en leeftijd. Voeg een variabele voor je woonplaats toe en toon die ook.",
+        hint: "Maak bijvoorbeeld $woonplaats = \"Amsterdam\"; en gebruik echo met een punt om de waarde te tonen.",
+        solution: "Voeg een woonplaatsvariabele toe en schrijf een extra echo-regel die de variabele aan tekst koppelt.",
+        starter: '<?php\n$naam = "Sam";\n$leeftijd = 21;\n\necho "Mijn naam is " . $naam;\necho "<br>";\necho "Ik ben " . $leeftijd . " jaar oud.";\n?>',
+        solutionCode: '<?php\n$naam = "Alex";\n$leeftijd = 20;\n$woonplaats = "Amsterdam";\n\necho "Mijn naam is " . $naam;\necho "<br>";\necho "Ik ben " . $leeftijd . " jaar oud.";\necho "<br>";\necho "Ik woon in " . $woonplaats;\n?>',
+        check: (code, out) => /\$woonplaats\s*=/.test(code) && /woonplaats/.test(out.toLowerCase()) && !out.includes("Sam"),
+        checkFail: "Controleer of je een variabele $woonplaats hebt gemaakt én de waarde op het scherm toont.",
+        success: "Netjes! Je gebruikt meerdere variabelen en toont ook je woonplaats."
+      },
+      {
+        module: "Operators en berekeningen", title: "Rekenen met PHP", duration: "15 min",
+        intro: "Met operators kun je rekenen en waarden vergelijken. Je gebruikt dezelfde rekenkundige symbolen als bij gewone berekeningen.",
+        topics: ["Rekenen met +, -, * en /", "De uitkomst opslaan in een variabele", "Prioriteit van berekeningen", "Tekst en getallen samen tonen"],
+        explanation: "<p>In PHP betekent <code>*</code> vermenigvuldigen en <code>/</code> delen. De berekening <code>$prijs * $aantal</code> wordt eerst uitgevoerd en kan worden opgeslagen in <code>$totaal</code>.</p><p>Voeg de delen van een zin samen met de puntoperator.</p>",
+        task: "Voeg een kortingspercentage toe en bereken hoeveel de klant na korting betaalt.",
+        hint: "Bereken eerst de korting: totaalbedrag × percentage / 100. Trek die korting daarna van het totaal af.",
+        solution: "Bijvoorbeeld: $korting = $totaal * 10 / 100; daarna $teBetalen = $totaal - $korting;.",
+        starter: '<?php\n$prijs = 50;\n$aantal = 3;\n\n$totaal = $prijs * $aantal;\n\necho "Totaal: €" . $totaal;\n?>',
+        solutionCode: '<?php\n$prijs = 50;\n$aantal = 3;\n$kortingPercentage = 10;\n\n$totaal = $prijs * $aantal;\n$korting = $totaal * $kortingPercentage / 100;\n$teBetalen = $totaal - $korting;\n\necho "Totaal na korting: €" . $teBetalen;\n?>',
+        check: (code, out) => /[$](korting|kortingPercentage)/i.test(code) && /[$](teBetalen|naKorting|eindprijs)/i.test(code) && /45/.test(out),
+        checkFail: "Bereken een kortingsbedrag en trek het af van het totaal. Bij 10% korting op €150 is de uitkomst €135.",
+        success: "Goed berekend! De korting is verwerkt in het bedrag dat de klant betaalt."
+      },
+      {
+        module: "Condities", title: "Keuzes maken met if en else", duration: "18 min",
+        intro: "Met een voorwaarde laat je je programma een keuze maken. PHP voert een ander codeblok uit als de voorwaarde waar of onwaar is.",
+        topics: ["Voorwaarden met if en else", "Vergelijken met >=, < en ===", "Meerdere situaties met elseif", "Codeblokken staan tussen accolades"],
+        explanation: '<p>De voorwaarde tussen haakjes wordt gecontroleerd. Is <code>$leeftijd >= 18</code> waar, dan wordt het eerste blok uitgevoerd; anders volgt het <code>else</code>-blok.</p><p>Gebruik <code>elseif</code> voor extra situaties, zoals kinderen onder de 12.</p>',
+        task: "Breid het voorbeeld uit: toon een aparte boodschap voor iemand jonger dan 12 jaar.",
+        hint: "Plaats een elseif tussen if en else en controleer daarin of $leeftijd < 12.",
+        solution: 'Gebruik bijvoorbeeld: elseif ($leeftijd < 12) { echo "Je bent jonger dan 12."; }',
+        starter: '<?php\n$leeftijd = 17;\n\nif ($leeftijd >= 18) {\n    echo "Je bent volwassen.";\n} else {\n    echo "Je bent nog geen 18.";\n}\n?>',
+        solutionCode: '<?php\n$leeftijd = 17;\n\nif ($leeftijd >= 18) {\n    echo "Je bent volwassen.";\n} elseif ($leeftijd < 12) {\n    echo "Je bent jonger dan 12.";\n} else {\n    echo "Je bent nog geen 18.";\n}\n?>',
+        check: (code, out) => /elseif\s*\(/i.test(code) && /<\s*12/.test(code) && /jonger dan 12/i.test(code),
+        checkFail: "Voeg een elseif-voorwaarde voor leeftijden onder 12 toe en geef in die tak een passende tekst.",
+        success: "Goed gedaan! Je programma herkent nu ook een derde leeftijdssituatie."
+      },
+      {
+        module: "Loops", title: "Herhalen met loops", duration: "20 min",
+        intro: "Een loop herhaalt code zolang een voorwaarde waar is. Zo kun je bijvoorbeeld tellen zonder dezelfde echo-regel tien keer te schrijven.",
+        topics: ["Een for-loop heeft start, voorwaarde en stap", "Een teller verandert per ronde", "while herhaalt zolang een voorwaarde waar is", "foreach loopt door items in een array"],
+        explanation: '<p>In <code>for ($i = 1; $i &lt;= 5; $i++)</code> begint de teller op 1, loopt de loop zolang de teller maximaal 5 is en komt er na iedere ronde 1 bij.</p><p>De simulator ondersteunt eenvoudige for- en while-loops.</p>',
+        task: "Pas de loop aan zodat deze van 1 tot en met 10 telt. Toon daarna alleen even getallen.",
+        hint: "Verander de eindvoorwaarde naar $i <= 10. Gebruik binnen de loop de restoperator % om te testen of de rest bij delen door 2 gelijk is aan 0.",
+        solution: "Gebruik if ($i % 2 === 0) rond de echo-regel en laat de for-loop tot en met 10 lopen.",
+        starter: '<?php\nfor ($i = 1; $i <= 5; $i++) {\n    echo "Ronde " . $i . "<br>";\n}\n?>',
+        solutionCode: '<?php\nfor ($i = 1; $i <= 10; $i++) {\n    if ($i % 2 === 0) {\n        echo "Ronde " . $i . "<br>";\n    }\n}\n?>',
+        check: (code, out) => /\$i\s*<=\s*10/.test(code) && /%/.test(code) && /2/.test(code) && /Ronde 10/.test(out) && !/Ronde 9/.test(out),
+        checkFail: "Controleer de grens op 10 én toon alleen waarden die deelbaar zijn door 2.",
+        success: "Mooi! Je loop telt tot 10 en filtert de even getallen."
+      },
+      {
+        module: "Arrays", title: "Meerdere waarden bewaren", duration: "20 min",
+        intro: "Een array groepeert meerdere waarden onder één variabelenaam. Met een associatieve array geef je elk item een herkenbare sleutel.",
+        topics: ["Geïndexeerde en associatieve arrays", "Een waarde lezen met een sleutel", "Items toevoegen of wijzigen", "Arrays doorlopen met foreach"],
+        explanation: '<p>In <code>$student["naam"]</code> is <code>naam</code> de sleutel en is <code>Sara</code> de bijbehorende waarde. Je kunt een extra item toevoegen met <code>$student["vak"] = "PHP";</code>.</p><p>Associatieve arrays met stringwaarden kunnen in de simulator worden gelezen en doorlopen.</p>',
+        task: "Voeg een vak en een tweede cijfer toe. Toon alle gegevens van de student.",
+        hint: "Voeg twee sleutels toe aan $student en gebruik foreach ($student as $sleutel => $waarde) om ze te tonen.",
+        solution: 'Voeg bijvoorbeeld "vak" => "PHP" en "cijfer2" => 9 toe en gebruik een foreach-loop.',
+        starter: '<?php\n$student = [\n    "naam" => "Sara",\n    "opleiding" => "Software Development",\n    "cijfer" => 8\n];\n\necho $student["naam"];\necho "<br>";\necho $student["cijfer"];\n?>',
+        solutionCode: '<?php\n$student = [\n    "naam" => "Sara",\n    "opleiding" => "Software Development",\n    "cijfer" => 8,\n    "vak" => "PHP",\n    "cijfer2" => 9\n];\n\nforeach ($student as $sleutel => $waarde) {\n    echo $sleutel . ": " . $waarde . "<br>";\n}\n?>',
+        check: (code, out) => /["']vak["']\s*=>/.test(code) && /cijfer2/.test(code) && /foreach\s*\(/.test(code) && /PHP/.test(out) && /9/.test(out),
+        checkFail: "Voeg de sleutels vak en cijfer2 toe en loop met foreach door alle gegevens.",
+        success: "Top! Je hebt nieuwe arraygegevens toegevoegd en alle items getoond."
+      },
+      {
+        module: "Functies", title: "Herbruikbare code met functies", duration: "22 min",
+        intro: "Een functie groepeert code die je op verschillende plekken kunt gebruiken. Met parameters geef je waarden mee en met return stuur je een resultaat terug.",
+        topics: ["Een functie definiëren", "Parameters meegeven", "Een waarde teruggeven met return", "De functie aanroepen"],
+        explanation: '<p>Een functie begint met <code>function</code>. De parameter <code>$prijs</code> ontvangt de invoer. Met <code>return</code> geef je de uitkomst terug aan de plek waar de functie is aangeroepen.</p><p>Functies zijn onderdeel van PHP, maar deze bootcamp-simulator voert zelf gedefinieerde functies niet uit.</p>',
+        task: "Maak een functie die een prijs inclusief 21% btw teruggeeft.",
+        hint: "Bereken binnen de functie de prijs plus 21% van die prijs en geef het resultaat terug met return.",
+        solution: "Bijvoorbeeld: return $prijs * 1.21; en roep de functie aan met een bedrag.",
+        starter: '<?php\n$prijs = 100;\n$btw = $prijs * 0.21;\n\n echo "BTW: €" . $btw;\n?>',
+        solutionCode: '<?php\nfunction prijsInclusiefBtw($prijs) {\n    return $prijs * 1.21;\n}\n\n$totaal = prijsInclusiefBtw(100);\necho "Prijs inclusief btw: €" . $totaal;\n?>',
+        check: (code) => /function\s+\w+\s*\(/.test(code) && /return\b/.test(code) && /1\.21|0\.21/.test(code),
+        checkFail: "Definieer een functie met een prijsparameter en gebruik return voor het btw-bedrag.",
+        success: "Goed bezig! Je hebt de functie en btw-berekening correct opgezet. De huidige simulator ondersteunt nog geen zelf gedefinieerde functies.",
+        simulatorNote: "De functie wordt herkend bij de opdrachtcontrole, maar niet uitgevoerd. De simulator ondersteunt op dit moment geen functieaanroepen of returnwaarden."
+      },
+      {
+        module: "Formulieren en gebruikersinvoer", title: "Formulieren verwerken", duration: "25 min",
+        intro: "Een formulier stuurt gegevens van een bezoeker naar je PHP-programma. Je valideert die gegevens voordat je ze gebruikt en toont tekst veilig terug.",
+        topics: ["Formulieren met GET en POST", "Invoer valideren", "Gebruikersinvoer veilig tonen", "htmlspecialchars voorkomt HTML-injectie"],
+        explanation: "<p>Gegevens uit een POST-formulier lees je in PHP via <code>$_POST</code>. Controleer eerst of verplichte invoer aanwezig is en ontsmet tekst met <code>htmlspecialchars()</code> voordat je deze als HTML toont.</p><p>Deze standalone pagina verzendt geen echte POST-verzoeken en voert geen formulieren of superglobals uit.</p>",
+        task: "Breid het voorbeeld uit met een e-mailadres en controleer of dit een geldig e-mailadres is.",
+        hint: "Een goede oplossing controleert of het e-mailadres aanwezig is en gebruikt filter_var met FILTER_VALIDATE_EMAIL.",
+        solution: "Lees $_POST['email'] uit en valideer met filter_var($email, FILTER_VALIDATE_EMAIL).",
+        starter: '<?php\n$naam = $_POST["naam"] ?? "";\n\nif ($naam !== "") {\n    echo "Welkom, " . htmlspecialchars($naam, ENT_QUOTES, "UTF-8");\n}\n?>\n\n<form method="post">\n    <label for="naam">Je naam:</label>\n    <input id="naam" name="naam" type="text">\n    <button type="submit">Verstuur</button>\n</form>',
+        solutionCode: '<?php\n$email = $_POST["email"] ?? "";\n\nif (filter_var($email, FILTER_VALIDATE_EMAIL)) {\n    echo "Geldig e-mailadres";\n} else {\n    echo "Controleer je e-mailadres";\n}\n?>',
+        check: (code) => /email/i.test(code) && /FILTER_VALIDATE_EMAIL/.test(code),
+        checkFail: "Voeg een e-mailveld toe en valideer de invoer met FILTER_VALIDATE_EMAIL.",
+        success: "Je controleert op een geldig e-mailadres. Let op: de simulator verwerkt geen echte formulierinzendingen.",
+        simulatorNote: "HTML-formulieren, $_GET, $_POST en filter_var worden niet uitgevoerd door deze simulator; controleer formuliercode in een echte PHP-omgeving."
+      },
+      {
+        module: "Objectgeoriënteerd programmeren", title: "Werken met classes en objecten", duration: "25 min",
+        intro: "Met objectgeoriënteerd programmeren groepeer je gegevens en gedrag in classes. Een object is een concrete instantie van een class.",
+        topics: ["Een class en object maken", "Properties bewaren eigenschappen", "Methods beschrijven gedrag", "Een constructor initialiseert een object"],
+        explanation: '<p>Een class is een blauwdruk. De constructor <code>__construct()</code> wordt uitgevoerd wanneer je een object met <code>new</code> maakt. Binnen een methode verwijst <code>$this</code> naar het huidige object.</p><p>De simulator analyseert geen classes of objecten; de voorbeeldcode is daarom alleen leerstof en wordt niet uitgevoerd.</p>',
+        task: "Voeg een eigenschap voor het bouwjaar toe en maak een methode die de volledige beschrijving teruggeeft.",
+        hint: "Initialiseer $bouwjaar in de constructor en voeg het toe in de tekst van de beschrijvingsmethode.",
+        solution: "Voeg public $bouwjaar toe, geef het mee aan de constructor en gebruik het in de returntekst.",
+        starter: '<?php\nclass Auto {\n    public $merk;\n\n    public function __construct($merk) {\n        $this->merk = $merk;\n    }\n\n    public function beschrijving() {\n        return "Deze auto is een " . $this->merk;\n    }\n}\n\n$auto = new Auto("Volvo");\necho $auto->beschrijving();\n?>',
+        solutionCode: '<?php\nclass Auto {\n    public $merk;\n    public $bouwjaar;\n\n    public function __construct($merk, $bouwjaar) {\n        $this->merk = $merk;\n        $this->bouwjaar = $bouwjaar;\n    }\n\n    public function beschrijving() {\n        return "Deze auto is een " . $this->merk . " uit " . $this->bouwjaar;\n    }\n}\n\n$auto = new Auto("Volvo", 2022);\necho $auto->beschrijving();\n?>',
+        check: (code) => /bouwjaar/i.test(code) && /function\s+beschrijving/i.test(code) && /this->bouwjaar/i.test(code),
+        checkFail: "Voeg een property bouwjaar toe en gebruik die in de methode beschrijving().",
+        success: "Goed uitgewerkt! Je class bevat nu ook het bouwjaar en toont dit in de beschrijving.",
+        simulatorNote: "Classes, objecten, constructors en methods vallen buiten de ondersteunde subset en worden niet uitgevoerd."
+      },
+      {
+        module: "Eindproject", title: "Bouw je eigen PHP-project", duration: "45+ min",
+        intro: "Tijd om onderdelen uit de bootcamp te combineren in een klein project. Kies een idee en werk stap voor stap aan een oplossing.",
+        topics: ["Een studentencijferlijst", "Een webshopberekening", "Een takenlijst", "Een registratieformulier of bibliotheek"],
+        explanation: "<p>Kies een project en schrijf op welke gegevens nodig zijn. Maak daarna een kleine eerste versie, test die en voeg functies toe. Combineer waar mogelijk variabelen, berekeningen, keuzes, loops en arrays.</p><p>Gebruik een echte PHP-installatie voor projectonderdelen die niet door deze browser-simulator worden ondersteund.</p>",
+        task: "Kies een project. Laat het minimaal gegevens bewaren en een passend resultaat tonen. Beschrijf in een commentaarregel wat jouw programma doet.",
+        hint: "Begin met één doel en twee of drie variabelen. Breid je programma daarna uit met een berekening of voorwaarde.",
+        solution: "Er is geen enkele juiste oplossing. Een webshopberekening kan bijvoorbeeld prijs, aantal en totaal combineren.",
+        starter: '<?php\n// Mijn project: voeg hier je idee toe\n$project = "Mijn PHP-project";\n\necho "Welkom bij " . $project;\n?>',
+        solutionCode: '<?php\n// Mijn project: een kleine webshopberekening\n$product = "Notitieboek";\n$prijs = 4.50;\n$aantal = 3;\n$totaal = $prijs * $aantal;\n\necho $product . ": " . $aantal . " stuks";\necho "<br>";\necho "Totaal: €" . $totaal;\n?>',
+        check: (code, out) => /\/\/|\/\*/.test(code) && /[$]\w+\s*=/.test(code) && out.trim().length > 0,
+        checkFail: "Beschrijf je project in commentaar, gebruik minimaal één variabele en toon een resultaat.",
+        success: "Je project heeft een beschrijving, gebruikt variabelen en toont uitvoer. Goed gedaan!",
+        simulatorNote: "Je project gebruikt mogelijk onderdelen buiten de beperkte simulator. Alleen ondersteunde codeconstructies worden uitgevoerd."
+      }
+    ];
+
+    const STORAGE_KEY = "rocva-php-bootcamp-v1";
+    let currentLesson = 0;
+    let completed = loadProgress();
+    let debounceTimer;
+    let toastTimer;
+    const editor = document.getElementById("code-editor");
+
+    function loadProgress() {
+      try {
+        const stored = JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]");
+        return Array.isArray(stored) ? stored.filter((value) => Number.isInteger(value) && value >= 0 && value < lessons.length) : [];
+      } catch (error) {
+        console.warn("Voortgang kon niet uit lokale opslag worden gelezen.", error);
+        return [];
+      }
+    }
+
+    function saveProgress() {
+      try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify([...new Set(completed)]));
+      } catch (error) {
+        showToast("Voortgang kon niet lokaal worden opgeslagen.");
+        console.warn("Voortgang opslaan is mislukt.", error);
+      }
+    }
+
+    function renderNavigation() {
+      const nav = document.getElementById("lesson-nav");
+      nav.replaceChildren();
+      let moduleIndex = -1;
+      let moduleElement;
+      lessons.forEach((lesson, index) => {
+        if (index === 0 || lesson.module !== lessons[index - 1].module) {
+          moduleIndex += 1;
+          moduleElement = document.createElement("div");
+          moduleElement.className = "module";
+          const heading = document.createElement("div");
+          heading.className = "module-title";
+          heading.innerHTML = `<span>Module ${moduleIndex + 1}</span><span>${completed.includes(index) ? "✓" : ""}</span>`;
+          moduleElement.append(heading);
+          const list = document.createElement("div");
+          list.className = "lesson-nav";
+          moduleElement.append(list);
+          nav.append(moduleElement);
+        }
+        const button = document.createElement("button");
+        button.type = "button";
+        button.className = `lesson-button${completed.includes(index) ? " is-done" : ""}`;
+        button.setAttribute("aria-current", index === currentLesson ? "page" : "false");
+        button.innerHTML = `<span class="lesson-number">${String(index + 1).padStart(2, "0")}</span><span>${escapeHtml(lesson.title)}</span>${completed.includes(index) ? '<span class="nav-check" aria-label="Afgerond">✓</span>' : ""}`;
+        button.addEventListener("click", () => selectLesson(index));
+        moduleElement.querySelector(".lesson-nav").append(button);
+      });
+      const count = new Set(completed).size;
+      document.getElementById("progress-label").textContent = `${count} / ${lessons.length} lessen`;
+      document.getElementById("progress-fill").style.width = `${count / lessons.length * 100}%`;
+    }
+
+    function renderLesson() {
+      const lesson = lessons[currentLesson];
+      const moduleNumber = lessons.slice(0, currentLesson + 1).filter((item, index, all) => index === 0 || item.module !== all[index - 1].module).length;
+      document.getElementById("breadcrumb-module").textContent = `Module ${moduleNumber}`;
+      document.getElementById("breadcrumb-lesson").textContent = lesson.module;
+      document.getElementById("lesson-title").textContent = lesson.title;
+      document.getElementById("lesson-intro").textContent = lesson.intro;
+      document.getElementById("lesson-tags").innerHTML = `<span class="tag">Les ${String(currentLesson + 1).padStart(2, "0")}</span><span class="tag">${escapeHtml(lesson.duration)}</span><span class="tag">PHP basis</span>`;
+      document.getElementById("lesson-topics").innerHTML = lesson.topics.map((topic) => `<li>${escapeHtml(topic)}</li>`).join("");
+      document.getElementById("lesson-explanation").innerHTML = lesson.explanation;
+      document.getElementById("lesson-task").textContent = lesson.task;
+      document.getElementById("hint-text").textContent = lesson.hint;
+      document.getElementById("solution-text").textContent = lesson.solution;
+      document.getElementById("hint-box").classList.add("hidden");
+      document.getElementById("solution-box").classList.add("hidden");
+      document.getElementById("feedback").className = "feedback";
+      document.getElementById("unsupported").className = "unsupported";
+      document.getElementById("check-description").textContent = "Voer je code uit. De opdracht wordt automatisch gecontroleerd op het resultaat.";
+      document.getElementById("previous-button").disabled = currentLesson === 0;
+      document.getElementById("next-button").textContent = currentLesson === lessons.length - 1 ? "Bootcamp afgerond ✓" : "Volgende les →";
+      document.getElementById("next-button").disabled = currentLesson === lessons.length - 1 && completed.includes(currentLesson);
+      editor.value = lesson.starter;
+      updateLineNumbers();
+      document.getElementById("output-content").textContent = "Klik op ‘Uitvoeren’ om je code te starten.";
+      document.getElementById("output-content").className = "output-content";
+      document.getElementById("source-code").textContent = "";
+      setStatus("Nog niet uitgevoerd", "");
+      renderNavigation();
+    }
+
+    function selectLesson(index) {
+      if (index < 0 || index >= lessons.length) return;
+      currentLesson = index;
+      renderLesson();
+      if (window.matchMedia("(max-width: 760px)").matches) {
+        document.body.classList.remove("workspace-open");
+        document.getElementById("workspace").classList.remove("mobile-active");
+      }
+    }
+
+    function escapeHtml(value) {
+      return String(value).replace(/[&<>"']/g, (char) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[char]);
+    }
+
+    function updateLineNumbers() {
+      const lines = editor.value.split("\n").length;
+      document.getElementById("line-numbers").textContent = Array.from({ length: lines }, (_, index) => index + 1).join("\n");
+    }
+
+    function setStatus(text, state) {
+      document.getElementById("status-text").textContent = text;
+      document.getElementById("status-dot").className = `status-dot${state ? ` ${state}` : ""}`;
+    }
+
+    function showToast(text) {
+      const toast = document.getElementById("toast");
+      toast.textContent = text;
+      toast.classList.remove("hidden");
+      clearTimeout(toastTimer);
+      toastTimer = setTimeout(() => toast.classList.add("hidden"), 2400);
+    }
+
+    function addCompletion(index) {
+      if (completed.includes(index)) return;
+      completed.push(index);
+      saveProgress();
+      renderNavigation();
+      document.getElementById("next-button").disabled = index === lessons.length - 1;
+    }
+
+    function checkAssignment(lesson, code, output) {
+      const feedback = document.getElementById("feedback");
+      const outFeedback = document.getElementById("output-feedback");
+      let passed = false;
+      try {
+        passed = Boolean(lesson.check(code, output));
+      } catch (error) {
+        console.error("Opdrachtcontrole is mislukt.", error);
+        feedback.textContent = "De controle van deze opdracht is niet gelukt. Probeer je code aan te passen en opnieuw uit te voeren.";
+        feedback.className = "feedback visible wrong";
+        outFeedback.textContent = feedback.textContent;
+        outFeedback.className = "feedback visible wrong";
+        return;
+      }
+      const text = passed ? lesson.success : lesson.checkFail;
+      feedback.textContent = text;
+      feedback.className = `feedback visible${passed ? "" : " wrong"}`;
+      outFeedback.textContent = text;
+      outFeedback.className = `feedback visible${passed ? "" : " wrong"}`;
+      if (passed) addCompletion(currentLesson);
+    }
+
+    function runCode(manual = true) {
+      const lesson = lessons[currentLesson];
+      const code = editor.value;
+      document.getElementById("source-code").textContent = code;
+      document.getElementById("unsupported").className = "unsupported";
+      setStatus("Bezig…", "");
+      try {
+        const result = simulatePhp(code);
+        document.getElementById("output-content").textContent = result.output || "(Geen uitvoer)";
+        document.getElementById("output-content").className = "output-content";
+        setStatus(`Uitgevoerd · ${result.steps} stappen`, "ok");
+        if (result.unsupported.length) {
+          const note = lesson.simulatorNote || `Niet ondersteund door de simulator: ${result.unsupported.join(", ")}. Alleen het ondersteunde deel is uitgevoerd.`;
+          const unsupported = document.getElementById("unsupported");
+          unsupported.textContent = `Simulatorbeperking: ${note}`;
+          unsupported.className = "unsupported visible";
+        }
+        checkAssignment(lesson, code, result.output);
+      } catch (error) {
+        document.getElementById("output-content").textContent = error instanceof Error ? error.message : "Onbekende uitvoerfout.";
+        document.getElementById("output-content").className = "output-content error-output";
+        setStatus("Fout in code", "error");
+        const message = error instanceof Error ? error.message : "Onbekende fout.";
+        const feedback = `Controleer je PHP-code. ${message}`;
+        document.getElementById("feedback").textContent = feedback;
+        document.getElementById("feedback").className = "feedback visible wrong";
+        document.getElementById("output-feedback").textContent = feedback;
+        document.getElementById("output-feedback").className = "feedback visible wrong";
+      }
+      if (manual) {
+        document.getElementById("output-tab").click();
+        if (window.matchMedia("(max-width: 760px)").matches) openWorkspace();
+      }
+    }
+
+    class PhpSubsetParser {
+      constructor(source) {
+        this.tokens = tokenize(source);
+        this.position = 0;
+        this.variables = Object.create(null);
+        this.output = "";
+        this.steps = 0;
+        this.unsupported = [];
+      }
+      peek(value) { return this.tokens[this.position] === value; }
+      next() { return this.tokens[this.position++]; }
+      expect(value) {
+        if (!this.peek(value)) throw new Error(`Verwacht '${value}' in de PHP-code.`);
+        this.position++;
+      }
+      tick() {
+        this.steps++;
+        if (this.steps > 5000) throw new Error("De code duurde te lang. Controleer of je loop stopt.");
+      }
+      parse() {
+        while (this.position < this.tokens.length) {
+          if (this.peek(";")) { this.next(); continue; }
+          const before = this.position;
+          this.statement();
+          if (before === this.position) throw new Error(`De simulator kan deze code niet verwerken bij '${this.peek() || "einde"}'.`);
+        }
+        return { output: this.output, steps: this.steps, unsupported: [...new Set(this.unsupported)] };
+      }
+      statement() {
+        this.tick();
+        if (this.peek("<?php") || this.peek("?>")) { this.next(); return; }
+        if (this.peek("//") || this.peek("#")) { while (this.position < this.tokens.length && !this.peek("\n")) this.next(); this.next(); return; }
+        if (this.peek("/*")) { while (this.position < this.tokens.length && !this.peek("*/")) this.next(); this.expect("*/"); return; }
+        if (this.peek("{")) { this.next(); this.block(); return; }
+        if (this.peek("echo") || this.peek("print")) {
+          const keyword = this.next();
+          do {
+            const value = this.expression();
+            this.output += stringify(value);
+            if (!this.peek(",")) break;
+            this.next();
+          } while (true);
+          if (keyword === "print") return;
+          this.expect(";");
+          return;
+        }
+        if (this.peek("if")) { this.ifStatement(); return; }
+        if (this.peek("for")) { this.forStatement(); return; }
+        if (this.peek("while")) { this.whileStatement(); return; }
+        if (this.peek("foreach")) { this.foreachStatement(); return; }
+        if (this.peek("$")) { this.assignment(); return; }
+        if (this.peek("function") || this.peek("class") || this.peek("new") || this.peek("return")) {
+          const unsupported = this.next();
+          this.unsupported.push(`${unsupported} / ${unsupported === "class" ? "classes" : unsupported === "new" ? "objecten" : unsupported}`);
+          while (this.position < this.tokens.length && !this.peek(";") && !this.peek("}")) this.next();
+          if (this.peek(";")) this.next();
+          return;
+        }
+        throw new Error(`De simulator ondersteunt '${this.peek()}' niet.`);
+      }
+      block() {
+        while (this.position < this.tokens.length && !this.peek("}")) this.statement();
+        this.expect("}");
+      }
+      runBlock() {
+        if (this.peek("{")) this.block();
+        else this.statement();
+      }
+      ifStatement() {
+        this.expect("if"); this.expect("(");
+        let branch = Boolean(this.expression());
+        this.expect(")"); this.expect("{");
+        if (branch) this.block(); else this.skipBlock();
+        while (this.peek("elseif")) {
+          this.next(); this.expect("(");
+          const condition = Boolean(this.expression());
+          this.expect(")"); this.expect("{");
+          const execute = !branch && condition;
+          if (execute) this.block(); else this.skipBlock();
+          branch = branch || condition;
+        }
+        if (this.peek("else")) {
+          this.next(); this.expect("{");
+          if (!branch) this.block(); else this.skipBlock();
+        }
+      }
+      skipBlock() {
+        let depth = 1;
+        while (this.position < this.tokens.length && depth > 0) {
+          const token = this.next();
+          if (token === "{") depth++;
+          if (token === "}") depth--;
+        }
+        if (depth !== 0) throw new Error("Een codeblok mist een afsluitende accolade.");
+      }
+      forStatement() {
+        this.expect("for"); this.expect("(");
+        this.assignment(false); this.expect(";");
+        const conditionTokens = this.readUntil(";");
+        this.expect(";");
+        const incrementTokens = this.readUntil(")");
+        this.expect(")");
+        const bodyStart = this.position;
+        const bodyEnd = this.findBodyEnd(bodyStart);
+        let runs = 0;
+        while (Boolean(this.evalExpressionTokens(conditionTokens))) {
+          if (++runs > 1000) throw new Error("Deze loop heeft te veel herhalingen (limiet: 1.000).");
+          const saved = this.position;
+          this.position = bodyStart;
+          this.runBlock();
+          this.position = saved;
+          this.executeInline(incrementTokens);
+        }
+        this.position = bodyEnd;
+      }
+      whileStatement() {
+        this.expect("while"); this.expect("(");
+        const conditionTokens = this.readUntil(")");
+        this.expect(")");
+        const bodyStart = this.position;
+        const bodyEnd = this.findBodyEnd(bodyStart);
+        let runs = 0;
+        while (Boolean(this.evalExpressionTokens(conditionTokens))) {
+          if (++runs > 1000) throw new Error("Deze loop heeft te veel herhalingen (limiet: 1.000).");
+          const saved = this.position;
+          this.position = bodyStart;
+          this.runBlock();
+          this.position = saved;
+        }
+        this.position = bodyEnd;
+      }
+      foreachStatement() {
+        this.expect("foreach"); this.expect("(");
+        const iterable = this.expression();
+        this.expect("as");
+        const first = this.next();
+        if (!first || !first.startsWith("$")) throw new Error("Gebruik een variabele als foreach-doelwaarde.");
+        let keyName = null;
+        let valueName = first.slice(1);
+        if (this.peek("=>")) {
+          this.next();
+          keyName = valueName;
+          const value = this.next();
+          if (!value || !value.startsWith("$")) throw new Error("Gebruik een variabele na => in foreach.");
+          valueName = value.slice(1);
+        }
+        this.expect(")");
+        const entries = Object.entries(iterable || {});
+        const bodyStart = this.position;
+        const bodyEnd = this.findBodyEnd(bodyStart);
+        for (const [key, value] of entries) {
+          const saved = this.position;
+          if (keyName) this.variables[keyName] = key;
+          this.variables[valueName] = value;
+          this.position = bodyStart;
+          this.runBlock();
+          this.position = saved;
+        }
+        this.position = bodyEnd;
+      }
+      findBodyEnd(start) {
+        if (this.tokens[start] !== "{") return start + 1;
+        let depth = 0;
+        for (let i = start; i < this.tokens.length; i++) {
+          if (this.tokens[i] === "{") depth++;
+          if (this.tokens[i] === "}" && --depth === 0) return i + 1;
+        }
+        throw new Error("Een codeblok mist een afsluitende accolade.");
+      }
+      readUntil(endToken) {
+        const result = [];
+        let depth = 0;
+        while (this.position < this.tokens.length) {
+          const token = this.tokens[this.position];
+          if (token === endToken && depth === 0) break;
+          if (token === "(" || token === "[") depth++;
+          if (token === ")" || token === "]") depth--;
+          result.push(this.next());
+        }
+        return result;
+      }
+      executeInline(tokens) {
+        if (tokens[0] !== "$") throw new Error("Alleen een eenvoudige variabeletoekenning wordt ondersteund in de for-loop.");
+        this.position = 0;
+        this.tokens = tokens.concat(";");
+        this.assignment(true);
+        this.tokens = this.originalTokens;
+      }
+      evalExpressionTokens(tokens) {
+        const oldTokens = this.tokens, oldPosition = this.position;
+        this.tokens = tokens;
+        this.position = 0;
+        const result = this.expression();
+        this.tokens = oldTokens;
+        this.position = oldPosition;
+        return result;
+      }
+      assignment(semicolon = true) {
+        this.expect("$");
+        const name = this.next();
+        if (!name || !/^[a-zA-Z_]\w*$/.test(name)) throw new Error("Ongeldige variabelenaam.");
+        this.expect("=");
+        const value = this.expression();
+        this.variables[name] = value;
+        if (semicolon) this.expect(";");
+      }
+      expression(minPrecedence = 0) {
+        let left = this.primary();
+        const precedence = { "||": 1, "&&": 2, "===": 3, "!==": 3, "==": 3, "!=": 3, "<": 4, ">": 4, "<=": 4, ">=": 4, "+": 5, "-": 5, ".": 5, "*": 6, "/": 6, "%": 6 };
+        while (precedence[this.peek()] !== undefined && precedence[this.peek()] >= minPrecedence) {
+          const operator = this.next();
+          const nextPrecedence = precedence[operator] + 1;
+          const right = this.expression(nextPrecedence);
+          left = applyOperator(operator, left, right);
+        }
+        return left;
+      }
+      primary() {
+        if (this.peek("!") || this.peek("-") || this.peek("+")) {
+          const operator = this.next();
+          const value = this.primary();
+          return operator === "!" ? !value : operator === "-" ? -Number(value) : Number(value);
+        }
+        if (this.peek("(")) { this.next(); const value = this.expression(); this.expect(")"); return value; }
+        if (this.peek("[")) {
+          this.next();
+          const array = Object.create(null);
+          let index = 0;
+          while (!this.peek("]")) {
+            const value = this.expression();
+            if (this.peek("=>")) {
+              this.next();
+              array[stringify(value)] = this.expression();
+            } else array[index++] = value;
+            if (!this.peek(",")) break;
+            this.next();
+          }
+          this.expect("]");
+          return array;
+        }
+        const token = this.next();
+        if (token === undefined) throw new Error("Er ontbreekt een waarde in de expressie.");
+        if (token.startsWith("$")) {
+          const name = token.slice(1);
+          let value = this.variables[name];
+          if (this.peek("[")) {
+            this.next();
+            const key = stringify(this.expression());
+            this.expect("]");
+            value = value && value[key];
+          }
+          if (value === undefined) throw new Error(`De variabele ${token} is nog niet ingesteld.`);
+          return value;
+        }
+        if (token.startsWith('"') || token.startsWith("'")) return parseString(token, this.variables);
+        if (/^\d+(\.\d+)?$/.test(token)) return Number(token);
+        if (token === "true") return true;
+        if (token === "false") return false;
+        if (token === "null") return null;
+        throw new Error(`De simulator begrijpt de waarde '${token}' niet.`);
+      }
+    }
+
+    function tokenize(source) {
+      const cleaned = source.replace(/<\?(?:php)?| \?>/gi, (tag) => tag.trim()).replace(/\?>/g, " ?>");
+      const tokens = [];
+      const pattern = /\s+|\/\/[^\n]*|#[^\n]*|\/\*[\s\S]*?\*\/|"(?:\\.|[^"\\])*"|'(?:\\.|[^'\\])*'|\$[a-zA-Z_]\w*|(?:===|!==|<=|>=|==|!=|=>|\+\+|--|&&|\|\|)|\d+(?:\.\d+)?|[a-zA-Z_]\w*|[{}()[\];,.:+\-*/%<>=!#]/gy;
+      let position = 0;
+      while (position < cleaned.length) {
+        pattern.lastIndex = position;
+        const match = pattern.exec(cleaned);
+        if (!match) {
+          if (cleaned.slice(position).trim() === "") break;
+          throw new Error(`Ongeldig of niet-ondersteund teken bij positie ${position}.`);
+        }
+        const token = match[0];
+        position = pattern.lastIndex;
+        if (/^\s+$/.test(token)) continue;
+        if (token.startsWith("//") || token.startsWith("#") || token.startsWith("/*")) {
+          if (token.startsWith("/*")) tokens.push("/*", token.slice(2, -2), "*/");
+          else tokens.push(token.startsWith("#") ? "#" : "//", token.slice(1));
+          continue;
+        }
+        if (token.startsWith("$")) {
+          tokens.push("$", token.slice(1));
+          continue;
+        }
+        tokens.push(token);
+      }
+      return tokens;
+    }
+
+    function parseString(token, variables) {
+      const quote = token[0];
+      let value = token.slice(1, -1);
+      value = value.replace(/\\(["'\\nrt])/g, (_, char) => ({ n: "\n", r: "\r", t: "\t" })[char] ?? char);
+      if (quote === '"') value = value.replace(/\$([a-zA-Z_]\w*)/g, (match, name) => stringify(variables[name] ?? match));
+      return value;
+    }
+
+    function stringify(value) {
+      if (value === null || value === false) return "";
+      if (value === true) return "1";
+      if (typeof value === "object") return "Array";
+      return String(value);
+    }
+
+    function applyOperator(operator, left, right) {
+      switch (operator) {
+        case ".": return stringify(left) + stringify(right);
+        case "+": return Number(left) + Number(right);
+        case "-": return Number(left) - Number(right);
+        case "*": return Number(left) * Number(right);
+        case "/": if (Number(right) === 0) throw new Error("Delen door nul is niet mogelijk."); return Number(left) / Number(right);
+        case "%": if (Number(right) === 0) throw new Error("Delen door nul is niet mogelijk."); return Number(left) % Number(right);
+        case "===": return typeof left === typeof right && left === right;
+        case "!==": return typeof left !== typeof right || left !== right;
+        case "==": return left == right;
+        case "!=": return left != right;
+        case "<": return left < right;
+        case ">": return left > right;
+        case "<=": return left <= right;
+        case ">=": return left >= right;
+        case "&&": return Boolean(left) && Boolean(right);
+        case "||": return Boolean(left) || Boolean(right);
+        default: throw new Error(`Operator '${operator}' wordt niet ondersteund.`);
+      }
+    }
+
+    function simulatePhp(source) {
+      const parser = new PhpSubsetParser(source);
+      parser.originalTokens = parser.tokens;
+      return parser.parse();
+    }
+
+    document.getElementById("run-button").addEventListener("click", () => runCode(true));
+    document.getElementById("mobile-run").addEventListener("click", () => runCode(true));
+    editor.addEventListener("input", () => {
+      updateLineNumbers();
+      clearTimeout(debounceTimer);
+      debounceTimer = setTimeout(() => runCode(false), 700);
+    });
+    editor.addEventListener("scroll", () => { document.getElementById("line-numbers").scrollTop = editor.scrollTop; });
+    editor.addEventListener("keydown", (event) => {
+      if (event.key === "Tab") {
+        event.preventDefault();
+        const start = editor.selectionStart;
+        const end = editor.selectionEnd;
+        editor.setRangeText("    ", start, end, "end");
+        editor.dispatchEvent(new Event("input", { bubbles: true }));
+      }
+      if ((event.ctrlKey || event.metaKey) && event.key === "Enter") {
+        event.preventDefault();
+        runCode(true);
+      }
+    });
+    document.getElementById("reset-button").addEventListener("click", () => {
+      editor.value = lessons[currentLesson].starter;
+      updateLineNumbers();
+      runCode(false);
+      showToast("De oorspronkelijke code is hersteld.");
+    });
+    document.getElementById("hint-button").addEventListener("click", () => document.getElementById("hint-box").classList.toggle("hidden"));
+    document.getElementById("solution-button").addEventListener("click", () => document.getElementById("solution-box").classList.toggle("hidden"));
+    document.getElementById("use-solution").addEventListener("click", () => {
+      editor.value = lessons[currentLesson].solutionCode;
+      updateLineNumbers();
+      runCode(true);
+      document.getElementById("solution-box").classList.add("hidden");
+    });
+    document.getElementById("previous-button").addEventListener("click", () => selectLesson(currentLesson - 1));
+    document.getElementById("next-button").addEventListener("click", () => {
+      if (currentLesson < lessons.length - 1) selectLesson(currentLesson + 1);
+      else showToast("Je hebt de PHP Bootcamp afgerond. Gefeliciteerd!");
+    });
+    document.getElementById("output-tab").addEventListener("click", () => {
+      document.getElementById("output-tab").classList.add("active");
+      document.getElementById("code-tab").classList.remove("active");
+      document.getElementById("output-pane").classList.remove("hidden");
+      document.getElementById("code-pane").classList.add("hidden");
+    });
+    document.getElementById("code-tab").addEventListener("click", () => {
+      document.getElementById("code-tab").classList.add("active");
+      document.getElementById("output-tab").classList.remove("active");
+      document.getElementById("code-pane").classList.remove("hidden");
+      document.getElementById("output-pane").classList.add("hidden");
+    });
+    function openWorkspace() {
+      document.body.classList.add("workspace-open");
+      document.getElementById("workspace").classList.add("mobile-active");
+    }
+    document.getElementById("back-to-lesson").addEventListener("click", () => {
+      document.body.classList.remove("workspace-open");
+      document.getElementById("workspace").classList.remove("mobile-active");
+    });
+    renderLesson();
+    runCode(false);
+  </script>
+</body>
+</html>
