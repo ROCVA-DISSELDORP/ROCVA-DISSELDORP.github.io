@@ -498,6 +498,13 @@
       if (passed) addCompletion(currentLesson);
     }
 
+    class UnsupportedPhpFeature extends Error {
+      constructor(feature) {
+        super(`De PHP-simulator voert ${feature} niet uit.`);
+        this.feature = feature;
+      }
+    }
+
     function runCode(manual = true) {
       const lesson = lessons[currentLesson];
       const code = editor.value;
@@ -517,6 +524,20 @@
         }
         checkAssignment(lesson, code, result.output);
       } catch (error) {
+        if (error instanceof UnsupportedPhpFeature) {
+          document.getElementById("output-content").textContent = "(Niet uitgevoerd)";
+          document.getElementById("output-content").className = "output-content";
+          setStatus("Niet ondersteund", "error");
+          const unsupported = document.getElementById("unsupported");
+          unsupported.textContent = `${error.message} Je code is niet als PHP-uitvoer voorgesteld.`;
+          unsupported.className = "unsupported visible";
+          checkAssignment(lesson, code, "");
+          if (manual) {
+            document.getElementById("output-tab").click();
+            if (window.matchMedia("(max-width: 760px)").matches) openWorkspace();
+          }
+          return;
+        }
         document.getElementById("output-content").textContent = error instanceof Error ? error.message : "Onbekende uitvoerfout.";
         document.getElementById("output-content").className = "output-content error-output";
         setStatus("Fout in code", "error");
@@ -584,9 +605,16 @@
         if (this.peek("while")) { this.whileStatement(); return; }
         if (this.peek("foreach")) { this.foreachStatement(); return; }
         if (this.peek("$")) { this.assignment(); return; }
-        if (this.peek("function") || this.peek("class") || this.peek("new") || this.peek("return")) {
+        if (this.peek("function") || this.peek("class")) {
           const unsupported = this.next();
-          this.unsupported.push(`${unsupported} / ${unsupported === "class" ? "classes" : unsupported === "new" ? "objecten" : unsupported}`);
+          this.unsupported.push(unsupported === "class" ? "classes" : "functies");
+          while (this.position < this.tokens.length && !this.peek("{")) this.next();
+          if (this.peek("{")) { this.next(); this.skipBlock(); }
+          else throw new Error(`De ${unsupported} mist een codeblok.`);
+          return;
+        }
+        if (this.peek("return")) {
+          this.unsupported.push("returnwaarden");
           while (this.position < this.tokens.length && !this.peek(";") && !this.peek("}")) this.next();
           if (this.peek(";")) this.next();
           return;
@@ -598,7 +626,7 @@
         this.expect("}");
       }
       runBlock() {
-        if (this.peek("{")) this.block();
+        if (this.peek("{")) { this.next(); this.block(); }
         else this.statement();
       }
       ifStatement() {
@@ -669,15 +697,16 @@
         const iterable = this.expression();
         this.expect("as");
         const first = this.next();
-        if (!first || !first.startsWith("$")) throw new Error("Gebruik een variabele als foreach-doelwaarde.");
+        if (first !== "$") throw new Error("Gebruik een variabele als foreach-doelwaarde.");
         let keyName = null;
-        let valueName = first.slice(1);
+        let valueName = this.next();
+        if (!valueName || !/^[a-zA-Z_]\w*$/.test(valueName)) throw new Error("Ongeldige foreach-variabele.");
         if (this.peek("=>")) {
           this.next();
           keyName = valueName;
-          const value = this.next();
-          if (!value || !value.startsWith("$")) throw new Error("Gebruik een variabele na => in foreach.");
-          valueName = value.slice(1);
+          if (this.next() !== "$") throw new Error("Gebruik een variabele na => in foreach.");
+          valueName = this.next();
+          if (!valueName || !/^[a-zA-Z_]\w*$/.test(valueName)) throw new Error("Ongeldige foreach-variabele.");
         }
         this.expect(")");
         const entries = Object.entries(iterable || {});
@@ -715,11 +744,23 @@
         return result;
       }
       executeInline(tokens) {
+        const oldTokens = this.tokens;
+        const oldPosition = this.position;
+        if (tokens[0] === "$" && (tokens[2] === "++" || tokens[2] === "--")) {
+          const name = tokens[1];
+          if (typeof this.variables[name] !== "number") throw new Error(`De teller $${name} moet een getal zijn.`);
+          this.variables[name] += tokens[2] === "++" ? 1 : -1;
+          return;
+        }
         if (tokens[0] !== "$") throw new Error("Alleen een eenvoudige variabeletoekenning wordt ondersteund in de for-loop.");
-        this.position = 0;
-        this.tokens = tokens.concat(";");
-        this.assignment(true);
-        this.tokens = this.originalTokens;
+        try {
+          this.tokens = tokens.concat(";");
+          this.position = 0;
+          this.assignment(true);
+        } finally {
+          this.tokens = oldTokens;
+          this.position = oldPosition;
+        }
       }
       evalExpressionTokens(tokens) {
         const oldTokens = this.tokens, oldPosition = this.position;
@@ -742,7 +783,7 @@
       expression(minPrecedence = 0) {
         let left = this.primary();
         const precedence = { "||": 1, "&&": 2, "===": 3, "!==": 3, "==": 3, "!=": 3, "<": 4, ">": 4, "<=": 4, ">=": 4, "+": 5, "-": 5, ".": 5, "*": 6, "/": 6, "%": 6 };
-        while (precedence[this.peek()] !== undefined && precedence[this.peek()] >= minPrecedence) {
+        while (precedence[this.tokens[this.position]] !== undefined && precedence[this.tokens[this.position]] >= minPrecedence) {
           const operator = this.next();
           const nextPrecedence = precedence[operator] + 1;
           const right = this.expression(nextPrecedence);
@@ -775,8 +816,11 @@
         }
         const token = this.next();
         if (token === undefined) throw new Error("Er ontbreekt een waarde in de expressie.");
-        if (token.startsWith("$")) {
-          const name = token.slice(1);
+        if (token === "new") throw new UnsupportedPhpFeature("objecten");
+        if (/^[a-zA-Z_]\w*$/.test(token) && this.peek("(")) throw new UnsupportedPhpFeature("zelf gedefinieerde functies en functieaanroepen");
+        if (token === "$" || token.startsWith("$")) {
+          const name = token === "$" ? this.next() : token.slice(1);
+          if (!name || !/^[a-zA-Z_]\w*$/.test(name)) throw new Error("Ongeldige variabelenaam.");
           let value = this.variables[name];
           if (this.peek("[")) {
             this.next();
@@ -797,7 +841,7 @@
     }
 
     function tokenize(source) {
-      const cleaned = source.replace(/<\?(?:php)?| \?>/gi, (tag) => tag.trim()).replace(/\?>/g, " ?>");
+      const cleaned = source.replace(/<\?php|<\?|\?>/gi, " ");
       const tokens = [];
       const pattern = /\s+|\/\/[^\n]*|#[^\n]*|\/\*[\s\S]*?\*\/|"(?:\\.|[^"\\])*"|'(?:\\.|[^'\\])*'|\$[a-zA-Z_]\w*|(?:===|!==|<=|>=|==|!=|=>|\+\+|--|&&|\|\|)|\d+(?:\.\d+)?|[a-zA-Z_]\w*|[{}()[\];,.:+\-*/%<>=!#]/gy;
       let position = 0;
@@ -813,7 +857,6 @@
         if (/^\s+$/.test(token)) continue;
         if (token.startsWith("//") || token.startsWith("#") || token.startsWith("/*")) {
           if (token.startsWith("/*")) tokens.push("/*", token.slice(2, -2), "*/");
-          else tokens.push(token.startsWith("#") ? "#" : "//", token.slice(1));
           continue;
         }
         if (token.startsWith("$")) {
