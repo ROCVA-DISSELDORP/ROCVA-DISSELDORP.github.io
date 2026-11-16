@@ -1,0 +1,361 @@
+<!doctype html>
+<html lang="nl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#17253a">
+  <title>PHP Monster · Leer PHP door te doen</title>
+  <style>
+    :root{color-scheme:light;--ink:#172a3d;--muted:#617286;--purple:#6854c7;--green:#14745f;--border:#dce4eb;--paper:#fff;--bg:#f4f7f8}
+    *{box-sizing:border-box}
+    body{margin:0;background:var(--bg);color:var(--ink);font-family:system-ui,-apple-system,"Segoe UI",sans-serif}
+    button,select,textarea{font:inherit}
+    button,select{cursor:pointer}
+    button:focus-visible,select:focus-visible,textarea:focus-visible{outline:3px solid #ffbd5b;outline-offset:3px}
+    .topbar{background:#172a3d;color:#fff}
+    .top-inner{max-width:1460px;margin:auto;padding:16px 32px;display:flex;align-items:center;justify-content:space-between;gap:20px}
+    .brand{display:flex;align-items:center;gap:11px;font-size:19px;font-weight:850;letter-spacing:-.04em}
+    .brand-icon{display:grid;place-items:center;width:37px;height:37px;background:#a5e5c4;color:#183a36;border-radius:12px;font-size:15px;letter-spacing:-.08em}
+    .brand small{display:block;color:#a6bbc9;font-size:10px;font-weight:600;letter-spacing:.11em;text-transform:uppercase}
+    .top-note{color:#c3d3de;font-size:12px}
+    main{max-width:1460px;margin:auto;padding:30px 32px 38px}
+    .heading{display:flex;justify-content:space-between;align-items:end;gap:24px;margin-bottom:22px}
+    .eyebrow{margin:0 0 7px;color:var(--green);font-size:11px;font-weight:850;letter-spacing:.14em;text-transform:uppercase}
+    h1{margin:0;font-size:clamp(27px,3vw,40px);line-height:1.1;letter-spacing:-.05em}
+    .subtitle{margin:9px 0 0;color:var(--muted);font-size:14px}
+    .progress{min-width:215px}
+    .progress-label{display:flex;justify-content:space-between;gap:16px;margin-bottom:8px;font-size:12px;font-weight:700}
+    .progress-label span:last-child{color:var(--green)}
+    .track{height:8px;border-radius:9px;background:#dfe9e5;overflow:hidden}
+    .track span{display:block;height:100%;width:0;background:#57c899;transition:width .25s}
+    .guide{display:grid;grid-template-columns:130px 1fr;gap:20px;align-items:center;margin-bottom:18px}
+    .monster-wrap{position:relative;display:grid;place-items:center;align-self:stretch;min-height:145px;border-radius:20px;background:#d6f1df;overflow:hidden}
+    .monster-wrap:before,.monster-wrap:after{content:"";position:absolute;border-radius:50%;background:#c2e9d0}
+    .monster-wrap:before{width:85px;height:85px;left:-32px;top:-25px}
+    .monster-wrap:after{width:70px;height:70px;right:-20px;bottom:-30px}
+    .monster{position:relative;z-index:1;width:90px;height:90px;background:#70c69a;border:4px solid #245f51;border-radius:43% 43% 38% 38%;box-shadow:inset 0 -7px #54ae82}
+    .monster:before,.monster:after{content:"";position:absolute;top:-13px;width:15px;height:20px;background:#70c69a;border:4px solid #245f51;border-bottom:0;border-radius:12px 12px 0 0}
+    .monster:before{left:10px;transform:rotate(-25deg)}.monster:after{right:10px;transform:rotate(25deg)}
+    .eyes{display:flex;justify-content:center;gap:10px;margin-top:24px}
+    .eyes i{width:20px;height:24px;background:white;border:3px solid #245f51;border-radius:50%;position:relative}
+    .eyes i:after{content:"";position:absolute;width:6px;height:7px;top:7px;left:5px;border-radius:50%;background:#245f51}
+    .mouth{width:25px;height:11px;margin:9px auto 0;border-bottom:4px solid #245f51;border-radius:0 0 20px 20px}
+    .bubble{position:relative;min-width:0;min-height:145px;padding:22px 26px;background:#fff;border:1px solid var(--border);border-radius:20px;box-shadow:0 5px 20px #233e4f08}
+    .bubble:before{content:"";position:absolute;left:-9px;top:55px;width:16px;height:16px;background:white;border-left:1px solid var(--border);border-bottom:1px solid var(--border);transform:rotate(45deg)}
+    .bubble-top{display:flex;justify-content:space-between;align-items:center;gap:5px 10px;flex-wrap:wrap}
+    .lesson-kicker{color:var(--purple);font-size:11px;font-weight:850;letter-spacing:.1em;text-transform:uppercase}
+    .lesson-count{color:#8492a1;font-size:11px;font-weight:700;white-space:nowrap}
+    h2{margin:7px 0;font-size:22px;letter-spacing:-.035em}
+    .instruction{margin:0;color:#526477;font-size:14px;line-height:1.6}
+    .instruction code,.hint code{background:#f0edff;color:#5140a3;border-radius:4px;padding:1px 4px}
+    .task{margin:9px 0 0;font-size:13px;font-weight:700;line-height:1.5}
+    .controls{display:flex;justify-content:space-between;align-items:center;gap:12px;margin:0 0 12px}
+    .control-group{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+    .control-group label{font-size:12px;font-weight:750;color:#506376}
+    select{max-width:270px;padding:9px 30px 9px 11px;border:1px solid #d5e0e7;border-radius:9px;background:white;color:var(--ink);font-size:12px}
+    .btn{min-height:37px;padding:8px 13px;border:1px solid #d5e0e7;border-radius:9px;background:white;color:#33495c;font-size:12px;font-weight:750}
+    .btn:hover{border-color:#aabdc8;background:#f8fbfa}.btn:disabled{opacity:.42;cursor:not-allowed}
+    .btn.primary{border-color:#6450bf;background:#6854c7;color:white}.btn.primary:hover{background:#5846ad}
+    .btn.next{border-color:#b9dfcd;background:#e2f5e9;color:#176b50}.btn.next:hover{background:#d0eedc}
+    .workspace{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+    .panel{min-width:0;background:white;border:1px solid var(--border);border-radius:15px;overflow:hidden;box-shadow:0 6px 24px #243d4e08}
+    .panel-head{min-height:54px;padding:13px 17px;display:flex;align-items:center;justify-content:space-between;gap:10px;border-bottom:1px solid #e8edf0}
+    .panel-title{display:flex;align-items:center;gap:8px;font-size:13px;font-weight:800}
+    .dot{width:9px;height:9px;border-radius:50%;background:#a495ec}
+    .dot.green{background:#61c999}
+    .panel-meta{color:#8b9aa8;font-size:11px}
+    .editor{display:block;width:100%;height:330px;resize:vertical;padding:20px;border:0;background:#1a2939;color:#e8eff5;caret-color:#a9e8ca;font:14px/1.7 "Cascadia Code",Consolas,monospace;tab-size:4;white-space:pre;overflow:auto}
+    .editor:focus{outline:0}
+    .editor-foot{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;padding:10px 15px;background:#223447;color:#b1c2ce;font-size:11px}
+    .output-area{min-height:330px;padding:18px;background:#fafdfe}
+    .scene{display:flex;flex-direction:column;justify-content:center;align-items:center;min-height:190px;padding:20px;border:1px dashed #c9ded8;border-radius:12px;background:linear-gradient(145deg,#effaf3,#f3f6ff)}
+    .scene-label{margin-bottom:13px;color:#72958a;font-size:10px;font-weight:850;letter-spacing:.13em;text-transform:uppercase}
+    .scene-items{display:flex;justify-content:center;align-items:center;gap:8px;flex-wrap:wrap;width:100%}
+    .scene-item{max-width:100%;padding:10px 14px;border:1px solid #d6e8df;border-radius:10px;background:white;color:#305a4b;font-size:14px;font-weight:750;overflow-wrap:anywhere;box-shadow:0 3px 8px #2c5e4910}
+    .shape{flex:none;box-shadow:0 4px 10px #2c5e4920}
+    .scene-empty{color:#8da8a0;font-size:13px;text-align:center}
+    .output-label{margin:17px 0 7px;color:#81909c;font-size:10px;font-weight:850;letter-spacing:.1em;text-transform:uppercase}
+    pre.output{min-height:55px;max-height:160px;overflow:auto;margin:0;padding:11px 12px;border-radius:8px;background:#edf2f4;color:#33495c;font:12px/1.65 "Cascadia Code",Consolas,monospace;white-space:pre-wrap;overflow-wrap:anywhere}
+    .status{min-height:50px;padding:12px 17px;border-top:1px solid #e8edf0;color:#617286;font-size:12px;line-height:1.5}
+    .status.success{background:#edfaf2;color:#176b50}.status.error{background:#fff1f0;color:#a03636}
+    .below{display:flex;justify-content:space-between;align-items:start;gap:12px;margin-top:14px}
+    details{flex:1;padding:12px 15px;border:1px solid var(--border);border-radius:10px;background:white;color:#536778;font-size:12px;line-height:1.65}
+    summary{color:#354e60;font-weight:750;cursor:pointer}
+    .hint{margin:10px 0 0}.hint code{white-space:pre-wrap}
+    .solution{display:block;max-height:220px;overflow:auto;margin:10px 0;padding:12px;border-radius:8px;background:#1a2939;color:#e8eff5;font:12px/1.6 Consolas,monospace;white-space:pre-wrap}
+    footer{margin-top:24px;color:#80909c;font-size:11px;line-height:1.6;text-align:center}
+    @media(max-width:750px){.top-inner{padding:14px 18px}.top-note{display:none}main{padding:23px 16px}.heading{align-items:start;flex-direction:column;gap:15px}.progress{width:100%}.guide{grid-template-columns:75px 1fr;gap:12px}.monster-wrap{min-height:115px}.monster{transform:scale(.7)}.bubble{min-height:115px;padding:16px}.bubble:before{top:43px}h2{font-size:19px}.workspace{grid-template-columns:1fr}.editor{height:280px}.output-area{min-height:250px}.controls{align-items:start;flex-direction:column}.control-group{width:100%}select{max-width:100%;flex:1}.below{flex-direction:column}.below details{width:100%}}
+  </style>
+</head>
+<body>
+  <header class="topbar"><div class="top-inner"><div class="brand"><span class="brand-icon" aria-hidden="true">&lt;?&gt;</span><span>PHP MONSTER<small>Leer door te doen</small></span></div><div class="top-note">Kleine stappen. Grote ideeën. Echte PHP.</div></div></header>
+  <main>
+    <div class="heading"><div><p class="eyebrow">Jouw interactieve PHP-speeltuin</p><h1>Schrijf code. Zie wat er gebeurt.</h1><p class="subtitle">Experimenteer, maak fouten en ontdek PHP samen met je monster.</p></div><div class="progress"><div class="progress-label"><span>Jouw voortgang</span><span id="progress-text">0 voltooid</span></div><div class="track" role="progressbar" aria-label="Voltooide opdrachten" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" id="progress-bar"><span id="progress-fill"></span></div></div></div>
+    <section class="guide" aria-labelledby="lesson-title"><div class="monster-wrap" aria-hidden="true"><div class="monster"><div class="eyes"><i></i><i></i></div><div class="mouth"></div></div></div><div class="bubble"><div class="bubble-top"><span class="lesson-kicker" id="chapter"></span><span class="lesson-count" id="lesson-count"></span></div><h2 id="lesson-title"></h2><p class="instruction" id="instruction"></p><p class="task" id="task"></p></div></section>
+    <div class="controls"><div class="control-group"><label for="lesson-select">Spring naar</label><select id="lesson-select"></select></div><div class="control-group"><button class="btn" id="previous" type="button">← Vorige</button><button class="btn next" id="next" type="button">Volgende →</button></div></div>
+    <div class="workspace">
+      <section class="panel" aria-label="PHP-code"><div class="panel-head"><div class="panel-title"><span class="dot"></span> jouw-code.php</div><div class="control-group"><button class="btn" id="reset" type="button">Herstel code</button><button class="btn primary" id="run" type="button">▶ Uitvoeren</button></div></div><textarea class="editor" id="editor" aria-label="PHP-code bewerken" spellcheck="false" autocapitalize="off" autocomplete="off" autocorrect="off"></textarea><div class="editor-foot"><span>Verander de code en bekijk het resultaat.</span><span>Ctrl / ⌘ + Enter om uit te voeren</span></div></section>
+      <section class="panel" aria-label="Resultaat"><div class="panel-head"><div class="panel-title"><span class="dot green"></span> Jouw resultaat</div><span class="panel-meta">PHP 8.3 · in je browser</span></div><div class="output-area"><div class="scene"><div class="scene-label">Het monster ziet</div><div class="scene-items" id="scene"><span class="scene-empty">Je resultaat verschijnt hier.</span></div></div><div class="output-label">Uitvoer</div><pre class="output" id="output">PHP wordt geladen…</pre></div><div class="status" id="status" role="status" aria-live="polite">De PHP-runtime wordt geladen. Dit kan even duren.</div></section>
+    </div>
+    <div class="below"><details><summary>Een hint nodig?</summary><p class="hint" id="hint"></p></details><details><summary>Bekijk een voorbeeldoplossing</summary><pre class="solution" id="solution"></pre><button class="btn" id="use-solution" type="button">Gebruik deze code</button></details></div>
+    <footer>Je code draait lokaal in je browser met PHP WebAssembly. Voor het laden van de runtime is internet nodig.<br>Je voortgang en code worden op dit apparaat opgeslagen. De uitvoer wordt als tekst getoond, niet als actieve HTML.<br>De opdrachtcontrole vergelijkt de uitvoer en controleert enkele onderdelen van de code; blijf ook zelf testen.<span id="storage-warning" role="status"></span></footer>
+  </main>
+  <script>
+    "use strict";
+    const tag = "<" + "?php\n";
+    const lessons = [
+      {chapter:"1 · Hallo PHP", title:"Maak kennis met echo", explain:"Met echo laat je PHP iets tonen. Een opdracht eindigt met een puntkomma.", task:"Laat precies Hallo monster! verschijnen.", hint:'Zet de tekst tussen aanhalingstekens: echo "Hallo monster!";', starter:'echo "Hallo wereld!";', solution:'echo "Hallo monster!";', expected:"Hallo monster!", pattern:/\becho\b/},
+      {chapter:"1 · Hallo PHP", title:"Twee regels tekst", explain:"Een programma kan meerdere opdrachten uitvoeren. Met \\n maak je een nieuwe regel in een string met dubbele aanhalingstekens.", task:"Toon op twee regels: Hallo en PHP!", hint:'Gebruik bijvoorbeeld echo "Hallo\\nPHP!";', starter:'echo "Hallo";', solution:'echo "Hallo\\nPHP!";', expected:"Hallo\nPHP!", pattern:/\becho\b/},
+      {chapter:"1 · Hallo PHP", title:"Schrijf een opmerking", explain:"Commentaar is uitleg voor mensen; PHP voert het niet uit. Een regel commentaar begint met //.", task:"Schrijf een commentaarregel en toon Start!.", hint:'Zet // mijn uitleg boven echo "Start!";', starter:'echo "Start!";', solution:'// Mijn eerste programma\necho "Start!";', expected:"Start!", pattern:/\/\/[^\n]+/},
+      {chapter:"2 · Variabelen", title:"Geef iets een naam", explain:"Een variabele bewaart een waarde. In PHP begint een variabelenaam met een dollarteken.", task:"Bewaar de tekst Pip in $naam en toon de variabele.", hint:'Maak $naam = "Pip"; en schrijf daarna echo $naam;', starter:'$naam = "Monster";\necho $naam;', solution:'$naam = "Pip";\necho $naam;', expected:"Pip", pattern:/\$naam\s*=/},
+      {chapter:"2 · Variabelen", title:"Plak tekst aan elkaar", explain:"Met een punt verbind je strings en variabelen. Dat heet concatenatie.", task:"Gebruik $naam om Hallo Pip! te tonen.", hint:'Combineer "Hallo ", $naam en "!" met punten.', starter:'$naam = "Pip";\necho $naam;', solution:'$naam = "Pip";\necho "Hallo " . $naam . "!";', expected:"Hallo Pip!", pattern:/\$naam\s*\./},
+      {chapter:"2 · Variabelen", title:"Getallen en rekenen", explain:"Getallen hoeven niet tussen aanhalingstekens. Gebruik +, -, * en / om ermee te rekenen.", task:"Bereken met $prijs en $aantal de totale prijs: 15.", hint:"Vermenigvuldig de twee variabelen met *.", starter:'$prijs = 5;\n$aantal = 3;\necho $prijs;', solution:'$prijs = 5;\n$aantal = 3;\necho $prijs * $aantal;', expected:"15", pattern:/\$prijs\s*\*\s*\$aantal/},
+      {chapter:"2 · Variabelen", title:"Waarden veranderen", explain:"Je kunt een bestaande variabele een nieuwe waarde geven. += telt een waarde erbij op.", task:"Tel 4 bij $score op en toon 10.", hint:"Gebruik $score += 4; voordat je echo gebruikt.", starter:'$score = 6;\necho $score;', solution:'$score = 6;\n$score += 4;\necho $score;', expected:"10", pattern:/\$score\s*(?:\+=|=\s*\$score\s*\+)/},
+      {chapter:"2 · Variabelen", title:"Typen ontdekken", explain:"PHP kent onder andere integers, floats, strings en booleans. Met gettype() zie je het type van een waarde.", task:"Toon het type van $waarde, een kommagetal.", hint:"Roep gettype($waarde) aan met echo.", starter:'$waarde = 3.5;\necho $waarde;', solution:'$waarde = 3.5;\necho gettype($waarde);', expected:"double", pattern:/gettype\s*\(\s*\$waarde\s*\)/},
+      {chapter:"3 · Beslissingen", title:"Waar of niet waar?", explain:"Een vergelijking levert true of false op. Met === vergelijk je zowel waarde als type.", task:"Vergelijk $leeftijd strikt met 18 en toon het resultaat met var_export.", hint:"Gebruik var_export($leeftijd === 18);", starter:'$leeftijd = 18;\nvar_export($leeftijd);', solution:'$leeftijd = 18;\nvar_export($leeftijd === 18);', expected:"true", pattern:/===/},
+      {chapter:"3 · Beslissingen", title:"Kies met if en else", explain:"Een if-blok draait alleen als de voorwaarde waar is. Anders draait het else-blok.", task:"Toon Welkom als $leeftijd minstens 18 is, anders Nog even wachten.", hint:'Vergelijk met >= en gebruik een else-blok.', starter:'$leeftijd = 19;\n\n// Maak hier je keuze', solution:'$leeftijd = 19;\nif ($leeftijd >= 18) {\n    echo "Welkom";\n} else {\n    echo "Nog even wachten";\n}', expected:"Welkom", pattern:/\bif\s*\([\s\S]*?\)\s*\{[\s\S]*?\}\s*else\s*\{/},
+      {chapter:"3 · Beslissingen", title:"Meerdere voorwaarden", explain:"Met && moeten beide voorwaarden waar zijn. Met || is één ware voorwaarde genoeg.", task:"Toon Toegang als $leeftijd minstens 18 is én $kaartje true is.", hint:"Gebruik && tussen de twee voorwaarden.", starter:'$leeftijd = 20;\n$kaartje = true;\n\n// Controleer beide voorwaarden', solution:'$leeftijd = 20;\n$kaartje = true;\nif ($leeftijd >= 18 && $kaartje) {\n    echo "Toegang";\n}', expected:"Toegang", pattern:/&&/},
+      {chapter:"3 · Beslissingen", title:"De rest van een deling", explain:"De operator % geeft de rest na een deling. Een even getal heeft rest 0 bij deling door 2.", task:"Controleer of $getal even is en toon Even of Oneven.", hint:"Vergelijk $getal % 2 met 0.", starter:'$getal = 8;\n\n// Is het getal even?', solution:'$getal = 8;\nif ($getal % 2 === 0) {\n    echo "Even";\n} else {\n    echo "Oneven";\n}', expected:"Even", pattern:/%\s*2/},
+      {chapter:"4 · Herhalen", title:"Tellen met for", explain:"Een for-loop heeft een startwaarde, een voorwaarde en een stap. De code tussen accolades wordt herhaald.", task:"Toon de getallen 1 tot en met 5, elk op een nieuwe regel.", hint:'Gebruik for ($i = 1; $i <= 5; $i++) en echo $i . "\\n";', starter:'for ($i = 1; $i <= 3; $i++) {\n    echo $i . "\\n";\n}', solution:'for ($i = 1; $i <= 5; $i++) {\n    echo $i . "\\n";\n}', expected:"1\n2\n3\n4\n5", pattern:/\bfor\s*\(/},
+      {chapter:"4 · Herhalen", title:"Zolang iets waar is", explain:"Een while-loop herhaalt zolang de voorwaarde waar is. Vergeet niet de teller te veranderen!", task:"Tel met while af van 3 naar 1, elk op een nieuwe regel.", hint:"Begin bij 3, herhaal zolang de teller groter is dan 0 en verlaag met --.", starter:'$i = 3;\n\n// Maak een while-loop', solution:'$i = 3;\nwhile ($i > 0) {\n    echo $i . "\\n";\n    $i--;\n}', expected:"3\n2\n1", pattern:/\bwhile\s*\(/},
+      {chapter:"5 · Arrays", title:"Een lijst maken", explain:"Een array bewaart meerdere waarden. De eerste positie heeft index 0.", task:"Toon het tweede dier uit de array.", hint:"Gebruik $dieren[1].", starter:'$dieren = ["kat", "hond", "vis"];\necho $dieren[0];', solution:'$dieren = ["kat", "hond", "vis"];\necho $dieren[1];', expected:"hond", pattern:/\$dieren\s*\[\s*1\s*\]/},
+      {chapter:"5 · Arrays", title:"Voeg een item toe", explain:"Met [] voeg je een waarde toe aan het einde van een array. count() telt het aantal items.", task:"Voeg peer toe en toon het aantal items: 3.", hint:'Gebruik $fruit[] = "peer"; en echo count($fruit);', starter:'$fruit = ["appel", "banaan"];\n\n// Voeg een stuk fruit toe', solution:'$fruit = ["appel", "banaan"];\n$fruit[] = "peer";\necho count($fruit);', expected:"3", pattern:/\$fruit\s*\[\s*\]\s*=/},
+      {chapter:"5 · Arrays", title:"Doorloop een lijst", explain:"Met foreach pak je elk item van een array, één voor één.", task:"Toon elk dier op een eigen regel met foreach.", hint:'Gebruik foreach ($dieren as $dier) en echo $dier . "\\n";', starter:'$dieren = ["kat", "hond", "vis"];\n\n// Doorloop de dieren', solution:'$dieren = ["kat", "hond", "vis"];\nforeach ($dieren as $dier) {\n    echo $dier . "\\n";\n}', expected:"kat\nhond\nvis", pattern:/\bforeach\s*\(/},
+      {chapter:"5 · Arrays", title:"Sleutels en waarden", explain:"Een associatieve array gebruikt herkenbare sleutels in plaats van alleen cijfers.", task:"Toon de naam én het cijfer van de student, gescheiden door een dubbele punt en spatie.", hint:'Lees $student["naam"] en $student["cijfer"].', starter:'$student = ["naam" => "Mila", "cijfer" => 8];\necho $student["naam"];', solution:'$student = ["naam" => "Mila", "cijfer" => 8];\necho $student["naam"] . ": " . $student["cijfer"];', expected:"Mila: 8", pattern:/\$student\s*\[\s*["']cijfer["']\s*\]/},
+      {chapter:"6 · Functies", title:"Maak een functie", explain:"Een functie groepeert code die je opnieuw kunt gebruiken. Parameters ontvangen waarden; return geeft een resultaat terug.", task:"Maak verdubbel($getal) en toon het resultaat voor 6.", hint:"Geef $getal * 2 terug met return en roep de functie aan.", starter:'// Maak de functie verdubbel\n\necho verdubbel(6);', solution:'function verdubbel($getal) {\n    return $getal * 2;\n}\necho verdubbel(6);', expected:"12", pattern:/function\s+verdubbel\s*\([\s\S]*?\)[\s\S]*?\breturn\b/},
+      {chapter:"6 · Functies", title:"Meer parameters", explain:"Een functie kan meerdere parameters hebben. Iedere aanroep kan andere waarden meegeven.", task:"Maak telOp($a, $b) en toon de som van 7 en 5.", hint:"Zet beide parameters tussen de haakjes, gescheiden door een komma.", starter:'// Maak telOp met twee parameters\n\necho telOp(7, 5);', solution:'function telOp($a, $b) {\n    return $a + $b;\n}\necho telOp(7, 5);', expected:"12", pattern:/function\s+telOp\s*\(\s*\$\w+\s*,\s*\$\w+\s*\)/},
+      {chapter:"6 · Functies", title:"Handige ingebouwde functies", explain:"PHP heeft veel ingebouwde functies. strtoupper() maakt letters hoofdletters en strlen() telt bytes.", task:"Toon de naam van het monster in hoofdletters.", hint:"Geef $naam mee aan strtoupper().", starter:'$naam = "pip";\necho $naam;', solution:'$naam = "pip";\necho strtoupper($naam);', expected:"PIP", pattern:/strtoupper\s*\(/},
+      {chapter:"7 · Invoer en veiligheid", title:"Ontbrekende invoer", explain:"Gegevens kunnen ontbreken. Met ?? kies je een standaardwaarde wanneer een sleutel ontbreekt of null is.", task:"Lees de naam uit $invoer en gebruik Gast als die ontbreekt.", hint:'Gebruik $invoer["naam"] ?? "Gast".', starter:'$invoer = [];\n\n// Lees de naam met een standaardwaarde', solution:'$invoer = [];\n$naam = $invoer["naam"] ?? "Gast";\necho $naam;', expected:"Gast", pattern:/\?\?/},
+      {chapter:"7 · Invoer en veiligheid", title:"Controleer een e-mailadres", explain:"Controleer invoer voordat je die gebruikt. filter_var() kan een e-mailadres valideren.", task:"Toon Geldig als het e-mailadres geldig is, anders Ongeldig.", hint:"Gebruik filter_var($email, FILTER_VALIDATE_EMAIL) als voorwaarde.", starter:'$email = "pip@example.com";\n\n// Controleer het adres', solution:'$email = "pip@example.com";\nif (filter_var($email, FILTER_VALIDATE_EMAIL)) {\n    echo "Geldig";\n} else {\n    echo "Ongeldig";\n}', expected:"Geldig", pattern:/filter_var\s*\([\s\S]*?FILTER_VALIDATE_EMAIL/},
+      {chapter:"7 · Invoer en veiligheid", title:"Tekst veilig tonen", explain:"Bij uitvoer in HTML moet je gebruikersinvoer escapen. htmlspecialchars() zet speciale tekens om in HTML-entiteiten.", task:"Escape de invoer en toon het resultaat. Hier zie je de entiteiten als tekst.", hint:'Gebruik htmlspecialchars($invoer, ENT_QUOTES, "UTF-8").', starter:'$invoer = "<b>Hallo</b>";\necho $invoer;', solution:'$invoer = "<b>Hallo</b>";\necho htmlspecialchars($invoer, ENT_QUOTES, "UTF-8");', expected:"&lt;b&gt;Hallo&lt;/b&gt;", pattern:/htmlspecialchars\s*\(/},
+      {chapter:"8 · Objecten", title:"Je eerste object", explain:"Een class is een blauwdruk; met new maak je een object. Een property bewaart gegevens van dat object.", task:"Maak een Monster-object met de naam Pip en toon de property naam.", hint:'Gebruik $monster = new Monster(); en $monster->naam = "Pip";', starter:'class Monster {\n    public $naam;\n}\n\n// Maak een object en geef het een naam', solution:'class Monster {\n    public $naam;\n}\n$monster = new Monster();\n$monster->naam = "Pip";\necho $monster->naam;', expected:"Pip", pattern:/new\s+Monster\s*\(/},
+      {chapter:"8 · Objecten", title:"Een methode maken", explain:"Een methode is een functie in een class. Met $this verwijs je naar het huidige object.", task:"Maak de methode groet() die Hallo Pip! teruggeeft met behulp van de property naam.", hint:'Gebruik return "Hallo " . $this->naam . "!";', starter:'class Monster {\n    public $naam = "Pip";\n    // Maak hier groet()\n}\n$monster = new Monster();\necho $monster->groet();', solution:'class Monster {\n    public $naam = "Pip";\n    public function groet() {\n        return "Hallo " . $this->naam . "!";\n    }\n}\n$monster = new Monster();\necho $monster->groet();', expected:"Hallo Pip!", pattern:/function\s+groet\s*\([\s\S]*?\$this->naam/},
+      {chapter:"8 · Objecten", title:"Een constructor gebruiken", explain:"__construct() draait automatisch bij new. Zo geef je een object meteen zijn beginwaarden.", task:"Geef Pip mee aan de constructor en toon de naam.", hint:"Ontvang $naam in __construct en bewaar die in $this->naam.", starter:'class Monster {\n    public $naam;\n    // Maak een constructor\n}\n$monster = new Monster("Pip");\necho $monster->naam;', solution:'class Monster {\n    public $naam;\n    public function __construct($naam) {\n        $this->naam = $naam;\n    }\n}\n$monster = new Monster("Pip");\necho $monster->naam;', expected:"Pip", pattern:/function\s+__construct\s*\(/},
+      {chapter:"9 · Visueel programmeren", title:"Teken een vorm", explain:"PHP kan gegevens als JSON uitsturen. Het monster leest een lijst met vormen en tekent die. Probeer cirkel of vierkant, en roze, paars, groen, blauw of geel.", task:"Maak een roze cirkel van grootte 80.", hint:'Verander de waarden van vorm, kleur en grootte in de array.', starter:'$vormen = [\n    ["vorm" => "vierkant", "kleur" => "blauw", "grootte" => 80]\n];\necho json_encode(["vormen" => $vormen]);', solution:'$vormen = [\n    ["vorm" => "cirkel", "kleur" => "roze", "grootte" => 80]\n];\necho json_encode(["vormen" => $vormen]);', expected:'{"vormen":[{"vorm":"cirkel","kleur":"roze","grootte":80}]}', pattern:/json_encode\s*\(/},
+      {chapter:"9 · Visueel programmeren", title:"Verander de grootte", explain:"Een variabele kan bepalen hoe groot een vorm is. Verander de waarde en kijk hoe de tekening mee verandert.", task:"Gebruik $grootte om een paars vierkant van grootte 120 te tekenen.", hint:'Gebruik $grootte als waarde bij de sleutel "grootte".', starter:'$grootte = 60;\n$vormen = [\n    ["vorm" => "vierkant", "kleur" => "paars", "grootte" => $grootte]\n];\necho json_encode(["vormen" => $vormen]);', solution:'$grootte = 120;\n$vormen = [\n    ["vorm" => "vierkant", "kleur" => "paars", "grootte" => $grootte]\n];\necho json_encode(["vormen" => $vormen]);', expected:'{"vormen":[{"vorm":"vierkant","kleur":"paars","grootte":120}]}', pattern:/"grootte"\s*=>\s*\$grootte/},
+      {chapter:"9 · Visueel programmeren", title:"Teken met een loop", explain:"Een loop kan meerdere vormen aan een array toevoegen. PHP maakt de lijst en het monster tekent hem.", task:"Teken met een for-loop drie groene cirkels van grootte 50.", hint:'Voeg in elke ronde een array met vorm, kleur en grootte toe aan $vormen[].', starter:'$vormen = [];\n\n// Voeg drie cirkels toe met een for-loop\n\necho json_encode(["vormen" => $vormen]);', solution:'$vormen = [];\nfor ($i = 0; $i < 3; $i++) {\n    $vormen[] = ["vorm" => "cirkel", "kleur" => "groen", "grootte" => 50];\n}\necho json_encode(["vormen" => $vormen]);', expected:'{"vormen":[{"vorm":"cirkel","kleur":"groen","grootte":50},{"vorm":"cirkel","kleur":"groen","grootte":50},{"vorm":"cirkel","kleur":"groen","grootte":50}]}', pattern:/\bfor\s*\(/},
+      {chapter:"10 · Verder bouwen", title:"Vang een fout op", explain:"Met try en catch kun je een exception opvangen en zelf bepalen wat er daarna gebeurt.", task:"Vang de exception op en toon haar bericht.", hint:"Gebruik catch (Exception $fout) en $fout->getMessage().", starter:'try {\n    throw new Exception("Oeps!");\n} // Voeg catch toe', solution:'try {\n    throw new Exception("Oeps!");\n} catch (Exception $fout) {\n    echo $fout->getMessage();\n}', expected:"Oeps!", pattern:/\bcatch\s*\(/},
+      {chapter:"10 · Verder bouwen", title:"Eindopdracht: monsterscores", explain:"Combineer arrays, een loop en een functie. Je kunt nu zelf kleine programma's bouwen!", task:"Bereken met een functie en foreach de som van de scores 3, 5 en 7. Toon 15.", hint:"Begin met $totaal = 0, tel elke score erbij op en return het totaal.", starter:'$scores = [3, 5, 7];\n\n// Maak een functie totaal en loop door de scores\n\necho totaal($scores);', solution:'$scores = [3, 5, 7];\nfunction totaal($scores) {\n    $totaal = 0;\n    foreach ($scores as $score) {\n        $totaal += $score;\n    }\n    return $totaal;\n}\necho totaal($scores);', expected:"15", pattern:/function\s+totaal\s*\([\s\S]*?\bforeach\s*\([\s\S]*?\breturn\b/},
+      {chapter:"11 · Monsterpret", title:"Maak een monstertitel", explain:"Met strtoupper() verander je kleine letters in hoofdletters. Combineer de naam met een titel.", task:"Maak van pip de tekst SUPER PIP!", hint:'Plak "SUPER ", strtoupper($naam) en "!" aan elkaar.', starter:'$naam = "pip";\necho $naam;', solution:'$naam = "pip";\necho "SUPER " . strtoupper($naam) . "!";', expected:"SUPER PIP!", pattern:/strtoupper\s*\(/},
+      {chapter:"11 · Monsterpret", title:"De geheime code", explain:"Een geheime code kun je vergelijken met ===. Een if/else laat een andere boodschap zien bij een verkeerde code.", task:"Toon Schat gevonden! wanneer $code gelijk is aan 1234, anders Verkeerde code.", hint:"Gebruik if ($code === 1234) en voeg een else toe.", starter:'$code = 1234;\n\n// Controleer de code', solution:'$code = 1234;\nif ($code === 1234) {\n    echo "Schat gevonden!";\n} else {\n    echo "Verkeerde code";\n}', expected:"Schat gevonden!", pattern:/\bif\s*\([\s\S]*?===\s*1234[\s\S]*?\)\s*\{[\s\S]*?\}\s*else\s*\{/},
+      {chapter:"11 · Monsterpret", title:"Een trap van sterren", explain:"str_repeat() herhaalt tekst. Gebruik een loop om bij elke regel een ster toe te voegen.", task:"Maak drie regels met respectievelijk *, ** en ***.", hint:'Laat $i van 1 tot 3 lopen en toon str_repeat("*", $i) met een nieuwe regel.', starter:'// Maak een sterrentrap', solution:'for ($i = 1; $i <= 3; $i++) {\n    echo str_repeat("*", $i) . "\\n";\n}', expected:"*\n**\n***", pattern:/\bfor\s*\([\s\S]*?str_repeat\s*\(/},
+      {chapter:"11 · Monsterpret", title:"Tijd voor pizza", explain:"Met intdiv() deel je gehele getallen zonder rest. De restoperator % laat zien hoeveel stukken overblijven.", task:"Verdeel 10 pizzapunten over 3 monsters. Toon op twee regels: Per monster: 3 en Over: 1.", hint:"Gebruik intdiv($punten, $monsters) en $punten % $monsters.", starter:'$punten = 10;\n$monsters = 3;\n\n// Verdeel de pizza', solution:'$punten = 10;\n$monsters = 3;\necho "Per monster: " . intdiv($punten, $monsters) . "\\n";\necho "Over: " . ($punten % $monsters);', expected:"Per monster: 3\nOver: 1", pattern:/intdiv\s*\([\s\S]*?%/},
+      {chapter:"11 · Monsterpret", title:"De rugzak", explain:"in_array() controleert of een waarde in een array voorkomt. Met true als derde argument vergelijk je ook het type.", task:"Controleer of de rugzak een sleutel bevat en toon Sleutel gevonden! of Geen sleutel.", hint:'Gebruik in_array("sleutel", $rugzak, true) als voorwaarde.', starter:'$rugzak = ["kaart", "sleutel", "appel"];\n\n// Zoek de sleutel', solution:'$rugzak = ["kaart", "sleutel", "appel"];\nif (in_array("sleutel", $rugzak, true)) {\n    echo "Sleutel gevonden!";\n} else {\n    echo "Geen sleutel";\n}', expected:"Sleutel gevonden!", pattern:/in_array\s*\(/},
+      {chapter:"11 · Monsterpret", title:"Een drankje kiezen", explain:"Met switch kies je een codeblok op basis van een waarde. break voorkomt dat de volgende case ook draait.", task:"Toon voor drankje sap de tekst Appelsap. Voeg ook een default toe voor andere drankjes.", hint:'Gebruik case "sap": en sluit die af met break;.', starter:'$drankje = "sap";\n\n// Kies een drankje met switch', solution:'$drankje = "sap";\nswitch ($drankje) {\n    case "sap":\n        echo "Appelsap";\n        break;\n    default:\n        echo "Onbekend drankje";\n}', expected:"Appelsap", pattern:/\bswitch\s*\([\s\S]*?\bcase\b[\s\S]*?\bbreak\b[\s\S]*?\bdefault\s*:/},
+      {chapter:"11 · Monsterpret", title:"De monsterscore", explain:"array_sum() telt alle getallen in een array op. Zo bereken je snel de score van een team.", task:"Tel de scores op en toon Teamscore: 18.", hint:"Geef $scores mee aan array_sum().", starter:'$scores = [4, 6, 8];\n\n// Toon de teamscore', solution:'$scores = [4, 6, 8];\necho "Teamscore: " . array_sum($scores);', expected:"Teamscore: 18", pattern:/array_sum\s*\(/},
+      {chapter:"11 · Monsterpret", title:"De schatkist sorteren", explain:"sort() sorteert een array op waarde. implode() voegt de items samen met een scheidingsteken.", task:"Sorteer de munten van laag naar hoog en toon 1, 3, 5.", hint:'Gebruik sort($munten); en implode(", ", $munten).', starter:'$munten = [5, 1, 3];\n\n// Sorteer en toon de munten', solution:'$munten = [5, 1, 3];\nsort($munten);\necho implode(", ", $munten);', expected:"1, 3, 5", pattern:/\bsort\s*\([\s\S]*?implode\s*\(/},
+      {chapter:"12 · Vormenkunst", title:"Twee monsterogen", explain:"Een tekening bestaat uit een array met vormen. Iedere vorm heeft een soort, kleur en grootte.", task:"Maak twee blauwe cirkels van grootte 50.", hint:'Zet twee arrays met "vorm", "kleur" en "grootte" in $vormen.', starter:'$vormen = [\n    ["vorm" => "cirkel", "kleur" => "blauw", "grootte" => 50]\n];\necho json_encode(["vormen" => $vormen]);', solution:'$vormen = [\n    ["vorm" => "cirkel", "kleur" => "blauw", "grootte" => 50],\n    ["vorm" => "cirkel", "kleur" => "blauw", "grootte" => 50]\n];\necho json_encode(["vormen" => $vormen]);', expected:'{"vormen":[{"vorm":"cirkel","kleur":"blauw","grootte":50},{"vorm":"cirkel","kleur":"blauw","grootte":50}]}', pattern:/json_encode\s*\(/},
+      {chapter:"12 · Vormenkunst", title:"Een groeiend patroon", explain:"Je kunt de teller van een loop gebruiken om vormen steeds groter te maken.", task:"Teken met een loop drie paarse cirkels met grootte 30, 60 en 90.", hint:'Laat $i van 1 tot 3 lopen en gebruik $i * 30 als grootte.', starter:'$vormen = [];\n\n// Maak drie steeds grotere cirkels\n\necho json_encode(["vormen" => $vormen]);', solution:'$vormen = [];\nfor ($i = 1; $i <= 3; $i++) {\n    $vormen[] = ["vorm" => "cirkel", "kleur" => "paars", "grootte" => $i * 30];\n}\necho json_encode(["vormen" => $vormen]);', expected:'{"vormen":[{"vorm":"cirkel","kleur":"paars","grootte":30},{"vorm":"cirkel","kleur":"paars","grootte":60},{"vorm":"cirkel","kleur":"paars","grootte":90}]}', pattern:/\bfor\s*\(/},
+      {chapter:"12 · Vormenkunst", title:"Een kleurrijke rij", explain:"Met foreach kun je een lijst kleuren omzetten in een rij vormen.", task:"Teken drie vierkanten van grootte 50: eerst roze, dan geel en dan blauw.", hint:'Loop door $kleuren en gebruik $kleur als waarde voor "kleur".', starter:'$kleuren = ["roze", "geel", "blauw"];\n$vormen = [];\n\n// Maak voor elke kleur een vierkant\n\necho json_encode(["vormen" => $vormen]);', solution:'$kleuren = ["roze", "geel", "blauw"];\n$vormen = [];\nforeach ($kleuren as $kleur) {\n    $vormen[] = ["vorm" => "vierkant", "kleur" => $kleur, "grootte" => 50];\n}\necho json_encode(["vormen" => $vormen]);', expected:'{"vormen":[{"vorm":"vierkant","kleur":"roze","grootte":50},{"vorm":"vierkant","kleur":"geel","grootte":50},{"vorm":"vierkant","kleur":"blauw","grootte":50}]}', pattern:/\bforeach\s*\(/},
+      {chapter:"12 · Vormenkunst", title:"Een vorm kiezen", explain:"Met een voorwaarde kun je bepalen wat je tekent. Verander de waarde en kijk wat er gebeurt.", task:"Maak bij $feest = true een gele cirkel van grootte 80; teken anders een blauw vierkant van grootte 80.", hint:'Kies met if/else een array voor $vorm en voeg die toe aan $vormen.', starter:'$feest = true;\n$vormen = [];\n\n// Kies een vorm voor een feestje\n\necho json_encode(["vormen" => $vormen]);', solution:'$feest = true;\n$vormen = [];\nif ($feest) {\n    $vorm = ["vorm" => "cirkel", "kleur" => "geel", "grootte" => 80];\n} else {\n    $vorm = ["vorm" => "vierkant", "kleur" => "blauw", "grootte" => 80];\n}\n$vormen[] = $vorm;\necho json_encode(["vormen" => $vormen]);', expected:'{"vormen":[{"vorm":"cirkel","kleur":"geel","grootte":80}]}', pattern:/\bif\s*\([\s\S]*?\)\s*\{[\s\S]*?\}\s*else\s*\{/}
+    ];
+
+    const $ = (id) => document.getElementById(id);
+    const storageKey = "php-monster-v1";
+    let saved = { current: 0, drafts: {}, completed: [] };
+    try {
+      const data = JSON.parse(localStorage.getItem(storageKey) || "null");
+      if (data && typeof data === "object") {
+        if (Number.isInteger(data.current) && data.current >= 0 && data.current < lessons.length) saved.current = data.current;
+        if (data.drafts && typeof data.drafts === "object" && !Array.isArray(data.drafts)) saved.drafts = data.drafts;
+        if (Array.isArray(data.completed)) saved.completed = data.completed.filter((n) => Number.isInteger(n) && n >= 0 && n < lessons.length);
+      }
+    } catch (error) { console.warn("Voortgang lezen is niet gelukt.", error); $("storage-warning").textContent = " Voortgang lezen is niet gelukt."; }
+    let current = saved.current;
+    let worker, ready = false, running = false, pending = false, timer, watchdog, request = 0;
+    const editor = $("editor");
+    const select = $("lesson-select");
+    lessons.forEach((lesson, index) => {
+      const option = document.createElement("option");
+      option.value = index;
+      option.textContent = `${index + 1}. ${lesson.title}`;
+      select.append(option);
+    });
+
+    function save() {
+      try { localStorage.setItem(storageKey, JSON.stringify(saved)); }
+      catch (error) { console.warn("Voortgang opslaan is niet gelukt.", error); $("storage-warning").textContent = " Voortgang opslaan is niet gelukt."; }
+    }
+    function status(message, kind = "") { $("status").textContent = message; $("status").className = `status ${kind}`; }
+    function progress() {
+      const count = new Set(saved.completed).size;
+      const percent = Math.round(count / lessons.length * 100);
+      $("progress-text").textContent = `${count} / ${lessons.length} voltooid`;
+      $("progress-fill").style.width = `${percent}%`;
+      $("progress-bar").setAttribute("aria-valuenow", percent);
+    }
+    function scene(text) {
+      const container = $("scene");
+      container.replaceChildren();
+      let drawing;
+      try { drawing = JSON.parse(text); } catch (error) { if (!(error instanceof SyntaxError)) throw error; }
+      if (drawing && Array.isArray(drawing.vormen)) {
+        const colors = {roze:"#ed86a8", paars:"#9d86e9", groen:"#70c69a", blauw:"#70b5e5", geel:"#f3c76e"};
+        const shapes = drawing.vormen.slice(0, 30);
+        shapes.forEach((shape) => {
+          if (!shape || !["cirkel", "vierkant"].includes(shape.vorm) || !Object.hasOwn(colors, shape.kleur) || !Number.isFinite(shape.grootte)) return;
+          const item = document.createElement("span");
+          item.className = "shape";
+          item.style.width = `${Math.max(10, Math.min(140, shape.grootte))}px`;
+          item.style.height = item.style.width;
+          item.style.backgroundColor = colors[shape.kleur];
+          item.style.borderRadius = shape.vorm === "cirkel" ? "50%" : "8px";
+          item.setAttribute("role", "img");
+          item.setAttribute("aria-label", `${shape.kleur} ${shape.vorm}, grootte ${shape.grootte}`);
+          container.append(item);
+        });
+        if (container.childElementCount) return;
+      }
+      const lines = text.trim().split(/\r?\n/).filter(Boolean);
+      if (!text.trim()) {
+        const empty = document.createElement("span");
+        empty.className = "scene-empty";
+        empty.textContent = "Nog geen uitvoer. Probeer eens echo!";
+        container.append(empty);
+        return;
+      }
+      lines.slice(0, 20).forEach((line) => {
+        const item = document.createElement("span");
+        item.className = "scene-item";
+        item.textContent = line.length > 200 ? `${line.slice(0, 200)}…` : line;
+        container.append(item);
+      });
+      if (lines.length > 20) {
+        const more = document.createElement("span");
+        more.className = "scene-empty";
+        more.textContent = `+ ${lines.length - 20} regels (zie uitvoer)`;
+        container.append(more);
+      }
+    }
+    function showLesson(index) {
+      current = index;
+      saved.current = index;
+      const lesson = lessons[index];
+      $("chapter").textContent = lesson.chapter;
+      $("lesson-count").textContent = `Opdracht ${index + 1} van ${lessons.length}`;
+      $("lesson-title").textContent = lesson.title;
+      $("instruction").textContent = lesson.explain;
+      $("task").textContent = `Jouw missie: ${lesson.task}`;
+      $("hint").textContent = lesson.hint;
+      $("solution").textContent = tag + lesson.solution;
+      select.value = String(index);
+      $("previous").disabled = index === 0;
+      $("next").disabled = index === lessons.length - 1;
+      document.querySelectorAll("details").forEach((item) => { item.open = false; });
+      editor.value = typeof saved.drafts[index] === "string" ? saved.drafts[index] : tag + lesson.starter;
+      $("output").textContent = "Wacht op de uitvoer…";
+      scene("");
+      status("Pas de code aan en ontdek wat er gebeurt.");
+      save();
+      queueRun();
+    }
+    function startWorker() {
+      ready = false;
+      running = false;
+      const source = `
+        import { PHP } from "https://esm.sh/@php-wasm/universal@3.1.65";
+        import { loadWebRuntime } from "https://esm.sh/@php-wasm/web@3.1.65";
+        let php;
+        try {
+          php = new PHP(await loadWebRuntime("8.3"));
+          postMessage({type:"ready"});
+        } catch (error) {
+          postMessage({type:"load-error", message:String(error)});
+        }
+        onmessage = async (event) => {
+          try {
+            const result = await php.run({code:event.data.code});
+            postMessage({type:"result", id:event.data.id, text:result.text, errors:result.errors, exitCode:result.exitCode});
+          } catch (error) {
+            postMessage({type:"error", id:event.data.id, message:String(error)});
+          }
+        };`;
+      const url = URL.createObjectURL(new Blob([source], {type:"text/javascript"}));
+      worker = new Worker(url, {type:"module"});
+      URL.revokeObjectURL(url);
+      watchdog = setTimeout(() => failWorker("PHP laden duurt te lang. Controleer je internetverbinding en klik op Uitvoeren om opnieuw te proberen."), 60000);
+      worker.onerror = (event) => { event.preventDefault(); failWorker(`PHP kon niet worden geladen: ${event.message}. Klik op Uitvoeren om opnieuw te proberen.`); };
+      worker.onmessage = ({data}) => {
+        if (data.type === "load-error") { failWorker(`PHP kon niet worden geladen: ${data.message}. Klik op Uitvoeren om opnieuw te proberen.`); return; }
+        if (data.type === "ready") {
+          clearTimeout(watchdog);
+          ready = true;
+          if (pending) run();
+          return;
+        }
+        clearTimeout(watchdog);
+        running = false;
+        if (data.id === request && !pending) {
+          if (data.type === "error") {
+            $("output").textContent = data.message;
+            scene("");
+            status("PHP kon deze code niet uitvoeren. Controleer de foutmelding.", "error");
+          } else {
+            const output = data.text || "";
+            $("output").textContent = [output, data.errors].filter(Boolean).join("\n") || "(geen uitvoer)";
+            scene(output);
+            if (data.exitCode !== 0 || data.errors) {
+              status("Er ging iets mis. Lees de melding in de uitvoer en probeer het opnieuw.", "error");
+            } else if (output.trimEnd() === lessons[current].expected && lessons[current].pattern.test(editor.value)) {
+              if (!saved.completed.includes(current)) { saved.completed.push(current); save(); }
+              progress();
+              status("Goed gedaan! Je missie is geslaagd. Experimenteer verder of ga naar de volgende opdracht.", "success");
+            } else {
+              status("Je code is uitgevoerd. Vergelijk je resultaat met de missie en probeer verder.");
+            }
+          }
+        }
+        if (pending) run();
+      };
+    }
+    function failWorker(message) {
+      clearTimeout(watchdog);
+      worker.terminate();
+      worker = null;
+      ready = false;
+      running = false;
+      pending = false;
+      $("output").textContent = message;
+      scene("");
+      status(message, "error");
+    }
+    function queueRun() {
+      clearTimeout(timer);
+      pending = true;
+      request++;
+      status(ready ? "Code gewijzigd; resultaat wordt bijgewerkt…" : "De PHP-runtime wordt geladen. Dit kan even duren.");
+      timer = setTimeout(() => { if (ready && !running) run(); }, 600);
+    }
+    function run() {
+      clearTimeout(timer);
+      pending = true;
+      if (!worker) { startWorker(); return; }
+      if (!ready || running) return;
+      pending = false;
+      running = true;
+      const id = request;
+      status("PHP voert je code uit…");
+      watchdog = setTimeout(() => failWorker("De code duurde te lang. Controleer of een loop ooit stopt en klik op Uitvoeren om opnieuw te proberen."), 8000);
+      worker.postMessage({id, code:editor.value});
+    }
+    editor.addEventListener("input", () => { saved.drafts[current] = editor.value; save(); queueRun(); });
+    editor.addEventListener("keydown", (event) => {
+      if ((event.ctrlKey || event.metaKey) && event.key === "Enter") { event.preventDefault(); request++; run(); }
+      if (event.key === "Tab") {
+        event.preventDefault();
+        editor.setRangeText("    ", editor.selectionStart, editor.selectionEnd, "end");
+        editor.dispatchEvent(new Event("input"));
+      }
+    });
+    $("run").addEventListener("click", () => { request++; run(); });
+    $("reset").addEventListener("click", () => { editor.value = tag + lessons[current].starter; saved.drafts[current] = editor.value; save(); queueRun(); });
+    $("use-solution").addEventListener("click", () => { editor.value = tag + lessons[current].solution; saved.drafts[current] = editor.value; save(); queueRun(); editor.focus(); });
+    $("previous").addEventListener("click", () => showLesson(current - 1));
+    $("next").addEventListener("click", () => showLesson(current + 1));
+    select.addEventListener("change", () => showLesson(Number(select.value)));
+    progress();
+    showLesson(current);
+    startWorker();
+  </script>
+</body>
+</html>
