@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="nl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#111b2b">
+  <title>Code Crew — Station 42</title>
+  <link rel="stylesheet" href="/codecrew.css">
+</head>
+<body>
+  <div class="grain" aria-hidden="true"></div>
+  <header class="topbar">
+    <a class="brand" href="/codecrew.html" aria-label="Code Crew startpagina"><span class="brand-mark">C<span>+</span></span><span>CODE CREW <small>STATION 42</small></span></a>
+    <div class="top-status"><span class="live-dot"></span><span id="connectionLabel">Lobby's laden…</span></div>
+    <a class="back-link" href="/">Codegroei <span>↗</span></a>
+  </header>
+
+  <main id="app" class="app-shell">
+    <section id="homeView" class="home-view">
+      <div class="hero-copy">
+        <p class="eyebrow"><span class="eyebrow-line"></span> COÖPERATIEVE CODEMISSIE</p>
+        <h1>Jullie code.<br><span>Jullie station.</span></h1>
+        <p class="hero-text">Werk samen aan PHP-missies. Elke goede oplossing brengt Station 42 weer tot leven. Ontdek wie er verder denkt dan de happy flow.</p>
+        <div class="hero-stats"><div><strong>02–10</strong><small>spelers per lobby</small></div><i></i><div><strong>05</strong><small>missies per ronde</small></div><i></i><div><strong>Multi</strong><small>lobby's tegelijk</small></div></div>
+        <div class="station-preview" aria-label="Voorbeeld van het ruimtestation">
+          <div class="orbit orbit-one"></div><div class="orbit orbit-two"></div>
+          <div class="planet"><span>42</span></div><span class="float-dot dot-a"></span><span class="float-dot dot-b"></span><span class="float-dot dot-c"></span>
+          <div class="preview-tag"><span class="live-dot"></span> STATION ONLINE <b>42%</b></div>
+        </div>
+      </div>
+      <section class="lobby-panel">
+        <div class="panel-heading"><div><p class="eyebrow">KLAAR VOOR LANCERING?</p><h2>Start een missie</h2></div><span class="panel-icon">⌁</span></div>
+        <label class="field-label" for="playerName">Jouw naam of codenaam</label>
+        <input id="playerName" class="text-input" maxlength="24" placeholder="bijv. Nova" autocomplete="nickname">
+        <label class="field-label" for="gameMode">Spelmodus</label>
+        <select id="gameMode" class="text-input select-input">
+          <option value="crew">Crew — samen repareren</option>
+          <option value="undercover">Undercover QA — geheime testers</option>
+        </select>
+        <p class="mode-note" id="modeNote">Iedereen werkt aan hetzelfde doel. Rollen wisselen per missie.</p>
+        <div class="field-row"><div><label class="field-label" for="duration">Missietijd</label><select id="duration" class="text-input"><option value="8">8 minuten</option><option value="10">10 minuten</option><option value="12">12 minuten</option><option value="15" selected>15 minuten</option></select></div><div class="level-chip"><span>PHP</span><strong>basis → combineren</strong></div></div>
+        <button id="createRoom" class="primary-btn">Maak een lobby <span>→</span></button>
+        <div class="divider"><span>OF DOE MEE</span></div>
+        <form id="joinForm" class="join-form"><input id="roomCodeInput" class="text-input code-input" maxlength="4" placeholder="LOBBYCODE" aria-label="Lobbycode"><button class="secondary-btn" type="submit">Join <span>↗</span></button></form>
+        <p class="privacy-note">Gebruik een voornaam of codenaam. Deze pilot bewaart lobby's alleen zolang de server draait.</p>
+      </section>
+      <section class="rooms-section"><div class="section-heading"><div><p class="eyebrow">LIVE IN DE KLAS</p><h2>Open lobby's <span id="roomCount" class="count-pill">0</span></h2></div><button id="refreshRooms" class="text-button">Vernieuwen ↻</button></div><div id="roomList" class="room-list"><p class="empty-state">Nog geen actieve lobby's. Maak de eerste aan.</p></div></section>
+    </section>
+
+    <section id="roomView" class="room-view hidden">
+      <div class="game-topline"><button id="leaveRoom" class="icon-button" aria-label="Terug naar lobby-overzicht">←</button><div class="room-title"><span class="eyebrow">STATION 42 · LOBBY <b id="roomCodeLabel">----</b></span><h1 id="roomNameLabel">Crew</h1></div><div class="timer-box"><span class="timer-icon">◷</span><div><small>TIJD OVER</small><strong id="timer">10:00</strong></div></div><button id="shareRoom" class="share-btn">Deel code <span>⤴</span></button></div>
+      <div id="waitingBanner" class="waiting-banner"><span class="live-dot"></span><span>Wachten op crew… De host start de missie zodra er minimaal 2 spelers zijn.</span></div>
+      <div class="game-layout">
+        <aside class="crew-rail">
+          <div class="rail-card crew-card"><div class="card-head"><div><p class="eyebrow">JOUW CREW</p><h2>Team <span id="crewCount">1</span><small>/ 10</small></h2></div><span class="crew-avatars">◉</span></div><div id="playerList" class="player-list"></div><div class="role-strip"><span class="role-icon">⌘</span><span><b id="roleLabel">CREW MEMBER</b><small id="roleDescription">Samen de systemen herstellen.</small></span></div></div>
+          <div id="secretCard" class="rail-card secret-card hidden"><div class="secret-top"><span>◈</span><span>GEHEIM · ALLEEN VOOR JOU</span></div><h3>Undercover QA</h3><p id="secretTask">Test een randgeval.</p><button id="qaDone" class="qa-btn">✓ Ik heb dit getest</button><small id="qaStatus"></small></div>
+          <div class="rail-card objective-card"><p class="eyebrow">TEAMDOEL</p><h3>Herstel Station 42</h3><p>Voltooi de PHP-missies voordat de tijd om is. Goede code herstelt een systeem; hints kosten tijd en punten.</p><div class="score-line"><span>TEAMSCORE</span><strong id="score">000</strong></div><div class="heat-wrap"><div class="heat-label"><span>STORINGSDRUK</span><b id="heatLabel">LAAG</b></div><div class="heat-track"><span id="heatBar"></span></div></div></div>
+          <div class="rail-actions"><button id="startMission" class="primary-btn hidden">Start missie <span>▶</span></button><button id="resetMission" class="secondary-btn hidden">Nieuwe ronde ↻</button><button id="endMission" class="text-button hidden">Beëindig missie</button></div>
+          <p class="host-note" id="hostNote"></p>
+        </aside>
+
+        <div class="mission-area">
+          <section class="station-panel">
+            <div class="station-header"><div><p class="eyebrow">LIVE STATION STATUS <span class="live-dot"></span></p><h2>Systems online</h2></div><div class="station-health"><span>⚡ <b id="powerPercent">20%</b></span><span>◉ <b id="systemsPercent">0 / 5</b></span></div></div>
+            <div id="stationMap" class="station-map" aria-label="Kaart van Station 42"></div>
+            <div class="map-caption"><span><i class="legend-dot green"></i> Hersteld</span><span><i class="legend-dot amber"></i> Actieve missie</span><span><i class="legend-dot red"></i> Storing</span><span class="map-coords">DECK 04 · SECTOR A</span></div>
+          </section>
+          <section class="mission-card">
+            <div class="mission-heading"><div><p class="eyebrow">MISSIE <span id="missionNumber">01</span> <span class="divider-dot">·</span> <span id="missionLevel">VARIABELEN</span></p><h2 id="missionTitle">Stroom terug in de basis</h2></div><div id="missionBadge" class="mission-badge">ACTIVE</div></div>
+            <p id="missionBrief" class="mission-brief">De basis is donker. Stel de energie in op 100.</p>
+            <div class="editor-toolbar"><span><i class="file-icon">&lt;/&gt;</i> <b>mission.php</b></span><span class="sync-state"><i class="live-dot"></i> live gedeeld</span></div>
+            <textarea id="codeEditor" class="code-editor" spellcheck="false" autocapitalize="off" autocomplete="off" autocorrect="off" aria-label="Gedeelde PHP-code" placeholder="Schrijf samen PHP-code…"></textarea>
+            <div class="editor-bottom"><span class="editor-tip">Tip: spreek af wie typt; iedereen ziet dezelfde code.</span><div class="editor-buttons"><button id="hintButton" class="hint-btn">? Hint <span>−15 sec</span></button><button id="runCode" class="run-btn">Test oplossing <span>↗</span></button></div></div>
+            <div id="runFeedback" class="run-feedback hidden" role="status"></div>
+            <p class="prototype-note">Prototype: de missie controleert PHP-structuur en kernbegrippen. De code wordt nog niet als volledige PHP uitgevoerd.</p>
+          </section>
+          <section class="event-panel"><div class="event-heading"><div><p class="eyebrow">STATION LOG</p><h3>Wat gebeurt er?</h3></div><span class="log-pulse">● LIVE</span></div><div id="eventLog" class="event-log" aria-live="polite"></div></section>
+          <section id="debrief" class="debrief hidden"><p class="eyebrow">MISSIE-AFSLUITING</p><h2 id="debriefTitle">Debrief</h2><p id="debriefText"></p><div id="roleReveal" class="role-reveal"></div></section>
+        </div>
+      </div>
+      <div class="footer-note">Code Crew is een klaslokaalpilot. Lobby's zijn zichtbaar voor iedereen op hetzelfde netwerk en verdwijnen wanneer de server stopt.</div>
+    </section>
+  </main>
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+  <script type="module" src="/codecrew.js"></script>
+</body>
+</html>
